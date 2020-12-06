@@ -21,7 +21,7 @@ declare(strict_types=1);
  * @package PinkCrab\Core
  */
 
-namespace PinkCrab\Core;
+namespace PinkCrab\Core\Application;
 
 use Exception;
 use PC_Vendor\Psr\Container\ContainerInterface;
