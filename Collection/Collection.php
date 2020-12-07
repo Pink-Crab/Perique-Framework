@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 /**
- * Base Collection. 
- * 
+ * Base Collection.
+ *
  * Can be extended and used with supplied traits.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
@@ -25,8 +25,8 @@ declare(strict_types=1);
 
 namespace PinkCrab\Core\Collection;
 
-class Collection
-{
+class Collection {
+
 
 	/**
 	 * Datasource.
@@ -40,21 +40,30 @@ class Collection
 	 *
 	 * @param array $data
 	 */
-	public function __construct(array $data = [])
-	{
+	public function __construct( array $data = array() ) {
 		$this->data = $data;
 	}
 
 	/**
-	 * Pushes an item to the collection and reutrns a new instance.
+	 * Static contrcutor
 	 *
 	 * @param mixed ...$data
 	 * @return self
 	 */
-	public function push(...$data): self
-	{
-		foreach ($data as $value) {
-			$this->data[] = $value;
+	public static function from( array $data = array() ): self {
+		return new static( $data );
+	}
+
+
+	/**
+	 * Apply a function to the collection of items.
+	 *
+	 * @param callable $function
+	 * @return self
+	 */
+	public function apply( callable $function ): self {
+		foreach ( $this->data as &$element ) {
+			$element = $function( $element );
 		}
 		return $this;
 	}
@@ -65,10 +74,9 @@ class Collection
 	 * @param callable $function
 	 * @return self
 	 */
-	public function apply(callable $function): self
-	{
-		foreach ($this->data as &$element) {
-			$element = $function($element);
+	public function each( callable $function ): self {
+		foreach ( $this->data as $key => $value ) {
+			$function( $value, $key );
 		}
 		return $this;
 	}
@@ -79,9 +87,8 @@ class Collection
 	 * @param callable $function
 	 * @return self
 	 */
-	public function filter(callable $function): self
-	{
-		return new static(array_filter($this->data, $function));
+	public function filter( callable $function ): self {
+		return new static( array_filter( $this->data, $function ) );
 	}
 
 	/**
@@ -90,9 +97,18 @@ class Collection
 	 * @param callable $function
 	 * @return self
 	 */
-	public function map(callable $function): self
-	{
-		return new static(array_map($function, $this->data));
+	public function map( callable $function ): self {
+		return new static( array_map( $function, $this->data ) );
+	}
+
+	public function reduce( callable $function, $inital = '' ) {
+		return array_reduce(
+			$this->data,
+			function( $carry, $value ) use ( $function ) {
+				return $function( $carry, $value );
+			},
+			$inital
+		);
 	}
 
 	/**
@@ -101,31 +117,29 @@ class Collection
 	 * @param Collection|array $data
 	 * @return self
 	 */
-	public function merge($data): self
-	{
-		if (!is_array($data) && !is_a($data, Collection::class)) {
-			throw new \TypeError("Can only merge with other Collections or Arrays.");
+	public function merge( $data ): self {
+		if ( ! is_array( $data ) && ! is_a( $data, Collection::class ) ) {
+			throw new \TypeError( 'Can only merge with other Collections or Arrays.' );
 		}
 		return new static(
 			array_merge(
 				$this->data,
-				is_a($data, Collection::class) ? $data->to_array() : $data
+				is_a( $data, Collection::class ) ? $data->to_array() : $data
 			)
 		);
 	}
 
 	/**
-	 * Returns the last value from the collection
+	 * Pushes an item to the collection and reutrns a new instance.
 	 *
-	 * @throws UnderflowException If emtpy.
-	 * @return mixed
+	 * @param mixed ...$data
+	 * @return self
 	 */
-	public function pop()
-	{
-		if (empty($this->data)) {
-			throw new \UnderflowException("Collection is empty, can not extract value.", 1);
+	public function push( ...$data ): self {
+		foreach ( $data as $value ) {
+			$this->data[] = $value;
 		}
-		return \array_pop($this->data);
+		return $this;
 	}
 
 	/**
@@ -134,12 +148,24 @@ class Collection
 	 * @throws UnderflowException If emtpy.
 	 * @return mixed
 	 */
-	public function shift()
-	{
-		if (empty($this->data)) {
-			throw new \UnderflowException("Collection is empty, can not extract value.", 1);
+	public function pop() {
+		if ( empty( $this->data ) ) {
+			throw new \UnderflowException( 'Collection is empty, can not extract value.', 1 );
 		}
-		return \array_shift($this->data);
+		return \array_pop( $this->data );
+	}
+
+	/**
+	 * Returns the last value from the collection
+	 *
+	 * @throws UnderflowException If emtpy.
+	 * @return mixed
+	 */
+	public function shift() {
+		if ( empty( $this->data ) ) {
+			throw new \UnderflowException( 'Collection is empty, can not extract value.', 1 );
+		}
+		return \array_shift( $this->data );
 	}
 
 	/**
@@ -148,9 +174,8 @@ class Collection
 	 * @param mixed $item
 	 * @return self
 	 */
-	public function unshift($item): self
-	{
-		array_unshift($this->data, $item);
+	public function unshift( $item ): self {
+		array_unshift( $this->data, $item );
 		return $this;
 	}
 
@@ -159,8 +184,7 @@ class Collection
 	 *
 	 * @return array
 	 */
-	public function to_array(): array
-	{
+	public function to_array(): array {
 		return $this->data;
 	}
 
@@ -169,67 +193,37 @@ class Collection
 	 *
 	 * @return bool
 	 */
-	public function is_empty(): bool
-	{
-		return empty($this->data);
+	public function is_empty(): bool {
+		return empty( $this->data );
 	}
 
 	/**
-	 * Searches for a simple value
-	 * Uses array_search()
+	 * Checks if the array contains all of the values.
 	 *
-	 * @param mixed $value
-	 * @return void
-	 */
-	public function find($value)
-	{
-		return array_search($value, $this->data, true);
-	}
-
-	/**
-	 * Gets a value from the passed index
-	 * 
-	 * @param int $index
-	 * @return mixed
-	 * @throws OutOfRangeException
-	 */
-	public function get(int $index)
-	{
-		if (!array_key_exists($index, $this->data)) {
-			throw new \OutOfRangeException();
-		}
-
-		return $this->data[$index];
-	}
-
-	/**
-	 * Inserts a single or multiple items to an index
-	 *
-	 * @param integer $index
 	 * @param mixed ...$values
-	 * @return void
-	 * @throws OutOfRangeException
+	 * @return bool
 	 */
-	public function insert(int $index, ...$values): self
-	{
-		if (!array_key_exists($index, $this->data) && $index !== count($this)) {
-			throw new \OutOfRangeException();
+	public function contains( ...$values ): bool {
+		foreach ( $values as $value ) {
+			if ( ! in_array( $value, $this->data, true ) ) {
+				return false;
+			}
 		}
-
-		array_splice($this->data, $index, 0, $values);
-		return $this;
+		return true;
 	}
 
 	/**
-	 * Sets a value at a defined inded
+	 * Joins the collection as a string.
 	 *
-	 * @param integer $index
-	 * @param mixed $value
-	 * @return self
+	 * @param string $glue
+	 * @return string
 	 */
-	public function set(int $index, $value): self
-	{
-		$this->array[$index] = $value;
-		return $this;
+	public function join( string $glue = '' ): string {
+		return join( $glue, $this->data );
 	}
+
+	// @TODO SORT, SLICE, COUNT, CLEAR, DIF, UDIFF, COPY
+
+
+
 }

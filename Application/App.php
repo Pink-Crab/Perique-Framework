@@ -21,37 +21,43 @@ declare(strict_types=1);
  * @package PinkCrab\Core
  */
 
-namespace PinkCrab\Core;
+namespace PinkCrab\Core\Application;
 
 use Exception;
+use OutOfBoundsException;
 use PC_Vendor\Psr\Container\ContainerInterface;
 
-final class App
-{
+final class App {
 
+	/**
+	 * Holds the isntance of its self.
+	 *
+	 * @var \PinkCrab\Core\Application\App
+	 */
 	public static $instance;
 
-	protected $serviceContainer;
+	/**
+	 * The service container.
+	 *
+	 * @var \PC_Vendor\Psr\Container\ContainerInterface
+	 */
+	protected $service_container;
 
-	protected function __construct(ContainerInterface $serviceContainer)
-	{
-		$this->serviceContainer = $serviceContainer;
+	protected function __construct( ContainerInterface $service_container ) {
+		$this->service_container = $service_container;
+		self::$instance          = $this;
 	}
-
 
 	/**
 	 * Do not allow cloning.
 	 */
-	protected function __clone()
-	{
-	}
+	protected function __clone() {  }
 
 	/**
 	 * Prevent wakeup.
 	 */
-	public function __wakeup()
-	{
-		throw new Exception('App can only be initialised directly.');
+	public function __wakeup() {
+		throw new Exception( 'App can only be initialised directly.' );
 	}
 
 	/**
@@ -59,9 +65,8 @@ final class App
 	 *
 	 * @return self
 	 */
-	public static function init(ContainerInterface $serviceContainer): self
-	{
-		return self::$instance ?? self::$instance = new static($serviceContainer);
+	public static function init( ContainerInterface $service_container ): self {
+		return self::$instance ?? self::$instance = new static( $service_container );
 	}
 
 	/**
@@ -70,14 +75,13 @@ final class App
 	 * @throws Exception Will throw if not already initialised.
 	 * @return self
 	 */
-	public static function getInstance(): self
-	{
+	public static function get_instance(): self {
 		try {
-			if (!self::$instance) {
-				throw new Exception('PinkCrab Core not loaded', 1);
+			if ( ! self::$instance ) {
+				throw new Exception( 'PinkCrab Core not loaded' );
 			}
-		} catch (\Throwable $th) {
-			wp_die($th->getMessage());
+		} catch ( \Throwable $th ) {
+			\wp_die( $th->getMessage() );
 		}
 		return self::$instance;
 	}
@@ -89,9 +93,8 @@ final class App
 	 * @param mixed $service
 	 * @return self
 	 */
-	public function bind(string $key, $service): self
-	{
-		$this->serviceContainer->set($key, $service);
+	public function bind( string $key, $service ): self {
+		$this->service_container->set( $key, $service );
 		return $this;
 	}
 
@@ -100,10 +103,16 @@ final class App
 	 *
 	 * @param string $key
 	 * @return mixed
+	 * @throws OutOfBoundsException If key not set.
 	 */
-	public function get(string $key)
-	{
-		return $this->serviceContainer->get($key) ?? null;
+	public function get( string $key ) {
+
+		// Throw exception if not set.
+		if ( ! self::$instance->service_container->has( $key ) ) {
+			throw new OutOfBoundsException( sprintf( '%s has not been bound to container.', $key ) );
+		}
+
+		return $this->service_container->get( $key );
 	}
 
 	/**
@@ -113,9 +122,8 @@ final class App
 	 * @param mixed $service
 	 * @return self
 	 */
-	public function set(string $key, $service): self
-	{
-		$this->serviceContainer->set($key, $service);
+	public function set( string $key, $service ): self {
+		$this->service_container->set( $key, $service );
 		return $this;
 	}
 
@@ -125,10 +133,10 @@ final class App
 	 * @param string $key
 	 * @param array $params
 	 * @return void
+	 * @throws OutOfBoundsException If key not set.
 	 */
-	public static function __callStatic(string $key, $params)
-	{
-		return self::$instance->get($key);
+	public static function __callStatic( string $key, $params ) {
+		return self::$instance->get( $key );
 	}
 
 	/**
@@ -136,10 +144,10 @@ final class App
 	 *
 	 * @param string $key
 	 * @return void
+	 * @throws OutOfBoundsException If key not set.
 	 */
-	public static function retreive(string $key)
-	{
-		return self::$instance->get($key);
+	public static function retreive( string $key ) {
+		return self::$instance->get( $key );
 	}
 
 	/**
@@ -148,36 +156,21 @@ final class App
 	 * @param string $class
 	 * @param array $args
 	 * @return object|null
+	 * @throws OutOfBoundsException If di not set.
 	 */
-	public static function make(string $class, array $args = array())
-	{
-		return self::$instance->serviceContainer->has('di') ?
-			self::$instance->get('di')->create($class, $args) :
-			null;
+	public static function make( string $class, array $args = array() ) {
+		return self::$instance->get( 'di' )->create( $class, $args );
 	}
 
 	/**
 	 * Creates an instance using Dice.
 	 *
-	 * @param string $class
-	 * @param array $args
-	 * @return object|null
+	 * @param string $method The config key to call
+	 * @param array $args Additional params passed.
+	 * @return mixed
+	 * @throws OutOfBoundsException If config is not set, or can buggle up from App_Config.
 	 */
-	public static function config(?string $method = null, ...$args)
-	{
-		if (!self::$instance->serviceContainer->has('config')) {
-			return null;
-		}
-
-		$config = self::$instance->get('config');
-
-		// If no method passed, return the while config object.
-		if (empty($method)) {
-			return $config;
-		}
-
-		return method_exists($config, $method)
-			? $config->{$method}(...$args)
-			: $config;
+	public static function config( string $method, ...$args ) {
+		return  self::$instance->get( 'config' )->{$method}( ...$args );
 	}
 }

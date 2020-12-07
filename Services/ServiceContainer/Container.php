@@ -16,6 +16,7 @@ declare(strict_types=1);
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
+ * @since 0.1.0
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
  * @package PinkCrab\Core\Services
@@ -30,6 +31,11 @@ use PinkCrab\Core\Services\ServiceContainer\ServiceNotRegisteredException;
 
 class Container implements ContainerInterface {
 
+	/**
+	 * Holds all of the bound services.
+	 *
+	 * @var array
+	 */
 	protected $services = array();
 
 	/**
@@ -66,7 +72,7 @@ class Container implements ContainerInterface {
 	 */
 	public function set( $id, object $service ) {
 		if ( $this->has( $id ) ) {
-			throw new Exception( "{$id} already defined in container", 1 );
+			throw new Exception( "{$id} already defined in container" );
 		}
 		$this->services[ (string) $id ] = $service;
 	}
