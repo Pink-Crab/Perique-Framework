@@ -60,16 +60,9 @@ trait Sequence {
 	/**
 	 * Returns a sum of all the elements.
 	 *
-	 * @return void
+	 * @return int|float
 	 */
 	public function sum() {
-		return array_sum(
-			array_map(
-				static function( $e ) {
-					return (int) $e;
-				},
-				$this->data
-			)
-		);
+		return array_sum( $this->data );
 	}
 }
