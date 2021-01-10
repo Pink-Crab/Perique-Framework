@@ -28,9 +28,7 @@ use PinkCrab\Core\Application\App;
 use PinkCrab\Core\Interfaces\Registerable;
 use PinkCrab\Core\Services\Registration\Loader;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	die;
-}
+
 
 class Register_Loader {
 

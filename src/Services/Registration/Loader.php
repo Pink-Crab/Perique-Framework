@@ -27,9 +27,7 @@ namespace PinkCrab\Core\Services\Registration;
 
 use PinkCrab\Core\Collection\Collection;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	die;
-}
+
 
 class Loader {
 

@@ -21,9 +21,7 @@
 
 namespace PinkCrab\Core\Interfaces;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+
 
 interface Renderable {
 	public function render( string $view, $data, bool $print = true );

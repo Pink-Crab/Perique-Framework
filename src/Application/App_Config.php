@@ -11,9 +11,7 @@ declare(strict_types=1);
 
 namespace PinkCrab\Core\Application;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	die;
-}
+
 
 use OutOfBoundsException;
 

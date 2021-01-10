@@ -24,9 +24,7 @@ namespace PinkCrab\Core\Services\View;
 use Exception;
 use PinkCrab\Core\Interfaces\Renderable;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+
 
 class PHP_Engine implements Renderable {
 

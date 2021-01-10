@@ -17,9 +17,7 @@ use ReflectionMethod;
 use ReflectionParameter;
 use InvalidArgumentException;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	die;
-}
+
 
 class Dice {
 	const CONSTANT   = 'Dice::CONSTANT';

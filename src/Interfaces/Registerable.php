@@ -21,10 +21,6 @@
 
 namespace PinkCrab\Core\Interfaces;
 
-// if ( ! defined( 'ABSPATH' ) ) {
-// 	exit;
-// }
-
 use PinkCrab\Core\Services\Registration\Loader;
 
 interface Registerable {

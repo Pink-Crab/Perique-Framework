@@ -29,9 +29,7 @@ use Exception;
 use PinkCrab\Core\Interfaces\Service_Container;
 use PinkCrab\Core\Services\ServiceContainer\ServiceNotRegisteredException;
 
-if ( ! defined( 'ABSPATH' ) ) {
-	die;
-}
+
 
 class Container implements Service_Container {
 
