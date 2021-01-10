@@ -6,7 +6,8 @@ For more details please visit our docs.
 
 
 ## Version ##
-Release 0.3.0
+**Release 0.3.0**
+
 With version 0.3 we have moved away from the submodule driven approach and thanks to PHP Scoper we can now use actual composer libraries.
 
 The Core only provides access to the Loader, Registration, Collection, DI (DICE Dependency Injection Container), App_Config and basic (native) PHP render engine for view.
