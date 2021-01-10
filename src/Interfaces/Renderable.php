@@ -1,10 +1,6 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 /**
- * Base Collection. 
- * 
- * Can be extended and used with supplied traits.
+ * The view engine interface.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -20,24 +16,13 @@ declare(strict_types=1);
  *
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- * @package PinkCrab\Core\Collection
+ * @package PinkCrab\Core
  */
 
-namespace PinkCrab\Core\Collection;
+namespace PinkCrab\Core\Interfaces;
 
-trait JsonSerializable
-{
 
-    /**
-     * Returns a representation that can be natively converted to JSON, which is
-     * called when invoking json_encode.
-     *
-     * @return mixed
-     *
-     * @see \JsonSerializable
-     */
-    public function jsonSerialize()
-    {
-        return $this->to_array();
-    }
+
+interface Renderable {
+	public function render( string $view, $data, bool $print = true );
 }

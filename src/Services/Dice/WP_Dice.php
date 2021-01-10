@@ -26,6 +26,8 @@ namespace PinkCrab\Core\Services\Dice;
 
 use PinkCrab\Core\Services\Dice\Dice;
 
+
+
 class WP_Dice {
 
 	/**

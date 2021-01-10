@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 /**
- * OOP Action loader
+ * The hook loader.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -16,6 +16,7 @@ declare(strict_types=1);
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
+ * @since 0.1.0
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
  * @package PinkCrab\Core\Registration
@@ -26,18 +27,50 @@ namespace PinkCrab\Core\Services\Registration;
 
 use PinkCrab\Core\Collection\Collection;
 
-if ( ! defined( 'WPINC' ) ) {
-	die;
-}
+
 
 class Loader {
 
-
+	/**
+	 * Global hooks
+	 *
+	 * @var \PinkCrab\Core\Collection\Collection
+	 */
 	protected $global;
+
+	/**
+	 * Admin only hooks
+	 *
+	 * @var \PinkCrab\Core\Collection\Collection
+	 */
 	protected $admin;
+
+	/**
+	 * Front hooks
+	 *
+	 * @var \PinkCrab\Core\Collection\Collection
+	 */
 	protected $front;
+
+	/**
+	 * Shortoces
+	 *
+	 * @var \PinkCrab\Core\Collection\Collection
+	 */
 	protected $shortcode;
+
+	/**
+	 * Ajax Calls
+	 *
+	 * @var \PinkCrab\Core\Collection\Collection
+	 */
 	protected $ajax;
+
+	/**
+	 * Static instance.
+	 *
+	 * @var self
+	 */
 	public static $instance;
 
 	/**
@@ -69,7 +102,7 @@ class Loader {
 	 * @param integer               $args
 	 * @return void
 	 */
-	public function admin_action( string $handle, $method, int $priority = 10, int $args = 1 ): void {
+	public function admin_action( string $handle, callable $method, int $priority = 10, int $args = 1 ): void {
 		$this->admin->push(
 			array(
 				'type'     => 'action',
@@ -90,7 +123,7 @@ class Loader {
 	 * @param integer               $args
 	 * @return void
 	 */
-	public function admin_filter( string $handle, $method, int $priority = 10, int $args = 1 ) {
+	public function admin_filter( string $handle, callable $method, int $priority = 10, int $args = 1 ) {
 		$this->admin->push(
 			array(
 				'type'     => 'filter',
@@ -111,7 +144,7 @@ class Loader {
 	 * @param integer               $args
 	 * @return void
 	 */
-	public function front_action( string $handle, $method, int $priority = 10, int $args = 1 ): void {
+	public function front_action( string $handle, callable $method, int $priority = 10, int $args = 1 ): void {
 		$this->front->push(
 			array(
 				'type'     => 'action',
@@ -132,7 +165,7 @@ class Loader {
 	 * @param integer               $args
 	 * @return void
 	 */
-	public function front_filter( string $handle, $method, int $priority = 10, int $args = 1 ) {
+	public function front_filter( string $handle, callable $method, int $priority = 10, int $args = 1 ) {
 		$this->front->push(
 			array(
 				'type'     => 'filter',
@@ -153,7 +186,7 @@ class Loader {
 	 * @param integer               $args
 	 * @return void
 	 */
-	public function action( string $handle, $method, int $priority = 10, int $args = 1 ): void {
+	public function action( string $handle, callable $method, int $priority = 10, int $args = 1 ): void {
 		$this->global->push(
 			array(
 				'type'     => 'action',
@@ -174,7 +207,7 @@ class Loader {
 	 * @param integer               $args
 	 * @return void
 	 */
-	public function filter( string $handle, $method, int $priority = 10, int $args = 1 ) {
+	public function filter( string $handle, callable $method, int $priority = 10, int $args = 1 ) {
 		$this->global->push(
 			array(
 				'type'     => 'filter',
@@ -193,7 +226,7 @@ class Loader {
 	 * @param string|array|callable $method
 	 * @return void
 	 */
-	public function shortcode( string $handle, $method ) {
+	public function shortcode( string $handle, callable $method ) {
 		$this->shortcode->push(
 			array(
 				'handle' => $handle,
@@ -202,7 +235,16 @@ class Loader {
 		);
 	}
 
-	public function ajax( string $handle, $method, $public = true, $private = true ) {
+	/**
+	 * Adds an ajax call
+	 *
+	 * @param string $handle
+	 * @param callable $method
+	 * @param bool $public
+	 * @param bool $private
+	 * @return void
+	 */
+	public function ajax( string $handle, callable $method, $public = true, $private = true ) {
 		$this->ajax->push(
 			array(
 				'handle'  => $handle,
@@ -219,7 +261,6 @@ class Loader {
 	 * @return void
 	 */
 	public function register_hooks() {
-
 
 		// Register shortcodes.
 		$this->shortcode->apply(
