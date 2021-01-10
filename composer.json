@@ -29,7 +29,6 @@
         "yoast/phpunit-polyfills": "^0.1.0",
         "symfony/var-dumper": "^5.0",
         "phpstan/phpstan": "^0.11.10",
-        "jetbrains/phpstorm-stubs": "dev-master",
         "szepeviktor/phpstan-wordpress": "^0.2.1"
     },
     "require": {
