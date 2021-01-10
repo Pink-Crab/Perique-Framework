@@ -3,6 +3,7 @@
 Welcome the main package of the PinkCrab Framwework. 
 
 For more details please visit our docs.
+https://app.gitbook.com/@glynn-quelch/s/pinkcrab/~/drafts/-MQX_cCgS6Q37RjFODUp/
 
 
 ## Version ##
