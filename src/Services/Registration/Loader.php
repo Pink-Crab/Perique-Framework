@@ -87,7 +87,7 @@ class Loader {
 	/**
 	 * Boots the loader as a static instance.
 	 *
-	 * @return void
+	 * @return self
 	 */
 	public static function boot(): self {
 		return self::$instance ?? self::$instance = new Loader();
@@ -96,10 +96,10 @@ class Loader {
 	/**
 	 * Adds and admin hook to the collection.
 	 *
-	 * @param string                $handle
-	 * @param string|array|callable $method
-	 * @param integer               $priority
-	 * @param integer               $args
+	 * @param string     $handle
+	 * @param callable   $method
+	 * @param integer    $priority
+	 * @param integer    $args
 	 * @return void
 	 */
 	public function admin_action( string $handle, callable $method, int $priority = 10, int $args = 1 ): void {
@@ -117,10 +117,10 @@ class Loader {
 	/**
 	 * Adds an admin filter to the admin collection.
 	 *
-	 * @param string                $handle
-	 * @param string|array|callable $method
-	 * @param integer               $priority
-	 * @param integer               $args
+	 * @param string     $handle
+	 * @param callable   $method
+	 * @param integer    $priority
+	 * @param integer    $args
 	 * @return void
 	 */
 	public function admin_filter( string $handle, callable $method, int $priority = 10, int $args = 1 ) {
@@ -138,10 +138,10 @@ class Loader {
 	/**
 	 * Adds an action for the front end.
 	 *
-	 * @param string                $handle
-	 * @param string|array|callable $method
-	 * @param integer               $priority
-	 * @param integer               $args
+	 * @param string     $handle
+	 * @param callable   $method
+	 * @param integer    $priority
+	 * @param integer    $args
 	 * @return void
 	 */
 	public function front_action( string $handle, callable $method, int $priority = 10, int $args = 1 ): void {
@@ -159,13 +159,13 @@ class Loader {
 	/**
 	 * Adds an front filter to the front collection.
 	 *
-	 * @param string                $handle
-	 * @param string|array|callable $method
-	 * @param integer               $priority
-	 * @param integer               $args
+	 * @param string     $handle
+	 * @param callable   $method
+	 * @param integer    $priority
+	 * @param integer    $args
 	 * @return void
 	 */
-	public function front_filter( string $handle, callable $method, int $priority = 10, int $args = 1 ) {
+	public function front_filter( string $handle, callable $method, int $priority = 10, int $args = 1 ): void {
 		$this->front->push(
 			array(
 				'type'     => 'filter',
@@ -180,10 +180,10 @@ class Loader {
 	/**
 	 * Adds an action for the global end.
 	 *
-	 * @param string                $handle
-	 * @param string|array|callable $method
-	 * @param integer               $priority
-	 * @param integer               $args
+	 * @param string     $handle
+	 * @param callable   $method
+	 * @param integer    $priority
+	 * @param integer    $args
 	 * @return void
 	 */
 	public function action( string $handle, callable $method, int $priority = 10, int $args = 1 ): void {
@@ -201,13 +201,13 @@ class Loader {
 	/**
 	 * Adds an global filter to the global collection.
 	 *
-	 * @param string                $handle
-	 * @param string|array|callable $method
-	 * @param integer               $priority
-	 * @param integer               $args
+	 * @param string     $handle
+	 * @param callable   $method
+	 * @param integer    $priority
+	 * @param integer    $args
 	 * @return void
 	 */
-	public function filter( string $handle, callable $method, int $priority = 10, int $args = 1 ) {
+	public function filter( string $handle, callable $method, int $priority = 10, int $args = 1 ): void {
 		$this->global->push(
 			array(
 				'type'     => 'filter',
@@ -222,11 +222,11 @@ class Loader {
 	/**
 	 * Adds a shortcode to the loader.
 	 *
-	 * @param string                $handle
-	 * @param string|array|callable $method
+	 * @param string     $handle
+	 * @param callable   $method
 	 * @return void
 	 */
-	public function shortcode( string $handle, callable $method ) {
+	public function shortcode( string $handle, callable $method ): void {
 		$this->shortcode->push(
 			array(
 				'handle' => $handle,
@@ -244,7 +244,7 @@ class Loader {
 	 * @param bool $private
 	 * @return void
 	 */
-	public function ajax( string $handle, callable $method, $public = true, $private = true ) {
+	public function ajax( string $handle, callable $method, $public = true, $private = true ): void {
 		$this->ajax->push(
 			array(
 				'handle'  => $handle,
@@ -260,7 +260,7 @@ class Loader {
 	 *
 	 * @return void
 	 */
-	public function register_hooks() {
+	public function register_hooks(): void {
 
 		// Register shortcodes.
 		$this->shortcode->apply(
@@ -346,7 +346,7 @@ class Loader {
 	 * @param array $hook
 	 * @return void
 	 */
-	private function registerHookCallback( array $hook ) {
+	private function registerHookCallback( array $hook ): void {
 
 		switch ( $hook['type'] ) {
 			case 'action':

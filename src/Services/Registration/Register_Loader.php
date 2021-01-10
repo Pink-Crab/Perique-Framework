@@ -37,9 +37,9 @@ class Register_Loader {
 	 * Loops through all classes for regisration and regiter
 	 * if they have the Registerable interface.
 	 *
-	 * @param PinkCrab\Core\App $app
-	 * @param array $registerable_classes
-	 * @param PinkCrab\Core\Services\Registration\Loader $loader
+	 * @param App    $app
+	 * @param array  $registerable_classes
+	 * @param Loader $loader
 	 * @return void
 	 */
 	public static function initalise( App $app, array $registerable_classes, Loader $loader ): void {

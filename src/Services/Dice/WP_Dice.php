@@ -26,21 +26,19 @@ namespace PinkCrab\Core\Services\Dice;
 
 use PinkCrab\Core\Services\Dice\Dice;
 
-
-
 class WP_Dice {
 
 	/**
 	 * Holds the instnace of DICE to work with.
 	 *
-	 * @var PinkCrab\Core\Services\Dice\Dice;
+	 * @var Dice;
 	 */
 	protected $dice;
 
 	/**
 	 * Passes in the inital dice instance.
 	 *
-	 * @param \PinkCrab\Core\Services\Dice\Dice
+	 * @param Dice $dice
 	 */
 	public function __construct( Dice $dice ) {
 		$this->dice = $dice;
@@ -50,8 +48,7 @@ class WP_Dice {
 	/**
 	 * Lazy stack instancing.
 	 *
-	 * @param \PinkCrab\Core\Services\Dice\Dice
-
+	 * @param Dice $dice
 	 * @return self
 	 */
 	public static function constructWith( Dice $dice ): self {
