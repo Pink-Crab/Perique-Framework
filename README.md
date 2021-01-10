@@ -1,6 +1,6 @@
 # PinkCrab Framework Core #
 
-[][https://img.shields.io/badge/PHPStan-level%207-brightgreen.svg?style=flat]
+![alt text](https://img.shields.io/badge/PHPStan-level%207-brightgreen.svg?style=flat " ")
 
 Welcome the main package of the PinkCrab Framwework. 
 
