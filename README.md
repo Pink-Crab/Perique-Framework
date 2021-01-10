@@ -186,6 +186,8 @@ The framework requires 3 config files, these are usually placed in the /config d
 If you would like to run the tests for this package, please ensure you add your database details into the test/wp-config.php file before running phpunit.
 
 ### PHP Stan ###
+The module comes with a pollyfill for all WP Functions, allowing for the testing of all core files. The current config omits the Dice file as this is not ours. To run the suite call.
+````bash vendor/bin/phpstan analyse src/ -l7 ````
 
 ## Building ##
 If you wish to use PHP Scoper to rebase the namespaces, to remove the risk of conflicts feel free. The Core has been tested and will run for other namespaces without too many issues. 

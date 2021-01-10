@@ -10,6 +10,7 @@ parameters:
         - %currentWorkingDirectory%/src/
     excludes_analyse:
         - %currentWorkingDirectory%/tests/*
+        - %currentWorkingDirectory%/src/Services/Dice/Dice.php
 
 #    autoload_files:
         - plugin.php
