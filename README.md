@@ -51,7 +51,6 @@ This file can be anywhere in your plugin, although we reccomend keeping it in yo
     add_action(
         'init',
         function () use ( $loader, $app, $config ) {
-            dump( $loader, $app, $config );
             // Add all DI rules.
             $app->get( 'di' )->addRules(
                 apply_filters( 'PinkCrab\\di_rules', require( 'config/dependencies.php' ) ) // Change if using custom path for config.
