@@ -87,3 +87,32 @@ Once you have your bootstrap file created, its just a case of hooking it up in y
 
     // Optional activation hooks
 ````
+
+The framework requires 3 config files, these are usually placed in the /config directory, but can be placed elsewhere. If you do use these elsewhere, please upadate the paths in the bootstrap.php file.
+
+
+````php
+    <?php
+    // @file config/dependencies.php
+
+    /**
+     * Handles all depenedency injection rules and config.
+     *
+     * @package Your Plugin
+     * @author Awesome Devs <awesome.devs@rock.com>
+     * @since 1.2.3
+     */
+
+    use PinkCrab\Core\Application\App;
+    use PinkCrab\Core\Interfaces\Renderable;
+    use PinkCrab\Core\Services\View\PHP_Engine;
+    
+    return array(
+	// Gloabl Rules
+	'*'               => array(
+		'substitutions' => array(
+			App::class        => App::getInstance(),
+			Renderable::class => PHP_Engine::class, // Can be removed if using Blade or Mustache
+		),
+	),
+````
