@@ -9,6 +9,8 @@ To use the Framework, a few files are needed for the framework to be loaded.
 This file can be anywhere in your plugin, although we reccomend keeping it in your root directory with the plugin.php file.
 
 ````php
+    <?php
+    // @file bootstrap.php
 
     // Namespaces
     use PinkCrab\Core\Application\App;
@@ -58,6 +60,9 @@ If you are planning to give all of your vendor libraries custom namespaces using
 Once you have your bootstrap file created, its just a case of hooking it up in your plugin.php file.
 
 ````php
+    <?php
+    // @file plugin.php
+    
     /**
      * @wordpress-plugin
      * Plugin Name:     ##PLUGIN NAME##
