@@ -202,8 +202,8 @@ The only issues that soemtimes arise if the the namespacing of core wp functions
         // ....
     	'patchers' => array(
 		function ( $file_path, $prefix, $contents ) {
-			// Your other files to omit
-            $contents = str_replace( "\\$prefix\\wp_upload_dir", '\\wp_upload_dir', $contents );
+			// Your other functions to omit
+                $contents = str_replace( "\\$prefix\\wp_upload_dir", '\\wp_upload_dir', $contents );
 			$contents = str_replace( "\\$prefix\\plugins_url", '\\plugins_url', $contents );
 
             return $contents;
