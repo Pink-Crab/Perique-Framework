@@ -25,7 +25,6 @@ namespace PinkCrab\Core\Application;
 
 use Exception;
 use OutOfBoundsException;
-use PC_Vendor\Psr\Container\ContainerInterface;
 use PinkCrab\Core\Interfaces\Service_Container;
 
 final class App {
