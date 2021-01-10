@@ -1,0 +1,39 @@
+{
+    "name": "pinkcrab/plugin-framework",
+    "type": "library",
+    "description": "The core component of the PinkCrab plugin framework",
+    "keywords": [],
+    "homepage": "https://pinkcrab.co.uk",
+    "license": "MIT",
+    "authors": [{
+        "name": "Glynn Quelch",
+        "email": "glynn.quelch@pinkcrab.co.uk",
+        "homepage": "http://clappo.co.uk",
+        "role": "Developer"
+    }],
+    "autoload": {
+        "psr-4": {
+            "PinkCrab\\Core\\": "src"
+        },
+        "files": [
+
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PinkCrab\\Core\\Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.4",
+        "yoast/phpunit-polyfills": "^0.1.0",
+        "symfony/var-dumper": "^5.0",
+        "phpstan/phpstan": "^0.11.10",
+        "jetbrains/phpstorm-stubs": "dev-master",
+        "szepeviktor/phpstan-wordpress": "^0.2.1"
+    },
+    "require": {
+        "php": ">=7.1.0",
+        "psr/container": "^1.0"
+    }
+}

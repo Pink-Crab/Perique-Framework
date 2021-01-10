@@ -26,6 +26,10 @@ namespace PinkCrab\Core\Services\Dice;
 
 use PinkCrab\Core\Services\Dice\Dice;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	die;
+}
+
 class WP_Dice {
 
 	/**

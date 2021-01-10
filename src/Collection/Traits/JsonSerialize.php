@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 /**
- * Base Collection. 
- * 
- * Can be extended and used with supplied traits.
+ * JSON Serialise trait.
+ *
+ * Give any collection the means to be json_encoded()
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -23,21 +23,20 @@ declare(strict_types=1);
  * @package PinkCrab\Core\Collection
  */
 
-namespace PinkCrab\Core\Collection;
+namespace PinkCrab\Core\Collection\Traits;
 
-trait JsonSerializable
-{
+trait JsonSerialize {
 
-    /**
-     * Returns a representation that can be natively converted to JSON, which is
-     * called when invoking json_encode.
-     *
-     * @return mixed
-     *
-     * @see \JsonSerializable
-     */
-    public function jsonSerialize()
-    {
-        return $this->to_array();
-    }
+
+	/**
+	 * Returns a representation that can be natively converted to JSON, which is
+	 * called when invoking json_encode.
+	 *
+	 * @return mixed
+	 *
+	 * @see \JsonSerializable
+	 */
+	public function jsonSerialize() {
+		return $this->data;
+	}
 }

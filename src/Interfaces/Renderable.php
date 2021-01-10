@@ -1,9 +1,6 @@
-<?php
-
-declare(strict_types=1);
-
+<?php declare(strict_types=1);
 /**
- * Registration loader
+ * The view engine interface.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -19,32 +16,15 @@ declare(strict_types=1);
  *
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- * @package PinkCrab\Core\Registration
+ * @package PinkCrab\Core
  */
 
-namespace PinkCrab\Core\Services\Registration;
+namespace PinkCrab\Core\Interfaces;
 
-use PinkCrab\Core\Application\App;
-use PinkCrab\Core\Interfaces\Registerable;
-use PinkCrab\Core\Services\Registration\Loader;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
-class Register_Loader {
-
-
-	/**
-	 * Loops through all classes for regisration and regiter
-	 * if they have the Registerable interface.
-	 *
-	 * @param PinkCrab\Core\App $app
-	 * @param array $registerable_classes
-	 * @param PinkCrab\Core\Services\Registration\Loader $loader
-	 * @return void
-	 */
-	public static function initalise( App $app, array $registerable_classes, Loader $loader ): void {
-		foreach ( $registerable_classes as $class ) {
-			if ( in_array( Registerable::class, class_implements( $class ) ) ) {
-				$app::make( $class )->register( $loader );
-			}
-		}
-	}
+interface Renderable {
+	public function render( string $view, $data, bool $print = true );
 }

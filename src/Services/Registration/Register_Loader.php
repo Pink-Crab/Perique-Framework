@@ -1,8 +1,9 @@
 <?php
 
 declare(strict_types=1);
+
 /**
- * Service not registered exception
+ * Registration loader
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -18,13 +19,36 @@ declare(strict_types=1);
  *
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- * @package PinkCrab\Core\Services
+ * @package PinkCrab\Core\Registration
  */
 
+namespace PinkCrab\Core\Services\Registration;
 
-namespace PinkCrab\Core\Services\ServiceContainer;
+use PinkCrab\Core\Application\App;
+use PinkCrab\Core\Interfaces\Registerable;
+use PinkCrab\Core\Services\Registration\Loader;
 
-use Exception;
-use PC_Vendor\Psr\Container\NotFoundExceptionInterface;
+if ( ! defined( 'ABSPATH' ) ) {
+	die;
+}
 
-class ServiceNotRegisteredException extends Exception implements NotFoundExceptionInterface {}
+class Register_Loader {
+
+
+	/**
+	 * Loops through all classes for regisration and regiter
+	 * if they have the Registerable interface.
+	 *
+	 * @param PinkCrab\Core\App $app
+	 * @param array $registerable_classes
+	 * @param PinkCrab\Core\Services\Registration\Loader $loader
+	 * @return void
+	 */
+	public static function initalise( App $app, array $registerable_classes, Loader $loader ): void {
+		foreach ( $registerable_classes as $class ) {
+			if ( in_array( Registerable::class, class_implements( $class ), true ) ) {
+				$app::make( $class )->register( $loader );
+			}
+		}
+	}
+}
