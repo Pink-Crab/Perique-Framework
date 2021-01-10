@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 /**
- * The main view class.
+ * Basic PHP engine for using the Renderable interface.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -24,8 +24,6 @@ namespace PinkCrab\Core\Services\View;
 use Exception;
 use PinkCrab\Core\Interfaces\Renderable;
 
-
-
 class PHP_Engine implements Renderable {
 
 
@@ -33,7 +31,7 @@ class PHP_Engine implements Renderable {
 	 * Renders a template with data.
 	 *
 	 * @param string $file_path
-	 * @param array|object $data
+	 * @param iterable $data
 	 * @return void|string
 	 * @throws Exception If invalid filepath.
 	 */
@@ -45,6 +43,7 @@ class PHP_Engine implements Renderable {
 
 		if ( $print ) {
 			print( $this->render_buffer( $file_path, $data ) );
+			return;
 		} else {
 			return $this->render_buffer( $file_path, $data );
 		}
@@ -54,7 +53,7 @@ class PHP_Engine implements Renderable {
 	 * Builds the view.
 	 *
 	 * @param string $file_path
-	 * @param array|object $data
+	 * @param iterable $data
 	 * @return string
 	 */
 	private function render_buffer( string $file_path, iterable $data ): string {
@@ -71,6 +70,6 @@ class PHP_Engine implements Renderable {
 		include $file_path;
 		$output = ob_get_contents();
 		ob_end_clean();
-		return $output;
+		return $output ?: '';
 	}
 }
