@@ -24,5 +24,14 @@ namespace PinkCrab\Core\Interfaces;
 
 
 interface Renderable {
-	public function render( string $view, $data, bool $print = true );
+
+	/**
+	 * Display a view and its context.
+	 *
+	 * @param string $view
+	 * @param iterable<string, mixed> $data
+	 * @param bool $print
+	 * @return void|string
+	 */
+	public function render( string $view, iterable $data, bool $print = true );
 }

@@ -59,7 +59,7 @@ class WP_Dice {
 	 * Proxy for addRule.
 	 *
 	 * @param string $name
-	 * @param array $rule
+	 * @param array<string, string|object|array> $rule
 	 * @return self
 	 */
 	public function addRule( string $name, array $rule ): self {
@@ -70,7 +70,7 @@ class WP_Dice {
 	/**
 	 * Proxy for addRules
 	 *
-	 * @param array $rules
+	 * @param array<string, array> $rules
 	 * @return self
 	 */
 	public function addRules( array $rules ): self {
@@ -82,7 +82,7 @@ class WP_Dice {
 	 * Proxy for create, but with third param removed (see dice code comments)
 	 *
 	 * @param string $name
-	 * @param array $args
+	 * @param array<mixed> $args
 	 * @return object|null
 	 */
 	public function create( string $name, array $args = array() ):? object {
