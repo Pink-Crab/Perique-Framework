@@ -136,7 +136,7 @@ final class App {
 	 * Magic static getter.
 	 *
 	 * @param string $key
-	 * @param array $params
+	 * @param  array<int, mixed> $params
 	 * @return object
 	 * @throws OutOfBoundsException If key not set.
 	 */
@@ -169,7 +169,7 @@ final class App {
 	 * Creates an instance using Dice.
 	 *
 	 * @param string $class
-	 * @param array $args
+	 * @param array<int, mixed> $args
 	 * @return mixed
 	 * @throws OutOfBoundsException If di not set.
 	 */

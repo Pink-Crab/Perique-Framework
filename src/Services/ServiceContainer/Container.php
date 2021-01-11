@@ -36,7 +36,7 @@ class Container implements Service_Container {
 	/**
 	 * Holds all of the bound services.
 	 *
-	 * @var array
+	 * @var array<string, object>
 	 */
 	protected $services = array();
 

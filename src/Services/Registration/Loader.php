@@ -69,9 +69,9 @@ class Loader {
 	/**
 	 * Static instance.
 	 *
-	 * @var self
+	 * @var self|null
 	 */
-	public static $instance;
+	public static $instance = null;
 
 	/**
 	 * Creates an instance of the loader.
@@ -90,7 +90,10 @@ class Loader {
 	 * @return self
 	 */
 	public static function boot(): self {
-		return self::$instance ?? self::$instance = new Loader();
+		if ( ! self::$instance ) {
+			self::$instance = new self();
+		}
+		return self::$instance;
 	}
 
 	/**
@@ -343,7 +346,7 @@ class Loader {
 	/**
 	 * Registers both hooks and filters.
 	 *
-	 * @param array $hook
+	 * @param array<string, mixed> $hook
 	 * @return void
 	 */
 	private function registerHookCallback( array $hook ): void {

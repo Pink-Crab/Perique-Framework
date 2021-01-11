@@ -20,42 +20,42 @@ final class App_Config {
 	/**
 	 * Holds the current sites paths & urls
 	 *
-	 * @var array
+	 * @var array<string, mixed>
 	 */
 	protected $paths = array();
 
 	/**
 	 * Holds all the namespaces (rest, cache etc).
 	 *
-	 * @var array
+	 * @var array<string, mixed>
 	 */
 	protected $namespaces = array();
 
 	/**
 	 * Holds all additiional array details.
 	 *
-	 * @var array
+	 * @var array<string, mixed>
 	 */
 	protected $plugin = array();
 
 	/**
 	 * Holds all additiional array details.
 	 *
-	 * @var array
+	 * @var array<string, mixed>
 	 */
 	protected $taxonomies = array();
 
 	/**
 	 * Holds the CPT slugs and meta keys.
 	 *
-	 * @var array
+	 * @var array<string, mixed>
 	 */
 	protected $post_types = array();
 
 	/**
 	 * Holds an array of table names.
 	 *
-	 * @var array
+	 * @var array<string, mixed>
 	 */
 	protected $db_tables = array();
 
@@ -63,10 +63,13 @@ final class App_Config {
 	 * Holds all custom settings keys.
 	 * Accessed using __get()
 	 *
-	 * @var array
+	 * @var array<string, mixed>
 	 */
 	protected $additional = array();
 
+	/**
+	 * @param array<string, mixed> $settings
+	 */
 	public function __construct( array $settings = array() ) {
 		$settings = $this->set_defaults( $settings );
 		$this->set_props( $settings );
@@ -75,17 +78,17 @@ final class App_Config {
 	/**
 	 * Overlays the passed details to the predefined fallbacks.
 	 *
-	 * @param array $settings
-	 * @return array
+	 * @param array<string, mixed> $settings
+	 * @return array<string, mixed>
 	 */
 	private function set_defaults( array $settings ): array {
-		return array_replace_recursive( $this->settings_defaults(), $settings ) ?? [];
+		return array_replace_recursive( $this->settings_defaults(), $settings );
 	}
 
 	/**
 	 * Maps the supplied settings array to inner states.
 	 *
-	 * @param array $paths
+	 * @param array<string, mixed> $paths
 	 * @return void
 	 */
 	private function set_props( array $paths ): void {
@@ -103,7 +106,7 @@ final class App_Config {
 	 * Gets a path with trailing slash.
 	 *
 	 * @param string|null $path
-	 * @return array|string|null
+	 * @return array<string, mixed>|string|null
 	 */
 	public function path( ?string $path = null ) {
 
@@ -111,14 +114,14 @@ final class App_Config {
 			return $this->paths['path'];
 		}
 
-		return \array_key_exists( $path, $this->paths['path'] ) ? trailingslashit( $this->paths['path'][ $path ] ) : null; /** @phpstan-ignore-line */
+		return \array_key_exists( $path, $this->paths['path'] ) ? trailingslashit( $this->paths['path'][ $path ] ) : null; 
 	}
 
 	/**
 	 * Gets a path with trailing slash.
 	 *
 	 * @param string|null $url
-	 * @return array|string|null
+	 * @return array<string, mixed>|string|null
 	 */
 	public function url( ?string $url = null ) {
 
@@ -173,7 +176,7 @@ final class App_Config {
 	 * Returns the key for a post type.
 	 *
 	 * @param string $key
-	 * @return string|array
+	 * @return string|array<string, mixed>
 	 * @throws OutOfBoundsException
 	 */
 	public function post_types( string $key, string $field = 'slug', ?string $meta_key = null ) {
@@ -198,7 +201,7 @@ final class App_Config {
 	 * Set the defined post types.
 	 * Ensures all have valid slug and meta array.
 	 *
-	 * @param array $post_types
+	 * @param array<string, mixed> $post_types
 	 * @return void
 	 */
 	protected function set_post_types( array $post_types ): void {
@@ -223,7 +226,7 @@ final class App_Config {
 	 * Returns the key for a post type.
 	 *
 	 * @param string $key
-	 * @return string|array
+	 * @return string|array<string, mixed>
 	 * @throws OutOfBoundsException
 	 */
 	public function taxonomies( string $key, string $field = 'slug', ?string $term_key = null ) {
@@ -248,7 +251,7 @@ final class App_Config {
 	 * Set the definedtaxonomies.
 	 * Ensures all have valid slug and term array.
 	 *
-	 * @param array $taxonomies
+	 * @param array<string, mixed> $taxonomies
 	 * @return void
 	 */
 	protected function set_taxonomies( array $taxonomies ): void {
@@ -296,7 +299,7 @@ final class App_Config {
 	/**
 	 * Returns a base settings array, to ensure all required values are defined.
 	 *
-	 * @return array
+	 * @return array<string, mixed>
 	 */
 	private function settings_defaults(): array {
 		$base_path  = \dirname( __DIR__, 2 );

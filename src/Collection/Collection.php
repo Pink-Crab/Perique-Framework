@@ -35,14 +35,14 @@ class Collection implements Countable {
 	/**
 	 * Datasource.
 	 *
-	 * @var array
+	 * @var array<int|string, mixed>
 	 */
 	protected $data = array();
 
 	/**
 	 * Creates an instance of the collection with predefined data.
 	 *
-	 * @param array $data
+	 * @param array<int|string, mixed> $data
 	 */
 	final public function __construct( array $data = array() ) {
 		$this->data = $this->map_construct( $data );
@@ -51,8 +51,8 @@ class Collection implements Countable {
 	/**
 	 * Overwrite this method in any extended classes, to modify the inital data.
 	 *
-	 * @param array $data
-	 * @return array
+	 * @param array<int|string, mixed> $data
+	 * @return array<int|string, mixed>
 	 */
 	protected function map_construct( array $data ): array {
 		return $data;
@@ -61,7 +61,7 @@ class Collection implements Countable {
 	/**
 	 * Static contrcutor
 	 *
-	 * @param mixed ...$data
+	 * @param array<int|string, mixed> $data
 	 * @return static
 	 */
 	public static function from( array $data = array() ) {
@@ -135,7 +135,7 @@ class Collection implements Countable {
 	/**
 	 * Merges with another array or collection
 	 *
-	 * @param Collection|array $data
+	 * @param Collection|array<int|string, mixed> $data
 	 * @return self
 	 * @throws TypeError If not an arrya or Collection.
 	 */
@@ -206,7 +206,7 @@ class Collection implements Countable {
 	/**
 	 * Returns the current contents as an array.
 	 *
-	 * @return array
+	 * @return array<int|string, mixed>
 	 */
 	public function to_array(): array {
 		return $this->data;
@@ -315,7 +315,7 @@ class Collection implements Countable {
 	/**
 	 * Returns a new collection of differences between another collection or array.
 	 *
-	 * @param array|Collection $data
+	 * @param array<int|string, mixed>|Collection $data
 	 * @return self
 	 * @throws TypeError
 	 */
@@ -336,7 +336,7 @@ class Collection implements Countable {
 	/**
 	 * Returns a collection of same values from another array or collection.
 	 *
-	 * @param array|Collection $data
+	 * @param array<int|string, mixed>|Collection $data
 	 * @return self
 	 */
 	public function intersect( $data ):self {

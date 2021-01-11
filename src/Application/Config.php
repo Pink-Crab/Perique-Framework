@@ -31,7 +31,7 @@ class Config {
 	 * Sets the config cache on first call.
 	 *
 	 * @param string $method
-	 * @param array $params
+	 * @param array<int, mixed> $params
 	 * @return mixed
 	 */
 	public static function __callStatic( $method, $params ) {
