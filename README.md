@@ -1,6 +1,6 @@
 # PinkCrab Framework Core #
 
-![alt text](https://img.shields.io/badge/PHPStan-level%207-brightgreen.svg?style=flat " ")
+![alt text](https://img.shields.io/badge/PHPStan-level%208-brightgreen.svg?style=flat " ")
 
 Welcome the main package of the PinkCrab Framwework. 
 
@@ -9,7 +9,7 @@ https://app.gitbook.com/@glynn-quelch/s/pinkcrab/~/drafts/-MQX_cCgS6Q37RjFODUp/
 
 
 ## Version ##
-**Release 0.3.0**
+**Release 0.3.1**
 
 With version 0.3 we have moved away from the submodule driven approach and thanks to PHP Scoper we can now use actual composer libraries.
 
@@ -218,3 +218,6 @@ The only issues that soemtimes arise if the the namespacing of core wp functions
 
 ### MIT License ###
 http://www.opensource.org/licenses/mit-license.html  
+
+## Update Log ##
+0.3.1 - Minor docblock changes for phpstan lv8

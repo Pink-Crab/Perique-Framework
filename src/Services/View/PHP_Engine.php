@@ -31,11 +31,11 @@ class PHP_Engine implements Renderable {
 	 * Renders a template with data.
 	 *
 	 * @param string $file_path
-	 * @param iterable $data
+	 * @param iterable<string, mixed> $data
 	 * @return void|string
 	 * @throws Exception If invalid filepath.
 	 */
-	public function render( string $file_path, $data, bool $print = true ) {
+	public function render( string $file_path, iterable $data, bool $print = true ) {
 		// Check file exists.
 		if ( ! file_exists( $file_path ) ) {
 			throw new Exception( sprintf( 'View %s not found', $file_path ) );
@@ -53,7 +53,7 @@ class PHP_Engine implements Renderable {
 	 * Builds the view.
 	 *
 	 * @param string $file_path
-	 * @param iterable $data
+	 * @param iterable<string, mixed> $data
 	 * @return string
 	 */
 	private function render_buffer( string $file_path, iterable $data ): string {

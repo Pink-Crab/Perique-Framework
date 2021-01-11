@@ -38,13 +38,13 @@ class Register_Loader {
 	 * if they have the Registerable interface.
 	 *
 	 * @param App    $app
-	 * @param array  $registerable_classes
+	 * @param array<int, string>  $registerable_classes
 	 * @param Loader $loader
 	 * @return void
 	 */
 	public static function initalise( App $app, array $registerable_classes, Loader $loader ): void {
 		foreach ( $registerable_classes as $class ) {
-			if ( in_array( Registerable::class, class_implements( $class ), true ) ) {
+			if ( in_array( Registerable::class, class_implements( $class ) ?: [], true ) ) {
 				$app::make( $class )->register( $loader );
 			}
 		}

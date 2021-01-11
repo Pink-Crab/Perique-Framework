@@ -12,7 +12,14 @@ namespace PinkCrab\Core\Interfaces;
 
 use Psr\Container\ContainerInterface;
 
-
 interface Service_Container extends ContainerInterface {
-	public function set( $id, object $service ): void;
+
+	/**
+	 * Binds an object to the constainer
+	 *
+	 * @param string $id
+	 * @param object $service
+	 * @return void
+	 */
+	public function set( string $id, object $service ): void;
 }
