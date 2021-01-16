@@ -11,7 +11,7 @@ declare(strict_types=1);
  * @package PinkCrab\Core
  */
 
-namespace PinkCrab\Core\Tests\Registration;
+namespace PinkCrab\Core\Tests\View;
 
 use Exception;
 use WP_UnitTestCase;

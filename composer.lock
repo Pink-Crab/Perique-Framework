@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f662da757c4ef09e66b4c4c72ecf162d",
+    "content-hash": "822a7eda472f0a4d75ecfcf8cf7c378c",
     "packages": [
         {
             "name": "psr/container",
@@ -529,16 +529,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "0.12.65",
+            "version": "0.12.67",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "1c7658668b28f8d647a8b874372acf14c4352688"
+                "reference": "ced7a5d9c5dba908c1c00cea3f1d4ad74da71b86"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/1c7658668b28f8d647a8b874372acf14c4352688",
-                "reference": "1c7658668b28f8d647a8b874372acf14c4352688",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/ced7a5d9c5dba908c1c00cea3f1d4ad74da71b86",
+                "reference": "ced7a5d9c5dba908c1c00cea3f1d4ad74da71b86",
                 "shasum": ""
             },
             "require": {
@@ -581,7 +581,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-01-06T16:51:10+00:00"
+            "time": "2021-01-14T14:16:19+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -937,6 +937,35 @@
                 "xunit"
             ],
             "time": "2020-01-08T08:45:45+00:00"
+        },
+        {
+            "name": "pinkcrab/phpunit-helpers",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Pink-Crab/PHP_Unut_Helpers.git",
+                "reference": "6ba4d50066daee34970c89e6492e971ab308bb4b"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PinkCrab\\PHPUnit_Helpers\\": "src"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Glynn Quelch",
+                    "email": "glynn.quelch@pinkcrab.co.uk",
+                    "homepage": "http://clappo.co.uk",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Collection of helper functions for use with tests.",
+            "homepage": "https://pinkcrab.co.uk",
+            "time": "2021-01-11T11:33:27+00:00"
         },
         {
             "name": "roots/wordpress",
@@ -2326,7 +2355,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "pinkcrab/phpunit-helpers": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

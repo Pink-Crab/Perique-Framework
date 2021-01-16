@@ -9,7 +9,7 @@ https://app.gitbook.com/@glynn-quelch/s/pinkcrab/~/drafts/-MQX_cCgS6Q37RjFODUp/
 
 
 ## Version ##
-**Release 0.3.1**
+**Release 0.3.2**
 
 With version 0.3 we have moved away from the submodule driven approach and thanks to PHP Scoper we can now use actual composer libraries.
 
@@ -221,3 +221,4 @@ http://www.opensource.org/licenses/mit-license.html
 
 ## Update Log ##
 0.3.1 - Minor docblock changes for phpstan lv8
+0.3.2 - Added in tests and expanded view
