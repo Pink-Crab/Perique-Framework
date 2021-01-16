@@ -1,4 +1,7 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 /**
  * Basic PHP engine for using the Renderable interface.
  *
@@ -26,50 +29,127 @@ use PinkCrab\Core\Interfaces\Renderable;
 
 class PHP_Engine implements Renderable {
 
+	/**
+	 * The path to base of templates.
+	 *
+	 * @var string
+	 */
+	protected $base_view_path;
+
+	/**
+	 * Creates an instance of the PHP_Engine
+	 *
+	 * @param string $base_view_path
+	 */
+	public function __construct( string $base_view_path ) {
+		$this->base_view_path = $this->verify_view_path( $base_view_path );
+	}
 
 	/**
 	 * Renders a template with data.
 	 *
-	 * @param string $file_path
+	 * @param string $view
 	 * @param iterable<string, mixed> $data
-	 * @return void|string
-	 * @throws Exception If invalid filepath.
+	 * @return string|void
 	 */
-	public function render( string $file_path, iterable $data, bool $print = true ) {
-		// Check file exists.
-		if ( ! file_exists( $file_path ) ) {
-			throw new Exception( sprintf( 'View %s not found', $file_path ) );
-		}
-
+	public function render( string $view, iterable $data, bool $print = true ) {
 		if ( $print ) {
-			print( $this->render_buffer( $file_path, $data ) );
-			return;
+			print( $this->render_buffer( $view, $data ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		} else {
-			return $this->render_buffer( $file_path, $data );
+			return $this->render_buffer( $view, $data );
+		}
+	}
+
+	/**
+	 * Include a partial subtemplate
+	 *
+	 * @param string $view
+	 * @param iterable<string, mixed> $data
+	 * @param bool $print
+	 * @return string|void
+	 */
+	public function partial( string $view, iterable $data = array(), bool $print = true ) {
+		if ( $print ) {
+			$this->render( $view, $data, $print );
+		} else {
+			return $this->render( $view, $data, $print );
 		}
 	}
 
 	/**
 	 * Builds the view.
 	 *
-	 * @param string $file_path
+	 * @param string $view
 	 * @param iterable<string, mixed> $data
 	 * @return string
+	 * @throws Exception
 	 */
-	private function render_buffer( string $file_path, iterable $data ): string {
+	protected function render_buffer( string $view, iterable $data ): string {
+
+		if ( ! file_exists( $this->resolve_file_path( $view ) ) ) {
+			throw new Exception( "{$view} doesnt exist" );
+		}
+
 		$output = '';
 		ob_start();
 
 		// Set all the data values a parameters.
 		foreach ( $data as $key => $value ) {
 			if ( is_string( $key ) ) {
-				${esc_html( $key )} = $value;
+				${\strip_tags( $key )} = $value;
 			}
 		}
 
-		include $file_path;
+		include $this->resolve_file_path( $view );
 		$output = ob_get_contents();
 		ob_end_clean();
 		return $output ?: '';
+	}
+
+	/**
+	 * Trims any leading slash and removes .php
+	 *
+	 * @param string $file
+	 * @return string
+	 */
+	protected function clean_filename( string $file ): string {
+			$file = ltrim( $file, '/' );
+			return substr( $file, -4 ) === '.php'
+			? substr( $file, 0, -4 )
+			: $file;
+
+	}
+
+	/**
+	 * Resolves the filepath from a filenane.
+	 *
+	 * @param string $filename
+	 * @return string
+	 */
+	protected function resolve_file_path( string $filename ): string {
+		return sprintf(
+			'%s%s.php',
+			$this->base_view_path,
+			$this->clean_filename( $filename )
+		);
+	}
+
+
+	/**
+	 * Verifies the view path exists and it has the trailing slash.
+	 *
+	 * @param string $path
+	 * @return string
+	 * @throws Exception
+	 */
+	protected function verify_view_path( string $path ): string {
+
+		$path = rtrim( $path, '/' ) . '/';
+
+		if ( ! \is_dir( $path ) ) {
+			throw new Exception( "{$path} doesnt exist and cant be used as the base view path." );
+		}
+
+		return $path;
 	}
 }
