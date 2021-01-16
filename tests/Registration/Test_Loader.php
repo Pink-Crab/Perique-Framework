@@ -32,6 +32,7 @@ class Loader_Test extends WP_UnitTestCase {
 	 * @return void
 	 */
 	public function setUp() {
+		parent::setUp();
 		$this->loader = Loader::boot();
 	}
 
