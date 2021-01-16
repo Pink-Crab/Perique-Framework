@@ -5,7 +5,7 @@
 Welcome the main package of the PinkCrab Framwework. 
 
 For more details please visit our docs.
-https://app.gitbook.com/@glynn-quelch/s/pinkcrab/~/drafts/-MQX_cCgS6Q37RjFODUp/
+https://app.gitbook.com/@glynn-quelch/s/pinkcrab/
 
 
 ## Version ##
@@ -27,49 +27,67 @@ To use the Framework, a few files are needed for the framework to be loaded.
 This file can be anywhere in your plugin, although we reccomend keeping it in your root directory with the plugin.php file.
 
 ````php
-    <?php
-    // @file bootstrap.php
+<?php
 
-    // Namespaces
-    use PinkCrab\Core\Application\App;
-    use PinkCrab\Core\Services\Dice\Dice;
-    use PinkCrab\Core\Collection\Collection;
-    use PinkCrab\Core\Services\Dice\WP_Dice;
-    use PinkCrab\Core\Application\App_Config;
-    use PinkCrab\Core\Services\Registration\Loader;
-    use PinkCrab\Core\Services\ServiceContainer\Container;
-    use PinkCrab\Core\Services\Registration\Register_Loader;
+declare(strict_types=1);
 
-    $loader    = Loader::boot();
-    $config    = new App_Config( require( 'config/settings.php' ) ); // Change if using custom path for config.
-    $container = new Container();
+/**
+ * Used to bootload the application.
+ *
+ * @author Glynn Quelch <glynn.quelch@gmail.com>
+ * @since 1.0.0
+ */
 
-    // Setup the service container .
-    $container->set( 'di', WP_Dice::constructWith( new Dice() ) );
-    $container->set( 'config', $config );
+use PinkCrab\Core\Application\App;
+use PinkCrab\Core\Services\Dice\Dice;
+use PinkCrab\Core\Services\Dice\WP_Dice;
+use PinkCrab\Core\Application\App_Config;
+use PinkCrab\Core\Services\Registration\Loader;
+use PinkCrab\Core\Services\ServiceContainer\Container;
+use PinkCrab\Core\Services\Registration\Register_Loader;
 
-    // Boot the app.
-    $app = App::init( $container );
-    // Add all DI rules and register the actions from loader.
-    add_action(
-        'init',
-        function () use ( $loader, $app, $config ) {
-            // Add all DI rules.
-            $app->get( 'di' )->addRules(
-                apply_filters( 'PinkCrab\\di_rules', require( 'config/dependencies.php' ) ) // Change if using custom path for config.
-            );
-            // Initalise all registerable classes.
-            Register_Loader::initalise(
-                $app,
-                apply_filters( 'PinkCrab\\registration_rules', require( 'config/registration.php' ) ), // Change if using custom path for config.
-                $loader
-            );
+// Populate Config with settings, if file exists.
+$settings = file_exists( 'config/settings.php' )
+	? require 'config/settings.php'
+	: array();
+$config   = new App_Config( $settings );
 
-            // Register Loader hooks.
-            $loader->register_hooks();
-        },
-        1
-    );
+// Load hook loader, DI & container.
+$loader    = Loader::boot();
+$di        = WP_Dice::constructWith( new Dice() );
+$container = new Container();
+
+// Setup the service container .
+$container->set( 'di', $di );
+$container->set( 'config', $config );
+
+// Boot the app.
+$app = App::init( $container );
+
+// Add all DI rules and register the actions from loader.
+add_action(
+	'init',
+	function () use ( $loader, $app, $config ) {
+
+		// If the dependencies file exists, add rules.
+		if ( file_exists( 'config/dependencies.php' ) ) {
+			$dependencies = include 'config/dependencies.php';
+			$app->get( 'di' )->addRules( $dependencies );
+		}
+
+		// Add all registerable objects to loader, if file exists.
+		if ( file_exists( 'config/registration.php' ) ) {
+			$registerables = include 'config/registration.php';
+			Register_Loader::initalise( $app, $registerables, $loader );
+		}
+		
+		// You can hook in with the $loader here to add any other setup hook calls.
+
+		// Initalise all registerable classes.
+		$loader->register_hooks();
+	},
+	1
+);
 
 ````
 If you are planning to give all of your vendor libraries custom namespaces using Php Scoper (more details below), to use the new mapped namespaces.
@@ -92,8 +110,6 @@ Once you have your bootstrap file created, its just a case of hooking it up in y
      * License URI:     http://www.gnu.org/licenses/gpl-2.0.txt
      * Text Domain:     ##TEXT DOMAIN##
      */
-
-
 
     if ( ! defined( 'ABSPATH' ) ) {
         die;
@@ -125,15 +141,22 @@ The framework requires 3 config files, these are usually placed in the /config d
     use PinkCrab\Core\Services\View\PHP_Engine;
     
     return array(
-        // Gloabl Rules
-        '*' => array(
-            'substitutions' => array(
-                App::class        => App::getInstance(),
-                Renderable::class => PHP_Engine::class,
-			    wpdb::class       => new wpdb( \DB_USER, \DB_PASSWORD, \DB_NAME, \DB_HOST ),
-            ),
-        ),
-    );
+	// Gloabl Rules
+	'*'         => array(
+		'substitutions' => array(
+			App::class        => App::get_instance(),
+			Renderable::class => PHP_Engine::class,
+		),
+	),
+
+	// Use wpdb as an injectable object.
+	wpdb::class => array(
+		'shared'          => true,
+		'constructParams' => array( \DB_USER, \DB_PASSWORD, \DB_NAME, \DB_HOST ),
+	),
+
+	/** ADD YOUR CUSTOM RULES HERE */
+);
 ````
 ### dependencies.php ###
 ````php
