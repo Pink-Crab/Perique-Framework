@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * Tests the default PHP Engine for the view/renderable interface.
+ * Tests for the view service class
  *
  * @since 0.1.0
  * @author Glynn Quelch <glynn.quelch@gmail.com>
