@@ -1,84 +1,146 @@
----
-description: >-
-  The core components of the PinkCrab framework, a small and highly extendable
-  framework for building WordPress Plugins and Themes.
----
+# PinkCrab Framework Core #
 
-# PinkCrab Framework::Core
+![alt text](https://img.shields.io/badge/PHPStan-level%208-brightgreen.svg?style=flat " ")
 
-The PinkCrab Framework 
+Welcome the main package of the PinkCrab Framwework. 
 
-### Setup.
-
-You can clone our existing **Plugin Boiler Plate** on [github](https://github.com/Pink-Crab/Framework_Plugin_Boilerplate), if however, you wanted to construct the application you can. The framework can work as a standalone plugin, or setup slightly differently to be used a core library in the mu-plugins directory or driving a more MVC orientated theme.
-
-The framework uses composer, normally this is not advised for WordPress plugins/themes. We have a small config for using [php-scoper](https://github.com/humbug/php-scoper/) to move the entire vendor directory to a prefixed namespace. More details can be found at the end of this page.
-
-{% hint style="info" %}
-The rest of this tutorial assumes you have composer installed globally.
-{% endhint %}
-
-### Structure
-
-```text
-+ plugin
-    + config
-        | dependencies.php
-        | registration.php
-        | settings.php
-    + src
-    | bootstrap.php
-    | composer.json
-    | plugin.php
+For more details please visit our docs.
+https://app.gitbook.com/@glynn-quelch/s/pinkcrab/
 
 
-// OPTIONAL (Comes included in boilerplate repo)
-    + views
-    + assets
-    + wp
-        | Activation.php
-        | Deactivation.php
-        | Uninstalled.php
-    + tests
-        | bootsrap.php
-        | wp_config.php
-    | phpcs.xml
-    | phpstan.neon.dist
-    | phpunit.xml.dist
-```
+## Version ##
+**Release 0.3.2**
 
-Create your directory and initialise a composer project with `composer init`from the command line. To add the Framework type `composer require pinkcrab/plugin-framework` to add to your plugin. You can add any additional libraries using **packagist** as you would any other PHP project. Then it's just a case of filling the rest of your composer.json file \([see an example](https://github.com/Pink-Crab/Framework_Plugin_Boilerplate/blob/master/composer.json)\)
+With version 0.3 we have moved away from the submodule driven approach and thanks to PHP Scoper we can now use actual composer libraries.
 
-Once you have all of your composer.json setup, you can run composer install, and then it's a case of hooking your application up to WordPress. 
+The Core only provides access to the Loader, Registration, Collection, DI (DICE Dependency Injection Container), App_Config and basic (native) PHP render engine for view.
 
-#### Config
+## Why? ##
+WordPress is powerful tool for building a wide range of website, but due to its age and commitment to backwards compatibility. Its often fustrating to work with using more modern tools. 
 
-At its bare minimum, we have 3 files that hold most of our global configs, registrations, and dependency injection wiring. These can be placed anywhere within your application and are just basic PHP files just return arrays \(so no need to be included in the autoloader\).
+The PinkCrab Framework allows the creation of Plugins, Themes and MU Libraries for use on more complex websites.
 
-```php
-// @file config/dependencies.php
+## Setup ##
 
+To use the Framework, a few files are needed for the framework to be loaded.
+*bootstrap.php*
+This file can be anywhere in your plugin, although we reccomend keeping it in your root directory with the plugin.php file.
+
+````php
 <?php
 
 declare(strict_types=1);
 
 /**
- * Handles all depenedency injection rules and config.
+ * Used to bootload the application.
  *
- * @package PinkCrab\PluginBoilerplate
  * @author Glynn Quelch <glynn.quelch@gmail.com>
- * @since 0.1.0
+ * @since 1.0.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	die;
-}
-
 use PinkCrab\Core\Application\App;
-use PinkCrab\Core\Interfaces\Renderable;
-use PinkCrab\Core\Services\View\PHP_Engine;
+use PinkCrab\Core\Services\Dice\Dice;
+use PinkCrab\Core\Services\Dice\WP_Dice;
+use PinkCrab\Core\Application\App_Config;
+use PinkCrab\Core\Services\Registration\Loader;
+use PinkCrab\Core\Services\ServiceContainer\Container;
+use PinkCrab\Core\Services\Registration\Register_Loader;
 
-return array(
+// Populate Config with settings, if file exists.
+$settings = file_exists( 'config/settings.php' )
+	? require 'config/settings.php'
+	: array();
+$config   = new App_Config( $settings );
+
+// Load hook loader, DI & container.
+$loader    = Loader::boot();
+$di        = WP_Dice::constructWith( new Dice() );
+$container = new Container();
+
+// Setup the service container .
+$container->set( 'di', $di );
+$container->set( 'config', $config );
+
+// Boot the app.
+$app = App::init( $container );
+
+// Add all DI rules and register the actions from loader.
+add_action(
+	'init',
+	function () use ( $loader, $app, $config ) {
+
+		// If the dependencies file exists, add rules.
+		if ( file_exists( 'config/dependencies.php' ) ) {
+			$dependencies = include 'config/dependencies.php';
+			$app->get( 'di' )->addRules( $dependencies );
+		}
+
+		// Add all registerable objects to loader, if file exists.
+		if ( file_exists( 'config/registration.php' ) ) {
+			$registerables = include 'config/registration.php';
+			Register_Loader::initalise( $app, $registerables, $loader );
+		}
+		
+		// You can hook in with the $loader here to add any other setup hook calls.
+
+		// Initalise all registerable classes.
+		$loader->register_hooks();
+	},
+	1
+);
+
+````
+If you are planning to give all of your vendor libraries custom namespaces using Php Scoper (more details below), to use the new mapped namespaces.
+
+Once you have your bootstrap file created, its just a case of hooking it up in your plugin.php file.
+
+````php
+    <?php
+    // @file plugin.php
+    
+    /**
+     * @wordpress-plugin
+     * Plugin Name:     ##PLUGIN NAME##
+     * Plugin URI:      ##YOUR URL##
+     * Description:     ##YOUR PLUGIN DESC##
+     * Version:         ##VERSION##
+     * Author:          ##AUTHOR##
+     * Author URI:      ##YOUR URL##
+     * License:         GPL-2.0+
+     * License URI:     http://www.gnu.org/licenses/gpl-2.0.txt
+     * Text Domain:     ##TEXT DOMAIN##
+     */
+
+    if ( ! defined( 'ABSPATH' ) ) {
+        die;
+    }
+
+    require_once __DIR__ . '/vendor/autoload.php';
+    require_once __DIR__ . '/bootstrap.php';
+
+    // Optional activation hooks
+````
+
+The framework requires 3 config files, these are usually placed in the /config directory, but can be placed elsewhere. If you do use these elsewhere, please upadate the paths in the bootstrap.php file.
+
+### dependencies.php ###
+````php
+    <?php
+    // @file config/dependencies.php
+
+    /**
+     * Handles all depenedency injection rules and config.
+     *
+     * @package Your Plugin
+     * @author Awesome Devs <awesome.devs@rock.com>
+     * @since 1.2.3
+     */
+
+    use PinkCrab\Core\Application\App;
+    use PinkCrab\Core\Interfaces\Renderable;
+    use PinkCrab\Core\Services\View\PHP_Engine;
+    
+    return array(
 	// Gloabl Rules
 	'*'         => array(
 		'substitutions' => array(
@@ -95,7 +157,91 @@ return array(
 
 	/** ADD YOUR CUSTOM RULES HERE */
 );
-```
+````
+### dependencies.php ###
+````php
+    <?php
+    // @file config/dependencies.php
+    declare(strict_types=1);
 
-The Dependencies file holds all our Dependency Injection rules, our boilerplate plugin 
 
+    /**
+     * Holds all classes which are to be loaded on initalisation.
+     *
+     * @package Your Plugin
+     * @author Awesome Devs <awesome.devs@rock.com>
+     * @since 1.2.3
+     */
+
+    return array(
+        /** Include all your classes which implemenet Registerable here */
+    );
+````
+### settings.php ###
+````php
+    // @file config/settings.php
+    <?php
+    
+    declare(strict_types=1);
+
+    /**
+     * Handles all the data used by App_Config
+     *
+     * @package Your Plugin
+     * @author Awesome Devs <awesome.devs@rock.com>
+     * @since 1.2.3
+     */
+
+    // Get the path of the plugin base.
+    $base_path  = \dirname( __DIR__, 1 );
+    $plugin_dir = \basename( $base_path );
+    $wp_uploads = \wp_upload_dir();
+
+    return array(
+        'additional' => array(
+            // Register your custom config data.
+        ),
+
+    );
+````
+
+## Testing ##
+
+### PHP Unit ###
+If you would like to run the tests for this package, please ensure you add your database details into the test/wp-config.php file before running phpunit.
+
+### PHP Stan ###
+The module comes with a pollyfill for all WP Functions, allowing for the testing of all core files. The current config omits the Dice file as this is not ours. To run the suite call.
+````bash vendor/bin/phpstan analyse src/ -l7 ````
+
+## Building ##
+If you wish to use PHP Scoper to rebase the namespaces, to remove the risk of conflicts feel free. The Core has been tested and will run for other namespaces without too many issues. 
+
+The only issues that soemtimes arise if the the namespacing of core wp functions. That can be avoided for this package by adding the following exclusions to your scoper.inc.php file.
+````php
+    <?php
+        // Omit from remapping.
+        // wp_upload_dir();    Used in settings.php
+        // plugins_url();      Used in settings.php
+
+        // ....
+    	'patchers' => array(
+		function ( $file_path, $prefix, $contents ) {
+			// Your other functions to omit
+                $contents = str_replace( "\\$prefix\\wp_upload_dir", '\\wp_upload_dir', $contents );
+			$contents = str_replace( "\\$prefix\\plugins_url", '\\plugins_url', $contents );
+
+            return $contents;
+		},
+        // .......
+	),
+````
+
+## License ##
+
+### MIT License ###
+http://www.opensource.org/licenses/mit-license.html  
+
+## Update Log ##
+0.3.1 - Minor docblock changes for phpstan lv8
+0.3.2 - Added in tests and expanded view
