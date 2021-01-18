@@ -24,7 +24,9 @@ declare(strict_types=1);
 
 namespace PinkCrab\Core\Services\Dice;
 
-use PinkCrab\Core\Services\Dice\Dice;
+use Dice\Dice;
+
+
 
 class WP_Dice {
 
