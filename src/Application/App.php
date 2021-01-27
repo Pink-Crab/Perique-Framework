@@ -158,7 +158,7 @@ final class App {
 	 * @return object
 	 * @throws OutOfBoundsException If key not set.
 	 */
-	public static function retreive( string $key ): object {
+	public static function retreive( string $key ) {
 
 		// Check app has been intialised, throw if not.
 		if ( is_null( self::$instance ) ) {
