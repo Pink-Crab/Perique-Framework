@@ -1,8 +1,13 @@
 # PinkCrab Framework Core #
 
-![alt text](https://img.shields.io/badge/PHPStan-level%208-brightgreen.svg?style=flat " ")
-
 Welcome the main package of the PinkCrab Framwework. 
+
+![alt text](https://img.shields.io/badge/Current_Version-0.3.3-yellow.svg?style=flat " ") 
+[![Open Source Love](https://badges.frapsoft.com/os/mit/mit.svg?v=102)]()
+
+![](https://github.com/Pink-Crab/Framework__core/workflows/GitHub_CI/badge.svg " ")![alt text](https://img.shields.io/badge/PHPStan-level%208-brightgreen.svg?style=flat " ")
+![alt text](https://img.shields.io/badge/WP_PHPUnit-V5-brightgreen.svg?style=flat " ")
+![alt text](https://img.shields.io/badge/PHPCS-WP_Extra-brightgreen.svg?style=flat " ")
 
 For more details please visit our docs.
 https://app.gitbook.com/@glynn-quelch/s/pinkcrab/
@@ -21,6 +26,10 @@ WordPress is powerful tool for building a wide range of website, but due to its 
 The PinkCrab Framework allows the creation of Plugins, Themes and MU Libraries for use on more complex websites.
 
 ## Setup ##
+
+```bash 
+$ composer require pinkcrab/plugin-framework 
+```
 
 To use the Framework, a few files are needed for the framework to be loaded.
 *bootstrap.php*
@@ -243,6 +252,7 @@ The only issues that soemtimes arise if the the namespacing of core wp functions
 http://www.opensource.org/licenses/mit-license.html  
 
 ## Update Log ##
-0.3.1 - Minor docblock changes for phpstan lv8
-0.3.2 - Added in tests and expanded view
-0.3.3 - Removed object type hint from service container.
+* 0.3.1 - Minor docblock changes for phpstan lv8
+* 0.3.2 - Added in tests and expanded view
+* 0.3.3 - Removed object type hint from service container.
+* 0.3.3 - 
