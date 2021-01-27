@@ -311,7 +311,7 @@ class Loader {
 		$this->global->apply(
 			function ( $hook ) {
 				if ( is_array( $hook ) ) {
-					$this->registerHookCallback( $hook );
+					$this->register_hook_callback( $hook );
 				}
 			}
 		);
@@ -323,7 +323,7 @@ class Loader {
 			$this->admin->apply(
 				function ( $hook ) {
 					if ( is_array( $hook ) ) {
-						$this->registerHookCallback( $hook );
+						$this->register_hook_callback( $hook );
 					}
 				}
 			);
@@ -336,7 +336,7 @@ class Loader {
 			$this->front->apply(
 				function ( $hook ) {
 					if ( is_array( $hook ) ) {
-						$this->registerHookCallback( $hook );
+						$this->register_hook_callback( $hook );
 					}
 				}
 			);
@@ -349,7 +349,7 @@ class Loader {
 	 * @param array<string, mixed> $hook
 	 * @return void
 	 */
-	private function registerHookCallback( array $hook ): void {
+	private function register_hook_callback( array $hook ): void {
 
 		switch ( $hook['type'] ) {
 			case 'action':

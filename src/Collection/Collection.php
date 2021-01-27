@@ -140,13 +140,13 @@ class Collection implements Countable {
 	 * @throws TypeError If not an arrya or Collection.
 	 */
 	public function merge( $data ): self {
-		if ( ! is_array( $data ) && ! is_a( $data, Collection::class ) ) {
+		if ( ! is_array( $data ) && ! is_a( $data, static::class ) ) {
 			throw new TypeError( 'Can only merge with other Collections or Arrays.' );
 		}
 		return new static(
 			array_merge(
 				$this->data,
-				is_object( $data ) &&  is_a( $data, Collection::class ) ? $data->to_array() : $data
+				is_object( $data ) && is_a( $data, static::class ) ? $data->to_array() : $data
 			)
 		);
 	}
@@ -321,14 +321,14 @@ class Collection implements Countable {
 	 */
 	public function diff( $data ):self {
 
-		if ( ! is_array( $data ) && ! is_a( $data, Collection::class ) ) {
+		if ( ! is_array( $data ) && ! is_a( $data, static::class ) ) {
 			throw new \TypeError( 'Can only merge with other Collections or Arrays.' );
 		}
 
 		return new static(
 			array_diff(
 				$this->data,
-				is_object( $data ) && is_a( $data, Collection::class ) ? $data->to_array() : $data
+				is_object( $data ) && is_a( $data, static::class ) ? $data->to_array() : $data
 			)
 		);
 	}
@@ -341,14 +341,14 @@ class Collection implements Countable {
 	 */
 	public function intersect( $data ):self {
 
-		if ( ! is_array( $data ) && ! is_a( $data, Collection::class ) ) {
+		if ( ! is_array( $data ) && ! is_a( $data, static::class ) ) {
 			throw new \TypeError( 'Can only merge with other Collections or Arrays.' );
 		}
 
 		return new static(
 			array_intersect(
 				$this->data,
-				is_object( $data ) && is_a( $data, Collection::class ) ? $data->to_array() : $data
+				is_object( $data ) && is_a( $data, static::class ) ? $data->to_array() : $data
 			)
 		);
 	}

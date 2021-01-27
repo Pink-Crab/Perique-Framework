@@ -21,8 +21,6 @@
 
 namespace PinkCrab\Core\Interfaces;
 
-
-
 interface Renderable {
 
 	/**

@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace PinkCrab\Core\Tests\DI;
 
+use Dice\Dice;
 use WP_UnitTestCase;
-use PinkCrab\Core\Services\Dice\Dice;
+use ReflectionException;
 use PinkCrab\PHPUnit_Helpers\Objects;
 use PinkCrab\Core\Services\Dice\WP_Dice;
+use PinkCrab\PHPUnit_Helpers\Reflection;
 use PinkCrab\Core\Tests\Fixtures\DI\Class_F;
 use PinkCrab\Core\Tests\Fixtures\DI\Class_G;
 use PinkCrab\Core\Tests\Fixtures\DI\Class_H;
@@ -63,7 +65,7 @@ class Test_WP_Dice extends WP_UnitTestCase {
 		// Check hold instance of Dice.
 		$this->assertInstanceOf(
 			Dice::class,
-			Objects::get_private_property( $wp_dice, 'dice' )
+			Reflection::get_private_property( $wp_dice, 'dice' )
 		);
 	}
 
@@ -93,6 +95,17 @@ class Test_WP_Dice extends WP_UnitTestCase {
 			$wp_dice->create( Class_F::class )->test()
 		);
 
+	}
+
+    /**
+     * Test an exception is thrown if creating none existing class
+     *
+     * @return void
+     */
+	public function test_exception_thrown_if_none_existing_class(): void {
+		$this->expectException( ReflectionException::class );
+		$wp_dice = WP_Dice::constructWith( new Dice() );
+		$wp_dice->create( 'NotAClass' );
 	}
 
 }

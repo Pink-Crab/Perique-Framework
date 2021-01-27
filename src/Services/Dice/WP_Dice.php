@@ -24,7 +24,8 @@ declare(strict_types=1);
 
 namespace PinkCrab\Core\Services\Dice;
 
-use PinkCrab\Core\Services\Dice\Dice;
+use Dice\Dice;
+
 
 class WP_Dice {
 
@@ -51,7 +52,7 @@ class WP_Dice {
 	 * @param Dice $dice
 	 * @return self
 	 */
-	public static function constructWith( Dice $dice ): self {
+	public static function constructWith( Dice $dice ): self { // phpcs:disable WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
 		return new self( $dice );
 	}
 
@@ -62,7 +63,7 @@ class WP_Dice {
 	 * @param array<string, string|object|array> $rule
 	 * @return self
 	 */
-	public function addRule( string $name, array $rule ): self {
+	public function addRule( string $name, array $rule ): self { // phpcs:disable WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
 		$this->dice = $this->dice->addRule( $name, $rule );
 		return $this;
 	}
@@ -73,7 +74,7 @@ class WP_Dice {
 	 * @param array<string, array> $rules
 	 * @return self
 	 */
-	public function addRules( array $rules ): self {
+	public function addRules( array $rules ): self { // phpcs:disable WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
 		$this->dice = $this->dice->addRules( $rules );
 		return $this;
 	}
@@ -85,7 +86,7 @@ class WP_Dice {
 	 * @param array<mixed> $args
 	 * @return object|null
 	 */
-	public function create( string $name, array $args = array() ):? object {
+	public function create( string $name, array $args = array() ) {
 		return $this->dice->create( $name, $args );
 	}
 }
