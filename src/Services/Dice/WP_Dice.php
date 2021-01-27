@@ -52,7 +52,7 @@ class WP_Dice {
 	 * @param Dice $dice
 	 * @return self
 	 */
-	public static function constructWith( Dice $dice ): self {
+	public static function constructWith( Dice $dice ): self { // phpcs:disable WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
 		return new self( $dice );
 	}
 
@@ -63,7 +63,7 @@ class WP_Dice {
 	 * @param array<string, string|object|array> $rule
 	 * @return self
 	 */
-	public function addRule( string $name, array $rule ): self {
+	public function addRule( string $name, array $rule ): self { // phpcs:disable WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
 		$this->dice = $this->dice->addRule( $name, $rule );
 		return $this;
 	}
@@ -74,7 +74,7 @@ class WP_Dice {
 	 * @param array<string, array> $rules
 	 * @return self
 	 */
-	public function addRules( array $rules ): self {
+	public function addRules( array $rules ): self { // phpcs:disable WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
 		$this->dice = $this->dice->addRules( $rules );
 		return $this;
 	}

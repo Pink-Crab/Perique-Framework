@@ -66,7 +66,10 @@ final class App {
 	 * @return self
 	 */
 	public static function init( Service_Container $service_container ): self {
-		return self::$instance ?? self::$instance = new static( $service_container );
+		if ( ! self::$instance ) {
+			self::$instance = new static( $service_container );
+		}
+		return self::$instance;
 	}
 
 	/**
@@ -81,7 +84,7 @@ final class App {
 				throw new Exception( 'PinkCrab Core not loaded' );
 			}
 		} catch ( \Throwable $th ) {
-			\wp_die( $th->getMessage() );
+			\wp_die( esc_html( $th->getMessage() ) );
 		}
 		return self::$instance;
 	}
@@ -107,7 +110,10 @@ final class App {
 	 * @throws OutOfBoundsException If key not set.
 	 */
 	public function get( string $key ) {
-
+		// Check app has been intialised, throw if not.
+		if ( is_null( self::$instance ) ) {
+			throw new OutOfBoundsException( 'App has not been intialised.' );
+		}
 		// Throw exception if not set.
 		if ( ! self::$instance->service_container->has( $key ) ) {
 			throw new OutOfBoundsException( sprintf( '%s has not been bound to container.', $key ) );
@@ -136,7 +142,7 @@ final class App {
 	 * @return object
 	 * @throws OutOfBoundsException If key not set.
 	 */
-	public static function __callStatic( string $key, $params ): object {
+	public static function __callStatic( string $key, $params ) { // phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
 
 		// Check app has been intialised, throw if not.
 		if ( is_null( self::$instance ) ) {
@@ -166,7 +172,7 @@ final class App {
 	 *
 	 * @param string $class
 	 * @param array<int, mixed> $args
-	 * @return mixed
+	 * @return object|null
 	 * @throws OutOfBoundsException If di not set.
 	 */
 	public static function make( string $class, array $args = array() ) {
