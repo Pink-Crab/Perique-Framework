@@ -86,7 +86,7 @@ class WP_Dice {
 	 * @param array<mixed> $args
 	 * @return object|null
 	 */
-	public function create( string $name, array $args = array() ):? object {
+	public function create( string $name, array $args = array() ) {
 		return $this->dice->create( $name, $args );
 	}
 }

@@ -18,6 +18,7 @@ use WP_UnitTestCase;
 use ReflectionException;
 use PinkCrab\PHPUnit_Helpers\Objects;
 use PinkCrab\Core\Services\Dice\WP_Dice;
+use PinkCrab\PHPUnit_Helpers\Reflection;
 use PinkCrab\Core\Tests\Fixtures\DI\Class_F;
 use PinkCrab\Core\Tests\Fixtures\DI\Class_G;
 use PinkCrab\Core\Tests\Fixtures\DI\Class_H;
@@ -64,7 +65,7 @@ class Test_WP_Dice extends WP_UnitTestCase {
 		// Check hold instance of Dice.
 		$this->assertInstanceOf(
 			Dice::class,
-			Objects::get_private_property( $wp_dice, 'dice' )
+			Reflection::get_private_property( $wp_dice, 'dice' )
 		);
 	}
 
