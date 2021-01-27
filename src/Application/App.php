@@ -92,6 +92,7 @@ final class App {
 	 * @param string $key
 	 * @param mixed $service
 	 * @return self
+	 * @deprecated 0.3.2
 	 */
 	public function bind( string $key, $service ): self {
 		$this->service_container->set( $key, $service );
@@ -180,17 +181,17 @@ final class App {
 	/**
 	 * Creates an instance using Dice.
 	 *
-	 * @param string $method The config key to call
-	 * @param array<int, mixed> $args Additional params passed.
+	 * @param string $key The config key to call
+	 * @param array<int, mixed> $child Additional params passed.
 	 * @return mixed
 	 * @throws OutOfBoundsException If config is not set, or can buggle up from App_Config.
 	 */
-	public static function config( string $method, ...$args ) {
+	public static function config( string $key, ...$child ) {
 
 		// Check app has been intialised, throw if not.
 		if ( is_null( self::$instance ) ) {
 			throw new OutOfBoundsException( 'App has not been intialised.' );
 		}
-		return self::$instance->get( 'config' )->{$method}( ...$args );
+		return self::$instance->get( 'config' )->{$key}( ...$child );
 	}
 }

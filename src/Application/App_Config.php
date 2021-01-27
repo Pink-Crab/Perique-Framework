@@ -114,7 +114,9 @@ final class App_Config {
 			return $this->paths['path'];
 		}
 
-		return \array_key_exists( $path, $this->paths['path'] ) ? trailingslashit( $this->paths['path'][ $path ] ) : null; 
+		return \array_key_exists( $path, $this->paths['path'] )
+			? trailingslashit( $this->paths['path'][ $path ] )
+			: null;
 	}
 
 	/**
@@ -129,7 +131,9 @@ final class App_Config {
 			return $this->paths['url'];
 		}
 
-		return \array_key_exists( $url, $this->paths['url'] ) ? trailingslashit( $this->paths['url'][ $url ] ) : null; 
+		return \array_key_exists( $url, $this->paths['url'] )
+			? trailingslashit( $this->paths['url'][ $url ] )
+			: null;
 	}
 
 	/**
@@ -281,7 +285,7 @@ final class App_Config {
 	 */
 	public function db_tables( string $name ): string {
 		if ( ! array_key_exists( $name, $this->db_tables ) ) {
-			throw new OutOfBoundsException( 'Taxonomy doesnt exists' );
+			throw new OutOfBoundsException( 'Table doesnt exist' );
 		}
 		return $this->db_tables[ $name ];
 	}
