@@ -107,11 +107,6 @@ final class App {
 	 */
 	public function get( string $key ) {
 
-		// Check app has been intialised, throw if not.
-		if ( is_null( self::$instance ) ) {
-			throw new OutOfBoundsException( 'App has not been intialised.' );
-		}
-
 		// Throw exception if not set.
 		if ( ! self::$instance->service_container->has( $key ) ) {
 			throw new OutOfBoundsException( sprintf( '%s has not been bound to container.', $key ) );

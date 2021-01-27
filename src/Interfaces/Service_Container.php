@@ -21,5 +21,5 @@ interface Service_Container extends ContainerInterface {
 	 * @param object $service
 	 * @return void
 	 */
-	public function set( string $id, object $service ): void;
+	public function set( string $id, $service ): void;
 }

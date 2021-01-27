@@ -26,10 +26,9 @@ declare(strict_types=1);
 namespace PinkCrab\Core\Services\ServiceContainer;
 
 use Exception;
+use TypeError;
 use PinkCrab\Core\Interfaces\Service_Container;
 use PinkCrab\Core\Services\ServiceContainer\ServiceNotRegisteredException;
-
-
 
 class Container implements Service_Container {
 
@@ -71,10 +70,16 @@ class Container implements Service_Container {
 	 * @param object $service
 	 * @return void
 	 */
-	public function set( $id, object $service ): void {
+	public function set( $id, $service ): void {
 		if ( $this->has( $id ) ) {
 			throw new Exception( "{$id} already defined in container" );
 		}
+
+		// If service is not an object, throw type error.
+		if ( ! is_object( $service ) ) {
+			throw new TypeError( 'Only objects can be bound to the container.' );
+		}
+
 		$this->services[ (string) $id ] = $service;
 	}
 
