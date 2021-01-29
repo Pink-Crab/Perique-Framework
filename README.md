@@ -48,7 +48,7 @@ declare(strict_types=1);
  */
 
 use PinkCrab\Core\Application\App;
-use PinkCrab\Core\Services\Dice\Dice;
+use Dice\Dice;
 use PinkCrab\Core\Services\Dice\WP_Dice;
 use PinkCrab\Core\Application\App_Config;
 use PinkCrab\Core\Services\Registration\Loader;
@@ -221,7 +221,7 @@ If you would like to run the tests for this package, please ensure you add your 
 
 ### PHP Stan ###
 The module comes with a pollyfill for all WP Functions, allowing for the testing of all core files. The current config omits the Dice file as this is not ours. To run the suite call.
-````bash vendor/bin/phpstan analyse src/ -l7 ````
+````bash vendor/bin/phpstan analyse src/ -l8 ````
 
 ## Building ##
 If you wish to use PHP Scoper to rebase the namespaces, to remove the risk of conflicts feel free. The Core has been tested and will run for other namespaces without too many issues. 
