@@ -95,6 +95,7 @@ final class App_Config {
 		$this->namespaces    = $paths['namespaces'];
 		$this->plugin        = $paths['plugin'];
 		$this->additional    = $paths['additional'];
+		$this->db_tables     = $paths['db_tables'];
 
 		$this->set_post_types( $paths['post_types'] );
 		$this->set_taxonomies( $paths['taxonomies'] );
@@ -240,7 +241,7 @@ final class App_Config {
 			return $this->taxonomies[ $key ]['slug'];
 		}
 
-		if ( $term_key && ! array_key_exists( $term_key, $this->taxonomies[ $key ]['meta'] ) ) {
+		if ( $term_key && ! array_key_exists( $term_key, $this->taxonomies[ $key ]['term'] ) ) {
 			throw new OutOfBoundsException( sprintf( 'Term key doesnt exist for the %s taxonomy in config', $key ) );
 		}
 

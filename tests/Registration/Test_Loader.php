@@ -14,8 +14,9 @@ declare(strict_types=1);
 namespace PinkCrab\Core\Tests\Registration;
 
 use WP_UnitTestCase;
+use PinkCrab\Core\Collection\Collection;
+use PinkCrab\PHPUnit_Helpers\Reflection;
 use PinkCrab\Core\Services\Registration\Loader;
-
 
 class Loader_Test extends WP_UnitTestCase {
 
@@ -55,6 +56,37 @@ class Loader_Test extends WP_UnitTestCase {
 			Loader::class,
 			$this->loader
 		);
+	}
+
+	/**
+	 * Test consutructor creates intenral collections.
+	 *
+	 * @return void
+	 */
+	public function test_is_constructed_with_internal_collection(): void {
+		$loader      = new Loader();
+		$collections = array( 'global', 'admin', 'front', 'shortcode', 'ajax' );
+		foreach ( $collections as $collection ) {
+			$this->assertInstanceOf(
+				Collection::class,
+				Reflection::get_private_property( $loader, $collection )
+			);
+		}
+
+	}
+
+	/**
+	 * Test boot populates $instance with itself
+	 *
+	 * @return void
+	 */
+	public function test_sets_internal_instance_on_boot() {
+		// Clear internal (singleton) state..
+		Reflection::set_private_static_property( $this->loader, 'instance', null );
+
+		// Run boot (recreate state) and check is instance.
+		$loader = Loader::boot();
+		$this->assertInstanceOf( Loader::class, Reflection::get_private_static_property( $loader, 'instance' ) );
 	}
 
 	/**
@@ -188,6 +220,22 @@ class Loader_Test extends WP_UnitTestCase {
 
 		$this->assertFalse( has_action( 'test_admin_action' ) );
 		$this->assertTrue( has_action( 'test_front_action' ) );
+
+	}
+
+	public function test_admin_hooks()
+	{
+		set_current_screen('edit.php');
+		$loader = new Loader();
+
+		$loader->admin_action(
+			'test_admin_action',
+			function() {
+				return true;
+			}
+		);
+		$loader->register_hooks();
+		$this->assertTrue( has_action( 'test_admin_action' ) );
 
 	}
 

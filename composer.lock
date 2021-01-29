@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e1ec1a14983bd52ae2b347b0048ab162",
+    "content-hash": "2908ef7501d342585669f04eaaa3f797",
     "packages": [
         {
             "name": "level-2/dice",
@@ -233,6 +233,44 @@
                 }
             ],
             "time": "2020-11-10T18:47:58+00:00"
+        },
+        {
+            "name": "jaschilz/php-coverage-badger",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/JASchilz/PHPCoverageBadge.git",
+                "reference": "9def6f0c2649dc020849420e633a4819878bac03"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/JASchilz/PHPCoverageBadge/zipball/9def6f0c2649dc020849420e633a4819878bac03",
+                "reference": "9def6f0c2649dc020849420e633a4819878bac03",
+                "shasum": ""
+            },
+            "bin": [
+                "bin/php-coverage-badger"
+            ],
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marco Pivetta",
+                    "email": "ocramius@gmail.com",
+                    "homepage": "http://ocramius.github.com"
+                },
+                {
+                    "name": "Joseph Schilz",
+                    "email": "joseph@schilz.org",
+                    "homepage": "https://www.schilz.org"
+                }
+            ],
+            "description": "Create a code coverage badge from a PHPUnit Clover XML file.",
+            "homepage": "https://github.com/jaschilz/PhpCoverageBadge",
+            "time": "2017-07-21T20:03:56+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -817,16 +855,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "0.12.69",
+            "version": "0.12.70",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "8f436ea35241da33487fd0d38b4bc3e6dfe30ea8"
+                "reference": "07f0ef37f5f876e8cee44cc8ea0ec3fe80d499ee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/8f436ea35241da33487fd0d38b4bc3e6dfe30ea8",
-                "reference": "8f436ea35241da33487fd0d38b4bc3e6dfe30ea8",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/07f0ef37f5f876e8cee44cc8ea0ec3fe80d499ee",
+                "reference": "07f0ef37f5f876e8cee44cc8ea0ec3fe80d499ee",
                 "shasum": ""
             },
             "require": {
@@ -869,7 +907,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-01-24T14:55:37+00:00"
+            "time": "2021-01-27T17:06:47+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -1292,7 +1330,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Pink-Crab/PHP_Unit_Helpers.git",
-                "reference": "b530df9485f036a15d1b90c22c5960dc726d2b08"
+                "reference": "971f9428c6e1c0759d97c82a424ef93e3c36c45c"
             },
             "require": {
                 "php": ">=7.1.0",
@@ -1317,7 +1355,7 @@
             ],
             "description": "Collection of helper functions for use with tests.",
             "homepage": "https://pinkcrab.co.uk",
-            "time": "2021-01-24T00:27:54+00:00"
+            "time": "2021-01-29T11:35:42+00:00"
         },
         {
             "name": "roots/wordpress",
@@ -2545,16 +2583,16 @@
         },
         {
             "name": "symfony/var-dumper",
-            "version": "v4.4.18",
+            "version": "v4.4.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "4f31364bbc8177f2a6dbc125ac3851634ebe2a03"
+                "reference": "a1eab2f69906dc83c5ddba4632180260d0ab4f7f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/4f31364bbc8177f2a6dbc125ac3851634ebe2a03",
-                "reference": "4f31364bbc8177f2a6dbc125ac3851634ebe2a03",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/a1eab2f69906dc83c5ddba4632180260d0ab4f7f",
+                "reference": "a1eab2f69906dc83c5ddba4632180260d0ab4f7f",
                 "shasum": ""
             },
             "require": {
@@ -2571,7 +2609,7 @@
                 "ext-iconv": "*",
                 "symfony/console": "^3.4|^4.0|^5.0",
                 "symfony/process": "^4.4|^5.0",
-                "twig/twig": "^1.34|^2.4|^3.0"
+                "twig/twig": "^1.43|^2.13|^3.0.4"
             },
             "suggest": {
                 "ext-iconv": "To convert non-UTF-8 strings to UTF-8 (or symfony/polyfill-iconv in case ext-iconv cannot be used).",
@@ -2607,7 +2645,7 @@
                     "homepage": "https://symfony.com/contributors"
                 }
             ],
-            "description": "Symfony mechanism for exploring and dumping PHP variables",
+            "description": "Provides mechanisms for walking through any arbitrary PHP variable",
             "homepage": "https://symfony.com",
             "keywords": [
                 "debug",
@@ -2627,7 +2665,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-12-08T16:59:59+00:00"
+            "time": "2021-01-27T09:09:26+00:00"
         },
         {
             "name": "szepeviktor/phpstan-wordpress",

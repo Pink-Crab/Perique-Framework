@@ -13,7 +13,17 @@
         </testsuite>
     </testsuites>
 
+     <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./src/</directory>
+        </whitelist>
+    </filter>
+
     <php>
         <env name="WP_PHPUNIT__TESTS_CONFIG" value="tests/wp-config.php" />
     </php>
+
+    <logging>
+        <log type="coverage-clover" target="coverage-report/logs/clover.xml"/>
+    </logging>
 </phpunit>

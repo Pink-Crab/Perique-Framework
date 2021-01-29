@@ -71,7 +71,7 @@ class Loader {
 	 *
 	 * @var self|null
 	 */
-	public static $instance = null;
+	protected static $instance = null;
 
 	/**
 	 * Creates an instance of the loader.

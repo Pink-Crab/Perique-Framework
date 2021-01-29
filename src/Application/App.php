@@ -96,6 +96,7 @@ final class App {
 	 * @param mixed $service
 	 * @return self
 	 * @deprecated 0.3.2
+	 * @codeCoverageIgnore
 	 */
 	public function bind( string $key, $service ): self {
 		$this->service_container->set( $key, $service );

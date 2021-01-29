@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace PinkCrab\Core\Tests\Registration;
 
 use Exception;
+use TypeError;
 use WP_UnitTestCase;
 use PinkCrab\Core\Services\ServiceContainer\Container;
 use PinkCrab\Core\Services\ServiceContainer\ServiceNotRegisteredException;
@@ -68,4 +69,12 @@ class Test_Container extends WP_UnitTestCase {
 		$container = new Container();
 		$container->get( 'foo' );
 	}
+
+	public function test_throws_exception_if_none_object_bound(): void {
+		$this->expectException( TypeError::class );
+
+		$container = new Container();
+		$container->set( 'foo', array( 'invalid', 'type' ) );
+	}
+
 }

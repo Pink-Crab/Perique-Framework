@@ -2,19 +2,19 @@
 
 Welcome the main package of the PinkCrab Framwework. 
 
-![alt text](https://img.shields.io/badge/Current_Version-0.3.3-yellow.svg?style=flat " ") 
+![alt text](https://img.shields.io/badge/Current_Version-0.3.4-yellow.svg?style=flat " ") 
 [![Open Source Love](https://badges.frapsoft.com/os/mit/mit.svg?v=102)]()
 
-![](https://github.com/Pink-Crab/Framework__core/workflows/GitHub_CI/badge.svg " ")![alt text](https://img.shields.io/badge/PHPStan-level%208-brightgreen.svg?style=flat " ")
-![alt text](https://img.shields.io/badge/WP_PHPUnit-V5-brightgreen.svg?style=flat " ")
-![alt text](https://img.shields.io/badge/PHPCS-WP_Extra-brightgreen.svg?style=flat " ")
+![](https://github.com/Pink-Crab/Framework__core/workflows/GitHub_CI/badge.svg " ")
+[![codecov](https://codecov.io/gh/Pink-Crab/Framework__core/branch/master/graph/badge.svg?token=VW566UL1J6)](https://codecov.io/gh/Pink-Crab/Framework__core)
+
 
 For more details please visit our docs.
 https://app.gitbook.com/@glynn-quelch/s/pinkcrab/
 
 
 ## Version ##
-**Release 0.3.3**
+**Release 0.3.4**
 
 With version 0.3 we have moved away from the submodule driven approach and thanks to PHP Scoper we can now use actual composer libraries.
 
@@ -48,7 +48,7 @@ declare(strict_types=1);
  */
 
 use PinkCrab\Core\Application\App;
-use PinkCrab\Core\Services\Dice\Dice;
+use Dice\Dice;
 use PinkCrab\Core\Services\Dice\WP_Dice;
 use PinkCrab\Core\Application\App_Config;
 use PinkCrab\Core\Services\Registration\Loader;
@@ -221,7 +221,7 @@ If you would like to run the tests for this package, please ensure you add your 
 
 ### PHP Stan ###
 The module comes with a pollyfill for all WP Functions, allowing for the testing of all core files. The current config omits the Dice file as this is not ours. To run the suite call.
-````bash vendor/bin/phpstan analyse src/ -l7 ````
+````bash vendor/bin/phpstan analyse src/ -l8 ````
 
 ## Building ##
 If you wish to use PHP Scoper to rebase the namespaces, to remove the risk of conflicts feel free. The Core has been tested and will run for other namespaces without too many issues. 
@@ -255,4 +255,4 @@ http://www.opensource.org/licenses/mit-license.html
 * 0.3.1 - Minor docblock changes for phpstan lv8
 * 0.3.2 - Added in tests and expanded view
 * 0.3.3 - Removed object type hint from service container.
-* 0.3.3 - 
+* 0.3.4 - Improved tests and hooked to codecov
