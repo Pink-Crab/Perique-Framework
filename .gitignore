@@ -1,2 +1,4 @@
 vendor
 wordpress
+coverage-report
+coverage.xml
