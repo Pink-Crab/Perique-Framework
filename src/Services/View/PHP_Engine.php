@@ -96,7 +96,7 @@ class PHP_Engine implements Renderable {
 		// Set all the data values a parameters.
 		foreach ( $data as $key => $value ) {
 			if ( is_string( $key ) ) {
-				${\strip_tags( $key )} = $value;
+				${\wp_strip_all_tags( $key )} = $value;
 			}
 		}
 

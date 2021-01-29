@@ -11,8 +11,6 @@ declare(strict_types=1);
 
 namespace PinkCrab\Core\Application;
 
-
-
 use OutOfBoundsException;
 
 final class App_Config {
@@ -97,6 +95,7 @@ final class App_Config {
 		$this->namespaces    = $paths['namespaces'];
 		$this->plugin        = $paths['plugin'];
 		$this->additional    = $paths['additional'];
+		$this->db_tables     = $paths['db_tables'];
 
 		$this->set_post_types( $paths['post_types'] );
 		$this->set_taxonomies( $paths['taxonomies'] );
@@ -212,11 +211,11 @@ final class App_Config {
 		foreach ( $post_types as $label => $post_type ) {
 			// Check we have a slug.
 			if ( empty( $post_type['slug'] ) ) {
-				throw new OutOfBoundsException( 'Post Types must have a defined slug. ' . \json_encode( $post_type, \JSON_PRETTY_PRINT ) );
+				throw new OutOfBoundsException( 'Post Types must have a defined slug. ' . \wp_json_encode( $post_type, \JSON_PRETTY_PRINT ) );
 			}
 			// Check we have a meta array, even if empty.
 			if ( ! array_key_exists( 'meta', $post_type ) || ! is_array( $post_type['meta'] ) ) {
-				throw new OutOfBoundsException( 'Post Types must have a defined meta array, even if empty. ' . \json_encode( $post_type, \JSON_PRETTY_PRINT ) );
+				throw new OutOfBoundsException( 'Post Types must have a defined meta array, even if empty. ' . \wp_json_encode( $post_type, \JSON_PRETTY_PRINT ) );
 			}
 
 			$this->post_types[ $label ] = array(
@@ -242,7 +241,7 @@ final class App_Config {
 			return $this->taxonomies[ $key ]['slug'];
 		}
 
-		if ( $term_key && ! array_key_exists( $term_key, $this->taxonomies[ $key ]['meta'] ) ) {
+		if ( $term_key && ! array_key_exists( $term_key, $this->taxonomies[ $key ]['term'] ) ) {
 			throw new OutOfBoundsException( sprintf( 'Term key doesnt exist for the %s taxonomy in config', $key ) );
 		}
 
@@ -262,11 +261,11 @@ final class App_Config {
 		foreach ( $taxonomies as $label => $taxonomy ) {
 			// Check we have a slug.
 			if ( empty( $taxonomy['slug'] ) ) {
-				throw new OutOfBoundsException( 'Taxonomies must have a defined slug. ' . \json_encode( $taxonomy, \JSON_PRETTY_PRINT ) );
+				throw new OutOfBoundsException( 'Taxonomies must have a defined slug. ' . \wp_json_encode( $taxonomy, \JSON_PRETTY_PRINT ) );
 			}
 			// Check we have a meta array, even if empty.
 			if ( ! array_key_exists( 'term', $taxonomy ) || ! is_array( $taxonomy['term'] ) ) {
-				throw new OutOfBoundsException( 'Taxonomies must have a defined term array, even if empty. ' . \json_encode( $taxonomy, \JSON_PRETTY_PRINT ) );
+				throw new OutOfBoundsException( 'Taxonomies must have a defined term array, even if empty. ' . \wp_json_encode( $taxonomy, \JSON_PRETTY_PRINT ) );
 			}
 
 			$this->taxonomies[ $label ] = array(

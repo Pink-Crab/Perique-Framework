@@ -22,7 +22,7 @@ class Config {
 	/**
 	 * Holds the current config object.
 	 *
-	 * @var \PinkCrab\Core\Application\App_Config|null
+	 * @var App_Config|null
 	 */
 	protected static $config_cache;
 
@@ -36,6 +36,7 @@ class Config {
 	 */
 	public static function __callStatic( $method, $params ) {
 		if ( ! self::$config_cache ) {
+			/** @phpstan-ignore-next-line */
 			self::$config_cache = App::make( App_Config::class );
 		}
 

@@ -66,14 +66,28 @@ class Test_PHP_Engine extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Test can render partial template from parent.
+	 * Test can print partial template from parent.
 	 *
 	 * @return void
 	 */
-	public function test_render_partial_template(): void {
+	public function test_print_partial_template(): void {
 		$this->expectOutputString( 'partial_value' );
 		$this->view->render(
 			'layout',
+			array( 'partial_data' => array( 'partial' => 'partial_value' ) ),
+			View::PRINT_VIEW // Optional as print view is default.
+		);
+	}
+
+	/**
+	 * The partial returns HTML then echos.
+	 *
+	 * @return void
+	 */
+	public function test_returns_partial_from_template(): void {
+		$this->expectOutputString( 'partial_value' );
+		$this->view->render(
+			'returns_partial',
 			array( 'partial_data' => array( 'partial' => 'partial_value' ) ),
 			View::PRINT_VIEW // Optional as print view is default.
 		);

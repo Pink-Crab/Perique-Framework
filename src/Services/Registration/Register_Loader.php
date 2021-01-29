@@ -44,7 +44,8 @@ class Register_Loader {
 	 */
 	public static function initalise( App $app, array $registerable_classes, Loader $loader ): void {
 		foreach ( $registerable_classes as $class ) {
-			if ( in_array( Registerable::class, class_implements( $class ) ?: [], true ) ) {
+			if ( in_array( Registerable::class, class_implements( $class ) ?: array(), true ) ) {
+				/** @phpstan-ignore-next-line class must implement register for interface*/
 				$app::make( $class )->register( $loader );
 			}
 		}
