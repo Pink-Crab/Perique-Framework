@@ -2,7 +2,7 @@
 
 Welcome the main package of the PinkCrab Framwework. 
 
-![alt text](https://img.shields.io/badge/Current_Version-0.3.4-yellow.svg?style=flat " ") 
+![alt text](https://img.shields.io/badge/Current_Version-0.3.5-yellow.svg?style=flat " ") 
 [![Open Source Love](https://badges.frapsoft.com/os/mit/mit.svg?v=102)]()
 
 ![](https://github.com/Pink-Crab/Framework__core/workflows/GitHub_CI/badge.svg " ")
@@ -14,7 +14,7 @@ https://app.gitbook.com/@glynn-quelch/s/pinkcrab/
 
 
 ## Version ##
-**Release 0.3.4**
+**Release 0.3.5**
 
 With version 0.3 we have moved away from the submodule driven approach and thanks to PHP Scoper we can now use actual composer libraries.
 
@@ -256,3 +256,4 @@ http://www.opensource.org/licenses/mit-license.html
 * 0.3.2 - Added in tests and expanded view
 * 0.3.3 - Removed object type hint from service container.
 * 0.3.4 - Improved tests and hooked to codecov
+* 0.3.5 - Added coverage reports to gitignore
