@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace PinkCrab\Core\Tests\DI;
 
+use DateTime;
+use stdClass;
 use Dice\Dice;
 use WP_UnitTestCase;
 use ReflectionException;
@@ -97,15 +99,21 @@ class Test_WP_Dice extends WP_UnitTestCase {
 
 	}
 
-    /**
-     * Test an exception is thrown if creating none existing class
-     *
-     * @return void
-     */
+	/**
+	 * Test an exception is thrown if creating none existing class
+	 *
+	 * @return void
+	 */
 	public function test_exception_thrown_if_none_existing_class(): void {
 		$this->expectException( ReflectionException::class );
 		$wp_dice = WP_Dice::constructWith( new Dice() );
 		$wp_dice->create( 'NotAClass' );
+	}
+
+	public function test_test_can_add_rule(): void {
+		$wp_dice = WP_Dice::constructWith( new Dice() );
+		$result  = $wp_dice->addRule( stdClass::class, array( 'instanceOf' => DateTime::class ) );
+		$this->assertInstanceOf( DateTime::class, $result->create( stdClass::class ) );
 	}
 
 }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace PinkCrab\Core\Tests\Application;
 
 use WP_UnitTestCase;
+use OutOfBoundsException;
 use PinkCrab\Core\Application\App;
 use PinkCrab\Core\Application\Config;
 use PinkCrab\Core\Application\App_Config;
@@ -28,6 +29,27 @@ class Test_App_Config extends WP_UnitTestCase {
 			'string' => 'HI',
 		),
 		'namespaces' => array( 'rest' => 'fake_rest' ),
+		'post_types' => array(
+			'my_cpt' => array(
+				// Allows expressions for values.
+				'slug' => 'my_slug',
+				'meta' => array(
+					'meta_1' => 'value_1',
+				),
+			),
+		),
+		'taxonomies' => array(
+			'tax' => array(
+				// Allows expressions for values.
+				'slug' => 'my_slug',
+				'term' => array(
+					'term_1' => 'value_1',
+				),
+			),
+		),
+		'db_tables'  => array(
+			'db' => 'db_table',
+		),
 	);
 
 	/**
@@ -86,5 +108,255 @@ class Test_App_Config extends WP_UnitTestCase {
 			$no_override->namespace( 'rest' ),
 			$with_override->namespace( 'rest' )
 		);
+	}
+
+	/**
+	 * Ensure the path is returned with a trailing slash.
+	 *
+	 * @return void
+	 */
+	public function test_path_returns_path_with_trailing_slash(): void {
+		$app_config = new App_Config( self::SAMPLE_SETTINGS );
+		$this->assertStringContainsString( '/views/', $app_config->path( 'view' ) );
+		$this->assertStringEndsWith( '/', $app_config->path( 'view' ) );
+	}
+
+	/**
+	 * Test that an invalid path key, returns null
+	 *
+	 * @return void
+	 */
+	public function test_path_returns_null_for_invalid_paths() {
+		$app_config = new App_Config( self::SAMPLE_SETTINGS );
+		$this->assertNull( $app_config->path( 'null' ) );
+	}
+
+	/**
+	 * Ensure the url is returned with a trailing slash.
+	 *
+	 * @return void
+	 */
+	public function test_url_returns_url_with_trailing_slash(): void {
+		$app_config = new App_Config( self::SAMPLE_SETTINGS );
+		$this->assertStringContainsString( '/views/', $app_config->url( 'view' ) );
+		$this->assertStringEndsWith( '/', $app_config->url( 'view' ) );
+	}
+
+	/**
+	 * Test that an invalid url key, returns null
+	 *
+	 * @return void
+	 */
+	public function test_url_returns_null_for_invalid_urls() {
+		$app_config = new App_Config( self::SAMPLE_SETTINGS );
+		$this->assertNull( $app_config->url( 'null' ) );
+	}
+
+	/**
+	 * Test returns rest namespace.
+	 *
+	 * @return void
+	 */
+	public function test_rest_returns_rest_namespace(): void {
+		$app_config = new App_Config( self::SAMPLE_SETTINGS );
+		$this->assertEquals( 'fake_rest', $app_config->rest() );
+	}
+
+	/**
+	 * Test returns cache namespace.
+	 *
+	 * @return void
+	 */
+	public function test_cache_returns_cache_namespace(): void {
+		$app_config = new App_Config( self::SAMPLE_SETTINGS );
+		$this->assertEquals( 'pc_cache', $app_config->cache() );
+	}
+
+	/**
+	 *                                 POST TYPES
+	 */
+
+	/**
+	 * Check excception thrown with unset key.
+	 *
+	 * @return void
+	 */
+	public function test_exception_throw_for_unset_posttype_key(): void {
+		$this->expectException( OutOfBoundsException::class );
+		$app_config = new App_Config( self::SAMPLE_SETTINGS );
+		$app_config->post_types( 'invalid' );
+	}
+
+	/**
+	 * Check excception thrown with unset meta_key.
+	 *
+	 * @return void
+	 */
+	public function test_exception_throw_for_unset_posttype_meta_key(): void {
+		$this->expectException( OutOfBoundsException::class );
+		$app_config = new App_Config( self::SAMPLE_SETTINGS );
+		$app_config->post_types( 'my_cpt', 'meta', 'invalid' );
+	}
+
+	/**
+	 * Test reutns slug.
+	 *
+	 * @return void
+	 */
+	public function test_can_get_slug_if_filed_set(): void {
+		$app_config = new App_Config( self::SAMPLE_SETTINGS );
+		$this->assertEquals( 'my_slug', $app_config->post_types( 'my_cpt', 'slug' ) );
+	}
+
+	/**
+	 * Test you can return all or a single meta key.
+	 *
+	 * @return void
+	 */
+	public function test_returns_meta_values(): void {
+		$app_config = new App_Config( self::SAMPLE_SETTINGS );
+		$this->assertIsArray( $app_config->post_types( 'my_cpt', 'meta' ) );
+		$this->assertEquals( 'value_1', $app_config->post_types( 'my_cpt', 'meta', 'meta_1' ) );
+	}
+
+	/**
+	 * Test throws exception for missing cpt slug.
+	 *
+	 * @return void
+	 */
+	public function test_throws_exception_when_postype_without_slug_set(): void {
+		$this->expectException( OutOfBoundsException::class );
+		$app_config = new App_Config(
+			array(
+				'post_types' => array(
+					'cpt' => array(
+						'_slug' => 'failue',
+					),
+				),
+			)
+		);
+	}
+
+	/**
+	 * Test throws exception for missing cpt meta.
+	 *
+	 * @return void
+	 */
+	public function test_throws_exception_when_postype_without_meta_set(): void {
+		$this->expectException( OutOfBoundsException::class );
+		$app_config = new App_Config(
+			array(
+				'post_types' => array(
+					'cpt' => array(
+						'slug'  => 'my_cpt',
+						'_meta' => 'failue',
+
+					),
+				),
+			)
+		);
+	}
+
+	/**
+	 *                                 TAXONMIES
+	 */
+
+	/**
+	 * Check excception thrown with unset key.
+	 *
+	 * @return void
+	 */
+	public function test_exception_throw_for_unset_taxonomy_key(): void {
+		$this->expectException( OutOfBoundsException::class );
+		$app_config = new App_Config( self::SAMPLE_SETTINGS );
+		$app_config->taxonomies( 'invalid' );
+	}
+
+	/**
+	 * Check excception thrown with unset term_key.
+	 *
+	 * @return void
+	 */
+	public function test_exception_throw_for_unset_taxonomy_term_key(): void {
+		$this->expectException( OutOfBoundsException::class );
+		$app_config = new App_Config( self::SAMPLE_SETTINGS );
+		$app_config->taxonomies( 'tax', 'term', 'invalid' );
+	}
+
+	/**
+	 * Test reutns slug.
+	 *
+	 * @return void
+	 */
+	public function test_can_get_slug_if_filed_taxonomy_set(): void {
+		$app_config = new App_Config( self::SAMPLE_SETTINGS );
+		$this->assertEquals( 'my_slug', $app_config->taxonomies( 'tax', 'slug' ) );
+	}
+
+	/**
+	 * Test you can return all or a single meta key.
+	 *
+	 * @return void
+	 */
+	public function test_returns_taxonomy_term_values(): void {
+		$app_config = new App_Config( self::SAMPLE_SETTINGS );
+		$this->assertIsArray( $app_config->taxonomies( 'tax', 'term' ) );
+		$this->assertEquals( 'value_1', $app_config->taxonomies( 'tax', 'term', 'term_1' ) );
+	}
+
+	/**
+	 * Test throws exception for missing cpt slug.
+	 *
+	 * @return void
+	 */
+	public function test_throws_exception_when_taxonomy_without_slug_set(): void {
+		$this->expectException( OutOfBoundsException::class );
+		$app_config = new App_Config(
+			array(
+				'taxonomies' => array(
+					'cpt' => array(
+						'_slug' => 'failue',
+					),
+				),
+			)
+		);
+	}
+
+	/**
+	 * Test throws exception for missing cpt meta.
+	 *
+	 * @return void
+	 */
+	public function test_throws_exception_when_taxonomy_without_meta_set(): void {
+		$this->expectException( OutOfBoundsException::class );
+		$app_config = new App_Config(
+			array(
+				'taxonomies' => array(
+					'cpt' => array(
+						'slug'  => 'my_cpt',
+						'_meta' => 'failue',
+					),
+				),
+			)
+		);
+	}
+
+	/**
+	 * Test can get a defined db name
+	 */
+	public function test_can_get_db_table_name(): void {
+		$app_config = new App_Config( self::SAMPLE_SETTINGS );
+		$this->assertEquals( 'db_table', $app_config->db_tables( 'db' ) );
+	}
+
+	/**
+	 * Test throws eception calling unset DB table
+	 *
+	 * @return void
+	 */
+	public function test_throws_exception_for_unset_db_table(): void {
+		$this->expectException( OutOfBoundsException::class );
+		$app_config = new App_Config( self::SAMPLE_SETTINGS );
+		$app_config->db_tables( 'failure' );
 	}
 }

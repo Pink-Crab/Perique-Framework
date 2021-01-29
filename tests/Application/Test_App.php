@@ -16,6 +16,8 @@ use Exception;
 use WP_UnitTestCase;
 use OutOfBoundsException;
 use PinkCrab\Core\Application\App;
+use PinkCrab\PHPUnit_Helpers\Reflection;
+use PinkCrab\Core\Interfaces\Service_Container;
 use PinkCrab\Core\Services\ServiceContainer\Container;
 use PinkCrab\Core\Tests\Fixtures\Mock_Objects\Sample_Class;
 use PinkCrab\Core\Tests\Fixtures\Mock_Objects\Parent_Dependency;
@@ -29,6 +31,25 @@ class Test_App extends WP_UnitTestCase {
 	public function setup() {
 		$serviceContainer = new Container();
 		$this->app        = App::init( $serviceContainer );
+	}
+
+	/**
+	 * Test that singleton instance and container are both set on construct
+	 * Obviously messy as singleton. But creates, unsets internal instance, recreates and checks contents.
+	 * Uses reflection.
+	 * 
+	 * @runInSeparateProcess
+	 * @preserveGlobalState disabled
+	 * @backupStaticAttributes disabled
+	 * @return void
+	 */
+	public function test_properties_set(): void {
+		$app = App::init( new Container() );
+		Reflection::set_private_static_property( $app, 'instance', null );
+		$this->assertNull( Reflection::get_private_static_property( $app, 'instance' ) );
+		$app::init(new Container() );
+		$this->assertInstanceOf( App::class, Reflection::get_private_static_property( $app, 'instance' ) );
+		$this->assertInstanceOf( Container::class, Reflection::get_private_property( $app, 'service_container' ) );
 	}
 
 	/**
@@ -114,5 +135,15 @@ class Test_App extends WP_UnitTestCase {
 	public function test_can_use_config_helper(): void {
 		$namespace = App::config( 'namespace', 'rest' );
 		$this->assertTrue( is_string( $namespace ) );
+	}
+
+	/**
+	 * Test the __callStatic can be used.
+	 *
+	 * @return void
+	 */
+	public function test_can_use_callstatic_for_services(): void {
+		$this->app->set( 'test_call_static', (object) array( 'key1' => 'yes' ) );
+		$this->assertTrue( is_object( $this->app::test_call_static() ) );
 	}
 }
