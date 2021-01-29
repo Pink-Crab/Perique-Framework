@@ -1330,7 +1330,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Pink-Crab/PHP_Unit_Helpers.git",
-                "reference": "5fefaf543500d9d81b3c3fe38ed034a568326267"
+                "reference": "971f9428c6e1c0759d97c82a424ef93e3c36c45c"
             },
             "require": {
                 "php": ">=7.1.0",
@@ -1355,7 +1355,7 @@
             ],
             "description": "Collection of helper functions for use with tests.",
             "homepage": "https://pinkcrab.co.uk",
-            "time": "2021-01-28T16:25:35+00:00"
+            "time": "2021-01-29T11:35:42+00:00"
         },
         {
             "name": "roots/wordpress",

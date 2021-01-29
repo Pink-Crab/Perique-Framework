@@ -86,7 +86,6 @@ class Loader_Test extends WP_UnitTestCase {
 
 		// Run boot (recreate state) and check is instance.
 		$loader = Loader::boot();
-		dump($loader);
 		$this->assertInstanceOf( Loader::class, Reflection::get_private_static_property( $loader, 'instance' ) );
 	}
 
