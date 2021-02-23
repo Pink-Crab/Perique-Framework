@@ -39,7 +39,7 @@
         "object-calisthenics/phpcs-calisthenics-rules": "*",
         "pinkcrab/phpunit-helpers": "dev-master",
         "jaschilz/php-coverage-badger": "^2.0",
-        "infection/infection": "^0.15.3"
+        "infection/infection": "^0.13"
     },
     "require": {
         "php": ">=7.1.0",
