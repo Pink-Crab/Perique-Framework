@@ -52,6 +52,6 @@
         "analyse": "vendor/bin/phpstan analyse src -l8",
         "sniff": "./vendor/bin/phpcs src/ -v",
         "infection": "vendor/bin/infection run -j 2",
-        "all": "composer test && composer analyse && composer sniff"
+        "all": "composer test && composer analyse && composer sniff && composer infection"
     }
 }
