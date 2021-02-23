@@ -33,6 +33,16 @@ class Loader_Test extends WP_UnitTestCase {
 	 * @return void
 	 */
 	public function setUp() {
+		
+		// Ensure all tests start as frontend.
+		if ( isset( $GLOBALS['current_screen'] ) ) {
+			Reflection::set_private_property(
+				$GLOBALS['current_screen'],
+				'in_admin',
+				false
+			);
+		}
+
 		parent::setUp();
 		$this->loader = Loader::boot();
 	}

@@ -1,0 +1,1031 @@
+Total: 337
+Killed mutants:
+===============
+
+
+Mutator: Throw_
+Line 60
+
+Mutator: LogicalNot
+Line 69
+
+Mutator: PublicVisibility
+Line 81
+
+Mutator: Throw_
+Line 84
+
+Mutator: FunctionCallRemoval
+Line 87
+
+Mutator: Throw_
+Line 116
+
+Mutator: Throw_
+Line 120
+
+Mutator: PublicVisibility
+Line 133
+
+Mutator: MethodCallRemoval
+Line 134
+
+Mutator: Throw_
+Line 150
+
+Mutator: Throw_
+Line 166
+
+Mutator: PublicVisibility
+Line 179
+
+Mutator: Throw_
+Line 183
+
+Mutator: PublicVisibility
+Line 196
+
+Mutator: Throw_
+Line 200
+
+Mutator: MethodCallRemoval
+Line 73
+
+Mutator: MethodCallRemoval
+Line 100
+
+Mutator: MethodCallRemoval
+Line 101
+
+Mutator: PublicVisibility
+Line 110
+
+Mutator: PublicVisibility
+Line 127
+
+Mutator: PublicVisibility
+Line 143
+
+Mutator: PublicVisibility
+Line 152
+
+Mutator: PublicVisibility
+Line 162
+
+Mutator: PublicVisibility
+Line 173
+
+Mutator: PublicVisibility
+Line 185
+
+Mutator: LogicalNot
+Line 186
+
+Mutator: Throw_
+Line 187
+
+Mutator: Identical
+Line 190
+
+Mutator: LogicalNot
+Line 194
+
+Mutator: LogicalAnd
+Line 194
+
+Mutator: Throw_
+Line 195
+
+Mutator: Foreach_
+Line 211
+
+Mutator: LogicalNot
+Line 217
+
+Mutator: LogicalNot
+Line 217
+
+Mutator: LogicalOr
+Line 217
+
+Mutator: Throw_
+Line 218
+
+Mutator: ArrayItemRemoval
+Line 221
+
+Mutator: PublicVisibility
+Line 235
+
+Mutator: LogicalNot
+Line 236
+
+Mutator: Throw_
+Line 237
+
+Mutator: Identical
+Line 240
+
+Mutator: LogicalNot
+Line 244
+
+Mutator: LogicalAnd
+Line 244
+
+Mutator: Throw_
+Line 245
+
+Mutator: Foreach_
+Line 261
+
+Mutator: LogicalNot
+Line 267
+
+Mutator: LogicalNot
+Line 267
+
+Mutator: LogicalOr
+Line 267
+
+Mutator: Throw_
+Line 268
+
+Mutator: ArrayItemRemoval
+Line 271
+
+Mutator: PublicVisibility
+Line 285
+
+Mutator: LogicalNot
+Line 286
+
+Mutator: Throw_
+Line 287
+
+Mutator: IncrementInteger
+Line 308
+
+Mutator: ArrayItemRemoval
+Line 312
+
+Mutator: ArrayItemRemoval
+Line 323
+
+Mutator: LogicalNot
+Line 38
+
+Mutator: ArrayOneItem
+Line 58
+
+Mutator: PublicVisibility
+Line 67
+
+Mutator: NewObject
+Line 68
+
+Mutator: PublicVisibility
+Line 78
+
+Mutator: PublicVisibility
+Line 91
+
+Mutator: Foreach_
+Line 92
+
+Mutator: FunctionCallRemoval
+Line 93
+
+Mutator: DecrementInteger
+Line 104
+
+Mutator: OneZeroInteger
+Line 104
+
+Mutator: PublicVisibility
+Line 104
+
+Mutator: UnwrapArrayFilter
+Line 105
+
+Mutator: PublicVisibility
+Line 114
+
+Mutator: UnwrapArrayMap
+Line 115
+
+Mutator: PublicVisibility
+Line 125
+
+Mutator: UnwrapArrayReduce
+Line 126
+
+Mutator: FunctionCall
+Line 126
+
+Mutator: FunctionCall
+Line 129
+
+Mutator: PublicVisibility
+Line 142
+
+Mutator: LogicalNot
+Line 143
+
+Mutator: LogicalNot
+Line 143
+
+Mutator: LogicalAnd
+Line 143
+
+Mutator: Throw_
+Line 144
+
+Mutator: UnwrapArrayMerge
+Line 147
+
+Mutator: UnwrapArrayMerge
+Line 147
+
+Mutator: LogicalAnd
+Line 149
+
+Mutator: PublicVisibility
+Line 160
+
+Mutator: Foreach_
+Line 161
+
+Mutator: PublicVisibility
+Line 173
+
+Mutator: IncrementInteger
+Line 175
+
+Mutator: OneZeroInteger
+Line 175
+
+Mutator: Throw_
+Line 175
+
+Mutator: FunctionCall
+Line 177
+
+Mutator: PublicVisibility
+Line 186
+
+Mutator: IncrementInteger
+Line 188
+
+Mutator: OneZeroInteger
+Line 188
+
+Mutator: Throw_
+Line 188
+
+Mutator: FunctionCall
+Line 190
+
+Mutator: PublicVisibility
+Line 199
+
+Mutator: Foreach_
+Line 200
+
+Mutator: FunctionCallRemoval
+Line 201
+
+Mutator: PublicVisibility
+Line 211
+
+Mutator: PublicVisibility
+Line 220
+
+Mutator: PublicVisibility
+Line 230
+
+Mutator: Foreach_
+Line 231
+
+Mutator: LogicalNot
+Line 232
+
+Mutator: FalseValue
+Line 233
+
+Mutator: TrueValue
+Line 236
+
+Mutator: PublicVisibility
+Line 245
+
+Mutator: PublicVisibility
+Line 264
+
+Mutator: PublicVisibility
+Line 274
+
+Mutator: PublicVisibility
+Line 284
+
+Mutator: FunctionCallRemoval
+Line 286
+
+Mutator: FunctionCallRemoval
+Line 288
+
+Mutator: PublicVisibility
+Line 300
+
+Mutator: PublicVisibility
+Line 311
+
+Mutator: Coalesce
+Line 312
+
+Mutator: UnwrapArraySlice
+Line 312
+
+Mutator: PublicVisibility
+Line 322
+
+Mutator: LogicalAnd
+Line 324
+
+Mutator: LogicalNot
+Line 324
+
+Mutator: LogicalNot
+Line 324
+
+Mutator: Throw_
+Line 325
+
+Mutator: UnwrapArrayDiff
+Line 329
+
+Mutator: LogicalAnd
+Line 331
+
+Mutator: PublicVisibility
+Line 342
+
+Mutator: LogicalNot
+Line 344
+
+Mutator: LogicalAnd
+Line 344
+
+Mutator: LogicalNot
+Line 344
+
+Mutator: Throw_
+Line 345
+
+Mutator: UnwrapArrayIntersect
+Line 349
+
+Mutator: UnwrapArrayIntersect
+Line 349
+
+Mutator: LogicalAnd
+Line 351
+
+Mutator: PublicVisibility
+Line 37
+
+Mutator: PublicVisibility
+Line 48
+
+Mutator: LogicalNot
+Line 49
+
+Mutator: Throw_
+Line 50
+
+Mutator: PublicVisibility
+Line 63
+
+Mutator: PublicVisibility
+Line 75
+
+Mutator: FunctionCall
+Line 76
+
+Mutator: PublicVisibility
+Line 86
+
+Mutator: LogicalNot
+Line 87
+
+Mutator: Throw_
+Line 88
+
+Mutator: PublicVisibility
+Line 37
+
+Mutator: UnwrapArrayReverse
+Line 38
+
+Mutator: PublicVisibility
+Line 47
+
+Mutator: UnwrapArrayReverse
+Line 48
+
+Mutator: PublicVisibility
+Line 57
+
+Mutator: GreaterThanNegotiation
+Line 59
+
+Mutator: LessThanNegotiation
+Line 60
+
+Mutator: For_
+Line 60
+
+Mutator: DecrementInteger
+Line 60
+
+Mutator: OneZeroInteger
+Line 60
+
+Mutator: LessThan
+Line 60
+
+Mutator: MethodCallRemoval
+Line 61
+
+Mutator: LessThanNegotiation
+Line 63
+
+Mutator: LessThan
+Line 64
+
+Mutator: DecrementInteger
+Line 64
+
+Mutator: OneZeroInteger
+Line 64
+
+Mutator: IncrementInteger
+Line 64
+
+Mutator: OneZeroInteger
+Line 64
+
+Mutator: For_
+Line 64
+
+Mutator: LessThanNegotiation
+Line 64
+
+Mutator: MethodCallRemoval
+Line 65
+
+Mutator: PublicVisibility
+Line 78
+
+Mutator: Throw_
+Line 80
+
+Mutator: OneZeroInteger
+Line 82
+
+Mutator: DecrementInteger
+Line 82
+
+Mutator: PublicVisibility
+Line 91
+
+Mutator: Throw_
+Line 93
+
+Mutator: OneZeroInteger
+Line 95
+
+Mutator: IncrementInteger
+Line 95
+
+Mutator: UnwrapArrayValues
+Line 95
+
+Mutator: Minus
+Line 95
+
+Mutator: PublicVisibility
+Line 103
+
+Mutator: FunctionCall
+Line 104
+
+Mutator: PublicVisibility
+Line 66
+
+Mutator: PublicVisibility
+Line 89
+
+Mutator: PublicVisibility
+Line 116
+
+Mutator: OneZeroInteger
+Line 116
+
+Mutator: MethodCallRemoval
+Line 117
+
+Mutator: ArrayItemRemoval
+Line 118
+
+Mutator: IncrementInteger
+Line 137
+
+Mutator: PublicVisibility
+Line 137
+
+Mutator: PublicVisibility
+Line 158
+
+Mutator: MethodCallRemoval
+Line 159
+
+Mutator: ArrayItemRemoval
+Line 160
+
+Mutator: OneZeroInteger
+Line 179
+
+Mutator: PublicVisibility
+Line 179
+
+Mutator: MethodCallRemoval
+Line 180
+
+Mutator: ArrayItemRemoval
+Line 181
+
+Mutator: PublicVisibility
+Line 200
+
+Mutator: MethodCallRemoval
+Line 201
+
+Mutator: ArrayItemRemoval
+Line 202
+
+Mutator: OneZeroInteger
+Line 221
+
+Mutator: PublicVisibility
+Line 221
+
+Mutator: MethodCallRemoval
+Line 222
+
+Mutator: ArrayItemRemoval
+Line 223
+
+Mutator: PublicVisibility
+Line 240
+
+Mutator: MethodCallRemoval
+Line 241
+
+Mutator: ArrayItemRemoval
+Line 242
+
+Mutator: PublicVisibility
+Line 258
+
+Mutator: TrueValue
+Line 258
+
+Mutator: TrueValue
+Line 258
+
+Mutator: MethodCallRemoval
+Line 259
+
+Mutator: ArrayItemRemoval
+Line 260
+
+Mutator: PublicVisibility
+Line 278
+
+Mutator: IncrementInteger
+Line 278
+
+Mutator: IncrementInteger
+Line 278
+
+Mutator: MethodCallRemoval
+Line 279
+
+Mutator: ArrayItemRemoval
+Line 280
+
+Mutator: DecrementInteger
+Line 299
+
+Mutator: IncrementInteger
+Line 299
+
+Mutator: MethodCallRemoval
+Line 300
+
+Mutator: ArrayItemRemoval
+Line 301
+
+Mutator: PublicVisibility
+Line 316
+
+Mutator: MethodCallRemoval
+Line 319
+
+Mutator: FunctionCallRemoval
+Line 331
+
+Mutator: MethodCallRemoval
+Line 336
+
+Mutator: MethodCallRemoval
+Line 341
+
+Mutator: ArrayItemRemoval
+Line 342
+
+Mutator: IncrementInteger
+Line 346
+
+Mutator: IncrementInteger
+Line 347
+
+Mutator: OneZeroInteger
+Line 347
+
+Mutator: MethodCallRemoval
+Line 353
+
+Mutator: ArrayItemRemoval
+Line 354
+
+Mutator: IncrementInteger
+Line 358
+
+Mutator: DecrementInteger
+Line 358
+
+Mutator: IncrementInteger
+Line 359
+
+Mutator: OneZeroInteger
+Line 359
+
+Mutator: MethodCallRemoval
+Line 370
+
+Mutator: MethodCallRemoval
+Line 373
+
+Mutator: MethodCallRemoval
+Line 382
+
+Mutator: MethodCallRemoval
+Line 385
+
+Mutator: LogicalNot
+Line 394
+
+Mutator: MethodCallRemoval
+Line 395
+
+Mutator: MethodCallRemoval
+Line 398
+
+Mutator: FunctionCallRemoval
+Line 415
+
+Mutator: FunctionCallRemoval
+Line 419
+
+Mutator: FunctionCallRemoval
+Line 434
+
+Mutator: FunctionCallRemoval
+Line 438
+
+Mutator: Foreach_
+Line 46
+
+Mutator: MethodCallRemoval
+Line 49
+
+Mutator: Throw_
+Line 51
+
+Mutator: Throw_
+Line 75
+
+Mutator: Throw_
+Line 80
+
+Mutator: CastString
+Line 83
+
+Mutator: TrueValue
+Line 55
+
+Mutator: TrueValue
+Line 71
+
+Mutator: PublicVisibility
+Line 71
+
+Mutator: MethodCallRemoval
+Line 73
+
+Mutator: ProtectedVisibility
+Line 87
+
+Mutator: LogicalNot
+Line 89
+
+Mutator: Throw_
+Line 90
+
+Mutator: FunctionCallRemoval
+Line 94
+
+Mutator: Foreach_
+Line 97
+
+Mutator: FunctionCallRemoval
+Line 105
+
+Mutator: ProtectedVisibility
+Line 115
+
+Mutator: Identical
+Line 117
+
+Mutator: IncrementInteger
+Line 117
+
+Mutator: DecrementInteger
+Line 117
+
+Mutator: DecrementInteger
+Line 118
+
+Mutator: OneZeroInteger
+Line 118
+
+Mutator: DecrementInteger
+Line 118
+
+Mutator: IncrementInteger
+Line 118
+
+Mutator: ProtectedVisibility
+Line 129
+
+Mutator: LogicalNot
+Line 149
+
+Mutator: Throw_
+Line 150
+
+Mutator: PublicVisibility
+Line 72
+
+Mutator: TrueValue
+Line 72
+
+Mutator: MethodCallRemoval
+Line 74
+
+Mutator: PublicVisibility
+Line 86
+
+Mutator: FunctionCallRemoval
+Line 88
+
+Mutator: FunctionCallRemoval
+Line 89
+
+Mutator: FunctionCallRemoval
+Line 91
+
+Errors mutants:
+===============
+
+
+Mutator: PublicVisibility
+Line 68
+
+Mutator: PublicVisibility
+Line 113
+
+Mutator: LogicalNot
+Line 119
+
+Mutator: PublicVisibility
+Line 162
+
+Mutator: UnwrapArrayReplaceRecursive
+Line 83
+
+Mutator: UnwrapArrayReplaceRecursive
+Line 83
+
+Mutator: PublicVisibility
+Line 39
+
+Mutator: PublicVisibility
+Line 55
+
+Mutator: PublicVisibility
+Line 77
+
+Mutator: PublicVisibility
+Line 100
+
+Mutator: LogicalNot
+Line 101
+
+Mutator: PublicVisibility
+Line 45
+
+Mutator: LogicalNot
+Line 50
+
+Mutator: FunctionCall
+Line 63
+
+Mutator: LogicalNot
+Line 79
+
+Escaped mutants:
+================
+
+
+Mutator: ProtectedVisibility
+Line 46
+
+Mutator: ProtectedVisibility
+Line 210
+
+Mutator: Throw_
+Line 214
+
+Mutator: ProtectedVisibility
+Line 260
+
+Mutator: Throw_
+Line 264
+
+Mutator: DecrementInteger
+Line 308
+
+Mutator: ArrayItemRemoval
+Line 313
+
+Mutator: ArrayItemRemoval
+Line 316
+
+Mutator: ArrayItem
+Line 324
+
+Mutator: ProtectedVisibility
+Line 57
+
+Mutator: GreaterThan
+Line 59
+
+Mutator: LessThan
+Line 63
+
+Mutator: UnwrapArrayValues
+Line 82
+
+Mutator: IncrementInteger
+Line 116
+
+Mutator: DecrementInteger
+Line 116
+
+Mutator: IncrementInteger
+Line 116
+
+Mutator: OneZeroInteger
+Line 137
+
+Mutator: DecrementInteger
+Line 137
+
+Mutator: IncrementInteger
+Line 137
+
+Mutator: MethodCallRemoval
+Line 138
+
+Mutator: ArrayItemRemoval
+Line 139
+
+Mutator: IncrementInteger
+Line 158
+
+Mutator: DecrementInteger
+Line 158
+
+Mutator: OneZeroInteger
+Line 158
+
+Mutator: IncrementInteger
+Line 158
+
+Mutator: IncrementInteger
+Line 179
+
+Mutator: IncrementInteger
+Line 179
+
+Mutator: DecrementInteger
+Line 179
+
+Mutator: OneZeroInteger
+Line 200
+
+Mutator: IncrementInteger
+Line 200
+
+Mutator: IncrementInteger
+Line 200
+
+Mutator: DecrementInteger
+Line 200
+
+Mutator: IncrementInteger
+Line 221
+
+Mutator: IncrementInteger
+Line 221
+
+Mutator: DecrementInteger
+Line 221
+
+Mutator: OneZeroInteger
+Line 278
+
+Mutator: DecrementInteger
+Line 278
+
+Mutator: OneZeroInteger
+Line 299
+
+Mutator: IncrementInteger
+Line 299
+
+Mutator: IncrementInteger
+Line 51
+
+Mutator: OneZeroInteger
+Line 51
+
+Mutator: ProtectedVisibility
+Line 145
+
+Timed Out mutants:
+==================
+
+
+Mutator: Foreach_
+Line 79
+
+Mutator: Increment
+Line 60
+
+Mutator: Increment
+Line 64
+
+Mutator: PublicVisibility
+Line 299
+
+Mutator: MethodCallRemoval
+Line 322
+
+Mutator: MethodCallRemoval
+Line 328
+
+Mutator: DecrementInteger
+Line 346
+
+Not Covered mutants:
+====================
+
+
+Mutator: ProtectedVisibility
+Line 54
+
+Mutator: ArrayItemRemoval
+Line 333

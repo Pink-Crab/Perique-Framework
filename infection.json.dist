@@ -1,0 +1,15 @@
+{
+    "source": {
+        "directories": [
+            "src"
+        ]
+    },
+    "mutators": {
+        "@default": true
+    },"logs": {
+        "text": "coverage-report/infection/infection-log.txt",
+        "summary": "coverage-report/infection/summary-log.txt",
+        "debug": "coverage-report/infection/debug-log.txt"
+    },
+    "tmpDir": "coverage-report/infection/temp"
+}

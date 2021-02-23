@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<phpunit bootstrap="/shared/httpd/php/htdocs/pc_core/tests/bootstrap.php" backupGlobals="false" colors="false" convertErrorsToExceptions="true" convertNoticesToExceptions="true" convertWarningsToExceptions="true" executionOrder="random" stopOnFailure="true" cacheResult="false" stderr="false">
+  <testsuites>
+    <testsuite name="core">
+      <directory prefix="Test_" suffix=".php">/shared/httpd/php/htdocs/pc_core/tests/</directory>
+    </testsuite>
+  </testsuites>
+  <filter>
+    <whitelist processUncoveredFilesFromWhitelist="true">
+      <directory suffix=".php">/shared/httpd/php/htdocs/pc_core/src/</directory>
+    </whitelist>
+  </filter>
+  <php>
+    <env name="WP_PHPUNIT__TESTS_CONFIG" value="tests/wp-config.php"/>
+  </php>
+  <logging>
+    <log type="coverage-xml" target="/shared/httpd/php/htdocs/pc_core/coverage-report/infection/temp/infection/coverage-xml"/>
+    <log type="junit" target="/shared/httpd/php/htdocs/pc_core/coverage-report/infection/temp/infection/junit.xml"/>
+  </logging>
+</phpunit>

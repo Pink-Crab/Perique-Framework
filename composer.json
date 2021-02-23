@@ -38,7 +38,8 @@
         "wp-coding-standards/wpcs": "*",
         "object-calisthenics/phpcs-calisthenics-rules": "*",
         "pinkcrab/phpunit-helpers": "dev-master",
-        "jaschilz/php-coverage-badger": "^2.0"
+        "jaschilz/php-coverage-badger": "^2.0",
+        "infection/infection": "^0.15.3"
     },
     "require": {
         "php": ">=7.1.0",
@@ -50,6 +51,7 @@
         "coverage": "phpunit --coverage-html coverage-report",
         "analyse": "vendor/bin/phpstan analyse src -l8",
         "sniff": "./vendor/bin/phpcs src/ -v",
+        "infection": "vendor/bin/infection run -j 2",
         "all": "composer test && composer analyse && composer sniff"
     }
 }
