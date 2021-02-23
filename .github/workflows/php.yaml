@@ -36,6 +36,7 @@ jobs:
           php-version: ${{ matrix.php-versions }}
           extensions: mbstring, intl
           ini-values: post_max_size=256M, log_errors=1
+          version: 1
           tools: pecl
 
       - name: Check PHP Version
@@ -57,5 +58,8 @@ jobs:
 
       - name: Codecov
         run: bash <(curl -s https://codecov.io/bash) -t ${{ secrets.CORE_CODEV }}
+
+      - name: Stryker Mutator
+        run: bash <(curl -s https://dashboard.stryker-mutator.io/api/reports/github.com/Pink-Crab/Framework__core/master) -t ${{ secrets.CORE_CODEV }}
 
       
