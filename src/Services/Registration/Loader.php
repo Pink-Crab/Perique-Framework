@@ -67,6 +67,13 @@ class Loader {
 	protected $ajax;
 
 	/**
+	 * Hooks to be removed.
+	 *
+	 * @var \PinkCrab\Core\Collection\Collection
+	 */
+	protected $remove;
+
+	/**
 	 * Static instance.
 	 *
 	 * @var self|null
@@ -82,6 +89,7 @@ class Loader {
 		$this->front     = new Collection();
 		$this->shortcode = new Collection();
 		$this->ajax      = new Collection();
+		$this->remove    = new Collection();
 	}
 
 	/**
@@ -259,11 +267,62 @@ class Loader {
 	}
 
 	/**
+	 * Removes a pre registered action.
+	 *
+	 * @param string $handle
+	 * @param callable $method
+	 * @param int $priority
+	 * @param int $args
+	 * @return void
+	 */
+	public function remove_action( string $handle, callable $method, int $priority = 10, int $args = 1 ) {
+		$this->remove->push(
+			array(
+				'type'     => 'action',
+				'handle'   => $handle,
+				'method'   => $method,
+				'priority' => $priority,
+				'args'     => $args,
+			)
+		);
+	}
+
+	/**
+	 * Removes a pre registered filter.
+	 *
+	 * @param string $handle
+	 * @param callable $method
+	 * @param int $priority
+	 * @param int $args
+	 * @return void
+	 */
+	public function remove_filter( string $handle, callable $method, int $priority = 10, int $args = 1 ) {
+		$this->remove->push(
+			array(
+				'type'     => 'filter',
+				'handle'   => $handle,
+				'method'   => $method,
+				'priority' => $priority,
+				'args'     => $args,
+			)
+		);
+	}
+
+	/**
 	 * Registers all the added hooks.
 	 *
 	 * @return void
 	 */
 	public function register_hooks(): void {
+
+		// Remove all requested hooks.
+		$this->remove->apply(
+			function ( $hook ) {
+				if ( is_array( $hook ) ) {
+					$this->remove_hook_callback( $hook );
+				}
+			}
+		);
 
 		// Register shortcodes.
 		$this->shortcode->apply(
@@ -358,6 +417,25 @@ class Loader {
 
 			case 'filter':
 				add_filter( $hook['handle'], $hook['method'], $hook['priority'], $hook['args'] );
+				break;
+		}
+	}
+
+	/**
+	 * Removed all requested hooks.
+	 *
+	 * @param array<string, mixed> $hook
+	 * @return void
+	 */
+	private function remove_hook_callback( array $hook ): void {
+
+		switch ( $hook['type'] ) {
+			case 'action':
+				remove_action( $hook['handle'], $hook['method'], $hook['priority'] );
+				break;
+
+			case 'filter':
+				remove_filter( $hook['handle'], $hook['method'], $hook['priority'] );
 				break;
 		}
 	}
