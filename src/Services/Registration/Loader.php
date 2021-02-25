@@ -274,7 +274,6 @@ class Loader {
 	 * @param string $handle
 	 * @param callable $method
 	 * @param int $priority
-	 * @param int $args
 	 * @return void
 	 */
 	public function remove_action( string $handle, callable $method, int $priority = 10 ) {
