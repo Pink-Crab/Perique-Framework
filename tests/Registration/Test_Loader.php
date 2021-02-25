@@ -17,6 +17,7 @@ use WP_UnitTestCase;
 use PinkCrab\Core\Collection\Collection;
 use PinkCrab\PHPUnit_Helpers\Reflection;
 use PinkCrab\Core\Services\Registration\Loader;
+use PinkCrab\Core\Tests\Fixtures\Loader\Hooks_Via_Static;
 
 class Loader_Test extends WP_UnitTestCase {
 
@@ -33,7 +34,7 @@ class Loader_Test extends WP_UnitTestCase {
 	 * @return void
 	 */
 	public function setUp() {
-		
+
 		// Ensure all tests start as frontend.
 		if ( isset( $GLOBALS['current_screen'] ) ) {
 			Reflection::set_private_property(
@@ -276,16 +277,12 @@ class Loader_Test extends WP_UnitTestCase {
 	 * @return void
 	 */
 	public function test_action_can_be_removed(): void {
-		$callback = function( $e ): void {
-			//noop
-		};
+		add_action( 'remove_this_action', array( Hooks_Via_Static::class, 'action_callback_static' ), 10 );
 
-		add_action( 'remove_this_action', $callback, 10 );
-
-		$this->loader->remove_action( 'remove_this_action', $callback, 10 );
-
+		$this->loader->remove_action( 'remove_this_action', array( Hooks_Via_Static::class, 'action_callback_static' ), 10 );
 		$this->register_hooks();
 
+		$this->assertEmpty( $GLOBALS['wp_filter']['remove_this_action']->callbacks[10] );
 		$this->assertFalse( has_action( 'remove_this_action' ) );
 	}
 
@@ -295,16 +292,12 @@ class Loader_Test extends WP_UnitTestCase {
 	 * @return void
 	 */
 	public function test_filter_can_be_removed(): void {
-		$callback = function( string $e ): string {
-			return 'DIDNT REMOVE ME';
-		};
+		add_filter( 'remove_this_filter', 'pc_tests_noop', 10 );
 
-		add_filter( 'remove_this_filter', $callback, 10 );
-
-		$this->loader->remove_filter( 'remove_this_filter', $callback, 10 );
-
+		$this->loader->remove_filter( 'remove_this_filter', 'pc_tests_noop', 10 );
 		$this->register_hooks();
 
+		$this->assertEmpty( $GLOBALS['wp_filter']['remove_this_filter']->callbacks[10] );
 		$this->assertFalse( has_filter( 'remove_this_filter' ) );
 	}
 }

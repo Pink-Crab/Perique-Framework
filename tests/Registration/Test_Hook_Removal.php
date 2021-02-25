@@ -88,7 +88,6 @@ class Test_Hook_Removal extends WP_UnitTestCase {
 
         $this->assertTrue( $response );
 		$this->assertEmpty( $GLOBALS['wp_filter'][ 'test_global_function' ]->callbacks[10] );
-
 	}
 
     public function test_returns_false_for_closures(): void
