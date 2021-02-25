@@ -14,13 +14,13 @@
     "autoload": {
         "psr-4": {
             "PinkCrab\\Core\\": "src"
-        },
-        "files": []
+        }
     },
     "autoload-dev": {
         "psr-4": {
             "PinkCrab\\Core\\Tests\\": "tests/"
-        }
+        },
+        "files": ["tests/Fixtures/functions.php"]
     },
     "repositories": [{
         "url": "https://github.com/Pink-Crab/PHP_Unit_Helpers.git",
@@ -37,8 +37,7 @@
         "dealerdirect/phpcodesniffer-composer-installer": "*",
         "wp-coding-standards/wpcs": "*",
         "object-calisthenics/phpcs-calisthenics-rules": "*",
-        "pinkcrab/phpunit-helpers": "dev-master",
-        "jaschilz/php-coverage-badger": "^2.0"
+        "pinkcrab/phpunit-helpers": "dev-master"
     },
     "require": {
         "php": ">=7.1.0",

@@ -1,0 +1,1171 @@
+Escaped mutants:
+================
+
+
+1) /shared/httpd/php/htdocs/pc_core/src/Application/App.php:46    [M] ProtectedVisibility
+
+--- Original
++++ New
+@@ @@
+      * @var \PinkCrab\Core\Interfaces\Service_Container
+      */
+     protected $service_container;
+-    protected function __construct(Service_Container $service_container)
++    private function __construct(Service_Container $service_container)
+     {
+         $this->service_container = $service_container;
+         self::$instance = $this;
+
+
+2) /shared/httpd/php/htdocs/pc_core/src/Application/App_Config.php:210    [M] ProtectedVisibility
+
+--- Original
++++ New
+@@ @@
+      * @param array<string, mixed> $post_types
+      * @return void
+      */
+-    protected function set_post_types(array $post_types) : void
++    private function set_post_types(array $post_types) : void
+     {
+         foreach ($post_types as $label => $post_type) {
+             // Check we have a slug.
+
+
+3) /shared/httpd/php/htdocs/pc_core/src/Application/App_Config.php:214    [M] Throw_
+
+--- Original
++++ New
+@@ @@
+         foreach ($post_types as $label => $post_type) {
+             // Check we have a slug.
+             if (empty($post_type['slug'])) {
+-                throw new OutOfBoundsException('Post Types must have a defined slug. ' . \wp_json_encode($post_type, \JSON_PRETTY_PRINT));
++                new OutOfBoundsException('Post Types must have a defined slug. ' . \wp_json_encode($post_type, \JSON_PRETTY_PRINT));
+             }
+             // Check we have a meta array, even if empty.
+             if (!array_key_exists('meta', $post_type) || !is_array($post_type['meta'])) {
+
+
+4) /shared/httpd/php/htdocs/pc_core/src/Application/App_Config.php:260    [M] ProtectedVisibility
+
+--- Original
++++ New
+@@ @@
+      * @param array<string, mixed> $taxonomies
+      * @return void
+      */
+-    protected function set_taxonomies(array $taxonomies) : void
++    private function set_taxonomies(array $taxonomies) : void
+     {
+         foreach ($taxonomies as $label => $taxonomy) {
+             // Check we have a slug.
+
+
+5) /shared/httpd/php/htdocs/pc_core/src/Application/App_Config.php:264    [M] Throw_
+
+--- Original
++++ New
+@@ @@
+         foreach ($taxonomies as $label => $taxonomy) {
+             // Check we have a slug.
+             if (empty($taxonomy['slug'])) {
+-                throw new OutOfBoundsException('Taxonomies must have a defined slug. ' . \wp_json_encode($taxonomy, \JSON_PRETTY_PRINT));
++                new OutOfBoundsException('Taxonomies must have a defined slug. ' . \wp_json_encode($taxonomy, \JSON_PRETTY_PRINT));
+             }
+             // Check we have a meta array, even if empty.
+             if (!array_key_exists('term', $taxonomy) || !is_array($taxonomy['term'])) {
+
+
+6) /shared/httpd/php/htdocs/pc_core/src/Application/App_Config.php:308    [M] DecrementInteger
+
+--- Original
++++ New
+@@ @@
+      */
+     private function settings_defaults() : array
+     {
+-        $base_path = \dirname(__DIR__, 2);
++        $base_path = \dirname(__DIR__, 1);
+         $plugin_dir = \basename($base_path);
+         $wp_uploads = \wp_upload_dir();
+         return array('plugin' => array('version' => '0.1.0'), 'path' => array('plugin' => $base_path, 'view' => $base_path . '/views', 'assets' => $base_path . '/assets', 'upload_root' => $wp_uploads['basedir'], 'upload_current' => $wp_uploads['path']), 'url' => array('plugin' => plugins_url($plugin_dir), 'view' => plugins_url($plugin_dir) . '/views', 'assets' => plugins_url($plugin_dir) . '/assets', 'upload_root' => $wp_uploads['baseurl'], 'upload_current' => $wp_uploads['url']), 'post_types' => array(), 'taxonomies' => array(), 'db_tables' => array(), 'namespaces' => array('rest' => 'pinkcrab', 'cache' => 'pc_cache'), 'additional' => array());
+     }
+
+7) /shared/httpd/php/htdocs/pc_core/src/Application/App_Config.php:308    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+      */
+     private function settings_defaults() : array
+     {
+-        $base_path = \dirname(__DIR__, 2);
++        $base_path = \dirname(__DIR__, 3);
+         $plugin_dir = \basename($base_path);
+         $wp_uploads = \wp_upload_dir();
+         return array('plugin' => array('version' => '0.1.0'), 'path' => array('plugin' => $base_path, 'view' => $base_path . '/views', 'assets' => $base_path . '/assets', 'upload_root' => $wp_uploads['basedir'], 'upload_current' => $wp_uploads['path']), 'url' => array('plugin' => plugins_url($plugin_dir), 'view' => plugins_url($plugin_dir) . '/views', 'assets' => plugins_url($plugin_dir) . '/assets', 'upload_root' => $wp_uploads['baseurl'], 'upload_current' => $wp_uploads['url']), 'post_types' => array(), 'taxonomies' => array(), 'db_tables' => array(), 'namespaces' => array('rest' => 'pinkcrab', 'cache' => 'pc_cache'), 'additional' => array());
+     }
+
+8) /shared/httpd/php/htdocs/pc_core/src/Application/App_Config.php:313    [M] ArrayItemRemoval
+
+--- Original
++++ New
+@@ @@
+         $base_path = \dirname(__DIR__, 2);
+         $plugin_dir = \basename($base_path);
+         $wp_uploads = \wp_upload_dir();
+-        return array('plugin' => array('version' => '0.1.0'), 'path' => array('plugin' => $base_path, 'view' => $base_path . '/views', 'assets' => $base_path . '/assets', 'upload_root' => $wp_uploads['basedir'], 'upload_current' => $wp_uploads['path']), 'url' => array('plugin' => plugins_url($plugin_dir), 'view' => plugins_url($plugin_dir) . '/views', 'assets' => plugins_url($plugin_dir) . '/assets', 'upload_root' => $wp_uploads['baseurl'], 'upload_current' => $wp_uploads['url']), 'post_types' => array(), 'taxonomies' => array(), 'db_tables' => array(), 'namespaces' => array('rest' => 'pinkcrab', 'cache' => 'pc_cache'), 'additional' => array());
++        return array('plugin' => array(), 'path' => array('plugin' => $base_path, 'view' => $base_path . '/views', 'assets' => $base_path . '/assets', 'upload_root' => $wp_uploads['basedir'], 'upload_current' => $wp_uploads['path']), 'url' => array('plugin' => plugins_url($plugin_dir), 'view' => plugins_url($plugin_dir) . '/views', 'assets' => plugins_url($plugin_dir) . '/assets', 'upload_root' => $wp_uploads['baseurl'], 'upload_current' => $wp_uploads['url']), 'post_types' => array(), 'taxonomies' => array(), 'db_tables' => array(), 'namespaces' => array('rest' => 'pinkcrab', 'cache' => 'pc_cache'), 'additional' => array());
+     }
+ }
+
+
+9) /shared/httpd/php/htdocs/pc_core/src/Application/App_Config.php:316    [M] ArrayItemRemoval
+
+--- Original
++++ New
+@@ @@
+         $base_path = \dirname(__DIR__, 2);
+         $plugin_dir = \basename($base_path);
+         $wp_uploads = \wp_upload_dir();
+-        return array('plugin' => array('version' => '0.1.0'), 'path' => array('plugin' => $base_path, 'view' => $base_path . '/views', 'assets' => $base_path . '/assets', 'upload_root' => $wp_uploads['basedir'], 'upload_current' => $wp_uploads['path']), 'url' => array('plugin' => plugins_url($plugin_dir), 'view' => plugins_url($plugin_dir) . '/views', 'assets' => plugins_url($plugin_dir) . '/assets', 'upload_root' => $wp_uploads['baseurl'], 'upload_current' => $wp_uploads['url']), 'post_types' => array(), 'taxonomies' => array(), 'db_tables' => array(), 'namespaces' => array('rest' => 'pinkcrab', 'cache' => 'pc_cache'), 'additional' => array());
++        return array('plugin' => array('version' => '0.1.0'), 'path' => array('view' => $base_path . '/views', 'assets' => $base_path . '/assets', 'upload_root' => $wp_uploads['basedir'], 'upload_current' => $wp_uploads['path']), 'url' => array('plugin' => plugins_url($plugin_dir), 'view' => plugins_url($plugin_dir) . '/views', 'assets' => plugins_url($plugin_dir) . '/assets', 'upload_root' => $wp_uploads['baseurl'], 'upload_current' => $wp_uploads['url']), 'post_types' => array(), 'taxonomies' => array(), 'db_tables' => array(), 'namespaces' => array('rest' => 'pinkcrab', 'cache' => 'pc_cache'), 'additional' => array());
+     }
+ }
+
+
+10) /shared/httpd/php/htdocs/pc_core/src/Application/App_Config.php:323    [M] ArrayItemRemoval
+
+--- Original
++++ New
+@@ @@
+         $base_path = \dirname(__DIR__, 2);
+         $plugin_dir = \basename($base_path);
+         $wp_uploads = \wp_upload_dir();
+-        return array('plugin' => array('version' => '0.1.0'), 'path' => array('plugin' => $base_path, 'view' => $base_path . '/views', 'assets' => $base_path . '/assets', 'upload_root' => $wp_uploads['basedir'], 'upload_current' => $wp_uploads['path']), 'url' => array('plugin' => plugins_url($plugin_dir), 'view' => plugins_url($plugin_dir) . '/views', 'assets' => plugins_url($plugin_dir) . '/assets', 'upload_root' => $wp_uploads['baseurl'], 'upload_current' => $wp_uploads['url']), 'post_types' => array(), 'taxonomies' => array(), 'db_tables' => array(), 'namespaces' => array('rest' => 'pinkcrab', 'cache' => 'pc_cache'), 'additional' => array());
++        return array('plugin' => array('version' => '0.1.0'), 'path' => array('plugin' => $base_path, 'view' => $base_path . '/views', 'assets' => $base_path . '/assets', 'upload_root' => $wp_uploads['basedir'], 'upload_current' => $wp_uploads['path']), 'url' => array('view' => plugins_url($plugin_dir) . '/views', 'assets' => plugins_url($plugin_dir) . '/assets', 'upload_root' => $wp_uploads['baseurl'], 'upload_current' => $wp_uploads['url']), 'post_types' => array(), 'taxonomies' => array(), 'db_tables' => array(), 'namespaces' => array('rest' => 'pinkcrab', 'cache' => 'pc_cache'), 'additional' => array());
+     }
+ }
+
+
+11) /shared/httpd/php/htdocs/pc_core/src/Application/App_Config.php:324    [M] ArrayItem
+
+--- Original
++++ New
+@@ @@
+         $base_path = \dirname(__DIR__, 2);
+         $plugin_dir = \basename($base_path);
+         $wp_uploads = \wp_upload_dir();
+-        return array('plugin' => array('version' => '0.1.0'), 'path' => array('plugin' => $base_path, 'view' => $base_path . '/views', 'assets' => $base_path . '/assets', 'upload_root' => $wp_uploads['basedir'], 'upload_current' => $wp_uploads['path']), 'url' => array('plugin' => plugins_url($plugin_dir), 'view' => plugins_url($plugin_dir) . '/views', 'assets' => plugins_url($plugin_dir) . '/assets', 'upload_root' => $wp_uploads['baseurl'], 'upload_current' => $wp_uploads['url']), 'post_types' => array(), 'taxonomies' => array(), 'db_tables' => array(), 'namespaces' => array('rest' => 'pinkcrab', 'cache' => 'pc_cache'), 'additional' => array());
++        return array('plugin' => array('version' => '0.1.0'), 'path' => array('plugin' => $base_path, 'view' => $base_path . '/views', 'assets' => $base_path . '/assets', 'upload_root' => $wp_uploads['basedir'], 'upload_current' => $wp_uploads['path']), 'url' => array('plugin' > plugins_url($plugin_dir), 'view' => plugins_url($plugin_dir) . '/views', 'assets' => plugins_url($plugin_dir) . '/assets', 'upload_root' => $wp_uploads['baseurl'], 'upload_current' => $wp_uploads['url']), 'post_types' => array(), 'taxonomies' => array(), 'db_tables' => array(), 'namespaces' => array('rest' => 'pinkcrab', 'cache' => 'pc_cache'), 'additional' => array());
+     }
+ }
+
+
+12) /shared/httpd/php/htdocs/pc_core/src/Collection/Collection.php:57    [M] ProtectedVisibility
+
+--- Original
++++ New
+@@ @@
+      * @param array<int|string, mixed> $data
+      * @return array<int|string, mixed>
+      */
+-    protected function map_construct(array $data) : array
++    private function map_construct(array $data) : array
+     {
+         return $data;
+     }
+
+
+13) /shared/httpd/php/htdocs/pc_core/src/Collection/Collection.php:104    [M] DecrementInteger
+
+--- Original
++++ New
+@@ @@
+      * @param callable $function
+      * @return self
+      */
+-    public function filter(callable $function, int $mode = 0) : self
++    public function filter(callable $function, int $mode = -1) : self
+     {
+         return new static(array_filter($this->data, $function, $mode));
+     }
+
+
+14) /shared/httpd/php/htdocs/pc_core/src/Collection/Collection.php:104    [M] OneZeroInteger
+
+--- Original
++++ New
+@@ @@
+      * @param callable $function
+      * @return self
+      */
+-    public function filter(callable $function, int $mode = 0) : self
++    public function filter(callable $function, int $mode = 1) : self
+     {
+         return new static(array_filter($this->data, $function, $mode));
+     }
+
+
+15) /shared/httpd/php/htdocs/pc_core/src/Collection/Collection.php:149    [M] LogicalAnd
+
+--- Original
++++ New
+@@ @@
+         if (!is_array($data) && !is_a($data, static::class)) {
+             throw new TypeError('Can only merge with other Collections or Arrays.');
+         }
+-        return new static(array_merge($this->data, is_object($data) && is_a($data, static::class) ? $data->to_array() : $data));
++        return new static(array_merge($this->data, is_object($data) || is_a($data, static::class) ? $data->to_array() : $data));
+     }
+     /**
+      * Pushes an item to the collection and reutrns a new instance.
+
+
+16) /shared/httpd/php/htdocs/pc_core/src/Collection/Collection.php:175    [M] OneZeroInteger
+
+--- Original
++++ New
+@@ @@
+     public function pop()
+     {
+         if (empty($this->data)) {
+-            throw new \UnderflowException('Collection is empty, can not extract value.', 1);
++            throw new \UnderflowException('Collection is empty, can not extract value.', 0);
+         }
+         return \array_pop($this->data);
+     }
+
+
+17) /shared/httpd/php/htdocs/pc_core/src/Collection/Collection.php:188    [M] OneZeroInteger
+
+--- Original
++++ New
+@@ @@
+     public function shift()
+     {
+         if (empty($this->data)) {
+-            throw new \UnderflowException('Collection is empty, can not extract value.', 1);
++            throw new \UnderflowException('Collection is empty, can not extract value.', 0);
+         }
+         return \array_shift($this->data);
+     }
+
+
+18) /shared/httpd/php/htdocs/pc_core/src/Collection/Collection.php:188    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+     public function shift()
+     {
+         if (empty($this->data)) {
+-            throw new \UnderflowException('Collection is empty, can not extract value.', 1);
++            throw new \UnderflowException('Collection is empty, can not extract value.', 2);
+         }
+         return \array_shift($this->data);
+     }
+
+
+19) /shared/httpd/php/htdocs/pc_core/src/Collection/Collection.php:349    [M] UnwrapArrayIntersect
+
+--- Original
++++ New
+@@ @@
+         if (!is_array($data) && !is_a($data, static::class)) {
+             throw new \TypeError('Can only merge with other Collections or Arrays.');
+         }
+-        return new static(array_intersect($this->data, is_object($data) && is_a($data, static::class) ? $data->to_array() : $data));
++        return new static(is_object($data) && is_a($data, static::class) ? $data->to_array() : $data);
+     }
+ }
+
+
+20) /shared/httpd/php/htdocs/pc_core/src/Collection/Collection.php:351    [M] LogicalAnd
+
+--- Original
++++ New
+@@ @@
+         if (!is_array($data) && !is_a($data, static::class)) {
+             throw new \TypeError('Can only merge with other Collections or Arrays.');
+         }
+-        return new static(array_intersect($this->data, is_object($data) && is_a($data, static::class) ? $data->to_array() : $data));
++        return new static(array_intersect($this->data, is_object($data) || is_a($data, static::class) ? $data->to_array() : $data));
+     }
+ }
+
+
+21) /shared/httpd/php/htdocs/pc_core/src/Collection/Traits/Sequence.php:63    [M] LessThan
+
+--- Original
++++ New
+@@ @@
+             for ($i = 0; $i < $step; $i++) {
+                 $this->push($this->shift());
+             }
+-        } elseif ($step < 0) {
++        } elseif ($step <= 0) {
+             for ($i = 0; $i < -1 * $step; $i++) {
+                 $this->unshift($this->pop());
+             }
+
+
+22) /shared/httpd/php/htdocs/pc_core/src/Collection/Traits/Sequence.php:82    [M] UnwrapArrayValues
+
+--- Original
++++ New
+@@ @@
+         if (empty($this->data)) {
+             throw new UnderflowException('Collection is empty, can not get first value');
+         }
+-        return array_values($this->data)[0];
++        return ($this->data)[0];
+     }
+     /**
+      * Returns the last value from the collection.
+
+
+23) /shared/httpd/php/htdocs/pc_core/src/Collection/Traits/Sequence.php:95    [M] UnwrapArrayValues
+
+--- Original
++++ New
+@@ @@
+         if (empty($this->data)) {
+             throw new UnderflowException('Collection is empty, can not get last value');
+         }
+-        return array_values($this->data)[count($this->data) - 1];
++        return ($this->data)[count($this->data) - 1];
+     }
+     /**
+      * Returns a sum of all the elements.
+
+
+24) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Hook_Removal.php:73    [M] LogicalOr
+
+--- Original
++++ New
+@@ @@
+      */
+     public function remove() : bool
+     {
+-        if (!$this->has_hook() || $this->is_callback_closure()) {
++        if (!$this->has_hook() && $this->is_callback_closure()) {
+             return false;
+         }
+         $removed = false;
+
+
+25) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Hook_Removal.php:77    [M] FalseValue
+
+--- Original
++++ New
+@@ @@
+         if (!$this->has_hook() || $this->is_callback_closure()) {
+             return false;
+         }
+-        $removed = false;
++        $removed = true;
+         foreach ($this->registered_hooks() as $key => $registered_callback) {
+             // Is class.
+             if (is_array($registered_callback['function']) && count($registered_callback['function']) === 2 && $this->matching_class_callback($registered_callback)) {
+
+
+26) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Hook_Removal.php:81    [M] LogicalAnd
+
+--- Original
++++ New
+@@ @@
+         $removed = false;
+         foreach ($this->registered_hooks() as $key => $registered_callback) {
+             // Is class.
+-            if (is_array($registered_callback['function']) && count($registered_callback['function']) === 2 && $this->matching_class_callback($registered_callback)) {
++            if (is_array($registered_callback['function']) && count($registered_callback['function']) === 2 || $this->matching_class_callback($registered_callback)) {
+                 unset($this->registered_hooks[$this->handle]->callbacks[$this->priority][$key]);
+                 $removed = true;
+             }
+
+
+27) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Hook_Removal.php:89    [M] LogicalAnd
+
+--- Original
++++ New
+@@ @@
+                 $removed = true;
+             }
+             // Is global function
+-            if (is_string($registered_callback['function']) && $this->matching_function_callback($registered_callback)) {
++            if (is_string($registered_callback['function']) || $this->matching_function_callback($registered_callback)) {
+                 unset($this->registered_hooks[$this->handle]->callbacks[$this->priority][$key]);
+                 $removed = true;
+             }
+
+
+28) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Hook_Removal.php:106    [M] ProtectedVisibility
+
+--- Original
++++ New
+@@ @@
+      * @param array<string, array|string> $registered_callback
+      * @return bool
+      */
+-    protected function matching_function_callback(array $registered_callback) : bool
++    private function matching_function_callback(array $registered_callback) : bool
+     {
+         return is_string($this->callback) && is_string($registered_callback['function']) && strcmp($registered_callback['function'], $this->callback) === 0;
+     }
+
+
+29) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Hook_Removal.php:107    [M] LogicalAnd
+
+--- Original
++++ New
+@@ @@
+      */
+     protected function matching_function_callback(array $registered_callback) : bool
+     {
+-        return is_string($this->callback) && is_string($registered_callback['function']) && strcmp($registered_callback['function'], $this->callback) === 0;
++        return is_string($this->callback) && is_string($registered_callback['function']) || strcmp($registered_callback['function'], $this->callback) === 0;
+     }
+     /**
+      * Checks if a registered callback matches defined class.
+
+
+30) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Hook_Removal.php:107    [M] LogicalAnd
+
+--- Original
++++ New
+@@ @@
+      */
+     protected function matching_function_callback(array $registered_callback) : bool
+     {
+-        return is_string($this->callback) && is_string($registered_callback['function']) && strcmp($registered_callback['function'], $this->callback) === 0;
++        return (is_string($this->callback) || is_string($registered_callback['function'])) && strcmp($registered_callback['function'], $this->callback) === 0;
+     }
+     /**
+      * Checks if a registered callback matches defined class.
+
+
+31) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Hook_Removal.php:120    [M] ProtectedVisibility
+
+--- Original
++++ New
+@@ @@
+      * @param array<string, array> $registered_callback
+      * @return bool
+      */
+-    protected function matching_class_callback(array $registered_callback) : bool
++    private function matching_class_callback(array $registered_callback) : bool
+     {
+         $registered_class = is_object($registered_callback['function'][0]) ? get_class($registered_callback['function'][0]) : $registered_callback['function'][0];
+         $callback_class = $this->get_callback_as_array();
+
+
+32) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Hook_Removal.php:127    [M] LogicalAnd
+
+--- Original
++++ New
+@@ @@
+     {
+         $registered_class = is_object($registered_callback['function'][0]) ? get_class($registered_callback['function'][0]) : $registered_callback['function'][0];
+         $callback_class = $this->get_callback_as_array();
+-        return class_exists($callback_class['class']) && $registered_class === $callback_class['class'] && $registered_callback['function'][1] === $callback_class['method'];
++        return class_exists($callback_class['class']) && $registered_class === $callback_class['class'] || $registered_callback['function'][1] === $callback_class['method'];
+     }
+     /**
+      * All registerd hooks on the defined handle and priority.
+
+
+33) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Hook_Removal.php:127    [M] LogicalAnd
+
+--- Original
++++ New
+@@ @@
+     {
+         $registered_class = is_object($registered_callback['function'][0]) ? get_class($registered_callback['function'][0]) : $registered_callback['function'][0];
+         $callback_class = $this->get_callback_as_array();
+-        return class_exists($callback_class['class']) && $registered_class === $callback_class['class'] && $registered_callback['function'][1] === $callback_class['method'];
++        return (class_exists($callback_class['class']) || $registered_class === $callback_class['class']) && $registered_callback['function'][1] === $callback_class['method'];
+     }
+     /**
+      * All registerd hooks on the defined handle and priority.
+
+
+34) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Hook_Removal.php:137    [M] ProtectedVisibility
+
+--- Original
++++ New
+@@ @@
+      *
+      * @return array<string, array>
+      */
+-    protected function registered_hooks() : array
++    private function registered_hooks() : array
+     {
+         return array_filter($this->registered_hooks[$this->handle]->callbacks[$this->priority], function (array $callback) {
+             return array_key_exists('function', $callback);
+
+
+35) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Hook_Removal.php:138    [M] UnwrapArrayFilter
+
+--- Original
++++ New
+@@ @@
+      */
+     protected function registered_hooks() : array
+     {
+-        return array_filter($this->registered_hooks[$this->handle]->callbacks[$this->priority], function (array $callback) {
+-            return array_key_exists('function', $callback);
+-        });
++        return $this->registered_hooks[$this->handle]->callbacks[$this->priority];
+     }
+     /**
+
+36) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Hook_Removal.php:151    [M] ProtectedVisibility
+
+--- Original
++++ New
+@@ @@
+      *
+      * @return array<string, string>
+      */
+-    protected function get_callback_as_array() : array
++    private function get_callback_as_array() : array
+     {
+         if (!is_array($this->callback)) {
+             return array('class' => '', 'method' => '');
+
+
+37) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Hook_Removal.php:170    [M] ProtectedVisibility
+
+--- Original
++++ New
+@@ @@
+      *
+      * @return bool
+      */
+-    protected function is_callback_closure() : bool
++    private function is_callback_closure() : bool
+     {
+         return $this->callback instanceof Closure;
+     }
+
+
+38) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Hook_Removal.php:180    [M] LogicalAnd
+
+--- Original
++++ New
+@@ @@
+      */
+     protected function has_hook() : bool
+     {
+-        return array_key_exists($this->handle, $this->registered_hooks) && array_key_exists($this->priority, $this->registered_hooks[$this->handle]->callbacks);
++        return array_key_exists($this->handle, $this->registered_hooks) || array_key_exists($this->priority, $this->registered_hooks[$this->handle]->callbacks);
+     }
+ }
+
+
+39) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Loader.php:108    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+      * @param integer    $args
+      * @return void
+      */
+-    public function admin_action(string $handle, callable $method, int $priority = 10, int $args = 1) : void
++    public function admin_action(string $handle, callable $method, int $priority = 11, int $args = 1) : void
+     {
+         $this->admin->push(array('type' => 'action', 'handle' => $handle, 'method' => $method, 'priority' => $priority, 'args' => $args));
+     }
+
+
+40) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Loader.php:108    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+      * @param integer    $args
+      * @return void
+      */
+-    public function admin_action(string $handle, callable $method, int $priority = 10, int $args = 1) : void
++    public function admin_action(string $handle, callable $method, int $priority = 10, int $args = 2) : void
+     {
+         $this->admin->push(array('type' => 'action', 'handle' => $handle, 'method' => $method, 'priority' => $priority, 'args' => $args));
+     }
+
+
+41) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Loader.php:108    [M] OneZeroInteger
+
+--- Original
++++ New
+@@ @@
+      * @param integer    $args
+      * @return void
+      */
+-    public function admin_action(string $handle, callable $method, int $priority = 10, int $args = 1) : void
++    public function admin_action(string $handle, callable $method, int $priority = 10, int $args = 0) : void
+     {
+         $this->admin->push(array('type' => 'action', 'handle' => $handle, 'method' => $method, 'priority' => $priority, 'args' => $args));
+     }
+
+
+42) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Loader.php:108    [M] DecrementInteger
+
+--- Original
++++ New
+@@ @@
+      * @param integer    $args
+      * @return void
+      */
+-    public function admin_action(string $handle, callable $method, int $priority = 10, int $args = 1) : void
++    public function admin_action(string $handle, callable $method, int $priority = 9, int $args = 1) : void
+     {
+         $this->admin->push(array('type' => 'action', 'handle' => $handle, 'method' => $method, 'priority' => $priority, 'args' => $args));
+     }
+
+
+43) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Loader.php:129    [M] DecrementInteger
+
+--- Original
++++ New
+@@ @@
+      * @param integer    $args
+      * @return void
+      */
+-    public function admin_filter(string $handle, callable $method, int $priority = 10, int $args = 1)
++    public function admin_filter(string $handle, callable $method, int $priority = 9, int $args = 1)
+     {
+         $this->admin->push(array('type' => 'filter', 'handle' => $handle, 'method' => $method, 'priority' => $priority, 'args' => $args));
+     }
+
+
+44) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Loader.php:129    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+      * @param integer    $args
+      * @return void
+      */
+-    public function admin_filter(string $handle, callable $method, int $priority = 10, int $args = 1)
++    public function admin_filter(string $handle, callable $method, int $priority = 11, int $args = 1)
+     {
+         $this->admin->push(array('type' => 'filter', 'handle' => $handle, 'method' => $method, 'priority' => $priority, 'args' => $args));
+     }
+
+
+45) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Loader.php:129    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+      * @param integer    $args
+      * @return void
+      */
+-    public function admin_filter(string $handle, callable $method, int $priority = 10, int $args = 1)
++    public function admin_filter(string $handle, callable $method, int $priority = 10, int $args = 2)
+     {
+         $this->admin->push(array('type' => 'filter', 'handle' => $handle, 'method' => $method, 'priority' => $priority, 'args' => $args));
+     }
+
+
+46) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Loader.php:129    [M] OneZeroInteger
+
+--- Original
++++ New
+@@ @@
+      * @param integer    $args
+      * @return void
+      */
+-    public function admin_filter(string $handle, callable $method, int $priority = 10, int $args = 1)
++    public function admin_filter(string $handle, callable $method, int $priority = 10, int $args = 0)
+     {
+         $this->admin->push(array('type' => 'filter', 'handle' => $handle, 'method' => $method, 'priority' => $priority, 'args' => $args));
+     }
+
+
+47) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Loader.php:130    [M] MethodCallRemoval
+
+--- Original
++++ New
+@@ @@
+      */
+     public function admin_filter(string $handle, callable $method, int $priority = 10, int $args = 1)
+     {
+-        $this->admin->push(array('type' => 'filter', 'handle' => $handle, 'method' => $method, 'priority' => $priority, 'args' => $args));
++        
+     }
+     /**
+      * Adds an action for the front end.
+
+
+48) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Loader.php:131    [M] ArrayItemRemoval
+
+--- Original
++++ New
+@@ @@
+      */
+     public function admin_filter(string $handle, callable $method, int $priority = 10, int $args = 1)
+     {
+-        $this->admin->push(array('type' => 'filter', 'handle' => $handle, 'method' => $method, 'priority' => $priority, 'args' => $args));
++        $this->admin->push(array('handle' => $handle, 'method' => $method, 'priority' => $priority, 'args' => $args));
+     }
+     /**
+      * Adds an action for the front end.
+
+
+49) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Loader.php:150    [M] OneZeroInteger
+
+--- Original
++++ New
+@@ @@
+      * @param integer    $args
+      * @return void
+      */
+-    public function front_action(string $handle, callable $method, int $priority = 10, int $args = 1) : void
++    public function front_action(string $handle, callable $method, int $priority = 10, int $args = 0) : void
+     {
+         $this->front->push(array('type' => 'action', 'handle' => $handle, 'method' => $method, 'priority' => $priority, 'args' => $args));
+     }
+
+
+50) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Loader.php:150    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+      * @param integer    $args
+      * @return void
+      */
+-    public function front_action(string $handle, callable $method, int $priority = 10, int $args = 1) : void
++    public function front_action(string $handle, callable $method, int $priority = 10, int $args = 2) : void
+     {
+         $this->front->push(array('type' => 'action', 'handle' => $handle, 'method' => $method, 'priority' => $priority, 'args' => $args));
+     }
+
+
+51) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Loader.php:150    [M] DecrementInteger
+
+--- Original
++++ New
+@@ @@
+      * @param integer    $args
+      * @return void
+      */
+-    public function front_action(string $handle, callable $method, int $priority = 10, int $args = 1) : void
++    public function front_action(string $handle, callable $method, int $priority = 9, int $args = 1) : void
+     {
+         $this->front->push(array('type' => 'action', 'handle' => $handle, 'method' => $method, 'priority' => $priority, 'args' => $args));
+     }
+
+
+52) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Loader.php:171    [M] DecrementInteger
+
+--- Original
++++ New
+@@ @@
+      * @param integer    $args
+      * @return void
+      */
+-    public function front_filter(string $handle, callable $method, int $priority = 10, int $args = 1) : void
++    public function front_filter(string $handle, callable $method, int $priority = 9, int $args = 1) : void
+     {
+         $this->front->push(array('type' => 'filter', 'handle' => $handle, 'method' => $method, 'priority' => $priority, 'args' => $args));
+     }
+
+
+53) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Loader.php:171    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+      * @param integer    $args
+      * @return void
+      */
+-    public function front_filter(string $handle, callable $method, int $priority = 10, int $args = 1) : void
++    public function front_filter(string $handle, callable $method, int $priority = 10, int $args = 2) : void
+     {
+         $this->front->push(array('type' => 'filter', 'handle' => $handle, 'method' => $method, 'priority' => $priority, 'args' => $args));
+     }
+
+
+54) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Loader.php:171    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+      * @param integer    $args
+      * @return void
+      */
+-    public function front_filter(string $handle, callable $method, int $priority = 10, int $args = 1) : void
++    public function front_filter(string $handle, callable $method, int $priority = 11, int $args = 1) : void
+     {
+         $this->front->push(array('type' => 'filter', 'handle' => $handle, 'method' => $method, 'priority' => $priority, 'args' => $args));
+     }
+
+
+55) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Loader.php:192    [M] DecrementInteger
+
+--- Original
++++ New
+@@ @@
+      * @param integer    $args
+      * @return void
+      */
+-    public function action(string $handle, callable $method, int $priority = 10, int $args = 1) : void
++    public function action(string $handle, callable $method, int $priority = 9, int $args = 1) : void
+     {
+         $this->global->push(array('type' => 'action', 'handle' => $handle, 'method' => $method, 'priority' => $priority, 'args' => $args));
+     }
+
+
+56) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Loader.php:192    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+      * @param integer    $args
+      * @return void
+      */
+-    public function action(string $handle, callable $method, int $priority = 10, int $args = 1) : void
++    public function action(string $handle, callable $method, int $priority = 10, int $args = 2) : void
+     {
+         $this->global->push(array('type' => 'action', 'handle' => $handle, 'method' => $method, 'priority' => $priority, 'args' => $args));
+     }
+
+
+57) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Loader.php:192    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+      * @param integer    $args
+      * @return void
+      */
+-    public function action(string $handle, callable $method, int $priority = 10, int $args = 1) : void
++    public function action(string $handle, callable $method, int $priority = 11, int $args = 1) : void
+     {
+         $this->global->push(array('type' => 'action', 'handle' => $handle, 'method' => $method, 'priority' => $priority, 'args' => $args));
+     }
+
+
+58) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Loader.php:192    [M] OneZeroInteger
+
+--- Original
++++ New
+@@ @@
+      * @param integer    $args
+      * @return void
+      */
+-    public function action(string $handle, callable $method, int $priority = 10, int $args = 1) : void
++    public function action(string $handle, callable $method, int $priority = 10, int $args = 0) : void
+     {
+         $this->global->push(array('type' => 'action', 'handle' => $handle, 'method' => $method, 'priority' => $priority, 'args' => $args));
+     }
+
+
+59) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Loader.php:213    [M] DecrementInteger
+
+--- Original
++++ New
+@@ @@
+      * @param integer    $args
+      * @return void
+      */
+-    public function filter(string $handle, callable $method, int $priority = 10, int $args = 1) : void
++    public function filter(string $handle, callable $method, int $priority = 9, int $args = 1) : void
+     {
+         $this->global->push(array('type' => 'filter', 'handle' => $handle, 'method' => $method, 'priority' => $priority, 'args' => $args));
+     }
+
+
+60) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Loader.php:213    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+      * @param integer    $args
+      * @return void
+      */
+-    public function filter(string $handle, callable $method, int $priority = 10, int $args = 1) : void
++    public function filter(string $handle, callable $method, int $priority = 10, int $args = 2) : void
+     {
+         $this->global->push(array('type' => 'filter', 'handle' => $handle, 'method' => $method, 'priority' => $priority, 'args' => $args));
+     }
+
+
+61) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Loader.php:287    [M] DecrementInteger
+
+--- Original
++++ New
+@@ @@
+             if (is_array($ajax)) {
+                 // If public (none logged in users)
+                 if ($ajax['public']) {
+-                    $this->global->push(array('type' => 'action', 'handle' => 'wp_ajax_nopriv_' . $ajax['handle'], 'method' => $ajax['method'], 'priority' => 10, 'args' => 1));
++                    $this->global->push(array('type' => 'action', 'handle' => 'wp_ajax_nopriv_' . $ajax['handle'], 'method' => $ajax['method'], 'priority' => 9, 'args' => 1));
+                 }
+                 // If private (logged in users only)
+                 if ($ajax['private']) {
+
+
+62) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Loader.php:287    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+             if (is_array($ajax)) {
+                 // If public (none logged in users)
+                 if ($ajax['public']) {
+-                    $this->global->push(array('type' => 'action', 'handle' => 'wp_ajax_nopriv_' . $ajax['handle'], 'method' => $ajax['method'], 'priority' => 10, 'args' => 1));
++                    $this->global->push(array('type' => 'action', 'handle' => 'wp_ajax_nopriv_' . $ajax['handle'], 'method' => $ajax['method'], 'priority' => 11, 'args' => 1));
+                 }
+                 // If private (logged in users only)
+                 if ($ajax['private']) {
+
+
+63) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Loader.php:288    [M] OneZeroInteger
+
+--- Original
++++ New
+@@ @@
+             if (is_array($ajax)) {
+                 // If public (none logged in users)
+                 if ($ajax['public']) {
+-                    $this->global->push(array('type' => 'action', 'handle' => 'wp_ajax_nopriv_' . $ajax['handle'], 'method' => $ajax['method'], 'priority' => 10, 'args' => 1));
++                    $this->global->push(array('type' => 'action', 'handle' => 'wp_ajax_nopriv_' . $ajax['handle'], 'method' => $ajax['method'], 'priority' => 10, 'args' => 0));
+                 }
+                 // If private (logged in users only)
+                 if ($ajax['private']) {
+
+
+64) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Loader.php:288    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+             if (is_array($ajax)) {
+                 // If public (none logged in users)
+                 if ($ajax['public']) {
+-                    $this->global->push(array('type' => 'action', 'handle' => 'wp_ajax_nopriv_' . $ajax['handle'], 'method' => $ajax['method'], 'priority' => 10, 'args' => 1));
++                    $this->global->push(array('type' => 'action', 'handle' => 'wp_ajax_nopriv_' . $ajax['handle'], 'method' => $ajax['method'], 'priority' => 10, 'args' => 2));
+                 }
+                 // If private (logged in users only)
+                 if ($ajax['private']) {
+
+
+65) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Loader.php:299    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+                 }
+                 // If private (logged in users only)
+                 if ($ajax['private']) {
+-                    $this->global->push(array('type' => 'action', 'handle' => 'wp_ajax_' . $ajax['handle'], 'method' => $ajax['method'], 'priority' => 10, 'args' => 1));
++                    $this->global->push(array('type' => 'action', 'handle' => 'wp_ajax_' . $ajax['handle'], 'method' => $ajax['method'], 'priority' => 11, 'args' => 1));
+                 }
+             }
+         });
+
+
+66) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Loader.php:299    [M] DecrementInteger
+
+--- Original
++++ New
+@@ @@
+                 }
+                 // If private (logged in users only)
+                 if ($ajax['private']) {
+-                    $this->global->push(array('type' => 'action', 'handle' => 'wp_ajax_' . $ajax['handle'], 'method' => $ajax['method'], 'priority' => 10, 'args' => 1));
++                    $this->global->push(array('type' => 'action', 'handle' => 'wp_ajax_' . $ajax['handle'], 'method' => $ajax['method'], 'priority' => 9, 'args' => 1));
+                 }
+             }
+         });
+
+
+67) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Loader.php:300    [M] OneZeroInteger
+
+--- Original
++++ New
+@@ @@
+                 }
+                 // If private (logged in users only)
+                 if ($ajax['private']) {
+-                    $this->global->push(array('type' => 'action', 'handle' => 'wp_ajax_' . $ajax['handle'], 'method' => $ajax['method'], 'priority' => 10, 'args' => 1));
++                    $this->global->push(array('type' => 'action', 'handle' => 'wp_ajax_' . $ajax['handle'], 'method' => $ajax['method'], 'priority' => 10, 'args' => 0));
+                 }
+             }
+         });
+
+
+68) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Loader.php:300    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+                 }
+                 // If private (logged in users only)
+                 if ($ajax['private']) {
+-                    $this->global->push(array('type' => 'action', 'handle' => 'wp_ajax_' . $ajax['handle'], 'method' => $ajax['method'], 'priority' => 10, 'args' => 1));
++                    $this->global->push(array('type' => 'action', 'handle' => 'wp_ajax_' . $ajax['handle'], 'method' => $ajax['method'], 'priority' => 10, 'args' => 2));
+                 }
+             }
+         });
+
+
+69) /shared/httpd/php/htdocs/pc_core/src/Services/ServiceContainer/Container.php:51    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+     public function get($id)
+     {
+         if (!$this->has($id)) {
+-            throw new ServiceNotRegisteredException("{$id} not defined in container", 1);
++            throw new ServiceNotRegisteredException("{$id} not defined in container", 2);
+         }
+         return $this->services[$id];
+     }
+
+
+70) /shared/httpd/php/htdocs/pc_core/src/Services/View/PHP_Engine.php:71    [M] PublicVisibility
+
+--- Original
++++ New
+@@ @@
+      * @param bool $print
+      * @return string|void
+      */
+-    public function partial(string $view, iterable $data = array(), bool $print = true)
++    protected function partial(string $view, iterable $data = array(), bool $print = true)
+     {
+         if ($print) {
+             $this->render($view, $data, $print);
+
+
+71) /shared/httpd/php/htdocs/pc_core/src/Services/View/PHP_Engine.php:87    [M] ProtectedVisibility
+
+--- Original
++++ New
+@@ @@
+      * @return string
+      * @throws Exception
+      */
+-    protected function render_buffer(string $view, iterable $data) : string
++    private function render_buffer(string $view, iterable $data) : string
+     {
+         if (!file_exists($this->resolve_file_path($view))) {
+             throw new Exception("{$view} doesnt exist");
+
+
+72) /shared/httpd/php/htdocs/pc_core/src/Services/View/PHP_Engine.php:115    [M] ProtectedVisibility
+
+--- Original
++++ New
+@@ @@
+      * @param string $file
+      * @return string
+      */
+-    protected function clean_filename(string $file) : string
++    private function clean_filename(string $file) : string
+     {
+         $file = ltrim($file, '/');
+         return substr($file, -4) === '.php' ? substr($file, 0, -4) : $file;
+
+
+73) /shared/httpd/php/htdocs/pc_core/src/Services/View/PHP_Engine.php:145    [M] ProtectedVisibility
+
+--- Original
++++ New
+@@ @@
+      * @return string
+      * @throws Exception
+      */
+-    protected function verify_view_path(string $path) : string
++    private function verify_view_path(string $path) : string
+     {
+         $path = rtrim($path, '/') . '/';
+         if (!\is_dir($path)) {
+
+
+74) /shared/httpd/php/htdocs/pc_core/src/Services/View/View.php:72    [M] TrueValue
+
+--- Original
++++ New
+@@ @@
+      * @param bool $print
+      * @return string|void
+      */
+-    public function render(string $view, iterable $view_data, bool $print = true)
++    public function render(string $view, iterable $view_data, bool $print = false)
+     {
+         if ($print) {
+             $this->engine->render($view, $view_data, self::PRINT_VIEW);
+
+
+75) /shared/httpd/php/htdocs/pc_core/src/Services/View/View.php:91    [M] FunctionCallRemoval
+
+--- Original
++++ New
+@@ @@
+         ob_start();
+         $to_buffer();
+         $output = ob_get_contents();
+-        ob_end_clean();
++        
+         return $output ?: '';
+     }
+ }
+
+Timed Out mutants:
+==================
+
+
+1) /shared/httpd/php/htdocs/pc_core/src/Collection/Traits/Sequence.php:60    [M] Increment
+
+--- Original
++++ New
+@@ @@
+     public function rotate(int $step) : self
+     {
+         if ($step > 0) {
+-            for ($i = 0; $i < $step; $i++) {
++            for ($i = 0; $i < $step; $i--) {
+                 $this->push($this->shift());
+             }
+         } elseif ($step < 0) {
+
+
+2) /shared/httpd/php/htdocs/pc_core/src/Collection/Traits/Sequence.php:64    [M] Increment
+
+--- Original
++++ New
+@@ @@
+                 $this->push($this->shift());
+             }
+         } elseif ($step < 0) {
+-            for ($i = 0; $i < -1 * $step; $i++) {
++            for ($i = 0; $i < -1 * $step; $i--) {
+                 $this->unshift($this->pop());
+             }
+         }
+
+Not Covered mutants:
+====================
+
+
+1) /shared/httpd/php/htdocs/pc_core/src/Services/Registration/Hook_Removal.php:153    [M] ArrayItemRemoval
+
+--- Original
++++ New
+@@ @@
+     protected function get_callback_as_array() : array
+     {
+         if (!is_array($this->callback)) {
+-            return array('class' => '', 'method' => '');
++            return array('method' => '');
+         }
+         return array('class' => is_object($this->callback[0]) ? get_class($this->callback[0]) : $this->callback[0], 'method' => $this->callback[1]);
+     }
