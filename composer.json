@@ -14,13 +14,13 @@
     "autoload": {
         "psr-4": {
             "PinkCrab\\Core\\": "src"
-        },
-        "files": []
+        }
     },
     "autoload-dev": {
         "psr-4": {
             "PinkCrab\\Core\\Tests\\": "tests/"
-        }
+        },
+        "files": ["tests/Fixtures/functions.php"]
     },
     "repositories": [{
         "url": "https://github.com/Pink-Crab/PHP_Unit_Helpers.git",
@@ -37,9 +37,7 @@
         "dealerdirect/phpcodesniffer-composer-installer": "*",
         "wp-coding-standards/wpcs": "*",
         "object-calisthenics/phpcs-calisthenics-rules": "*",
-        "pinkcrab/phpunit-helpers": "dev-master",
-        "jaschilz/php-coverage-badger": "^2.0",
-        "infection/infection": "^0.13"
+        "pinkcrab/phpunit-helpers": "dev-master"
     },
     "require": {
         "php": ">=7.1.0",
@@ -51,7 +49,6 @@
         "coverage": "phpunit --coverage-html coverage-report",
         "analyse": "vendor/bin/phpstan analyse src -l8",
         "sniff": "./vendor/bin/phpcs src/ -v",
-        "infection": "vendor/bin/infection run -j 2",
-        "all": "composer test && composer analyse && composer sniff && composer infection"
+        "all": "composer test && composer analyse && composer sniff"
     }
 }

@@ -11,5 +11,6 @@
         "summary": "coverage-report/infection/summary-log.txt",
         "debug": "coverage-report/infection/debug-log.txt"
     },
-    "tmpDir": "coverage-report/infection/temp"
+    "tmpDir": "coverage-report/infection/temp",
+    "timeout" : 120
 }
