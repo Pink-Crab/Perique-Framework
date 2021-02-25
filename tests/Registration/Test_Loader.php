@@ -75,7 +75,7 @@ class Loader_Test extends WP_UnitTestCase {
 	 */
 	public function test_is_constructed_with_internal_collection(): void {
 		$loader      = new Loader();
-		$collections = array( 'global', 'admin', 'front', 'shortcode', 'ajax' );
+		$collections = array( 'global', 'admin', 'front', 'shortcode', 'ajax', 'remove' );
 		foreach ( $collections as $collection ) {
 			$this->assertInstanceOf(
 				Collection::class,
@@ -233,9 +233,8 @@ class Loader_Test extends WP_UnitTestCase {
 
 	}
 
-	public function test_admin_hooks()
-	{
-		set_current_screen('edit.php');
+	public function test_admin_hooks() {
+		set_current_screen( 'edit.php' );
 		$loader = new Loader();
 
 		$loader->admin_action(
@@ -269,5 +268,43 @@ class Loader_Test extends WP_UnitTestCase {
 		do_shortcode( "[testShortCode text='yes']" );
 		$this->assertTrue( ob_get_contents() === 'yes' );
 		ob_end_clean();
+	}
+
+	/**
+	 * Ensure hooks can be removed using the loader
+	 *
+	 * @return void
+	 */
+	public function test_action_can_be_removed(): void {
+		$callback = function( $e ): void {
+			//noop
+		};
+
+		add_action( 'remove_this_action', $callback, 10 );
+
+		$this->loader->remove_action( 'remove_this_action', $callback, 10 );
+
+		$this->register_hooks();
+
+		$this->assertFalse( has_action( 'remove_this_action' ) );
+	}
+
+	/**
+	 * Ensure hooks can be removed using the loader
+	 *
+	 * @return void
+	 */
+	public function test_filter_can_be_removed(): void {
+		$callback = function( string $e ): string {
+			return 'DIDNT REMOVE ME';
+		};
+
+		add_filter( 'remove_this_filter', $callback, 10 );
+
+		$this->loader->remove_filter( 'remove_this_filter', $callback, 10 );
+
+		$this->register_hooks();
+
+		$this->assertFalse( has_filter( 'remove_this_filter' ) );
 	}
 }
