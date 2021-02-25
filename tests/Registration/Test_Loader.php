@@ -307,16 +307,14 @@ class Loader_Test extends WP_UnitTestCase {
 	 *
 	 * @return void
 	 */
-	public function test_can_remove_etiher_hook_fitler(): void
-	{
-		add_action('loader_remove_hook', array( new Hooks_Via_Instance(), 'action_callback_instance' ));
-		
+	public function test_can_remove_etiher_hook_fitler(): void {
+		add_action( 'loader_remove_hook', array( new Hooks_Via_Instance(), 'action_callback_instance' ) );
+
 		$loader = new Loader();
-		$loader->remove('loader_remove_hook', array( new Hooks_Via_Instance(), 'action_callback_instance' ));
+		$loader->remove( 'loader_remove_hook', array( new Hooks_Via_Instance(), 'action_callback_instance' ) );
 		$loader->register_hooks();
 
 		$this->assertEmpty( $GLOBALS['wp_filter']['loader_remove_hook']->callbacks[10] );
 		$this->assertFalse( has_action( 'loader_remove_hook' ) );
-		
 	}
 }
