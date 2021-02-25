@@ -277,14 +277,14 @@ class Loader {
 	 * @param int $args
 	 * @return void
 	 */
-	public function remove_action( string $handle, callable $method, int $priority = 10, int $args = 1 ) {
+	public function remove_action( string $handle, callable $method, int $priority = 10 ) {
 		$this->remove->push(
 			array(
 				'type'     => 'action',
 				'handle'   => $handle,
 				'method'   => $method,
 				'priority' => $priority,
-				'args'     => $args,
+				'args'     => false,
 			)
 		);
 	}
@@ -295,17 +295,16 @@ class Loader {
 	 * @param string $handle
 	 * @param callable $method
 	 * @param int $priority
-	 * @param int $args
 	 * @return void
 	 */
-	public function remove_filter( string $handle, callable $method, int $priority = 10, int $args = 1 ) {
+	public function remove_filter( string $handle, callable $method, int $priority = 10 ) {
 		$this->remove->push(
 			array(
 				'type'     => 'filter',
 				'handle'   => $handle,
 				'method'   => $method,
 				'priority' => $priority,
-				'args'     => $args,
+				'args'     => false,
 			)
 		);
 	}
@@ -316,17 +315,16 @@ class Loader {
 	 * @param string $handle
 	 * @param callable $method
 	 * @param int $priority
-	 * @param int $args
 	 * @return void
 	 */
-	public function remove( string $handle, callable $method, int $priority = 10, int $args = 1 ) {
+	public function remove( string $handle, callable $method, int $priority = 10 ) {
 		$this->remove->push(
 			array(
 				'type'     => false,
 				'handle'   => $handle,
 				'method'   => $method,
 				'priority' => $priority,
-				'args'     => $args,
+				'args'     => false,
 			)
 		);
 	}
