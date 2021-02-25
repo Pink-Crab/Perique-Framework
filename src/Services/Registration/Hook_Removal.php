@@ -100,7 +100,7 @@ class Hook_Removal {
 	/**
 	 * Checks if a registered callback matches a defined gloabl function.
 	 *
-	 * @param array<string, array|string> $registered_callback
+	 * @param array<string, string> $registered_callback
 	 * @return bool
 	 */
 	protected function matching_function_callback( array $registered_callback ): bool {
