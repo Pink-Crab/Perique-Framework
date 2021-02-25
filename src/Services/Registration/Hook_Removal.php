@@ -105,7 +105,6 @@ class Hook_Removal {
 	 */
 	protected function matching_function_callback( array $registered_callback ): bool {
 		return is_string( $this->callback )
-			&& is_string( $registered_callback['function'] )
 			&& strcmp( $registered_callback['function'], $this->callback ) === 0;
 	}
 
@@ -125,8 +124,8 @@ class Hook_Removal {
 		$callback_class = $this->get_callback_as_array();
 
 		return class_exists( $callback_class['class'] )
-			&& $registered_class === $callback_class['class']
-			&& $registered_callback['function'][1] === $callback_class['method'];
+			&& strcmp( $registered_class, $callback_class['class'] ) === 0
+			&& strcmp( $registered_callback['function'][1], $callback_class['method'] ) === 0;
 	}
 
 	/**
