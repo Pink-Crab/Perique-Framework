@@ -2,7 +2,7 @@
 
 Welcome the main package of the PinkCrab Framwework. 
 
-![alt text](https://img.shields.io/badge/Current_Version-0.3.7-yellow.svg?style=flat " ") 
+![alt text](https://img.shields.io/badge/Current_Version-0.3.8-yellow.svg?style=flat " ") 
 [![Open Source Love](https://badges.frapsoft.com/os/mit/mit.svg?v=102)]()
 
 ![](https://github.com/Pink-Crab/Framework__core/workflows/GitHub_CI/badge.svg " ")
@@ -14,7 +14,7 @@ https://app.gitbook.com/@glynn-quelch/s/pinkcrab/
 
 
 ## Version ##
-**Release 0.3.7**
+**Release 0.3.8**
 
 With version 0.3 we have moved away from the submodule driven approach and thanks to PHP Scoper we can now use actual composer libraries.
 
@@ -259,3 +259,4 @@ http://www.opensource.org/licenses/mit-license.html
 * 0.3.5 - Added coverage reports to gitignore
 * 0.3.6 - Added remove_action() and remove_filter() to Loader
 * 0.3.7 - Added in Hook_Removal and made minor changes to the Loader tests.
+* 0.3.8 - Added in missing Hook_Removal & Loader tests.
