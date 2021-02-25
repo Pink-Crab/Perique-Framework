@@ -26,6 +26,7 @@ declare(strict_types=1);
 namespace PinkCrab\Core\Services\Registration;
 
 use PinkCrab\Core\Collection\Collection;
+use PinkCrab\Core\Services\Registration\Hook_Removal;
 
 
 
@@ -69,6 +70,7 @@ class Loader {
 	/**
 	 * Hooks to be removed.
 	 *
+	 * @since 0.3.5
 	 * @var \PinkCrab\Core\Collection\Collection
 	 */
 	protected $remove;
@@ -309,6 +311,27 @@ class Loader {
 	}
 
 	/**
+	 * Removes a pre registered filter or action.
+	 *
+	 * @param string $handle
+	 * @param callable $method
+	 * @param int $priority
+	 * @param int $args
+	 * @return void
+	 */
+	public function remove( string $handle, callable $method, int $priority = 10, int $args = 1 ) {
+		$this->remove->push(
+			array(
+				'type'     => false,
+				'handle'   => $handle,
+				'method'   => $method,
+				'priority' => $priority,
+				'args'     => $args,
+			)
+		);
+	}
+
+	/**
 	 * Registers all the added hooks.
 	 *
 	 * @return void
@@ -422,21 +445,14 @@ class Loader {
 	}
 
 	/**
-	 * Removed all requested hooks.
+	 * Remove hook if set.
 	 *
+	 * @since 0.3.5
 	 * @param array<string, mixed> $hook
 	 * @return void
 	 */
 	private function remove_hook_callback( array $hook ): void {
-
-		switch ( $hook['type'] ) {
-			case 'action':
-				remove_action( $hook['handle'], $hook['method'], $hook['priority'] );
-				break;
-
-			case 'filter':
-				remove_filter( $hook['handle'], $hook['method'], $hook['priority'] );
-				break;
-		}
+		( new Hook_Removal( $hook['handle'], $hook['method'], $hook['priority'] ) )
+			->remove();
 	}
 }
