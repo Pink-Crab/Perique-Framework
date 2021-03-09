@@ -24,10 +24,9 @@ declare(strict_types=1);
 
 namespace PinkCrab\Core\Services\Registration;
 
+use PinkCrab\Loader\Loader;
 use PinkCrab\Core\Application\App;
 use PinkCrab\Core\Interfaces\Registerable;
-use PinkCrab\Core\Services\Registration\Loader;
-
 
 
 class Register_Loader {

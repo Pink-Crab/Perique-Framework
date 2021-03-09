@@ -2,7 +2,7 @@
 
 Welcome the main package of the PinkCrab Framwework. 
 
-![alt text](https://img.shields.io/badge/Current_Version-0.3.8-yellow.svg?style=flat " ") 
+![alt text](https://img.shields.io/badge/Current_Version-0.3.9-yellow.svg?style=flat " ") 
 [![Open Source Love](https://badges.frapsoft.com/os/mit/mit.svg?v=102)]()
 
 ![](https://github.com/Pink-Crab/Framework__core/workflows/GitHub_CI/badge.svg " ")
@@ -14,7 +14,7 @@ https://app.gitbook.com/@glynn-quelch/s/pinkcrab/
 
 
 ## Version ##
-**Release 0.3.8**
+**Release 0.3.9**
 
 With version 0.3 we have moved away from the submodule driven approach and thanks to PHP Scoper we can now use actual composer libraries.
 
@@ -51,7 +51,7 @@ use PinkCrab\Core\Application\App;
 use Dice\Dice;
 use PinkCrab\Core\Services\Dice\WP_Dice;
 use PinkCrab\Core\Application\App_Config;
-use PinkCrab\Core\Services\Registration\Loader;
+use PinkCrab\Loader\Loader;
 use PinkCrab\Core\Services\ServiceContainer\Container;
 use PinkCrab\Core\Services\Registration\Register_Loader;
 
@@ -134,84 +134,95 @@ The framework requires 3 config files, these are usually placed in the /config d
 
 ### dependencies.php ###
 ````php
-    <?php
-    // @file config/dependencies.php
+<?php
+// @file config/dependencies.php
 
-    /**
-     * Handles all depenedency injection rules and config.
-     *
-     * @package Your Plugin
-     * @author Awesome Devs <awesome.devs@rock.com>
-     * @since 1.2.3
-     */
+/**
+ * Handles all depenedency injection rules and config.
+ *
+ * @package Your Plugin
+ * @author Awesome Devs <awesome.devs@rock.com>
+ * @since 1.2.3
+ */
 
-    use PinkCrab\Core\Application\App;
-    use PinkCrab\Core\Interfaces\Renderable;
-    use PinkCrab\Core\Services\View\PHP_Engine;
-    
-    return array(
-	// Gloabl Rules
-	'*'         => array(
-		'substitutions' => array(
-			App::class        => App::get_instance(),
-			Renderable::class => PHP_Engine::class,
-		),
-	),
+use PinkCrab\Core\Application\App;
+use PinkCrab\Core\Interfaces\Renderable;
+use PinkCrab\Core\Services\View\PHP_Engine;
+use PinkCrab\Core\Application\App_Config;
 
-	// Use wpdb as an injectable object.
-	wpdb::class => array(
-		'shared'          => true,
-		'constructParams' => array( \DB_USER, \DB_PASSWORD, \DB_NAME, \DB_HOST ),
-	),
-
-	/** ADD YOUR CUSTOM RULES HERE */
+return array(
+    // Gloabl Rules
+    '*' => array(
+        'substitutions' => array(
+            App::class        => App::get_instance(),
+            Renderable::class => PHP_Engine::class,
+            App_Config::class => isset( $config ) ? $config : [],
+            wpdb::class       => $GLOBALS['wpdb'],
+        ),
+    ),
+    /** ADD YOUR CUSTOM RULES HERE */
 );
 ````
 ### dependencies.php ###
 ````php
-    <?php
-    // @file config/dependencies.php
-    declare(strict_types=1);
+<?php
+// @file config/dependencies.php
+declare(strict_types=1);
 
+/**
+ * Holds all classes which are to be loaded on initalisation.
+ *
+ * @package Your Plugin
+ * @author Awesome Devs <awesome.devs@rock.com>
+ * @since 1.2.3
+ */
 
-    /**
-     * Holds all classes which are to be loaded on initalisation.
-     *
-     * @package Your Plugin
-     * @author Awesome Devs <awesome.devs@rock.com>
-     * @since 1.2.3
-     */
-
-    return array(
-        /** Include all your classes which implemenet Registerable here */
-    );
+return array(
+    /** Include all your classes which implemenet Registerable here */
+);
 ````
 ### settings.php ###
 ````php
-    // @file config/settings.php
-    <?php
+// @file config/settings.php
+<?php
     
-    declare(strict_types=1);
+declare(strict_types=1);
 
-    /**
-     * Handles all the data used by App_Config
-     *
-     * @package Your Plugin
-     * @author Awesome Devs <awesome.devs@rock.com>
-     * @since 1.2.3
-     */
+/**
+ * Handles all the data used by App_Config
+ *
+ * @package Your Plugin
+ * @author Awesome Devs <awesome.devs@rock.com>
+ * @since 1.2.3
+ */
 
-    // Get the path of the plugin base.
-    $base_path  = \dirname( __DIR__, 1 );
-    $plugin_dir = \basename( $base_path );
-    $wp_uploads = \wp_upload_dir();
+// Get the path of the plugin base.
+$base_path  = \dirname( __DIR__, 1 );
+$plugin_dir = \basename( $base_path );
+$wp_uploads = \wp_upload_dir();
 
-    return array(
-        'additional' => array(
-            // Register your custom config data.
-        ),
-
-    );
+return array(
+    'plugin'     => array(
+		'dir' => 'my_plugin',
+	),
+	'path'       => array(
+		'plugin'         => $base_path,
+		'view'           => $base_path . '/views',
+		'assets'         => $base_path . '/assets',
+		'upload_root'    => $wp_uploads['basedir'],
+		'upload_current' => $wp_uploads['path'],
+	),
+	'url'        => array(
+		'plugin'         => plugins_url( $plugin_dir ),
+		'view'           => plugins_url( $plugin_dir ) . '/views',
+		'assets'         => plugins_url( $plugin_dir ) . '/assets',
+		'upload_root'    => $wp_uploads['baseurl'],
+		'upload_current' => $wp_uploads['url'],
+	),
+    'additional' => array(
+		// Custom values go here (Config::additiona('key'); = value)
+	),
+);
 ````
 
 ## Testing ##
@@ -221,29 +232,11 @@ If you would like to run the tests for this package, please ensure you add your 
 
 ### PHP Stan ###
 The module comes with a pollyfill for all WP Functions, allowing for the testing of all core files. The current config omits the Dice file as this is not ours. To run the suite call.
+
 ````bash vendor/bin/phpstan analyse src/ -l8 ````
 
 ## Building ##
-If you wish to use PHP Scoper to rebase the namespaces, to remove the risk of conflicts feel free. The Core has been tested and will run for other namespaces without too many issues. 
-
-The only issues that soemtimes arise if the the namespacing of core wp functions. That can be avoided for this package by adding the following exclusions to your scoper.inc.php file.
-````php
-    <?php
-        // Omit from remapping.
-        // wp_upload_dir();    Used in settings.php
-        // plugins_url();      Used in settings.php
-
-        // ....
-    	'patchers' => array(
-		function ( $file_path, $prefix, $contents ) {
-			// Your other functions to omit
-                $contents = str_replace( "\\$prefix\\wp_upload_dir", '\\wp_upload_dir', $contents );
-			$contents = str_replace( "\\$prefix\\plugins_url", '\\plugins_url', $contents );
-
-            return $contents;
-		},
-        // .......
-	),
+If you wish to use PHP Scoper, please see our Plugin Boilerplate which has a full PHP Scoper suite setup and ready to go.
 ````
 
 ## License ##
@@ -260,3 +253,4 @@ http://www.opensource.org/licenses/mit-license.html
 * 0.3.6 - Added remove_action() and remove_filter() to Loader
 * 0.3.7 - Added in Hook_Removal and made minor changes to the Loader tests.
 * 0.3.8 - Added in missing Hook_Removal & Loader tests.
+* 0.3.9 - Moved Loader into its own library, all tests and use statements updated.

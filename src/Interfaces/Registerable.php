@@ -21,7 +21,7 @@
 
 namespace PinkCrab\Core\Interfaces;
 
-use PinkCrab\Core\Services\Registration\Loader;
+use PinkCrab\Loader\Loader;
 
 interface Registerable {
 	public function register( Loader $loader ): void;

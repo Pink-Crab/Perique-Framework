@@ -42,7 +42,8 @@
     "require": {
         "php": ">=7.1.0",
         "level-2/dice": "^4.0.2",
-        "psr/container": "^1.0"
+        "psr/container": "^1.0",
+        "pinkcrab/hook-loader": "1.0.*"
     },
     "scripts": {
         "test": "phpunit --coverage-clover coverage.xml",

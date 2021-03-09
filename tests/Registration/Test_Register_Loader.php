@@ -15,10 +15,9 @@ namespace PinkCrab\Core\Tests\Registration;
 
 use stdClass;
 use WP_UnitTestCase;
+use PinkCrab\Loader\Loader;
 use PinkCrab\Core\Application\App;
 use PinkCrab\PHPUnit_Helpers\Reflection;
-use PinkCrab\Core\Services\Registration\Loader;
-use PinkCrab\Core\Services\ServiceContainer\Container;
 use PinkCrab\Core\Services\Registration\Register_Loader;
 use PinkCrab\Core\Tests\Fixtures\Mock_Objects\Registerable\Registerable_Mock;
 
