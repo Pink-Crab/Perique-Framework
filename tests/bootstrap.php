@@ -4,7 +4,7 @@ use Dice\Dice;
 use PinkCrab\Core\Application\App;
 use PinkCrab\Core\Services\Dice\WP_Dice;
 use PinkCrab\Core\Application\App_Config;
-use PinkCrab\Core\Services\Registration\Loader;
+use PinkCrab\Loader\Loader;
 use PinkCrab\Core\Services\ServiceContainer\Container;
 use PinkCrab\Core\Services\Registration\Register_Loader;
 /**

@@ -10,12 +10,4 @@ declare(strict_types=1);
  * @package PinkCrab\Core
  */
 
-/** 
- * Function that does nothing
- * 
- * @param mixed ...$args
- * @return void
- */
-function pc_tests_noop( ...$args ): void {
 
-}
