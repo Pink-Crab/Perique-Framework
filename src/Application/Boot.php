@@ -21,14 +21,19 @@ declare(strict_types=1);
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
  * @package PinkCrab\Core
  * @since 0.3.9
+ * @phpcs:disable WordPress.NamingConventions.ValidHookName.UseUnderscores
+ * @phpcs:disable WordPress.NamingConventions.ValidHookName.NotLowercase
  */
 
 namespace PinkCrab\Core\Application;
 
 use Dice\Dice;
 use PinkCrab\Loader\Loader;
+use PinkCrab\Core\Application\App;
 use PinkCrab\Core\Services\Dice\WP_Dice;
+use PinkCrab\Core\Application\App_Config;
 use PinkCrab\Core\Services\ServiceContainer\Container;
+use PinkCrab\Core\Services\Registration\Register_Loader;
 
 class Boot {
 
@@ -48,9 +53,21 @@ class Boot {
 	 * @var Loader
 	 */
 	protected $loader;
+	/**
+	 * @var WP_Dice
+	 */
 	protected $wp_di;
+	/**
+	 * @var App
+	 */
 	protected $app;
+	/**
+	 * @var Container
+	 */
 	protected $container;
+	/**
+	 * @var App_Config
+	 */
 	protected $app_settings;
 
 	public function __construct(
@@ -64,41 +81,58 @@ class Boot {
 	}
 
 	/**
-	 * Binds a service to the apps container.
-	 *
-	 * @param string $key
-	 * @param object $service
-	 * @return self
-	 */
-	public function bind_to_container( string $key, object $service ): self {
-		$this->container->set( $key, $service );
-		return $this;
-	}
-
-	/**
 	 * Populates the settings.
 	 *
 	 * @return self
 	 */
-	protected function populate_settings(): self {
-		$settings = file_exists( $this->settings )
-			? require_once $this->settings
+	protected function populate_app_config(): self {
+		$settings = file_exists( $this->settings_path )
+			? require_once $this->settings_path
 			: array();
 
-		$this->app_settings = new App_Config( $filter ? $filter( $settings ) : $settings );
+		$this->app_settings = new App_Config( apply_filters( 'PinkCrab/Boot/app_config', $settings, $this ) ); /* @phpstan-ignore-line */
 		return $this;
 	}
 
 	/**
 	 * Adds all the rules to DI.
 	 *
+	 * @uses PinkCrab/Boot/dependencies filter
 	 * @return void
 	 */
-	protected function build_di_rules(): void {
-		if ( file_exists( 'config/dependencies.php' ) ) {
-			$dependencies = include 'config/dependencies.php';
-			$this->wp_di->addRules( $dependencies );
-		}
+	protected function register_dependencies(): void {
+		$dependencies = file_exists( $this->dependencies_path )
+			? include_once $this->dependencies_path
+			: array();
+		$this->app->get( 'di' )->addRules( apply_filters( 'PinkCrab/Boot/dependencies', $dependencies, $this ) ); /* @phpstan-ignore-line */
+	}
+
+	/**
+	 * Registers all registerable instances.
+	 *
+	 * @uses PinkCrab/Boot/registerables filter
+	 * @return void
+	 */
+	protected function register_registerables(): void {
+		$registerables = file_exists( $this->registerables_path )
+			? include_once $this->registerables_path
+			: array();
+
+		Register_Loader::initalise(
+			$this->app,
+			apply_filters( 'PinkCrab/Boot/registerables', $registerables, $this ), /* @phpstan-ignore-line */
+			$this->loader
+		);
+	}
+
+	/**
+	 * Binds DI and Config to the apps internal container.
+	 *
+	 * @return void
+	 */
+	protected function bind_internal_services(): void {
+		$this->container->set( 'di', $this->wp_di );
+		$this->container->set( 'config', $this->app_settings );
 	}
 
 	/**
@@ -114,32 +148,46 @@ class Boot {
 		$this->wp_di     = WP_Dice::constructWith( new Dice() );
 
 		// Bind & populate all internal services.
-		$this->populate_settings();
-		$this->build_di_rules();
-		$this->bind_internal_services();
+		$this->populate_app_config();
 		return $this;
 	}
 
 	/**
-	 * Binds DI and Config to the apps internal container.
+	 * Binds a service to the apps container.
 	 *
-	 * @return void
+	 * @param string $key
+	 * @param object $service
+	 * @return self
 	 */
-	public function bind_internal_services(): void {
-		$this->container->set( 'di', $this->wp_di );
-		$this->container->set( 'config', $this->app_settings );
+	public function bind_to_container( string $key, object $service ): self {
+		$this->container->set( $key, $service );
+		return $this;
 	}
 
 	/**
-	 * Checks all essentials services are created and bound.
+	 * Finialises all settings and boots the app on init hook call (pritority 1)
 	 *
-	 * @return bool
+	 * @return self
 	 */
-	protected function verfiy(): bool {
-		# code...
-	}
+	public function finalise(): self {
+		$this->bind_internal_services();
 
-	public function finalise(): App {
+		do_action( 'PinkCrab/Boot/pre_app_init', $this ); // phpcs:disable WordPress.NamingConventions.ValidHookName.*
 		$this->app = App::init( $this->container );
+
+		// Initialise on init
+		add_action(
+			'init',
+			function() {
+				do_action( 'PinkCrab/Boot/pre_registration', $this );
+				$this->register_dependencies();
+				$this->register_registerables();
+				do_action( 'PinkCrab/Boot/post_registration', $this );
+				$this->loader->register_hooks();
+			},
+			1
+		);
+
+		return $this;
 	}
 }
