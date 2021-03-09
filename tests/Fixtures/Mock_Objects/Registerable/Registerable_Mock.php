@@ -14,14 +14,14 @@ declare(strict_types=1);
 namespace PinkCrab\Core\Tests\Fixtures\Mock_Objects\Registerable;
 
 use PinkCrab\Core\Interfaces\Registerable;
-use PinkCrab\Core\Services\Registration\Loader;
+use PinkCrab\Loader\Loader;
 
 class Registerable_Mock implements Registerable {
 
 	/**
 	 * Registers a single hook (Registerable_Mock) echos Registerable_Mock
 	 *
-	 * @param \PinkCrab\Core\Services\Registration\Loader $loader
+	 * @param \PinkCrab\Loader\Loader $loader
 	 * @return void
 	 */
 	public function register( Loader $loader ): void {
