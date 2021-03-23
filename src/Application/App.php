@@ -27,7 +27,7 @@ use Exception;
 use OutOfBoundsException;
 use PinkCrab\Core\Interfaces\Service_Container;
 
-final class App {
+class App {
 
 	/**
 	 * Holds the isntance of its self.

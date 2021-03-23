@@ -1,0 +1,72 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * App initialisation exception.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * @author Glynn Quelch <glynn.quelch@gmail.com>
+ * @license http://www.opensource.org/licenses/mit-license.html  MIT License
+ * @package PinkCrab\Core\Exceptions
+ * @version 0.4.0
+ */
+
+namespace PinkCrab\Core\Exceptions;
+
+use Exception;
+
+class App_Initialization_Exception extends Exception {
+
+	/**
+	 * Returns an exception if a DI Container is not bound to the app.
+	 * @code 1
+	 * @return App_Initialization_Exception
+	 */
+	public static function requires_di_container(): App_Initialization_Exception {
+		$message = 'The Application must be populated with a DI_Container before booting.';
+		return new App_Initialization_Exception( $message, 1 );
+	}
+
+	/**
+	 * Returns an exception if attempting to overwrite the DI Container.
+	 * @code 2
+	 * @return App_Initialization_Exception
+	 */
+	public static function di_container_exists(): App_Initialization_Exception {
+		$message = 'App already contains a DI Container, can not redeclare.';
+		return new App_Initialization_Exception( $message, 2 );
+	}
+
+	/**
+	 * Returns an exception if the Registration_Service is not defined.
+	 * @code 3
+	 * @return App_Initialization_Exception
+	 */
+	public static function requires_registration_service(): App_Initialization_Exception {
+		$message = 'App has not defined Registration Service, this must be set before use.';
+		return new App_Initialization_Exception( $message, 3 );
+	}
+
+	/**
+	 * Returns an exception if App hasnt been intialised and its getters are accessed
+	 * @code 4
+	 * @param string $service The service which has been called without intiialising the app.
+	 * @return App_Initialization_Exception
+	 */
+	public static function app_not_initialized( string $service ): App_Initialization_Exception {
+		$message = "App must be initialised before calling {$service}";
+		return new App_Initialization_Exception( $message, 4 );
+	}
+}
