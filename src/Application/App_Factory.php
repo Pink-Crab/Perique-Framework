@@ -35,23 +35,19 @@ class App_Factory {
 	public static function with_wp_di( array $di_rules = array() ): _App {
 		$app       = new _App();
 		$loader    = new Loader();
-		$container = WP_Dice::constructWith( new Dice() );
+		$container = WP_Dice::constructWith( new Dice() );//
+
+		// Mount container for App
+		$container = new WP_Dice_DI_Container_Bridge($container);
 		$container->addRules( $di_rules );
 
 		// Bind the container.
-		$app->set_container(
-			new WP_Dice_DI_Container_Bridge(
-				$container
-			)
-		);
+		$app->set_container($container);
 
-		$app->define_registration_services(
-			new Registration_Service(),
-			$loader
-		);
+		// Set registration middleware
+		$app->define_registration_services(new Registration_Service(), $loader);
+		$app->registration_middleware( new Registerable_Middleware( $loader, $container ) );
 
-		$app->registration_middleware( new Registerable_Middleware( $loader, $app ) );
-
-		return $app;
+		return $app->boot();
 	}
 }

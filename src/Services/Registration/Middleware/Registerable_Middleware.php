@@ -26,7 +26,7 @@ declare(strict_types=1);
 namespace PinkCrab\Core\Services\Registration\Middleware;
 
 use PinkCrab\Loader\Loader;
-use PinkCrab\Core\Application\App;
+use PinkCrab\Core\Interfaces\DI_Container;
 use PinkCrab\Core\Interfaces\Registerable;
 
 class Registerable_Middleware implements Registration_Middleware {
@@ -34,12 +34,12 @@ class Registerable_Middleware implements Registration_Middleware {
 	/** @var Loader */
 	protected $loader;
 
-	/** @var App */
-	protected $app;
+	/** @var DI_Container */
+	protected $container;
 
-	public function __construct( Loader $loader, App $app ) {
+	public function __construct( Loader $loader, DI_Container $container ) {
 		$this->loader = $loader;
-		$this->app    = $app;
+		$this->container    = $container;
 	}
 
 	/**
@@ -51,7 +51,7 @@ class Registerable_Middleware implements Registration_Middleware {
 	public function process( $class ) {
 		if ( in_array( Registerable::class, class_implements( $class ) ?: array(), true ) ) {
 			/** @phpstan-ignore-next-line class must implement register for interface*/
-			$this->app::make( $class )->register( $this->loader );
+			$this->container->create( $class )->register( $this->loader );
 		}
 		return $class;
 	}

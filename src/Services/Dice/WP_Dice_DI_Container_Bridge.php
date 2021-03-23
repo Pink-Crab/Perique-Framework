@@ -54,6 +54,8 @@ class WP_Dice_DI_Container_Bridge implements DI_Container {
 	 * @return DI_Container
 	 */
 	public function addRules( array $rules ): DI_Container {
+		$this->wp_dice->addRules($rules);
+		dump($rules);
 		return $this;
 	}
 
@@ -65,7 +67,7 @@ class WP_Dice_DI_Container_Bridge implements DI_Container {
 	 * @return object|null
 	 */
 	public function create( string $id, array $args = array() ) {
-		return null;
+		return $this->wp_dice->create($id, $args);
 	}
 
 	public function get( $id ) {

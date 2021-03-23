@@ -19,17 +19,20 @@ declare(strict_types=1);
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
  * @package PinkCrab\Core
+ * @since 0.4.0
  */
 
 namespace PinkCrab\Core\Application;
 
 use PinkCrab\Loader\Loader;
-use PinkCrab\Core\Application\App;
-use PinkCrab\Core\Application\App_Config;
-use PinkCrab\Core\Interfaces\DI_Container;
+use PinkCrab\Core\Application\{App, App_Config};
+use PinkCrab\Core\Services\View\View;
+use PinkCrab\Core\Interfaces\{Renderable,DI_Container};
 use PinkCrab\Core\Exceptions\App_Initialization_Exception;
-use PinkCrab\Core\Services\Registration\Registration_Service;
-use PinkCrab\Core\Services\Registration\Middleware\Registration_Middleware;
+use PinkCrab\Core\Services\Registration\{
+	Registration_Service,
+	Middleware\Registration_Middleware
+};
 
 final class _App extends App{
 
@@ -38,7 +41,7 @@ final class _App extends App{
 	 *
 	 * @var bool
 	 */
-	protected $booted = false;
+	protected static $booted = false;
 
 	/**
 	 * Dependency Injection Container
@@ -68,6 +71,10 @@ final class _App extends App{
 	 */
 	protected $loader;
 
+	public function __construct() {
+
+	}
+
 	/**
 	 * Sets the DI Constainer.
 	 *
@@ -88,8 +95,12 @@ final class _App extends App{
 	 *
 	 * @param array<mixed> $settings
 	 * @return self
+	 * @throws App_Initialization_Exception Code 5
 	 */
 	public function app_config( array $settings ): self {
+		if ( self::$app_config !== null ) {
+			throw App_Initialization_Exception::app_config_exists();
+		}
 		self::$app_config = new App_Config( $settings );
 		return $this;
 	}
@@ -136,6 +147,7 @@ final class _App extends App{
 		if ( $this->registration === null ) {
 			throw App_Initialization_Exception::requires_registration_service();
 		}
+
 		$this->registration->push_middleware( $middleware );
 		return $this;
 	}
@@ -161,7 +173,9 @@ final class _App extends App{
 	 * @return self
 	 */
 	public function boot(): self {
-		# code...
+		$this->registration->set_container(self::$container);
+		self::$booted = true;
+		return $this;
 	}
 
 	// Magic Helpers.
@@ -187,10 +201,34 @@ final class _App extends App{
 	 * @param string $key The config key to call
 	 * @param array<int, mixed> $child Additional params passed.
 	 * @return mixed
+	 * @throws App_Initialization_Exception Code 4
 	 */
 	public static function config( string $key, ...$child ) {
-
+		if ( self::$booted === false ) {
+			throw App_Initialization_Exception::app_not_initialized( App_Config::class );
+		}
+		return self::$app_config->{$key}( ...$child );
 	}
 
+	/**
+	 * Returns the View helper, populated with current Renderable engine.
+	 *
+	 * @return View
+	 */
+	public static function view(): View
+	{
+		if ( self::$booted === false ) {
+			throw App_Initialization_Exception::app_not_initialized( View::class );
+		}
+		return self::$container->create(View::class);
+	}
 
+	/** @return array{container:Container,app_config:App_Config,booted:bool} */
+	public function __debugInfo() {
+        return array(
+            'container' => self::$container,
+            'app_config' => self::$app_config,
+			'booted' => self::$booted
+        );
+    }
 }

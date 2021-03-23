@@ -69,4 +69,14 @@ class App_Initialization_Exception extends Exception {
 		$message = "App must be initialised before calling {$service}";
 		return new App_Initialization_Exception( $message, 4 );
 	}
+
+	/**
+	 * Returns an exception for trying to redefine the App_Config if its already been set.
+	 * @code 5
+	 * @return App_Initialization_Exception
+	 */
+	public static function app_config_exists(): App_Initialization_Exception {
+		$message = "Can not redeclare App_Config as its already set to the application";
+		return new App_Initialization_Exception( $message, 5 );
+	}
 }
