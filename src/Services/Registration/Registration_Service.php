@@ -32,14 +32,14 @@ class Registration_Service {
 	/**
 	 * Holds all the defined registration middlewares
 	 *
-	 * @var Registration_Middleware[]
+	 * @var array<Registration_Middleware>?
 	 */
 	protected $middleware = array();
 
 	/**
 	 * Holds all classes that are to be registered.
 	 *
-	 * @var array
+	 * @var array<string>
 	 */
 	protected $class_list = array();
 
@@ -103,7 +103,12 @@ class Registration_Service {
 		foreach ( $this->middleware as $middleware ) {
 			// Pass each class to the middleware.
 			foreach ( $this->class_list as $class ) {
-				$middleware->process( $class );
+				// Construct class using container,
+				//if valid object process via current middleware
+				$class_instance = $this->di_container->create( $class );
+				if ( is_object( $class_instance ) ) {
+					$middleware->process( $class_instance );
+				}
 			}
 		}
 	}

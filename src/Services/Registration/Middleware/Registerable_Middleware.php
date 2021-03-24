@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * Registration_Middleware for all classes that implement the Resiterable 
+ * Registration_Middleware for all classes that implement the Resiterable
  * interface.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
@@ -34,12 +34,8 @@ class Registerable_Middleware implements Registration_Middleware {
 	/** @var Loader */
 	protected $loader;
 
-	/** @var DI_Container */
-	protected $container;
-
-	public function __construct( Loader $loader, DI_Container $container ) {
+	public function __construct( Loader $loader ) {
 		$this->loader = $loader;
-		$this->container    = $container;
 	}
 
 	/**
@@ -51,7 +47,7 @@ class Registerable_Middleware implements Registration_Middleware {
 	public function process( $class ) {
 		if ( in_array( Registerable::class, class_implements( $class ) ?: array(), true ) ) {
 			/** @phpstan-ignore-next-line class must implement register for interface*/
-			$this->container->create( $class )->register( $this->loader );
+			$class->register( $this->loader );
 		}
 		return $class;
 	}

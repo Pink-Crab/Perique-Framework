@@ -25,16 +25,16 @@ declare(strict_types=1);
 namespace PinkCrab\Core\Application;
 
 use PinkCrab\Loader\Loader;
-use PinkCrab\Core\Application\{App, App_Config};
 use PinkCrab\Core\Services\View\View;
+use PinkCrab\Core\Services\Registration\{
+use PinkCrab\Core\Application\{App, App_Config};
 use PinkCrab\Core\Interfaces\{Renderable,DI_Container};
 use PinkCrab\Core\Exceptions\App_Initialization_Exception;
-use PinkCrab\Core\Services\Registration\{
 	Registration_Service,
 	Middleware\Registration_Middleware
 };
 
-final class _App extends App{
+final class _App extends App {
 
 	/**
 	 * Defines if the app has already been booted.
@@ -117,14 +117,14 @@ final class _App extends App{
 		Loader $loader
 	): self {
 		$this->registration = $registration;
-		$this->loader       = $loader;
+		$this->loader = $loader;
 		return $this;
 	}
 
 	/**
 	 * Interace with the container using a callable.
 	 *
-	 * @param callable $callback
+	 * @param callable(DI_Containter):void $callback
 	 * @return self
 	 * @throws App_Initialization_Exception Code 1
 	 */
@@ -173,7 +173,9 @@ final class _App extends App{
 	 * @return self
 	 */
 	public function boot(): self {
-		$this->registration->set_container(self::$container);
+		// Process registration
+		$this->registration->set_container( self::$container );
+		$this->registration->process
 		self::$booted = true;
 		return $this;
 	}
@@ -215,20 +217,19 @@ final class _App extends App{
 	 *
 	 * @return View
 	 */
-	public static function view(): View
-	{
+	public static function view(): View {
 		if ( self::$booted === false ) {
 			throw App_Initialization_Exception::app_not_initialized( View::class );
 		}
-		return self::$container->create(View::class);
+		return self::$container->create( View::class );
 	}
 
 	/** @return array{container:Container,app_config:App_Config,booted:bool} */
 	public function __debugInfo() {
-        return array(
-            'container' => self::$container,
-            'app_config' => self::$app_config,
-			'booted' => self::$booted
-        );
-    }
+		return array(
+			'container'  => self::$container,
+			'app_config' => self::$app_config,
+			'booted'     => self::$booted,
+		);
+	}
 }

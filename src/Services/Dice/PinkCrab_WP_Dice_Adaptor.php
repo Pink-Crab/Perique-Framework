@@ -26,55 +26,30 @@ namespace PinkCrab\Core\Services\Dice;
 
 use PinkCrab\Core\Services\Dice\WP_Dice;
 use PinkCrab\Core\Interfaces\DI_Container;
+use PinkCrab\Core\Services\ServiceContainer\ServiceNotRegisteredException;
 
-class WP_Dice_DI_Container_Bridge implements DI_Container {
+class PinkCrab_WP_Dice_Adaptor extends WP_Dice implements DI_Container {
 
 	/** @var WP_Dice */
 	protected $wp_dice;
 
-	public function __construct( WP_Dice $wp_dice ) {
-		$this->wp_dice = $wp_dice;
-	}
-
-	/**
-	 * Add a single rule.
-	 *
-	 * @param string $id
-	 * @param array<string, array> $rule
-	 * @return DI_Container
-	 */
-	public function addRule( string $id, array $rule ): DI_Container {
-		return $this;
-	}
-
-	/**
-	 * Add multiple rules
-	 *
-	 * @param array<string, array> $rules
-	 * @return DI_Container
-	 */
-	public function addRules( array $rules ): DI_Container {
-		$this->wp_dice->addRules($rules);
-		dump($rules);
-		return $this;
-	}
-
-	/**
-	 * Create an instance of a class, with optional parameters.
-	 *
-	 * @param string $id
-	 * @param array<mixed> $args
-	 * @return object|null
-	 */
-	public function create( string $id, array $args = array() ) {
-		return $this->wp_dice->create($id, $args);
-	}
-
 	public function get( $id ) {
-
+		if ( ! $this->has( $id ) ) {
+			throw new ServiceNotRegisteredException( "{$id} not defined in container", 1 );
+		}
 	}
 
 	public function has( $id ) {
+		if ( ! $this->has( $id ) ) {
+			throw new ServiceNotRegisteredException( "{$id} not defined in container", 1 );
+		}
 
+		// If class exists but
+		try {
+			$instance = $this->create( $id );
+		} catch ( \Throwable $th ) {
+			$instance = null;
+		}
+		return is_object( $instance );
 	}
 }

@@ -14,11 +14,9 @@ namespace PinkCrab\Core\Application;
 
 use Dice\Dice;
 use PinkCrab\Loader\Loader;
-use PinkCrab\Core\Services\Dice\WP_Dice;
-use PinkCrab\Core\Services\Dice\WP_Dice_DI_Container_Bridge;
+use PinkCrab\Core\Services\Dice\PinkCrab_WP_Dice_Adaptor;
 use PinkCrab\Core\Services\Registration\Registration_Service;
 use PinkCrab\Core\Services\Registration\Middleware\Registerable_Middleware;
-use PinkCrab\Core\Tests\Fixtures\Mock_Objects\Registerable\Registerable_Mock;
 
 class App_Factory {
 
@@ -33,19 +31,18 @@ class App_Factory {
 	 * @return App
 	 */
 	public static function with_wp_di( array $di_rules = array() ): _App {
-		$app       = new _App();
-		$loader    = new Loader();
-		$container = WP_Dice::constructWith( new Dice() );//
+		$app    = new _App();
+		$loader = new Loader();
 
-		// Mount container for App
-		$container = new WP_Dice_DI_Container_Bridge($container);
+		// Setup DI Container
+		$container = PinkCrab_WP_Dice_Adaptor::constructWith( new Dice() );
 		$container->addRules( $di_rules );
-
-		// Bind the container.
-		$app->set_container($container);
+		$app->set_container( $container );
 
 		// Set registration middleware
-		$app->define_registration_services(new Registration_Service(), $loader);
+		$app->define_registration_services( new Registration_Service(), $loader );
+
+		// Include Registerables.
 		$app->registration_middleware( new Registerable_Middleware( $loader, $container ) );
 
 		return $app->boot();

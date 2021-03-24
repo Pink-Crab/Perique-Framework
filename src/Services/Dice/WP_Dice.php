@@ -53,7 +53,7 @@ class WP_Dice {
 	 * @return self
 	 */
 	public static function constructWith( Dice $dice ): self { // phpcs:disable WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
-		return new self( $dice );
+		return new static( $dice );
 	}
 
 	/**
