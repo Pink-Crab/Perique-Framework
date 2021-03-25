@@ -23,5 +23,6 @@ class Hooks {
 	public const APP_INIT_CONFIG_VALUES = 'PinkCrab|App|Boot|app_config_values';
 	/** @var string */
 	public const APP_INIT_REGISTRATION_CLASS_LIST = 'PinkCrab|App|Boot|registration_class_list';
+	// public const APP_INIT_REGISTRATION_CLASS_LIST = 'PinkCrab|App|Boot|registration_class_list';
 }
 

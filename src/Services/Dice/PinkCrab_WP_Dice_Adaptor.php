@@ -24,6 +24,7 @@ declare(strict_types=1);
 
 namespace PinkCrab\Core\Services\Dice;
 
+use PinkCrab\Core\Application\Hooks;
 use PinkCrab\Core\Services\Dice\WP_Dice;
 use PinkCrab\Core\Interfaces\DI_Container;
 use PinkCrab\Core\Services\ServiceContainer\ServiceNotRegisteredException;
@@ -72,7 +73,7 @@ class PinkCrab_WP_Dice_Adaptor extends WP_Dice implements DI_Container {
 	 * @return self
 	 */
 	public function addRules( array $rules ): self { // phpcs:disable WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
-		$this->dice = $this->dice->addRules( $rules );
+		$this->dice = $this->dice->addRules( app_filters(Hooks::s $rules) );
 		return $this;
 	}
 
