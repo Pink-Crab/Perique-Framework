@@ -31,7 +31,7 @@ use PinkCrab\Core\Services\ServiceContainer\ServiceNotRegisteredException;
 class PinkCrab_WP_Dice_Adaptor extends WP_Dice implements DI_Container {
 
 	/** @var WP_Dice */
-	protected $wp_dice;
+	// protected $wp_dice;
 
 	public function get( $id ) {
 		if ( ! $this->has( $id ) ) {
@@ -51,5 +51,39 @@ class PinkCrab_WP_Dice_Adaptor extends WP_Dice implements DI_Container {
 			$instance = null;
 		}
 		return is_object( $instance );
+	}
+
+	/**
+	 * Proxy for addRule.
+	 *
+	 * @param string $name
+	 * @param array<string, string|object|array> $rule
+	 * @return self
+	 */
+	public function addRule( string $name, array $rule ): self { // phpcs:disable WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
+		$this->dice = $this->dice->addRule( $name, $rule );
+		return $this;
+	}
+
+	/**
+	 * Proxy for addRules
+	 *
+	 * @param array<string, array> $rules
+	 * @return self
+	 */
+	public function addRules( array $rules ): self { // phpcs:disable WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
+		$this->dice = $this->dice->addRules( $rules );
+		return $this;
+	}
+
+	/**
+	 * Proxy for create, but with third param removed (see dice code comments)
+	 *
+	 * @param string $name
+	 * @param array<mixed> $args
+	 * @return object|null
+	 */
+	public function create( string $name, array $args = array() ) {
+		return $this->dice->create( $name, $args );
 	}
 }

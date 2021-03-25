@@ -29,6 +29,8 @@ use Dice\Dice;
 
 class WP_Dice {
 
+	public const ADD_RULES_FILTER = 'pc_wp_dice_add_rules_filter';
+
 	/**
 	 * Holds the instnace of DICE to work with.
 	 *
@@ -73,9 +75,12 @@ class WP_Dice {
 	 *
 	 * @param array<string, array> $rules
 	 * @return self
+	 * @filter WP_Dice::ADD_RULES_FILTER(array<string, array>):array<string, array>
 	 */
 	public function addRules( array $rules ): self { // phpcs:disable WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
-		$this->dice = $this->dice->addRules( $rules );
+		$this->dice = $this->dice->addRules(
+			apply_filters( self::ADD_RULES_FILTER, $rules )
+		);
 		return $this;
 	}
 

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b70e05fcd932804f9e874ebda52c338f",
+    "content-hash": "139514611c7ba15774206129bc9265c0",
     "packages": [
         {
             "name": "level-2/dice",
@@ -318,6 +318,60 @@
                 }
             ],
             "time": "2020-11-10T18:47:58+00:00"
+        },
+        {
+            "name": "gin0115/wpunit-helpers",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/gin0115/WPUnit_Helpers.git",
+                "reference": "5acf15280037e6fafa79b9312f07c1ccc184ba2a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/gin0115/WPUnit_Helpers/zipball/5acf15280037e6fafa79b9312f07c1ccc184ba2a",
+                "reference": "5acf15280037e6fafa79b9312f07c1ccc184ba2a",
+                "shasum": ""
+            },
+            "require": {
+                "automattic/jetpack-constants": "^1.6",
+                "php": ">=7.1.0",
+                "pinkcrab/function-constructors": "~0.1.0"
+            },
+            "require-dev": {
+                "dealerdirect/phpcodesniffer-composer-installer": "*",
+                "object-calisthenics/phpcs-calisthenics-rules": "*",
+                "php-stubs/wordpress-stubs": "^5.6.0",
+                "phpstan/phpstan": "^0.12.6",
+                "phpunit/phpunit": "^7.0",
+                "roots/wordpress": "^5.5",
+                "symfony/var-dumper": "4.*",
+                "szepeviktor/phpstan-wordpress": "^0.7.2",
+                "wp-coding-standards/wpcs": "*",
+                "wp-phpunit/wp-phpunit": "^5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Gin0115\\WPUnit_Helpers\\": "src/"
+                },
+                "files": []
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Glynn Quelch",
+                    "email": "glynn.quelch@pinkcrab.co.uk",
+                    "homepage": "http://clappo.co.uk",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A series of helper classes, functions and traits for testing with WPUnit for WordPress",
+            "homepage": "https://pinkcrab.co.uk",
+            "time": "2021-03-15T10:24:21+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -1372,40 +1426,6 @@
             "time": "2021-01-21T23:37:15+00:00"
         },
         {
-            "name": "pinkcrab/phpunit-helpers",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Pink-Crab/PHP_Unit_Helpers.git",
-                "reference": "fd0f3c1473e65072a191c9cdba397f747890a04e"
-            },
-            "require": {
-                "automattic/jetpack-constants": "^1.6.1",
-                "php": ">=7.1.0",
-                "pinkcrab/function-constructors": "^0.1.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "PinkCrab\\PHPUnit_Helpers\\": "src"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Glynn Quelch",
-                    "email": "glynn.quelch@pinkcrab.co.uk",
-                    "homepage": "http://clappo.co.uk",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Collection of helper functions for use with tests.",
-            "homepage": "https://pinkcrab.co.uk",
-            "time": "2021-02-03T17:05:29+00:00"
-        },
-        {
             "name": "roots/wordpress",
             "version": "5.6.2",
             "source": {
@@ -1415,7 +1435,8 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WordPress/WordPress/zipball/5.6.2"
+                "url": "https://api.github.com/repos/WordPress/WordPress/zipball/5.6.2",
+                "reference": "5.6.2"
             },
             "require": {
                 "php": ">=5.3.2",
@@ -2966,9 +2987,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "pinkcrab/phpunit-helpers": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

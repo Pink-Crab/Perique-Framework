@@ -53,11 +53,11 @@ tests_add_filter(
 		// );
 
 		// Initalise App.
-		( new Boot(
-			'',
-			'',
-			''
-		) )->initialise()->finalise();
+		// ( new Boot(
+		// 	'',
+		// 	'',
+		// 	''
+		// ) )->initialise()->finalise();
 	}
 );
 

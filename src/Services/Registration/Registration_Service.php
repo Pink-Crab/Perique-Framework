@@ -53,7 +53,7 @@ class Registration_Service {
 	/**
 	 * Sets the DI Container.
 	 *
-	 * @param \PinkCrab\Core\Interfaces\DI_Container $di_container
+	 * @param DI_Container $di_container
 	 * @return self
 	 */
 	public function set_container( DI_Container $di_container ): self {
@@ -64,7 +64,7 @@ class Registration_Service {
 	/**
 	 * Pushes a peice of middleware to the collection.
 	 *
-	 * @param \PinkCrab\Core\Services\Registration\Registration_Middleware $middleware
+	 * @param Registration_Middleware $middleware
 	 * @return self
 	 */
 	public function push_middleware( Registration_Middleware $middleware ): self {
