@@ -28,7 +28,7 @@ use PinkCrab\Core\Interfaces\DI_Container;
 use PinkCrab\Core\Services\Registration\Middleware\Registration_Middleware;
 
 class Registration_Service {
-
+	
 	/**
 	 * Holds all the defined registration middlewares
 	 *

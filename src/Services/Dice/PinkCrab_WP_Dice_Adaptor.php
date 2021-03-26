@@ -73,7 +73,7 @@ class PinkCrab_WP_Dice_Adaptor extends WP_Dice implements DI_Container {
 	 * @return self
 	 */
 	public function addRules( array $rules ): self { // phpcs:disable WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
-		$this->dice = $this->dice->addRules( app_filters(Hooks::s $rules) );
+		$this->dice = $this->dice->addRules( apply_filters( Hooks::APP_INIT_SET_DI_RULES, $rules ) );
 		return $this;
 	}
 

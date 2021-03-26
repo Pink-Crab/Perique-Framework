@@ -32,17 +32,23 @@ class App_Factory {
 	 *
 	 * @return App
 	 */
-	public static function with_wp_di( bool $include_default_rules = false ): App {
+	public function with_wp_di( bool $include_default_rules = false ): App {
 		$app    = new App();
 		$loader = new Loader();
 
 		// Setup DI Container
 		$container = PinkCrab_WP_Dice_Adaptor::constructWith( new Dice() );
 
+		if ( $include_default_rules === true ) {
+			$container->addRules( $this->default_di_rules() );
+		}
+
 		$app->set_container( $container );
 
 		// Set registration middleware
-		$app->define_registration_services( new Registration_Service(), $loader );
+		$app->set_registration_services( new Registration_Service() );
+
+		$app->set_loader( $loader );
 
 		// Include Registerables.
 		$app->registration_middleware( new Registerable_Middleware( $loader, $container ) );
@@ -54,18 +60,15 @@ class App_Factory {
 	 * Returns the basic DI rules which are used to set.
 	 * WPDB
 	 * Renderable with PHP_Engine implementation
-	 * WP_Cache Access
 	 *
-	 * @return array
+	 * @return array<string, array<string, string|object|callable|void|false>>
 	 */
-	protected static function default_di_rules( App $app ): array {
+	protected function default_di_rules(): array {
 		return array(
 			'*' => array(
 				'substitutions' => array(
 					Renderable::class => new PHP_Engine( __DIR__ ),
 					\WPDB::class      => $GLOBALS['wpdb'],
-					\WP_Cache::class  => $GLOBALS['wp_cache'],
-					App_Config::class => $app::make( App_Config::class ),
 				),
 			),
 		);

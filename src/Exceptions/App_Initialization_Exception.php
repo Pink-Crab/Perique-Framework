@@ -76,7 +76,41 @@ class App_Initialization_Exception extends Exception {
 	 * @return App_Initialization_Exception
 	 */
 	public static function app_config_exists(): App_Initialization_Exception {
-		$message = "Can not redeclare App_Config as its already set to the application";
+		$message = 'Can not redeclare App_Config as its already set to the application';
 		return new App_Initialization_Exception( $message, 5 );
+	}
+
+	/**
+	 * Returns an exception for trying to redefine the Registration_Service if its already been set.
+	 * @code 7
+	 * @return App_Initialization_Exception
+	 */
+	public static function registation_exists(): App_Initialization_Exception {
+		$message = 'Can not redeclare Registration_Service as its already set to the application';
+		return new App_Initialization_Exception( $message, 7 );
+	}
+
+	/**
+	 * Returns an exception for trying to boot application without defining required properties
+	 * @code 6
+	 * @param array $errors
+	 * @return App_Initialization_Exception
+	 */
+	public static function failed_boot_validation( array $errors ): App_Initialization_Exception {
+		$message = sprintf(
+			'App failed boot validation : %s',
+			join( ',', $errors )
+		);
+		return new App_Initialization_Exception( $message, 6 );
+	}
+
+	/**
+	 * Returns an exception for trying to redefine the Loader if its already been set.
+	 * @code 8
+	 * @return App_Initialization_Exception
+	 */
+	public static function loader_exists(): App_Initialization_Exception {
+		$message = 'Can not redeclare Loader as its already set to the application';
+		return new App_Initialization_Exception( $message, 8 );
 	}
 }

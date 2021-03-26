@@ -20,35 +20,22 @@ use PinkCrab\Core\Application\_App;
 use PinkCrab\Core\Application\App_Factory;
 use PinkCrab\Core\Interfaces\DI_Container;
 use PinkCrab\Core\Services\Registration\Registration_Service;
+use PinkCrab\Core\Services\Registration\Middleware\Registerable_Middleware;
 
 class Test_App_Factory extends WP_UnitTestCase {
 
-	// public static $app;
-
-	// public static function setUpBeforeClass(): void {
-	// 	// self::$app = App_Factory::with_wp_di();
-	// }
-
-	// public function setUp(): void {
-	// 	parent::setUp();
-	// 	self::$app = App_Factory::with_wp_di();
-	// }
-
+	/**
+	 * @method self::unset_app_instance();
+	 */
+	use App_Helper_Trait;
 
 	public function tearDown(): void {
-		$app = new App();
-		Objects::set_property( $app, 'app_config', null );
-		Objects::set_property( $app, 'container', null );
-		Objects::set_property( $app, 'registration', null );
-		Objects::set_property( $app, 'loader', null );
-		Objects::set_property( $app, 'booted', false );
-		$app = null;
+		self::unset_app_instance();
 	}
-
 
 	/** @testdox When requested the App Factory can create an instance of App popualted with WP_Dice, Registerables Middleware, Loader and Registration Service. */
 	public function test_can_create_with_wp_dice(): void {
-		$app                  = App_Factory::with_wp_di();
+		$app                  = ( new App_Factory )->with_wp_di( true );
 		$registration_service = new Registration_Service();
 
 		$this->assertInstanceOf( App::class, $app );
@@ -61,9 +48,6 @@ class Test_App_Factory extends WP_UnitTestCase {
 			Objects::get_property( $app, 'loader' )
 		);
 		$this->assertInstanceOf( Registration_Service::class, $registration_service );
-		dump( $registration_service, $app->boot() );
-
-		// Should contain Registerable_
 	}
 
 }

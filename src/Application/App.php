@@ -71,9 +71,15 @@ final class App {
 	 */
 	protected $loader;
 
-	public function __construct() {
-
+	/**
+	 * Checks if the app has already been booted.
+	 *
+	 * @return bool
+	 */
+	public static function is_booted(): bool {
+		return self::$booted;
 	}
+
 
 	/**
 	 * Sets the DI Constainer.
@@ -111,15 +117,27 @@ final class App {
 	 * Sets the Registration service and loader.
 	 *
 	 * @param \PinkCrab\Core\Services\Registration\Registration_Service $registration
+	 * @return self
+	 */
+	public function set_registration_services( Registration_Service $registration ): self {
+		if ( $this->registration !== null ) {
+			throw App_Initialization_Exception::registation_exists();
+		}
+		$this->registration = $registration;
+		return $this;
+	}
+
+	/**
+	 * Sets the loader to the app
+	 *
 	 * @param \PinkCrab\Loader\Loader $loader
 	 * @return self
 	 */
-	public function define_registration_services(
-		Registration_Service $registration,
-		Loader $loader
-	): self {
-		$this->registration = $registration;
-		$this->loader       = $loader;
+	public function set_loader( Loader $loader ): self {
+		if ( $this->loader !== null ) {
+			throw App_Initialization_Exception::loader_exists();
+		}
+		$this->loader = $loader;
 		return $this;
 	}
 
@@ -175,11 +193,19 @@ final class App {
 	 * @return self
 	 */
 	public function boot(): self {
+
+		// Validate.
+		$validate = new App_Validation( $this );
+		if ( $validate->validate() === false ) {
+			if ( $this->registration === null ) {
+				throw App_Initialization_Exception::failed_boot_validation( $validate->errors );
+			}
+		}
+
 		// Process registration
 		$this->registration->set_container( self::$container );
-		
-		
-		// Run the final process, where all are loaded in via 
+
+		// Run the final process, where all are loaded in via
 		$this->finalise();
 		self::$booted = true;
 		return $this;
@@ -190,7 +216,7 @@ final class App {
 	 *
 	 * @return self
 	 */
-	public function finalise(): self {
+	protected function finalise(): self {
 
 		// Bind self to container.
 		self::$container->addRule(
