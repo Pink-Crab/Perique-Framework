@@ -13,8 +13,9 @@ declare(strict_types=1);
 namespace PinkCrab\Core\Tests\Fixtures\Mock_Objects;
 
 use PinkCrab\Core\Tests\Fixtures\Mock_Objects\Sample_Class;
+use PinkCrab\Core\Tests\Fixtures\Mock_Objects\Interface_Get;
 
-class Parent_Dependency {
+class Parent_Dependency implements Interface_Get {
 
 	/**
 	 * Test property

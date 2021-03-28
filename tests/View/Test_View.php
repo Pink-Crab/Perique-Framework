@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace PinkCrab\Core\Tests\View;
 
 use WP_UnitTestCase;
+use Gin0115\WPUnit_Helpers\Objects;
 use PinkCrab\Core\Services\View\View;
-use PinkCrab\PHPUnit_Helpers\Reflection;
 use PinkCrab\Core\Services\View\PHP_Engine;
 
 class Test_View extends WP_UnitTestCase {
@@ -60,7 +60,7 @@ class Test_View extends WP_UnitTestCase {
 
 		$this->assertSame(
 			$this->php_engine,
-			Reflection::get_private_property( $view, 'engine' )
+			Objects::get_property( $view, 'engine' )
 		);
 	}
 

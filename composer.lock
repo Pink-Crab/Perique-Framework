@@ -658,16 +658,16 @@
         },
         {
             "name": "php-stubs/wordpress-stubs",
-            "version": "v5.6.0",
+            "version": "v5.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-stubs/wordpress-stubs.git",
-                "reference": "ed446cce304cd49f13900274b3ed60d1b526297e"
+                "reference": "69baf30e7c92f149526da950a68222af05f7bc67"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-stubs/wordpress-stubs/zipball/ed446cce304cd49f13900274b3ed60d1b526297e",
-                "reference": "ed446cce304cd49f13900274b3ed60d1b526297e",
+                "url": "https://api.github.com/repos/php-stubs/wordpress-stubs/zipball/69baf30e7c92f149526da950a68222af05f7bc67",
+                "reference": "69baf30e7c92f149526da950a68222af05f7bc67",
                 "shasum": ""
             },
             "replace": {
@@ -694,7 +694,7 @@
                 "static analysis",
                 "wordpress"
             ],
-            "time": "2020-12-09T00:38:16+00:00"
+            "time": "2021-03-10T10:29:23+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -844,16 +844,16 @@
         },
         {
             "name": "phpspec/prophecy",
-            "version": "1.12.2",
+            "version": "1.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpspec/prophecy.git",
-                "reference": "245710e971a030f42e08f4912863805570f23d39"
+                "reference": "be1996ed8adc35c3fd795488a653f4b518be70ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/245710e971a030f42e08f4912863805570f23d39",
-                "reference": "245710e971a030f42e08f4912863805570f23d39",
+                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/be1996ed8adc35c3fd795488a653f4b518be70ea",
+                "reference": "be1996ed8adc35c3fd795488a653f4b518be70ea",
                 "shasum": ""
             },
             "require": {
@@ -903,7 +903,7 @@
                 "spy",
                 "stub"
             ],
-            "time": "2020-12-19T10:15:11+00:00"
+            "time": "2021-03-17T13:42:18+00:00"
         },
         {
             "name": "phpstan/phpdoc-parser",
@@ -956,16 +956,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "0.12.81",
+            "version": "0.12.82",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "0dd5b0ebeff568f7000022ea5f04aa86ad3124b8"
+                "reference": "3920f0fb0aff39263d3a4cb0bca120a67a1a6a11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/0dd5b0ebeff568f7000022ea5f04aa86ad3124b8",
-                "reference": "0dd5b0ebeff568f7000022ea5f04aa86ad3124b8",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/3920f0fb0aff39263d3a4cb0bca120a67a1a6a11",
+                "reference": "3920f0fb0aff39263d3a4cb0bca120a67a1a6a11",
                 "shasum": ""
             },
             "require": {
@@ -1008,7 +1008,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-03-08T22:03:02+00:00"
+            "time": "2021-03-19T06:08:17+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -1367,16 +1367,16 @@
         },
         {
             "name": "pinkcrab/function-constructors",
-            "version": "0.1.1",
+            "version": "0.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/gin0115/pinkcrab_function_constructors.git",
-                "reference": "6b43344ebb54de3af6dedfc625b7c3dea34742c8"
+                "reference": "9848f121cf2e114ee7f2a3bc8fce92eb8535bc14"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/gin0115/pinkcrab_function_constructors/zipball/6b43344ebb54de3af6dedfc625b7c3dea34742c8",
-                "reference": "6b43344ebb54de3af6dedfc625b7c3dea34742c8",
+                "url": "https://api.github.com/repos/gin0115/pinkcrab_function_constructors/zipball/9848f121cf2e114ee7f2a3bc8fce92eb8535bc14",
+                "reference": "9848f121cf2e114ee7f2a3bc8fce92eb8535bc14",
                 "shasum": ""
             },
             "require": {
@@ -1423,20 +1423,19 @@
                 "partial application",
                 "piping"
             ],
-            "time": "2021-01-21T23:37:15+00:00"
+            "time": "2021-03-16T01:58:27+00:00"
         },
         {
             "name": "roots/wordpress",
-            "version": "5.6.2",
+            "version": "5.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/WordPress/WordPress.git",
-                "reference": "5.6.2"
+                "reference": "5.7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WordPress/WordPress/zipball/5.6.2",
-                "reference": "5.6.2"
+                "url": "https://api.github.com/repos/WordPress/WordPress/zipball/5.7"
             },
             "require": {
                 "php": ">=5.3.2",
@@ -1470,7 +1469,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2021-02-22T15:12:53+00:00"
+            "time": "2021-03-09T20:23:15+00:00"
         },
         {
             "name": "roots/wordpress-core-installer",
@@ -2737,16 +2736,16 @@
         },
         {
             "name": "szepeviktor/phpstan-wordpress",
-            "version": "v0.7.4",
+            "version": "v0.7.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/szepeviktor/phpstan-wordpress.git",
-                "reference": "c816f18af8644382a3aea7e3b653be5e90d824a7"
+                "reference": "90cf3c6a225a633889b1b3a556816911f42de4f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/szepeviktor/phpstan-wordpress/zipball/c816f18af8644382a3aea7e3b653be5e90d824a7",
-                "reference": "c816f18af8644382a3aea7e3b653be5e90d824a7",
+                "url": "https://api.github.com/repos/szepeviktor/phpstan-wordpress/zipball/90cf3c6a225a633889b1b3a556816911f42de4f7",
+                "reference": "90cf3c6a225a633889b1b3a556816911f42de4f7",
                 "shasum": ""
             },
             "require": {
@@ -2757,10 +2756,10 @@
             },
             "require-dev": {
                 "composer/composer": "^1.8.6",
-                "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
+                "dealerdirect/phpcodesniffer-composer-installer": "^0.7",
                 "php-parallel-lint/php-parallel-lint": "^1.1",
                 "phpstan/phpstan-strict-rules": "^0.12",
-                "szepeviktor/phpcs-psr-12-neutron-hybrid-ruleset": "^0.4.3"
+                "szepeviktor/phpcs-psr-12-neutron-hybrid-ruleset": "^0.6"
             },
             "type": "phpstan-extension",
             "extra": {
@@ -2793,7 +2792,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2021-03-01T18:31:08+00:00"
+            "time": "2021-03-19T21:23:23+00:00"
         },
         {
             "name": "theseer/tokenizer",
@@ -2943,16 +2942,16 @@
         },
         {
             "name": "wp-phpunit/wp-phpunit",
-            "version": "5.6.2",
+            "version": "5.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wp-phpunit/wp-phpunit.git",
-                "reference": "f6b3fb65bccc0ff70b3bc7cc241935597dbd5562"
+                "reference": "5ab77c1e1328e9bee65f60c246e33b13fc202375"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wp-phpunit/wp-phpunit/zipball/f6b3fb65bccc0ff70b3bc7cc241935597dbd5562",
-                "reference": "f6b3fb65bccc0ff70b3bc7cc241935597dbd5562",
+                "url": "https://api.github.com/repos/wp-phpunit/wp-phpunit/zipball/5ab77c1e1328e9bee65f60c246e33b13fc202375",
+                "reference": "5ab77c1e1328e9bee65f60c246e33b13fc202375",
                 "shasum": ""
             },
             "type": "library",
@@ -2982,7 +2981,7 @@
                 "test",
                 "wordpress"
             ],
-            "time": "2021-02-04T18:24:14+00:00"
+            "time": "2021-03-10T17:57:07+00:00"
         }
     ],
     "aliases": [],

@@ -24,6 +24,7 @@ declare(strict_types=1);
 
 namespace PinkCrab\Core\Services\Dice;
 
+use Dice\Dice;
 use PinkCrab\Core\Application\Hooks;
 use PinkCrab\Core\Services\Dice\WP_Dice;
 use PinkCrab\Core\Interfaces\DI_Container;
@@ -31,27 +32,54 @@ use PinkCrab\Core\Services\ServiceContainer\ServiceNotRegisteredException;
 
 class PinkCrab_WP_Dice_Adaptor extends WP_Dice implements DI_Container {
 
-	/** @var WP_Dice */
-	// protected $wp_dice;
+	/**
+	 * Lazy stack instancing.
+	 *
+	 * @param Dice $dice
+	 * @return self
+	 */
+	public static function withDice( Dice $dice ): self { // phpcs:disable WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
+		return new PinkCrab_WP_Dice_Adaptor( $dice );
+	}
 
+	/**
+	 * ContainerInterface implementation of get.
+	 * Will attemp to construct autowired.
+	 *
+	 * @param string $id Class name (fully namespaced.)
+	 * @return void
+	 */
 	public function get( $id ) {
 		if ( ! $this->has( $id ) ) {
 			throw new ServiceNotRegisteredException( "{$id} not defined in container", 1 );
 		}
+		return $this->create( $id );
 	}
 
+	/**
+	 * Checks if a specific class is registered or exists.
+	 * Doesnt take into account the ability to autowire.
+	 *
+	 * @param string $id Class name (fully namespaced.)
+	 * @return bool
+	 */
 	public function has( $id ) {
-		if ( ! $this->has( $id ) ) {
-			throw new ServiceNotRegisteredException( "{$id} not defined in container", 1 );
+		$from_dice = $this->dice->getRule( $id );
+
+		// If set in global rules.
+		if ( array_key_exists( 'substitutions', $from_dice )
+		&& array_key_exists( $id, $from_dice['substitutions'] ) ) {
+			return true;
 		}
 
-		// If class exists but
-		try {
-			$instance = $this->create( $id );
-		} catch ( \Throwable $th ) {
-			$instance = null;
+		// If set with a replacement instance.
+		if ( array_key_exists( 'instanceOf', $from_dice ) ) {
+			return true;
 		}
-		return is_object( $instance );
+		// dump( $from_dice/* , $id === $from_dice['instanceOf'] , $id , $from_dice['instanceOf'] */ );
+
+		// Checks if the class exists
+		return class_exists( $id );
 	}
 
 	/**

@@ -24,10 +24,9 @@ declare(strict_types=1);
 
 namespace PinkCrab\Core\Application;
 
+use Closure;
 use PinkCrab\Loader\Loader;
 use PinkCrab\Core\Services\View\View;
-
-use PinkCrab\Core\Interfaces\Renderable;
 use PinkCrab\Core\Application\App_Config;
 use PinkCrab\Core\Interfaces\DI_Container;
 use PinkCrab\Core\Exceptions\App_Initialization_Exception;
@@ -144,7 +143,7 @@ final class App {
 	/**
 	 * Interace with the container using a callable.
 	 *
-	 * @param callable(DI_Containter):void $callback
+	 * @param callable(DI_Container):void $callback
 	 * @return self
 	 * @throws App_Initialization_Exception Code 1
 	 */
@@ -176,10 +175,10 @@ final class App {
 	 * Sets the class list.
 	 *
 	 * @param array<string> $class_list
-	 * @return void
+	 * @return self
 	 * @throws App_Initialization_Exception Code 3
 	 */
-	public function registration_classses( array $class_list ) {
+	public function registration_classses( array $class_list ): self {
 		if ( $this->registration === null ) {
 			throw App_Initialization_Exception::requires_registration_service();
 		}
@@ -223,7 +222,7 @@ final class App {
 			'*',
 			array(
 				'substitutions' => array(
-					App::class        => $this,
+					self::class       => $this,
 					App_Config::class => self::$app_config,
 				),
 			)
@@ -253,8 +252,8 @@ final class App {
 	 * Creates an instance of class using the DI Container.
 	 *
 	 * @param string $class
-	 * @param array $args<string, mixed>
-	 * @return object
+	 * @param array<string, mixed> $args
+	 * @return object|null
 	 * @throws App_Initialization_Exception Code 4
 	 */
 	public static function make( string $class, array $args = array() ) {
@@ -282,21 +281,31 @@ final class App {
 	/**
 	 * Returns the View helper, populated with current Renderable engine.
 	 *
-	 * @return View
+	 * @return View|null
 	 */
-	public static function view(): View {
+	public static function view(): ?View {
 		if ( self::$booted === false ) {
 			throw App_Initialization_Exception::app_not_initialized( View::class );
 		}
+		/** @var ?View */
 		return self::$container->create( View::class );
 	}
 
-	/** @return array{container:Container,app_config:App_Config,booted:bool} */
+	/** @return array{container:DI_Container,app_config:App_Config,booted:bool} */
 	public function __debugInfo() {
 		return array(
 			'container'  => self::$container,
 			'app_config' => self::$app_config,
 			'booted'     => self::$booted,
 		);
+	}
+
+	/**
+	 * Checks if app config set.
+	 *
+	 * @return bool
+	 */
+	public function has_app_config(): bool {
+		return is_a( self::$app_config, App_Config::class );
 	}
 }

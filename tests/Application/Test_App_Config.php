@@ -21,6 +21,19 @@ use PinkCrab\Core\Application\App_Config;
 class Test_App_Config extends WP_UnitTestCase {
 
 	/**
+	 * @method self::unset_app_instance();
+	 */
+	use App_Helper_Trait;
+
+	public function tearDown(): void {
+		self::unset_app_instance();
+	}
+
+	public function setup() {
+		$this->pre_booted_app_provider()->boot();
+	}
+
+	/**
 	 * Sample set of settings paths, would be passed on start up.
 	 */
 	public const SAMPLE_SETTINGS = array(
