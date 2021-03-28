@@ -176,6 +176,16 @@ final class App_Config {
 	}
 
 	/**
+	 * Returns the current set plugin version
+	 *
+	 * @return string
+	 */
+	public function version(): string
+	{
+		return $this->plugin['version'];
+	}
+
+	/**
 	 * Returns the key for a post type.
 	 *
 	 * @param string $key

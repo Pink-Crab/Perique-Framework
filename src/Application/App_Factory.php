@@ -82,7 +82,7 @@ class App_Factory {
 			'*' => array(
 				'substitutions' => array(
 					Renderable::class => new PHP_Engine( __DIR__ ),
-					// \wpdb::class      => $GLOBALS['wpdb'],
+					\wpdb::class      => $GLOBALS['wpdb'],
 				),
 			),
 		);
@@ -91,7 +91,7 @@ class App_Factory {
 	/**
 	 * Set the DI rules
 	 *
-	 * @param array<string, array<string, string|object|callable|null|false>> $rules
+	 * @param array<string,array<string,string|object|callable|null|false|\Closure>> $rules
 	 * @return self
 	 */
 	public function di_rules( array $rules ): self {

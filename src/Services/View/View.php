@@ -62,7 +62,7 @@ class View {
 	 * @param bool $print
 	 * @return string|void
 	 */
-	public function render( string $view, iterable $view_data, bool $print = true ) {
+	public function render( string $view, iterable $view_data = [], bool $print = true ) {
 		if ( $print ) {
 			$this->engine->render( $view, $view_data, self::PRINT_VIEW );
 		} else {
@@ -90,8 +90,7 @@ class View {
 	 *
 	 * @return Renderable
 	 */
-	public function engine(): Renderable
-	{
+	public function engine(): Renderable {
 		return $this->engine;
 	}
 

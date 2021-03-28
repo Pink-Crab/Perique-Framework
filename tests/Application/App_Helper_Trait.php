@@ -53,7 +53,7 @@ trait App_Helper_Trait {
 	 *
 	 * @return App
 	 */
-	protected function pre_booted_app_provider(): App {
+	protected function pre_populated_app_provider(): App {
 		// Build and populate the app.
 		$app          = new App();
 		$registration = new Registration_Service();
@@ -63,7 +63,7 @@ trait App_Helper_Trait {
 		$app->set_container( $container );
 		$app->set_registration_services( $registration );
 		$app->set_loader( $loader );
-		$app->set_app_config( array() );
+		$app->set_app_config( include FIXTURES_PATH . '/Application/settings.php' );
 
 		return $app;
 	}

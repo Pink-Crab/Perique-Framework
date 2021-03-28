@@ -93,7 +93,7 @@ class App_Initialization_Exception extends Exception {
 	/**
 	 * Returns an exception for trying to boot application without defining required properties
 	 * @code 6
-	 * @param array $errors
+	 * @param array<int,string> $errors
 	 * @return App_Initialization_Exception
 	 */
 	public static function failed_boot_validation( array $errors ): App_Initialization_Exception {

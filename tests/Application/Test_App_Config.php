@@ -30,7 +30,7 @@ class Test_App_Config extends WP_UnitTestCase {
 	}
 
 	public function setup() {
-		$this->pre_booted_app_provider()->boot();
+		$this->pre_populated_app_provider()->boot();
 	}
 
 	/**

@@ -177,7 +177,7 @@ class Test_App extends WP_UnitTestCase {
 
 	/** @testdox When a fully populated app is booted, it should pass valdaition and run all internal setups. */
 	public function test_boot(): void {
-		$app = $this->pre_booted_app_provider();
+		$app = $this->pre_populated_app_provider();
 		
 		// Ensure app is not marked as booted before calling boot()
 		$this->assertFalse( $app::is_booted() );
@@ -191,6 +191,24 @@ class Test_App extends WP_UnitTestCase {
 			DI_Container::class,
 			Objects::get_property( $registration, 'di_container' )
 		);
+	}
 
+	/** @testdox The app should only be bootable only once, trying to reboot should cause an error and abort the request. */
+	public function test_throws_exception_if_trying_to_boot_twice(): void
+	{
+		$this->expectException( App_Initialization_Exception::class );
+		$this->expectExceptionCode( 6 );
+		$app = $this->pre_populated_app_provider();
+		$app->boot();
+		$app->boot();
+	}
+
+	/** @testdox The apps internal serives (View, DI & App_Config) can only be used once the application has been booted. */
+	public function test_throws_exception_if_view_is_called_before_app_booted(): void
+	{
+		$this->expectException( App_Initialization_Exception::class );
+		$this->expectExceptionCode( 4 );
+		$app = $this->pre_populated_app_provider();
+		$app::view();
 	}
 }
