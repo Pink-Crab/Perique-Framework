@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * Registration loader
+ * Interface for registration processes middleware
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -23,31 +23,15 @@ declare(strict_types=1);
  * @since 0.4.0
  */
 
-namespace PinkCrab\Core\Services\Registration;
+namespace PinkCrab\Core\Services\Registration\Middleware;
 
-use PinkCrab\Loader\Loader;
-use PinkCrab\Core\Application\App;
-use PinkCrab\Core\Interfaces\Registerable;
-
-
-class Register_Loader {
-
+interface Registration_Middleware {
 
 	/**
-	 * Loops through all classes for regisration and regiter
-	 * if they have the Registerable interface.
+	 * Process the current class
 	 *
-	 * @param App    $app
-	 * @param array<int, string>  $registerable_classes
-	 * @param Loader $loader
-	 * @return void
+	 * @param object $class
+	 * @return object
 	 */
-	public static function initalise( App $app, array $registerable_classes, Loader $loader ): void {
-		foreach ( $registerable_classes as $class ) {
-			if ( in_array( Registerable::class, class_implements( $class ) ?: array(), true ) ) {
-				/** @phpstan-ignore-next-line class must implement register for interface*/
-				$app::make( $class )->register( $loader );
-			}
-		}
-	}
+	public function process( $class );
 }

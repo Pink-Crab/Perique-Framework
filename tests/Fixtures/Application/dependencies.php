@@ -1,12 +1,15 @@
 <?php
 
+use PinkCrab\Core\Tests\Fixtures\DI\Interface_A;
+use PinkCrab\Core\Tests\Fixtures\DI\Dependency_E;
+
 /**
  * Stub file for testing Dice Dependencies.
  */
 
 return array(
 	// Silence
-    Repository::class => array(
-		'instanceOf' => Repository_B::class
+    Interface_A::class => array(
+		'instanceOf' => Dependency_E::class
 	),
 );

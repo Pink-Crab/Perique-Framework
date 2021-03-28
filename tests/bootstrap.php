@@ -18,6 +18,8 @@ require_once dirname( __DIR__ ) . '/vendor/autoload.php';
 // Give access to tests_add_filter() function.
 require_once getenv( 'WP_PHPUNIT__DIR' ) . '/includes/functions.php';
 
+define( 'FIXTURES_PATH' , __DIR__ . '/Fixtures' );
+
 tests_add_filter(
 	'muplugins_loaded',
 	function() {
@@ -53,11 +55,11 @@ tests_add_filter(
 		// );
 
 		// Initalise App.
-		( new Boot(
-			'',
-			'',
-			''
-		) )->initialise()->finalise();
+		// ( new Boot(
+		// 	'',
+		// 	'',
+		// 	''
+		// ) )->initialise()->finalise();
 	}
 );
 

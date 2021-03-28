@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * Registration loader
+ * PinkCrab Dependency Inject Container Interface.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -19,35 +19,39 @@ declare(strict_types=1);
  *
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- * @package PinkCrab\Core\Registration
- * @since 0.4.0
+ * @package PinkCrab\Core
  */
 
-namespace PinkCrab\Core\Services\Registration;
+namespace PinkCrab\Core\Interfaces;
 
 use PinkCrab\Loader\Loader;
-use PinkCrab\Core\Application\App;
-use PinkCrab\Core\Interfaces\Registerable;
+use Psr\Container\ContainerInterface;
 
-
-class Register_Loader {
-
+interface DI_Container extends ContainerInterface {
 
 	/**
-	 * Loops through all classes for regisration and regiter
-	 * if they have the Registerable interface.
+	 * Add a single rule.
 	 *
-	 * @param App    $app
-	 * @param array<int, string>  $registerable_classes
-	 * @param Loader $loader
-	 * @return void
+	 * @param string $name
+	 * @param array<string, array> $rule
+	 * @return DI_Container
 	 */
-	public static function initalise( App $app, array $registerable_classes, Loader $loader ): void {
-		foreach ( $registerable_classes as $class ) {
-			if ( in_array( Registerable::class, class_implements( $class ) ?: array(), true ) ) {
-				/** @phpstan-ignore-next-line class must implement register for interface*/
-				$app::make( $class )->register( $loader );
-			}
-		}
-	}
+	public function addRule( string $name, array $rule ): DI_Container;
+
+	/**
+	 * Add multiple rules
+	 *
+	 * @param array<string, array> $rules
+	 * @return DI_Container
+	 */
+	public function addRules( array $rules ): DI_Container;
+
+	/**
+	 * Create an instance of a class, with optional parameters.
+	 *
+	 * @param string $name
+	 * @param array<mixed> $args
+	 * @return object|null
+	 */
+	public function create( string $name, array $args = array() );
 }

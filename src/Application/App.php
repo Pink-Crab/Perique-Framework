@@ -19,170 +19,248 @@ declare(strict_types=1);
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
  * @package PinkCrab\Core
+ * @since 0.4.0
  */
 
 namespace PinkCrab\Core\Application;
 
-use Exception;
-use OutOfBoundsException;
-use PinkCrab\Core\Interfaces\Service_Container;
+use Closure;
+use PinkCrab\Loader\Loader;
+use PinkCrab\Core\Services\View\View;
+use PinkCrab\Core\Application\App_Config;
+use PinkCrab\Core\Interfaces\DI_Container;
+use PinkCrab\Core\Exceptions\App_Initialization_Exception;
+use PinkCrab\Core\Services\Registration\Registration_Service;
+use PinkCrab\Core\Services\Registration\Middleware\Registration_Middleware;
 
 final class App {
 
 	/**
-	 * Holds the isntance of its self.
+	 * Defines if the app has already been booted.
 	 *
-	 * @var \PinkCrab\Core\Application\App|null
+	 * @var bool
 	 */
-	public static $instance;
+	protected static $booted = false;
 
 	/**
-	 * The service container.
+	 * Dependency Injection Container
 	 *
-	 * @var \PinkCrab\Core\Interfaces\Service_Container
+	 * @var DI_Container
 	 */
-	protected $service_container;
+	protected static $container;
 
-	protected function __construct( Service_Container $service_container ) {
-		$this->service_container = $service_container;
-		self::$instance          = $this;
+	/**
+	 * The Apps Config
+	 *
+	 * @var App_Config
+	 */
+	protected static $app_config;
+
+	/**
+	 * Handles all registration of all registerable and custom middlewares.
+	 *
+	 * @var Registration_Service
+	 */
+	protected $registration;
+
+	/**
+	 * Hook Loader
+	 *
+	 * @var Loader
+	 */
+	protected $loader;
+
+	/**
+	 * Checks if the app has already been booted.
+	 *
+	 * @return bool
+	 */
+	public static function is_booted(): bool {
+		return self::$booted;
 	}
 
-	/**
-	 * Do not allow cloning.
-	 */
-	protected function __clone() {  }
 
 	/**
-	 * Prevent wakeup.
-	 */
-	public function __wakeup() {
-		throw new Exception( 'App can only be initialised directly.' );
-	}
-
-	/**
-	 * Creates a static instance of the app container.
+	 * Sets the DI Constainer.
 	 *
+	 * @param \PinkCrab\Core\Interfaces\DI_Container $container
 	 * @return self
+	 * @throws App_Initialization_Exception Code 2
 	 */
-	public static function init( Service_Container $service_container ): self {
-		if ( ! self::$instance ) {
-			self::$instance = new static( $service_container );
+	public function set_container( DI_Container $container ): self {
+		if ( self::$container !== null ) {
+			throw App_Initialization_Exception::di_container_exists();
 		}
-		return self::$instance;
-	}
 
-	/**
-	 * Gets the current instance of the service container.
-	 *
-	 * @throws Exception Will throw if not already initialised.
-	 * @return self|null
-	 */
-	public static function get_instance(): ?self {
-		try {
-			if ( is_null( self::$instance ) ) {
-				throw new Exception( 'PinkCrab Core not loaded' );
-			}
-		} catch ( \Throwable $th ) {
-			\wp_die( esc_html( $th->getMessage() ) );
-		}
-		return self::$instance;
-	}
-
-	/**
-	 * Binds a class or value to the app container.
-	 *
-	 * @param string $key
-	 * @param mixed $service
-	 * @return self
-	 * @deprecated 0.3.2
-	 * @codeCoverageIgnore
-	 */
-	public function bind( string $key, $service ): self {
-		$this->service_container->set( $key, $service );
+		self::$container = $container;
 		return $this;
 	}
 
 	/**
-	 * Retrives data from the service container.
+	 * Define the app condfig.
 	 *
-	 * @param string $key
-	 * @return mixed
-	 * @throws OutOfBoundsException If key not set.
-	 */
-	public function get( string $key ) {
-		// Check app has been intialised, throw if not.
-		if ( is_null( self::$instance ) ) {
-			throw new OutOfBoundsException( 'App has not been intialised.' );
-		}
-		// Throw exception if not set.
-		if ( ! self::$instance->service_container->has( $key ) ) {
-			throw new OutOfBoundsException( sprintf( '%s has not been bound to container.', $key ) );
-		}
-
-		return $this->service_container->get( $key );
-	}
-
-	/**
-	 * Binds a class or value to the app container.
-	 *
-	 * @param string $key
-	 * @param mixed $service
+	 * @param array<string, mixed> $settings
 	 * @return self
+	 * @throws App_Initialization_Exception Code 5
 	 */
-	public function set( string $key, $service ): self {
-		$this->service_container->set( $key, $service );
+	public function set_app_config( array $settings ): self {
+		if ( self::$app_config !== null ) {
+			throw App_Initialization_Exception::app_config_exists();
+		}
+
+		self::$app_config = new App_Config( apply_filters( Hooks::APP_INIT_CONFIG_VALUES, $settings ) );
 		return $this;
 	}
 
 	/**
-	 * Magic static getter.
+	 * Sets the Registration service and loader.
 	 *
-	 * @param string $key
-	 * @param  array<int, mixed> $params
-	 * @return object
-	 * @throws OutOfBoundsException If key not set.
+	 * @param \PinkCrab\Core\Services\Registration\Registration_Service $registration
+	 * @return self
 	 */
-	public static function __callStatic( string $key, $params ) { // phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
-
-		// Check app has been intialised, throw if not.
-		if ( is_null( self::$instance ) ) {
-			throw new OutOfBoundsException( 'App has not been intialised.' );
+	public function set_registration_services( Registration_Service $registration ): self {
+		if ( $this->registration !== null ) {
+			throw App_Initialization_Exception::registation_exists();
 		}
-		return self::$instance->get( $key );
+		$this->registration = $registration;
+		return $this;
 	}
 
 	/**
-	 * A static way to call a value.
+	 * Sets the loader to the app
 	 *
-	 * @param string $key
-	 * @return object
-	 * @throws OutOfBoundsException If key not set.
+	 * @param \PinkCrab\Loader\Loader $loader
+	 * @return self
 	 */
-	public static function retreive( string $key ) {
-
-		// Check app has been intialised, throw if not.
-		if ( is_null( self::$instance ) ) {
-			throw new OutOfBoundsException( 'App has not been intialised.' );
+	public function set_loader( Loader $loader ): self {
+		if ( $this->loader !== null ) {
+			throw App_Initialization_Exception::loader_exists();
 		}
-		return self::$instance->get( $key );
+		$this->loader = $loader;
+		return $this;
 	}
 
 	/**
-	 * Creates an instance using Dice.
+	 * Interace with the container using a callable.
+	 *
+	 * @param callable(DI_Container):void $callback
+	 * @return self
+	 * @throws App_Initialization_Exception Code 1
+	 */
+	public function container_config( callable $callback ): self {
+		if ( self::$container === null ) {
+			throw App_Initialization_Exception::requires_di_container();
+		}
+		$callback( self::$container );
+		return $this;
+	}
+
+	/**
+	 * Add registration middleware
+	 *
+	 * @param Registration_Middleware $middleware
+	 * @return self
+	 * @throws App_Initialization_Exception Code 3
+	 */
+	public function registration_middleware( Registration_Middleware $middleware ): self {
+		if ( $this->registration === null ) {
+			throw App_Initialization_Exception::requires_registration_service();
+		}
+
+		$this->registration->push_middleware( $middleware );
+		return $this;
+	}
+
+	/**
+	 * Sets the class list.
+	 *
+	 * @param array<string> $class_list
+	 * @return self
+	 * @throws App_Initialization_Exception Code 3
+	 */
+	public function registration_classses( array $class_list ): self {
+		if ( $this->registration === null ) {
+			throw App_Initialization_Exception::requires_registration_service();
+		}
+		$this->registration->set_classes( apply_filters( Hooks::APP_INIT_REGISTRATION_CLASS_LIST, $class_list ) );
+		return $this;
+	}
+
+	/**
+	 * Boots the populated app.
+	 *
+	 * @return self
+	 */
+	public function boot(): self {
+
+		// Validate.
+		$validate = new App_Validation( $this );
+		if ( $validate->validate() === false || $this->registration === null ) {
+			throw App_Initialization_Exception::failed_boot_validation(
+				$validate->errors
+			);
+		}
+
+		// Process registration
+		$this->registration->set_container( self::$container );
+
+		// Run the final process, where all are loaded in via
+		$this->finalise();
+		self::$booted = true;
+		return $this;
+	}
+
+	/**
+	 * Finialises all settings and boots the app on init hook call (pritority 1)
+	 *
+	 * @return self
+	 */
+	protected function finalise(): self {
+
+		// Bind self to container.
+		self::$container->addRule(
+			'*',
+			array(
+				'substitutions' => array(
+					self::class       => $this,
+					App_Config::class => self::$app_config,
+				),
+			)
+		);
+
+		/** @hook{string, App_Config, Loader, DI_Container} */
+		do_action( Hooks::APP_INIT_PRE_BOOT, self::$app_config, $this->loader, self::$container ); // phpcs:disable WordPress.NamingConventions.ValidHookName.*
+
+		// Initialise on init
+		add_action(
+			'init',
+			function() {
+				do_action( Hooks::APP_INIT_PRE_REGISTRATION, self::$app_config, $this->loader, self::$container );
+				$this->registration->process();
+				do_action( Hooks::APP_INIT_POST_REGISTRATION, self::$app_config, $this->loader, self::$container );
+				$this->loader->register_hooks();
+			},
+			1
+		);
+
+		return $this;
+	}
+
+	// Magic Helpers.
+
+	/**
+	 * Creates an instance of class using the DI Container.
 	 *
 	 * @param string $class
-	 * @param array<int, mixed> $args
+	 * @param array<string, mixed> $args
 	 * @return object|null
-	 * @throws OutOfBoundsException If di not set.
+	 * @throws App_Initialization_Exception Code 4
 	 */
 	public static function make( string $class, array $args = array() ) {
-
-		// Check app has been intialised, throw if not.
-		if ( is_null( self::$instance ) ) {
-			throw new OutOfBoundsException( 'App has not been intialised.' );
+		if ( self::$booted === false ) {
+			throw App_Initialization_Exception::app_not_initialized( DI_Container::class );
 		}
-		return self::$instance->get( 'di' )->create( $class, $args );
+		return self::$container->create( $class, $args );
 	}
 
 	/**
@@ -191,14 +269,43 @@ final class App {
 	 * @param string $key The config key to call
 	 * @param array<int, mixed> $child Additional params passed.
 	 * @return mixed
-	 * @throws OutOfBoundsException If config is not set, or can buggle up from App_Config.
+	 * @throws App_Initialization_Exception Code 4
 	 */
 	public static function config( string $key, ...$child ) {
-
-		// Check app has been intialised, throw if not.
-		if ( is_null( self::$instance ) ) {
-			throw new OutOfBoundsException( 'App has not been intialised.' );
+		if ( self::$booted === false ) {
+			throw App_Initialization_Exception::app_not_initialized( App_Config::class );
 		}
-		return self::$instance->get( 'config' )->{$key}( ...$child );
+		return self::$app_config->{$key}( ...$child );
+	}
+
+	/**
+	 * Returns the View helper, populated with current Renderable engine.
+	 *
+	 * @return View|null
+	 */
+	public static function view(): ?View {
+		if ( self::$booted === false ) {
+			throw App_Initialization_Exception::app_not_initialized( View::class );
+		}
+		/** @var ?View */
+		return self::$container->create( View::class );
+	}
+
+	/** @return array{container:DI_Container,app_config:App_Config,booted:bool} */
+	public function __debugInfo() {
+		return array(
+			'container'  => self::$container,
+			'app_config' => self::$app_config,
+			'booted'     => self::$booted,
+		);
+	}
+
+	/**
+	 * Checks if app config set.
+	 *
+	 * @return bool
+	 */
+	public function has_app_config(): bool {
+		return is_a( self::$app_config, App_Config::class );
 	}
 }
