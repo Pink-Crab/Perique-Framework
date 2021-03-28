@@ -46,13 +46,13 @@ class App_Validation {
 	}
 
 	/**
-	 * Checks all properties
+	 * Checks all properties are set and app isnt already booted
 	 *
 	 * @return bool
 	 */
 	public function validate(): bool {
-		$this->validate_properties_set();
 		$this->already_booted();
+		$this->validate_properties_set();
 		return count( $this->errors ) === 0;
 	}
 
@@ -77,10 +77,8 @@ class App_Validation {
 	 *
 	 * @return void
 	 */
-	public function already_booted(): void {
-		dump(['val', $this->app->is_booted() ]);
-		if ( $this->app->is_booted() ) {
-			dump('FAILED AS BOOTED');
+	protected function already_booted(): void {
+		if ( $this->app->is_booted() === true ) {
 			$this->errors[] = self::ERROR_MESSAGE_APP_BOOTED;
 		}
 	}

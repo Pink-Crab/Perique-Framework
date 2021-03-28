@@ -89,16 +89,16 @@ class Test_App_Validation extends WP_UnitTestCase {
           $this->assertEmpty($validator->errors);
       }
 
-
+      /** @testdox The apps intialise process should not allow the app to be booted again. */
       public function test_alread_booted_app_fails_validataion(): void
       {
         $app = $this->pre_populated_app_provider()->boot();
-        dump($app->is_booted());
         $validator = new App_Validation($app);
-        // dump($validator);
+        $validator->validate();
+
         $this->assertNotEmpty($validator->errors);
         $this->assertContains(
-            sprintf(App_Validation::ERROR_MESSAGE_APP_BOOTEDI, 'registration'),
+            sprintf(App_Validation::ERROR_MESSAGE_APP_BOOTED, 'registration'),
             $validator->errors
         );
       }
