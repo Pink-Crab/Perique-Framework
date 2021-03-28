@@ -90,8 +90,7 @@ class View {
 	 *
 	 * @return Renderable
 	 */
-	public function engine(): Renderable
-	{
+	public function engine(): Renderable {
 		return $this->engine;
 	}
 

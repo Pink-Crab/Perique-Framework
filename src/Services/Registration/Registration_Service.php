@@ -28,7 +28,7 @@ use PinkCrab\Core\Interfaces\DI_Container;
 use PinkCrab\Core\Services\Registration\Middleware\Registration_Middleware;
 
 class Registration_Service {
-	
+
 	/**
 	 * Holds all the defined registration middlewares
 	 *
@@ -86,10 +86,10 @@ class Registration_Service {
 	/**
 	 * Pushes a single class to the class list.
 	 *
-	 * @param object $class
+	 * @param string $class
 	 * @return self
 	 */
-	public function push_class( $class ): self {
+	public function push_class( string $class ): self {
 		$this->class_list[] = $class;
 		return $this;
 	}

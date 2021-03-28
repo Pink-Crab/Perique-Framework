@@ -53,7 +53,7 @@ trait App_Helper_Trait {
 	 *
 	 * @return App
 	 */
-	protected function pre_booted_app_provider(): App {
+	protected function pre_populated_app_provider(): App {
 		// Build and populate the app.
 		$app          = new App();
 		$registration = new Registration_Service();

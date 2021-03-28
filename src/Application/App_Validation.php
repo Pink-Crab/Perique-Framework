@@ -19,10 +19,14 @@ use ReflectionProperty;
 
 class App_Validation {
 
+	public const ERROR_MESSAGE_TEMPLATE = '%s was not set in App';
+	public const ERROR_MESSAGE_APP_BOOTED = 'App already booted';
+	
 	/**
 	 * Required properties
+	 * Key is the propety and value is if "static"
 	 *
-	 * @var array{property:string,is_static:bool}
+	 * @var array<string,bool>
 	 */
 	protected $required_properties = array(
 		'container'    => true,
@@ -38,7 +42,7 @@ class App_Validation {
 	protected $app;
 
 	public function __construct( App $app ) {
-		$this->app = clone $app;
+		$this->app = $app;
 	}
 
 	/**
@@ -63,7 +67,7 @@ class App_Validation {
 			$property_reflection = new ReflectionProperty( $this->app, $property );
 			$property_reflection->setAccessible( true );
 			if ( empty( $property_reflection->getValue( $this->app ) ) ) {
-				$this->errors[] = \sprintf( '%s was not set in App', $property );
+				$this->errors[] = \sprintf( self::ERROR_MESSAGE_TEMPLATE, $property );
 			}
 		}
 	}
@@ -74,10 +78,10 @@ class App_Validation {
 	 * @return void
 	 */
 	public function already_booted(): void {
-		$property_reflection = new ReflectionProperty( $this->app, 'booted' );
-		$property_reflection->setAccessible( true );
-		if ( $property_reflection->getValue( $this->app ) === true ) {
-			$this->errors[] = 'App already booted';
+		dump(['val', $this->app->is_booted() ]);
+		if ( $this->app->is_booted() ) {
+			dump('FAILED AS BOOTED');
+			$this->errors[] = self::ERROR_MESSAGE_APP_BOOTED;
 		}
 	}
 }

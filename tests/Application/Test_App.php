@@ -177,7 +177,7 @@ class Test_App extends WP_UnitTestCase {
 
 	/** @testdox When a fully populated app is booted, it should pass valdaition and run all internal setups. */
 	public function test_boot(): void {
-		$app = $this->pre_booted_app_provider();
+		$app = $this->pre_populated_app_provider();
 		
 		// Ensure app is not marked as booted before calling boot()
 		$this->assertFalse( $app::is_booted() );

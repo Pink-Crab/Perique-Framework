@@ -47,7 +47,7 @@ class PinkCrab_WP_Dice_Adaptor extends WP_Dice implements DI_Container {
 	 * Will attemp to construct autowired.
 	 *
 	 * @param string $id Class name (fully namespaced.)
-	 * @return void
+	 * @return object|null
 	 */
 	public function get( $id ) {
 		if ( ! $this->has( $id ) ) {
@@ -76,7 +76,6 @@ class PinkCrab_WP_Dice_Adaptor extends WP_Dice implements DI_Container {
 		if ( array_key_exists( 'instanceOf', $from_dice ) ) {
 			return true;
 		}
-		// dump( $from_dice/* , $id === $from_dice['instanceOf'] , $id , $from_dice['instanceOf'] */ );
 
 		// Checks if the class exists
 		return class_exists( $id );
