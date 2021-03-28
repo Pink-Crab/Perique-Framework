@@ -19,8 +19,10 @@ use PinkCrab\Loader\Loader;
 use PinkCrab\Core\Application\App;
 use Gin0115\WPUnit_Helpers\Objects;
 use PinkCrab\Core\Application\Hooks;
+use PinkCrab\Core\Interfaces\Renderable;
 use PinkCrab\Core\Application\App_Config;
 use PinkCrab\Core\Interfaces\DI_Container;
+use PinkCrab\Core\Services\View\PHP_Engine;
 use PinkCrab\Core\Tests\Application\App_Helper_Trait;
 use PinkCrab\Core\Services\Dice\PinkCrab_WP_Dice_Adaptor;
 use PinkCrab\Core\Exceptions\App_Initialization_Exception;
@@ -86,9 +88,65 @@ class Test_App_Functional extends WP_UnitTestCase {
         $this->assertInstanceOf(Sample_Class::class, $parent->get_sample_class());
     }
 
+    /** @testdox When trying to use the DI Container from App as a static instance, an error should be thrown and the request aborted */
     public function test_cant_use_make_before_app_booted(): void
     {
-        # code...
+        $this->expectException( App_Initialization_Exception::class );
+		$this->expectExceptionCode( 4 );
+
+		App::make(Parent_Dependency::class);   
+    }
+
+    /** @testdox Once the app is booted, the static method config() should act as a proxy for the internal App_Config settings */
+    public function test_can_use_static_config_to_access_app_config(): void
+    {
+        $app = $this->pre_populated_app_provider()->boot();
+
+        $version = App::config('version'); 
+        $this->assertEquals('0.1.0', $version);
+    }
+
+    /** @testdox When trying to call config from app, before app has been booted should result in an error and abort the current request. */
+    public function test_cant_use_config_before_app_has_been_booted(): void
+    {
+        $this->expectException( App_Initialization_Exception::class );
+		$this->expectExceptionCode( 4 );
+
+        App::config('version');         
+    }
+
+    /** @testdox Once the app is booted, it should be possible to call the current view with it engine, using a static method on the app. */
+    public function test_can_user_static_view_from_app_once_booted(): void
+    {
+        $app = $this->pre_populated_app_provider()
+        ->container_config(function($di){
+            $di->addRules([
+                '*' => array(
+                    'substitutions' => array(
+                        Renderable::class => new PHP_Engine(FIXTURES_PATH . '/Views' ),
+                    ),
+                ),
+            ]);
+        })->boot();
+
+        $this->expectOutputString('HI');
+        App::view()->render('hello', ['hello' => 'HI']);
+    }
+
+    /** @testdox When calling var_dump on the apps instance, the internal static properties should be included to help with debugging. */
+    public function test_debugInfo_dumps_static_properties_values():void
+    {
+        $app = $this->pre_populated_app_provider()->boot();
+        $debug = $app->__debugInfo();
+        
+        $this->assertArrayHasKey('container', $debug);
+        $this->assertInstanceOf(DI_Container::class, $debug['container']);
+        
+        $this->assertArrayHasKey('app_config', $debug);
+        $this->assertInstanceOf(App_Config::class, $debug['app_config']);
+        
+        $this->assertArrayHasKey('booted', $debug);
+        $this->assertTrue($debug['booted']);
     }
 
 }

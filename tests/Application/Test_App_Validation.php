@@ -84,7 +84,7 @@ class Test_App_Validation extends WP_UnitTestCase {
       /** @testdox An app which has Loader, Registration, DI Container and App_Config bound, should pass validation. */
       public function test_can_validate_with_all_services_bound(): void
       {
-            $app = $this->pre_populated_app_provider();
+        $app = $this->pre_populated_app_provider();
           $validator = new App_Validation($app);
           $this->assertEmpty($validator->errors);
       }

@@ -63,7 +63,7 @@ trait App_Helper_Trait {
 		$app->set_container( $container );
 		$app->set_registration_services( $registration );
 		$app->set_loader( $loader );
-		$app->set_app_config( array() );
+		$app->set_app_config( include FIXTURES_PATH . '/Application/settings.php' );
 
 		return $app;
 	}
