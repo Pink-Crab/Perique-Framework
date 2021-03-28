@@ -21,6 +21,7 @@ declare(strict_types=1);
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
  * @package PinkCrab\Core\Registration
+ * @since 0.4.0
  */
 
 namespace PinkCrab\Core\Services\Registration\Middleware;

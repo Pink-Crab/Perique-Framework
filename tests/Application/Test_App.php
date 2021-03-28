@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace PinkCrab\Core\Tests\Application;
 
+use Dice\Dice;
 use Exception;
 use WP_UnitTestCase;
 use PinkCrab\Loader\Loader;
@@ -20,6 +21,7 @@ use Gin0115\WPUnit_Helpers\Objects;
 use PinkCrab\Core\Application\App_Config;
 use PinkCrab\Core\Interfaces\DI_Container;
 use PinkCrab\Core\Tests\Application\App_Helper_Trait;
+use PinkCrab\Core\Services\Dice\PinkCrab_WP_Dice_Adaptor;
 use PinkCrab\Core\Exceptions\App_Initialization_Exception;
 use PinkCrab\Core\Services\Registration\Registration_Service;
 use PinkCrab\Core\Services\Registration\Middleware\Registration_Middleware;
@@ -150,9 +152,46 @@ class Test_App extends WP_UnitTestCase {
 		$this->expectException( App_Initialization_Exception::class );
 		$this->expectExceptionCode( 3 );
 
-		$app    = new App();
-		$middleware   = $this->createMock( Registration_Middleware::class );
+		$app        = new App();
+		$middleware = $this->createMock( Registration_Middleware::class );
 		$app->registration_middleware( $middleware );
+	}
+
+	/** @testdox A list of classes which should be run through the registration process, should be able to stacked up ready to go. */
+	public function test_registration_classes(): void {
+		$app          = new App();
+		$registration = new Registration_Service();
+		$app->set_registration_services( $registration );
+		$app->registration_classses( array( Sample_Class::class ) );
+		$this->assertContains( Sample_Class::class, Objects::get_property( $registration, 'class_list' ) );
+	}
+
+	/** @testdox If classes are set for registration before the service has been bound to the application, it should error and abort initialisation. */
+	public function test_registration_classes_exception(): void {
+		$this->expectException( App_Initialization_Exception::class );
+		$this->expectExceptionCode( 3 );
+
+		$app = new App();
+		$app->registration_classses( array( Sample_Class::class ) );
+	}
+
+	/** @testdox When a fully populated app is booted, it should pass valdaition and run all internal setups. */
+	public function test_boot(): void {
+		$app = $this->pre_booted_app_provider();
+		
+		// Ensure app is not marked as booted before calling boot()
+		$this->assertFalse( $app::is_booted() );
+
+		$app->boot();
+
+		// Check the app has been booted and container is bound to registration.
+		$this->assertTrue( $app::is_booted() );
+		$registration = Objects::get_property( $app, 'registration' );
+		$this->assertInstanceOf(
+			DI_Container::class,
+			Objects::get_property( $registration, 'di_container' )
+		);
+
 	}
 
 

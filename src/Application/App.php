@@ -100,7 +100,7 @@ final class App {
 	/**
 	 * Define the app condfig.
 	 *
-	 * @param array<mixed> $settings
+	 * @param array<string, mixed> $settings
 	 * @return self
 	 * @throws App_Initialization_Exception Code 5
 	 */
@@ -196,10 +196,10 @@ final class App {
 
 		// Validate.
 		$validate = new App_Validation( $this );
-		if ( $validate->validate() === false ) {
-			if ( $this->registration === null ) {
-				throw App_Initialization_Exception::failed_boot_validation( $validate->errors );
-			}
+		if ( $validate->validate() === false || $this->registration === null ) {
+			throw App_Initialization_Exception::failed_boot_validation(
+				$validate->errors
+			);
 		}
 
 		// Process registration

@@ -50,4 +50,10 @@ class Test_App_Factory extends WP_UnitTestCase {
 		$this->assertInstanceOf( Registration_Service::class, $registration_service );
 	}
 
+	/** @testdox A classes which need to be registered, should be passable at setup. Allowing plugins to register hooks with WordPress */
+	public function test_can_set_registration_classes(): void
+	{
+		# code...
+	}
+
 }

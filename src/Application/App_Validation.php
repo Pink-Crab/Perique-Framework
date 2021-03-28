@@ -62,7 +62,7 @@ class App_Validation {
 		foreach ( $this->required_properties as $property => $is_static ) {
 			$property_reflection = new ReflectionProperty( $this->app, $property );
 			$property_reflection->setAccessible( true );
-			if ( $property_reflection->isDefault() ) {
+			if ( empty( $property_reflection->getValue( $this->app ) ) ) {
 				$this->errors[] = \sprintf( '%s was not set in App', $property );
 			}
 		}
