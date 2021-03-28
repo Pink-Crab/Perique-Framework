@@ -38,9 +38,9 @@ class Test_App_Factory extends WP_UnitTestCase {
 	}
 
 	/** @testdox When requested the App Factory can create an instance of App popualted with WP_Dice, Registerables Middleware, Loader and Registration Service. */
-	public function test_can_create_with_wp_dice(): void {
+	public function test_can_create_with_wp_dicece(): void {
 		$app = ( new App_Factory )
-			->with_wp_di( true )
+			->with_wp_dice( true )
 			->app();
 
 		$this->assertInstanceOf( App::class, $app );
@@ -57,7 +57,7 @@ class Test_App_Factory extends WP_UnitTestCase {
 	/** @testdox A classes which need to be registered, should be passable at setup. Allowing plugins to register hooks with WordPress */
 	public function test_can_set_registration_classes(): void {
 		$app = ( new App_Factory )
-			->with_wp_di( true )
+			->with_wp_dice( true )
 			->registration_classses( array( Registerable_Mock::class ) )->app();
 
 		$registration_service = Objects::get_property( $app, 'registration' );
@@ -70,7 +70,7 @@ class Test_App_Factory extends WP_UnitTestCase {
 	/** @testdox It should be possible to pass custom rules to the Dependency Injection container to handle classes whos depenedencies cant be inferred. */
 	public function test_can_set_di_rule() {
 		$app = ( new App_Factory )
-			->with_wp_di( true )
+			->with_wp_dice( true )
 			->di_rules( include FIXTURES_PATH . '/Application/dependencies.php' )
 			->app();
 
@@ -81,7 +81,7 @@ class Test_App_Factory extends WP_UnitTestCase {
 	/** @testdox It should be possible to set custom settings to the apps config. */
 	public function test_can_set_config(): void {
 		$app = ( new App_Factory )
-			->with_wp_di( true )
+			->with_wp_dice( true )
 			->app_config( include FIXTURES_PATH . '/Application/settings.php' )
 			->app();
 
@@ -92,7 +92,7 @@ class Test_App_Factory extends WP_UnitTestCase {
 	/** @testdox It should be possible to boot the app from a chained factory call. If no config is set, the defaults should be used. */
 	public function test_can_boot_app_from_factory_chain(): void {
 		$app = ( new App_Factory )
-			->with_wp_di( true )
+			->with_wp_dice( true )
 			->boot();
 		$this->assertTrue( $app::is_booted() );
 	}

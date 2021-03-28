@@ -47,7 +47,9 @@ trait App_Helper_Trait {
 	 * Returns an instance of app (not booted) populated with actual
 	 * service objects.
 	 *
-	 * No data has been bound to any internal services
+	 * No registration classes are added, di has no rules, loader is empty
+	 * but there is the settings from the Fixtures/Application added so we can 
+	 * use template paths in the App:view() tests.
 	 *
 	 * Is a plain and basic instance.
 	 *

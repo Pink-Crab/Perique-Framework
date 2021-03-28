@@ -26,6 +26,7 @@ namespace PinkCrab\Core\Application;
 
 use Closure;
 use PinkCrab\Loader\Loader;
+use PinkCrab\Core\Application\Hooks;
 use PinkCrab\Core\Services\View\View;
 use PinkCrab\Core\Application\App_Config;
 use PinkCrab\Core\Interfaces\DI_Container;

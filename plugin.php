@@ -11,7 +11,7 @@
 
 // //  require_once __DIR__ . '/vendor/autoload.php';
 
-// $app = ( new App_Factory() )->with_wp_di( true );
+// $app = ( new App_Factory() )->with_wp_dice( true );
 
 // // $app->set_app_config( array() );
 // // $app->registration_classses( array() );

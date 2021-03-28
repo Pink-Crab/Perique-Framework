@@ -13,17 +13,15 @@ For more details please visit our docs.
 https://app.gitbook.com/@glynn-quelch/s/pinkcrab/
 
 
-## Version ##
-**Release 0.3.9**
+## Version 0.4.0 ##
 
-With version 0.3 we have moved away from the submodule driven approach and thanks to PHP Scoper we can now use actual composer libraries.
-
-The Core only provides access to the Loader, Registration, Collection, DI (DICE Dependency Injection Container), App_Config and basic (native) PHP render engine for view.
 
 ## Why? ##
 WordPress is powerful tool for building a wide range of website, but due to its age and commitment to backwards compatibility. Its often fustrating to work with using more modern tools. 
 
 The PinkCrab Framework allows the creation of Plugins, Themes and MU Libraries for use on more complex websites.
+
+The Core only provides access to the Loader, Registration, Collection, DI (DICE Dependency Injection Container), App_Config and basic (native) PHP render engine for view.
 
 ## Setup ##
 
@@ -31,179 +29,118 @@ The PinkCrab Framework allows the creation of Plugins, Themes and MU Libraries f
 $ composer require pinkcrab/plugin-framework 
 ```
 
-To use the Framework, a few files are needed for the framework to be loaded.
-*bootstrap.php*
-This file can be anywhere in your plugin, although we reccomend keeping it in your root directory with the plugin.php file.
+*new setup for v0.4.0 and above*
+
+First you will need to create your composer.json and plugin.php file. 
+
+### plugin.php ###
 
 ````php
+// @file plugin.php 
 <?php
-
-declare(strict_types=1);
-
+     
 /**
- * Used to bootload the application.
- *
- * @author Glynn Quelch <glynn.quelch@gmail.com>
- * @since 1.0.0
+ * @wordpress-plugin
+ * Plugin Name:     ##PLUGIN NAME##
+ * Plugin URI:      ##YOUR URL##
+ * Description:     ##YOUR PLUGIN DESC##
+ * Version:         ##VERSION##
+ * Author:          ##AUTHOR##
+ * Author URI:      ##YOUR URL##
+ * License:         GPL-2.0+
+ * License URI:     http://www.gnu.org/licenses/gpl-2.0.txt
+ * Text Domain:     ##TEXT DOMAIN##
  */
 
-use PinkCrab\Core\Application\App;
-use Dice\Dice;
-use PinkCrab\Core\Services\Dice\WP_Dice;
-use PinkCrab\Core\Application\App_Config;
-use PinkCrab\Loader\Loader;
-use PinkCrab\Core\Services\ServiceContainer\Container;
-use PinkCrab\Core\Services\Registration\Register_Loader;
+require_once __DIR__ . '/vendor/autoload.php';
 
-// Populate Config with settings, if file exists.
-$settings = file_exists( 'config/settings.php' )
-	? require 'config/settings.php'
-	: array();
-$config   = new App_Config( $settings );
+// Creates an App loaded with the WP_Dice DI container and basic DI rules
+// Allows for the passing of wpdb and the App's own instance.
+$app = ( new App_Factory )->with_wp_dice( true );
 
-// Load hook loader, DI & container.
-$loader    = Loader::boot();
-$di        = WP_Dice::constructWith( new Dice() );
-$container = new Container();
+// Set rules and configure DI Container
+$app->container_config(function(DI_Container $container): void {
+	// Pass an array of rules
+	$container->addRules(include __DIR__ . '/config/dependencies.php');
+});
 
-// Setup the service container .
-$container->set( 'di', $di );
-$container->set( 'config', $config );
+// Pass settings for App_Config
+$app->app_config( include __DIR__ . '/config/settings.php' )
 
-// Boot the app.
-$app = App::init( $container );
+// Pass all class names which should be used during registration
+$app->registration_classses(include __DIR__ . '/config/registration.php' );
 
-// Add all DI rules and register the actions from loader.
-add_action(
-	'init',
-	function () use ( $loader, $app, $config ) {
+// Add custom Regisration Middleware
+$app->registration_middleware(new Rest_Route_Registration_Middleware('my_base/route'));
 
-		// If the dependencies file exists, add rules.
-		if ( file_exists( 'config/dependencies.php' ) ) {
-			$dependencies = include 'config/dependencies.php';
-			$app->get( 'di' )->addRules( $dependencies );
-		}
-
-		// Add all registerable objects to loader, if file exists.
-		if ( file_exists( 'config/registration.php' ) ) {
-			$registerables = include 'config/registration.php';
-			Register_Loader::initalise( $app, $registerables, $loader );
-		}
-		
-		// You can hook in with the $loader here to add any other setup hook calls.
-
-		// Initalise all registerable classes.
-		$loader->register_hooks();
-	},
-	1
-);
+// Then can just boot the application.
+$app->boot();
 
 ````
-If you are planning to give all of your vendor libraries custom namespaces using Php Scoper (more details below), to use the new mapped namespaces.
+Config Files
 
-Once you have your bootstrap file created, its just a case of hooking it up in your plugin.php file.
+While you can pass arrays to the container_config(), app_config() and registration_classes(), these can get quite large. So its best to have them returned from 
 
-````php
-    <?php
-    // @file plugin.php
-    
-    /**
-     * @wordpress-plugin
-     * Plugin Name:     ##PLUGIN NAME##
-     * Plugin URI:      ##YOUR URL##
-     * Description:     ##YOUR PLUGIN DESC##
-     * Version:         ##VERSION##
-     * Author:          ##AUTHOR##
-     * Author URI:      ##YOUR URL##
-     * License:         GPL-2.0+
-     * License URI:     http://www.gnu.org/licenses/gpl-2.0.txt
-     * Text Domain:     ##TEXT DOMAIN##
-     */
-
-    if ( ! defined( 'ABSPATH' ) ) {
-        die;
-    }
-
-    require_once __DIR__ . '/vendor/autoload.php';
-    require_once __DIR__ . '/bootstrap.php';
-
-    // Optional activation hooks
-````
-
-The framework requires 3 config files, these are usually placed in the /config directory, but can be placed elsewhere. If you do use these elsewhere, please upadate the paths in the bootstrap.php file.
+> These files can be placed anywhere, but in the above example and our boilerplates, these 3 files are placed in the /config directory.
 
 ### dependencies.php ###
+
+Used to define all of your custom rules for Dice, for more details on how to work with Interfaces and other classes which cant be autowired, see the full docs @todo link
+
+>Using the full class name is essential, so ensure you include all needed use statements.
+
 ````php
-<?php
 // @file config/dependencies.php
 
-/**
- * Handles all depenedency injection rules and config.
- *
- * @package Your Plugin
- * @author Awesome Devs <awesome.devs@rock.com>
- * @since 1.2.3
- */
+<?php
 
-use PinkCrab\Core\Application\App;
-use PinkCrab\Core\Interfaces\Renderable;
-use PinkCrab\Core\Services\View\PHP_Engine;
-use PinkCrab\Core\Application\App_Config;
+use Some\Namespace\{Some_Interface, Some_Implementation};
 
 return array(
-    // Gloabl Rules
-    '*' => array(
-        'substitutions' => array(
-            App::class        => App::get_instance(),
-            Renderable::class => PHP_Engine::class,
-            App_Config::class => isset( $config ) ? $config : [],
-            wpdb::class       => $GLOBALS['wpdb'],
-        ),
-    ),
-    /** ADD YOUR CUSTOM RULES HERE */
+    // Your custom rules
+	Some_Interface::class => array(
+		'instanceOf' => Some_Implementation::class
+	)
 );
 ````
-### dependencies.php ###
-````php
-<?php
-// @file config/dependencies.php
-declare(strict_types=1);
 
-/**
- * Holds all classes which are to be loaded on initalisation.
- *
- * @package Your Plugin
- * @author Awesome Devs <awesome.devs@rock.com>
- * @since 1.2.3
- */
+### registration.php ###
+
+When the app is booted, all classes which have either hook calls or needed to be called, are passed in this array. 
+
+By default the Registerable middleware is passed, so all classes which implement the Registerable interface will be called. Adding custom Registration Middleware will allow you to pass them in this array for intialisation at boot.
+
+>Using the full class name is essential, so ensure you include all needed use statements.
+
+````php
+// @file config/registration.php
+
+<?php
+
+use Some\Namespace\Some_Controller;
 
 return array(
-    /** Include all your classes which implemenet Registerable here */
+    Some_Controller::class
 );
 ````
 ### settings.php ###
+
+The App holds an internal config class, this can be used as an injectable collection of helper methods in place of defining lots of constants.
+
+Along side the usual path and url values that are needed frequently. You can also set namesapces (rest, cache), post types (meta and slug), taxonomies (slug & termmeta), database table names and custon values. 
 ````php
 // @file config/settings.php
 <?php
     
-declare(strict_types=1);
-
-/**
- * Handles all the data used by App_Config
- *
- * @package Your Plugin
- * @author Awesome Devs <awesome.devs@rock.com>
- * @since 1.2.3
- */
-
 // Get the path of the plugin base.
 $base_path  = \dirname( __DIR__, 1 );
 $plugin_dir = \basename( $base_path );
 $wp_uploads = \wp_upload_dir();
+global $wpdb;
 
 return array(
     'plugin'     => array(
-		'dir' => 'my_plugin',
+		'version' => '1.2.5',
 	),
 	'path'       => array(
 		'plugin'         => $base_path,
@@ -219,6 +156,9 @@ return array(
 		'upload_root'    => $wp_uploads['baseurl'],
 		'upload_current' => $wp_uploads['url'],
 	),
+	'db_table' => [
+		'subscriptions' => $wpdb->table_prefix . 'some_plugin_subscribers'
+	]
     'additional' => array(
 		// Custom values go here (Config::additiona('key'); = value)
 	),
