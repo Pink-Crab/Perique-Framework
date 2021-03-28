@@ -265,14 +265,14 @@ final class App {
 	}
 
 	/**
-	 * Creates an instance using Dice.
+	 * Gets a value from the internal App_Config
 	 *
 	 * @param string $key The config key to call
-	 * @param array<int, mixed> $child Additional params passed.
+	 * @param ...string $child Additional params passed.
 	 * @return mixed
 	 * @throws App_Initialization_Exception Code 4
 	 */
-	public static function config( string $key, ...$child ) {
+	public static function config( string $key, string ...$child ) {
 		if ( self::$booted === false ) {
 			throw App_Initialization_Exception::app_not_initialized( App_Config::class );
 		}

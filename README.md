@@ -77,7 +77,7 @@ $app->registration_middleware(new Rest_Route_Registration_Middleware('my_base/ro
 $app->boot();
 
 ````
-Config Files
+## Config files ##
 
 While you can pass arrays to the container_config(), app_config() and registration_classes(), these can get quite large. So its best to have them returned from 
 
@@ -132,9 +132,11 @@ Along side the usual path and url values that are needed frequently. You can als
 // @file config/settings.php
 <?php
     
-// Get the path of the plugin base.
+// Assumes the base directory of the plugin, is 1 level up.
 $base_path  = \dirname( __DIR__, 1 );
 $plugin_dir = \basename( $base_path );
+
+// Useful WP helpers
 $wp_uploads = \wp_upload_dir();
 global $wpdb;
 
@@ -156,28 +158,39 @@ return array(
 		'upload_root'    => $wp_uploads['baseurl'],
 		'upload_current' => $wp_uploads['url'],
 	),
-	'db_table' => [
+	'db_table' => array(
 		'subscriptions' => $wpdb->table_prefix . 'some_plugin_subscribers'
-	]
+	),
     'additional' => array(
 		// Custom values go here (Config::additiona('key'); = value)
 	),
 );
 ````
+> For the full set of options can be found in the [https://glynn-quelch.gitbook.io/pinkcrab/application/app_config](docs.)
 
-## Testing ##
+## Static Helpers ##
 
-### PHP Unit ###
-If you would like to run the tests for this package, please ensure you add your database details into the test/wp-config.php file before running phpunit.
+The App object has a few helper methods, which can be called statically (either from an instance, or from its name). 
 
-### PHP Stan ###
-The module comes with a pollyfill for all WP Functions, allowing for the testing of all core files. The current config omits the Dice file as this is not ours. To run the suite call.
+### App::make(string $class, array $args = array()): object ###
+* @param string $class Fully namespaced class name
+* @param array<string, mixed> $args Constcutor params if needed
+* @return object Object instance
+* @throws App_Initialization_Exception Code 4 If app isnt intialised.
 
-````bash vendor/bin/phpstan analyse src/ -l8 ````
+```make()``` can be used to access the Apps DI Container to fully resuolve the depenecies of an object. 
 
-## Building ##
-If you wish to use PHP Scoper, please see our Plugin Boilerplate which has a full PHP Scoper suite setup and ready to go.
-````
+```php 
+$emailer = App::make(Customer_Emailer::class);
+$emailer->mail(ADMIN_EMAIL, 'Some Report', $email_body);
+$emailer->send();
+```
+
+### App::config(string $key, ...$child): mixed ###
+* @param string $key The config key to call
+* @param ...string $child Additional params passed.
+* @return mixed
+* @throws App_Initialization_Exception Code 4 If app isnt intialised.
 
 ## License ##
 
@@ -185,12 +198,13 @@ If you wish to use PHP Scoper, please see our Plugin Boilerplate which has a ful
 http://www.opensource.org/licenses/mit-license.html  
 
 ## Update Log ##
-* 0.3.1 - Minor docblock changes for phpstan lv8
-* 0.3.2 - Added in tests and expanded view
-* 0.3.3 - Removed object type hint from service container.
-* 0.3.4 - Improved tests and hooked to codecov
-* 0.3.5 - Added coverage reports to gitignore
-* 0.3.6 - Added remove_action() and remove_filter() to Loader
-* 0.3.7 - Added in Hook_Removal and made minor changes to the Loader tests.
-* 0.3.8 - Added in missing Hook_Removal & Loader tests.
+* 0.4.0 - Introduced new app, with app factory to help with cleaner initalisation. Reintroduced Registation_Middleware which was removed in 0.2.0. Moved the registerables into a default piece of middleware which is automatically added at boot. Added a series of actions around the init callback which runs the registation process.
 * 0.3.9 - Moved Loader into its own library, all tests and use statements updated.
+* 0.3.8 - Added in missing Hook_Removal & Loader tests.
+* 0.3.7 - Added in Hook_Removal and made minor changes to the Loader tests.
+* 0.3.6 - Added remove_action() and remove_filter() to Loader
+* 0.3.5 - Added coverage reports to gitignore
+* 0.3.4 - Improved tests and hooked to codecov
+* 0.3.3 - Removed object type hint from service container.
+* 0.3.2 - Added in tests and expanded view
+* 0.3.1 - Minor docblock changes for phpstan lv8
