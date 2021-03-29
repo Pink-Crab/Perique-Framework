@@ -84,7 +84,7 @@ While you can pass arrays to the container_config(), app_config() and registrati
 
 ### dependencies.php ###
 
-Used to define all of your custom rules for Dice, for more details on how to work with Interfaces and other classes which cant be autowired, see the full docs @todo link
+Used to define all of your custom rules for Dice, for more details on how to work with Interfaces and other classes which cant be autowired, see the [full docs ](https://app.gitbook.com/@glynn-quelch/s/pinkcrab/application/dependency-injection)
 
 >Using the full class name is essential, so ensure you include all needed use statements.
 
