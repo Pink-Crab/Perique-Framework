@@ -25,7 +25,7 @@ declare(strict_types=1);
 namespace PinkCrab\Core\Services\Registration;
 
 use PinkCrab\Core\Interfaces\DI_Container;
-use PinkCrab\Core\Services\Registration\Middleware\Registration_Middleware;
+use PinkCrab\Core\Interfaces\Registration_Middleware;
 
 class Registration_Service {
 

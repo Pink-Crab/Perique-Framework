@@ -23,7 +23,7 @@ declare(strict_types=1);
  * @since 0.4.0
  */
 
-namespace PinkCrab\Core\Services\Registration\Middleware;
+namespace PinkCrab\Core\Interfaces;
 
 interface Registration_Middleware {
 

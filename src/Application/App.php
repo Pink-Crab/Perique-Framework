@@ -32,7 +32,7 @@ use PinkCrab\Core\Application\App_Config;
 use PinkCrab\Core\Interfaces\DI_Container;
 use PinkCrab\Core\Exceptions\App_Initialization_Exception;
 use PinkCrab\Core\Services\Registration\Registration_Service;
-use PinkCrab\Core\Services\Registration\Middleware\Registration_Middleware;
+use PinkCrab\Core\Interfaces\Registration_Middleware;
 
 final class App {
 
@@ -283,6 +283,7 @@ final class App {
 	 * Returns the View helper, populated with current Renderable engine.
 	 *
 	 * @return View|null
+	 * @throws App_Initialization_Exception Code 4
 	 */
 	public static function view(): ?View {
 		if ( self::$booted === false ) {

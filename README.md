@@ -2,9 +2,8 @@
 
 Welcome the main package of the PinkCrab Framwework. 
 
-![alt text](https://img.shields.io/badge/Current_Version-0.3.9-yellow.svg?style=flat " ") 
+![alt text](https://img.shields.io/badge/Current_Version-0.4.0-yellow.svg?style=flat " ") 
 [![Open Source Love](https://badges.frapsoft.com/os/mit/mit.svg?v=102)]()
-
 ![](https://github.com/Pink-Crab/Framework__core/workflows/GitHub_CI/badge.svg " ")
 [![codecov](https://codecov.io/gh/Pink-Crab/Framework__core/branch/master/graph/badge.svg?token=VW566UL1J6)](https://codecov.io/gh/Pink-Crab/Framework__core)
 
@@ -190,6 +189,41 @@ Now when the init hook is called (priority 1), the some_action hook will be adde
 
 ### Registration Middleware ###
 
+Custom registration processes can be added using Registration_Middleware, you can easily create your own middleware that implements the ```PinkCrab\Core\Interfaces\Registration_Middleware``` interface. This interface consists of a single method ```process(object $class): void``` which is passed each class.
+
+```php
+<?php
+
+class Does_Something implements PinkCrab\Core\Interfaces\Registration_Middleware {
+
+	/** @var Some_Service */
+	protected $some_service;
+	
+	public function __cosntruct(Some_Service $some_service){
+		$this->some_service = $some_service;
+	}
+
+	public function process(object $class): void {
+		// Use interfaces or abstract classes to ensure you only process classes you expected
+		if ( in_array( Some_Interface::class, class_implements( $class ) ?: array(), true ) ) {
+			$this->some_service->so_something($class);
+		}
+	}
+}
+```
+> The objects are passed fully cosntructed using the DI_Container
+
+You can then pass these custom Registatration_Middlewares to the app at boot.
+
+```php
+<?php 
+
+$app = ( new App_Factory )->with_wp_dice( true )
+	// Rest of bootstrapping
+	->registration_middleware(new Does_Something(new Some_Service()))
+	->boot();
+```
+
 
 ## Static Helpers ##
 
@@ -240,7 +274,18 @@ App::view()->render('signup/form', ['user' => wp_get_current_user(), 'nonce' => 
 
 > While the View and Config helpers are useful at times, its always better to inject them (App_Config::class or View::class).
 
-At the heart of the 
+## Hooks ##
+
+We have a number of hooks you can use to extend or modify how the app works. All of our internal hooks have pinkcrab/pf/app/ prefix, but we have a class of constants you can use ```PinkCrab\Core\Application\Hooks::class```
+
+### Hooks::APP_INIT_PRE_BOOT ###
+This is primarily used internally to make last minute changes to how the boot process works. Due to the way this hook is used (called when plugin.php is loaded) it should not be used from outside of your own code, as you can be 100% external code will load first.
+
+```php
+add_action( Hooks::APP_INIT_PRE_BOOT, function( App_Config $app_config, Loader $loader, DI_Container $container ): void {
+	// do something cool
+});
+```
 
 ## License ##
 
