@@ -168,6 +168,29 @@ return array(
 ````
 > For the full set of options can be found in the [docs](https://app.gitbook.com/@glynn-quelch/s/pinkcrab/application/app_config).
 
+
+## Registration Service ##
+
+At the heart of the Application is the registration process. Classes can be stacked up and executed at initalisation, this allows for registering into core WP apis, triggering remote api calls and anything else which needs to be setup when all of WP's core is loaded.
+
+### Registerable ###
+
+Included in this framework is a single peice of Registration_Middleware. The Renderable interface and Renderable_Middleware pair make it easy to register any hooks, shortcodes, post types, taxonomies, admin pages, rest endpoints. Any class which needs to be processed, implements the Renderable interface and creates the ```function register(Loader $loader): void {...}```
+```php
+class Some_Controller implements Registerable {
+	public function register(Loader $loader): void{
+		$loader->admin_action('some_action', [$this, 'some_action']);
+	}
+	public function some_action($some_arg): void {...}
+}
+```
+Now when the init hook is called (priority 1), the some_action hook will be added. So long as the request comes from wp-admin. 
+
+> For more details on Registerable and the Hook Loader please see the full docs
+
+### Registration Middleware ###
+
+
 ## Static Helpers ##
 
 The App object has a few helper methods, which can be called statically (either from an instance, or from its name). 
@@ -205,7 +228,19 @@ $version = App::config('version');
 
 > For more details on App_Config and its various usecases, [please checkout the full docs](https://app.gitbook.com/@glynn-quelch/s/pinkcrab/application/app_config).
 
+### App::view(): View ###
+* @return View
+* @throws App_Initialization_Exception Code 4
 
+If you need to render or return a template, you can use the ```view()``` helper. Returns an instance of the View class, populated with the current defined engine (use PHP by default).
+
+```php
+App::view()->render('signup/form', ['user' => wp_get_current_user(), 'nonce' => $nonce]);
+```
+
+> While the View and Config helpers are useful at times, its always better to inject them (App_Config::class or View::class).
+
+At the heart of the 
 
 ## License ##
 
