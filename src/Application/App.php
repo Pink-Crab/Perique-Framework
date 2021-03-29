@@ -30,9 +30,9 @@ use PinkCrab\Core\Application\Hooks;
 use PinkCrab\Core\Services\View\View;
 use PinkCrab\Core\Application\App_Config;
 use PinkCrab\Core\Interfaces\DI_Container;
+use PinkCrab\Core\Interfaces\Registration_Middleware;
 use PinkCrab\Core\Exceptions\App_Initialization_Exception;
 use PinkCrab\Core\Services\Registration\Registration_Service;
-use PinkCrab\Core\Interfaces\Registration_Middleware;
 
 final class App {
 
@@ -183,7 +183,7 @@ final class App {
 		if ( $this->registration === null ) {
 			throw App_Initialization_Exception::requires_registration_service();
 		}
-		$this->registration->set_classes( apply_filters( Hooks::APP_INIT_REGISTRATION_CLASS_LIST, $class_list ) );
+		$this->registration->set_classes( $class_list );
 		return $this;
 	}
 

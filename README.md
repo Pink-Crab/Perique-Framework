@@ -276,23 +276,125 @@ App::view()->render('signup/form', ['user' => wp_get_current_user(), 'nonce' => 
 
 ## Hooks ##
 
-We have a number of hooks you can use to extend or modify how the app works. All of our internal hooks have pinkcrab/pf/app/ prefix, but we have a class of constants you can use ```PinkCrab\Core\Application\Hooks::class```
+We have a number of hooks you can use to extend or modify how the app works. All of our internal hooks have pinkcrab/pf/app/ prefix, but we have a class of constants you can use ```PinkCrab\Core\Application\Hooks::APP_INIT_*```
 
 ### Hooks::APP_INIT_PRE_BOOT ###
 This is primarily used internally to make last minute changes to how the boot process works. Due to the way this hook is used (called when plugin.php is loaded) it should not be used from outside of your own code, as you can be 100% external code will load first.
 
 ```php
-add_action( Hooks::APP_INIT_PRE_BOOT, function( App_Config $app_config, Loader $loader, DI_Container $container ): void {
-	// do something cool
-});
+<?php
+add_action( 
+	Hooks::APP_INIT_PRE_BOOT, 
+	function( App_Config $app_config, Loader $loader, DI_Container $container ): void {
+		// do something cool
+	}
+);
 ```
+
+### Hooks::APP_INIT_PRE_REGISTRATION ###
+
+During the boot processes, all classes passed for registration are processed on init hook, priority 1. The APP_INIT_PRE_REGISTRATION hook fires right before these are added. This allow you to hook in extra functionality to the application. This allows for extending your plugin with other plugins.
+
+```php
+<?php
+add_action( 
+	Hooks::APP_INIT_PRE_REGISTRATION, 
+	function( App_Config $app_config, Loader $loader, DI_Container $container ): void {
+		$some_controller = $container->create(Some_Other\Namespace\Some_Controller::class);
+		$some_controller->load_hooks($loader);
+	}
+);
+```
+### Hooks::APP_INIT_POST_REGISTRATION ###
+
+After all the registation process has completed, this hook is fired. This allows you to check all has loaded correctly or if anything is missing. You can then fire off notification or diable functionality based on its results. *The internal loader is fired after this, so you can still hook in later hooks before initialisation.*
+
+```php
+<?php
+add_action( 
+	Hooks::APP_INIT_POST_REGISTRATION, 
+	function( App_Config $app_config, Loader $loader, DI_Container $container ): void {
+		if( ! has_action('some_action') ){
+			// Do something due to action not being added.
+		}
+	}
+);
+```
+
+### Hooks::APP_INIT_CONFIG_VALUES ###
+
+When the App_Config class is constructed with all values passed from ```config/settings.php``` this filter is fired during the initial boot process and should only really be used for internal purposes. Sadly due to the timing in which we use this filter, its not really suited for extending the plugin due.
+
+```php
+<?php
+add_filter(Hooks::APP_INIT_CONFIG_VALUES, 
+	function( array $config ): array {
+		$config['additional']['some_key'] = 'some value';
+		return $config;
+	}
+);
+```
+### Hooks::APP_INIT_REGISTRATION_CLASS_LIST ###
+
+Filters all classes passed to the Registration Service before they are processed. This allows for the hooking in from other plugins.
+
+```php
+<?php
+add_filter(Hooks::APP_INIT_REGISTRATION_CLASS_LIST, 
+	function( array $class_list ): array {
+		$class_list[] = 'My\Other\Plugin\Service';
+		$class_list[] = Another_Service::class;
+		return $class_list;
+	}
+);
+```
+
+### Hooks::APP_INIT_SET_DI_RULES ###
+
+When the DI rules are set to the container, this filter is applied to all definitions. This allows for hooking in from external plugins and code to make use of the DI_Container. This combined with the other hooks allows for full expansion of your plugin.
+
+```php
+<?php
+add_filter(Hooks::APP_INIT_SET_DI_RULES, 
+	function( array $di_rules ): array {
+		$di_rules['*'][Some_Interface::class] = Some_Class_Implementation::class;
+		return $di_rules;
+	}
+);
+```
+
+## Collection ##
+
+The framework gives you access to an extendable Collection which can be used in place of arrays throughout your application. Can even be configured to only accept a specific type, making simple generic collections a possibility.
+
+```php 
+<?php
+
+class Post_Collection extends Collection {
+	// Filter out anything not matching.
+	protected function map_construct( array $data ): array {
+		return array_filter(fn($e): bool => is_a($data, Some_Type::class));
+	}
+}
+
+$posts = Post_Collection::from([$post1, null, $post2, false, WP_Error]);
+var_dump($posts->to_array()); // [$post1, $post2];
+
+$collection->each(function($e){
+	print $e->post_title . PHP_EOL;
+}); 
+// Post Title 1
+// Post Title 2
+```
+
+> For more details on the PinkCrab Collection [please visit the full docs](https://app.gitbook.com/@glynn-quelch/s/pinkcrab/application/base-collection)
 
 ## License ##
 
 ### MIT License ###
 http://www.opensource.org/licenses/mit-license.html  
 
-## Update Log ##
+## Change Log ##
 * 0.4.0 - Introduced new app, with app factory to help with cleaner initalisation. Reintroduced Registation_Middleware which was removed in 0.2.0. Moved the registerables into a default piece of middleware which is automatically added at boot. Added a series of actions around the init callback which runs the registation process.
 * 0.3.9 - Moved Loader into its own library, all tests and use statements updated.
 * 0.3.8 - Added in missing Hook_Removal & Loader tests.
