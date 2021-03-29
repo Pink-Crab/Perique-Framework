@@ -195,15 +195,18 @@ $emailer->send();
 Once the app has been booted, you can access the App_Config values by either passing App_Config as a dependency, or by using the Apps helper.
 
 ```php
-$args = [
-	'post_type' => App::config('post_types', 'my_cpt')
-];
-// This would return whatever post type slug you set with the key of my_cpt.
 
+// Get post type slug
+$args = ['post_type' => App::config('post_types', 'my_cpt')];
+
+// Get current plugin version.
 $version = App::config('version');
 ```
 
 > For more details on App_Config and its various usecases, [please checkout the full docs](https://app.gitbook.com/@glynn-quelch/s/pinkcrab/application/app_config).
+
+
+
 ## License ##
 
 ### MIT License ###
