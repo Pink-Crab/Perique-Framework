@@ -140,7 +140,7 @@ $wp_uploads = \wp_upload_dir();
 global $wpdb;
 
 return array(
-    'plugin'     => array(
+	'plugin'     => array(
 		'version' => '1.2.5',
 	),
 	'path'       => array(
@@ -160,7 +160,7 @@ return array(
 	'db_table' => array(
 		'subscriptions' => $wpdb->table_prefix . 'some_plugin_subscribers'
 	),
-    'additional' => array(
+	'additional' => array(
 		// Custom values go here (Config::additiona('key'); = value)
 	),
 );
