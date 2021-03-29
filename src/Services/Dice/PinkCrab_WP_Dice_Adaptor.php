@@ -29,6 +29,7 @@ use PinkCrab\Core\Application\Hooks;
 use PinkCrab\Core\Services\Dice\WP_Dice;
 use PinkCrab\Core\Interfaces\DI_Container;
 use Psr\Container\NotFoundExceptionInterface;
+use PinkCrab\Core\Exceptions\DI_Container_Exception;
 
 class PinkCrab_WP_Dice_Adaptor extends WP_Dice implements DI_Container {
 
@@ -51,7 +52,7 @@ class PinkCrab_WP_Dice_Adaptor extends WP_Dice implements DI_Container {
 	 */
 	public function get( $id ) {
 		if ( ! $this->has( $id ) ) {
-			throw new NotFoundExceptionInterface( "{$id} not defined in container", 1 );
+			throw new DI_Container_Exception( "{$id} not defined in container", 1 );
 		}
 		return $this->create( $id );
 	}
