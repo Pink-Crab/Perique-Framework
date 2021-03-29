@@ -166,7 +166,7 @@ return array(
 	),
 );
 ````
-> For the full set of options can be found in the [https://glynn-quelch.gitbook.io/pinkcrab/application/app_config](docs.)
+> For the full set of options can be found in the [docs](https://app.gitbook.com/@glynn-quelch/s/pinkcrab/application/app_config).
 
 ## Static Helpers ##
 
@@ -192,6 +192,18 @@ $emailer->send();
 * @return mixed
 * @throws App_Initialization_Exception Code 4 If app isnt intialised.
 
+Once the app has been booted, you can access the App_Config values by either passing App_Config as a dependency, or by using the Apps helper.
+
+```php
+$args = [
+	'post_type' => App::config('post_types', 'my_cpt')
+];
+// This would return whatever post type slug you set with the key of my_cpt.
+
+$version = App::config('version');
+```
+
+> For more details on App_Config and its various usecases, [please checkout the full docs](https://app.gitbook.com/@glynn-quelch/s/pinkcrab/application/app_config).
 ## License ##
 
 ### MIT License ###
