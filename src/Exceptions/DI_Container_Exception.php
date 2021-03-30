@@ -1,8 +1,9 @@
 <?php
 
 declare(strict_types=1);
+
 /**
- * Service not registered exception
+ * Wrapper for all DI Container exceptions
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -18,13 +19,13 @@ declare(strict_types=1);
  *
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- * @package PinkCrab\Core\Services
+ * @package PinkCrab\Core\Exceptions
+ * @version 0.4.0
  */
 
-
-namespace PinkCrab\Core\Services\ServiceContainer;
+namespace PinkCrab\Core\Exceptions;
 
 use Exception;
 use Psr\Container\NotFoundExceptionInterface;
 
-class ServiceNotRegisteredException extends Exception implements NotFoundExceptionInterface {}
+class DI_Container_Exception extends Exception implements NotFoundExceptionInterface{}

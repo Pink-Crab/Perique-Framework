@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * Wrapper for DICE to handle DICE returning a new instance when new rules are added.
+ * Bridge for using the WP_Dice container with the PinkCrab App.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -25,9 +25,11 @@ declare(strict_types=1);
 namespace PinkCrab\Core\Services\Dice;
 
 use Dice\Dice;
+use PinkCrab\Core\Application\Hooks;
+use PinkCrab\Core\Interfaces\DI_Container;
+use PinkCrab\Core\Exceptions\DI_Container_Exception;
 
-
-class WP_Dice {
+class PinkCrab_Dice implements DI_Container {
 
 	/**
 	 * Holds the instnace of DICE to work with.
@@ -45,15 +47,52 @@ class WP_Dice {
 		$this->dice = $dice;
 	}
 
-
 	/**
 	 * Lazy stack instancing.
 	 *
 	 * @param Dice $dice
 	 * @return self
 	 */
-	public static function constructWith( Dice $dice ): self { // phpcs:disable WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
-		return new self( $dice );
+	public static function withDice( Dice $dice ): self { // phpcs:disable WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
+		return new PinkCrab_Dice( $dice );
+	}
+
+	/**
+	 * ContainerInterface implementation of get.
+	 * Will attemp to construct autowired.
+	 *
+	 * @param string $id Class name (fully namespaced.)
+	 * @return object|null
+	 */
+	public function get( $id ) {
+		if ( ! $this->has( $id ) ) {
+			throw new DI_Container_Exception( "{$id} not defined in container", 1 );
+		}
+		return $this->create( $id );
+	}
+
+	/**
+	 * Checks if a specific class is registered or exists.
+	 * Doesnt take into account the ability to autowire.
+	 *
+	 * @param string $id Class name (fully namespaced.)
+	 * @return bool
+	 */
+	public function has( $id ) {
+		$from_dice = $this->dice->getRule( $id );
+		// If set in global rules.
+		if ( array_key_exists( 'substitutions', $from_dice )
+		&& array_key_exists( $id, $from_dice['substitutions'] ) ) {
+			return true;
+		}
+
+		// If set with a replacement instance.
+		if ( array_key_exists( 'instanceOf', $from_dice ) ) {
+			return true;
+		}
+
+		// Checks if the class exists
+		return class_exists( $id );
 	}
 
 	/**
@@ -61,9 +100,9 @@ class WP_Dice {
 	 *
 	 * @param string $name
 	 * @param array<string, string|object|array> $rule
-	 * @return self
+	 * @return PinkCrab_Dice
 	 */
-	public function addRule( string $name, array $rule ): self { // phpcs:disable WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
+	public function addRule( string $name, array $rule ): DI_Container { // phpcs:disable WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
 		$this->dice = $this->dice->addRule( $name, $rule );
 		return $this;
 	}
@@ -72,10 +111,10 @@ class WP_Dice {
 	 * Proxy for addRules
 	 *
 	 * @param array<string, array> $rules
-	 * @return self
+	 * @return PinkCrab_Dice
 	 */
-	public function addRules( array $rules ): self { // phpcs:disable WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
-		$this->dice = $this->dice->addRules( $rules );
+	public function addRules( array $rules ): DI_Container { // phpcs:disable WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
+		$this->dice = $this->dice->addRules( apply_filters( Hooks::APP_INIT_SET_DI_RULES, $rules ) );
 		return $this;
 	}
 

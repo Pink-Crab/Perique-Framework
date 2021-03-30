@@ -46,13 +46,6 @@ class View {
 	protected $engine;
 
 	/**
-	 * Current view data model.
-	 *
-	 * @var iterable<string, mixed>|null
-	 */
-	protected $view_data;
-
-	/**
 	 * Creates an intance of view with the passed engine.
 	 *
 	 * @param Renderable $engine
@@ -69,7 +62,7 @@ class View {
 	 * @param bool $print
 	 * @return string|void
 	 */
-	public function render( string $view, iterable $view_data, bool $print = true ) {
+	public function render( string $view, iterable $view_data = array(), bool $print = true ) {
 		if ( $print ) {
 			$this->engine->render( $view, $view_data, self::PRINT_VIEW );
 		} else {
@@ -90,6 +83,15 @@ class View {
 		$output = ob_get_contents();
 		ob_end_clean();
 		return $output ?: '';
+	}
+
+	/**
+	 * Returns access to the internal rendering engine.
+	 *
+	 * @return Renderable
+	 */
+	public function engine(): Renderable {
+		return $this->engine;
 	}
 
 }
