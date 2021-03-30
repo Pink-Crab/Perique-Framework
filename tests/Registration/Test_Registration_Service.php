@@ -15,7 +15,6 @@ namespace PinkCrab\Core\Tests\Registration;
 
 use Dice\Dice;
 use WP_UnitTestCase;
-
 use Gin0115\WPUnit_Helpers\Objects;
 use PinkCrab\Core\Application\Hooks;
 use PinkCrab\Core\Interfaces\DI_Container;
