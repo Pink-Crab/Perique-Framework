@@ -19,7 +19,7 @@ use Gin0115\WPUnit_Helpers\Objects;
 use PinkCrab\Core\Application\Hooks;
 use PinkCrab\Core\Interfaces\DI_Container;
 use PinkCrab\Core\Interfaces\Registration_Middleware;
-use PinkCrab\Core\Services\Dice\PinkCrab_WP_Dice_Adaptor;
+use PinkCrab\Core\Services\Dice\PinkCrab_Dice;
 use PinkCrab\Core\Tests\Fixtures\Mock_Objects\Sample_Class;
 use PinkCrab\Core\Services\Registration\Registration_Service;
 use PinkCrab\Core\Tests\Fixtures\Mock_Objects\Parent_Dependency;
@@ -89,7 +89,7 @@ class Test_Registration_Service extends WP_UnitTestCase {
 	/** @testdox A populate registation service should be able to process all classes against all middleware. */
 	public function test_process_registation_middleware(): void {
 		$registration_service = new Registration_Service;
-		$container            = new PinkCrab_WP_Dice_Adaptor( new Dice );
+		$container            = new PinkCrab_Dice( new Dice );
 
 		$registration_service->set_container( $container );
 
@@ -108,7 +108,7 @@ class Test_Registration_Service extends WP_UnitTestCase {
 		$this->expectOutputRegex( '/Sample_Class/' );
 		$this->expectOutputRegex( '/Parent_Dependency/' );
 
-		$container = new PinkCrab_WP_Dice_Adaptor( new Dice );
+		$container = new PinkCrab_Dice( new Dice );
 
 		add_filter(
 			Hooks::APP_INIT_REGISTRATION_CLASS_LIST,

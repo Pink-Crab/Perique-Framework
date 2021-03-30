@@ -32,7 +32,7 @@ tests_add_filter(
 		// $container = new Container();
 
 		// // Setup the service container .
-		// $container->set( 'di', WP_Dice::constructWith( new Dice() ) );
+		// $container->set( 'di', PinkCrab_Dice::withDice( new Dice() ) );
 		// $container->set( 'config', $config );
 
 		// // Boot the app.

@@ -18,7 +18,7 @@ use PinkCrab\Core\Application\App;
 use PinkCrab\Core\Interfaces\Renderable;
 use PinkCrab\Core\Interfaces\DI_Container;
 use PinkCrab\Core\Services\View\PHP_Engine;
-use PinkCrab\Core\Services\Dice\PinkCrab_WP_Dice_Adaptor;
+use PinkCrab\Core\Services\Dice\PinkCrab_Dice;
 use PinkCrab\Core\Services\Registration\Registration_Service;
 use PinkCrab\Core\Services\Registration\Middleware\Registerable_Middleware;
 
@@ -37,7 +37,7 @@ class App_Factory {
 
 	/**
 	 * Pre populates a standard isntance of the App
-	 * Uses the WP_Dice container
+	 * Uses the PinkCrab_Dice container
 	 * Sets up registration and loader instances.
 	 * Adds Registerable Middleware
 	 *
@@ -49,7 +49,7 @@ class App_Factory {
 		$loader = new Loader();
 
 		// Setup DI Container
-		$container = PinkCrab_WP_Dice_Adaptor::withDice( new Dice() );
+		$container = PinkCrab_Dice::withDice( new Dice() );
 
 		if ( $include_default_rules === true ) {
 			$container->addRules( $this->default_di_rules() );
