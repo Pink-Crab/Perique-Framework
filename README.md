@@ -126,7 +126,7 @@ return array(
 
 The App holds an internal config class, this can be used as an injectable collection of helper methods in place of defining lots of constants.
 
-Along side the usual path and url values that are needed frequently. You can also set namesapces (rest, cache), post types (meta and slug), taxonomies (slug & termmeta), database table names and custon values. 
+Alongside the usual path and url values that are needed frequently. You can also set namesapces (rest, cache), post types (meta and slug), taxonomies (slug & termmeta), database table names and custon values. 
 ````php
 // @file config/settings.php
 <?php
@@ -139,7 +139,7 @@ $plugin_dir = \basename( $base_path );
 $wp_uploads = \wp_upload_dir();
 global $wpdb;
 
-return array(
+return array(g
 	'plugin'     => array(
 		'version' => '1.2.5',
 	),
@@ -373,7 +373,7 @@ The framework gives you access to an extendable Collection which can be used in 
 class Post_Collection extends Collection {
 	// Filter out anything not matching.
 	protected function map_construct( array $data ): array {
-		return array_filter(fn($e): bool => is_a($data, Some_Type::class));
+		return array_filter(fn($e): bool => is_a($data, \WP_Post::class));
 	}
 }
 

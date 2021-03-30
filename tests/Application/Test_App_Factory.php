@@ -16,14 +16,9 @@ use WP_UnitTestCase;
 use PinkCrab\Loader\Loader;
 use PinkCrab\Core\Application\App;
 use Gin0115\WPUnit_Helpers\Objects;
-use PinkCrab\Core\Application\_App;
 use PinkCrab\Core\Application\App_Factory;
 use PinkCrab\Core\Interfaces\DI_Container;
 use PinkCrab\Core\Tests\Fixtures\DI\Interface_A;
-use PinkCrab\Core\Tests\Fixtures\Mock_Objects\Interface_Get;
-use PinkCrab\Core\Services\Registration\Registration_Service;
-use PinkCrab\Core\Tests\Fixtures\Mock_Objects\Parent_Dependency;
-use PinkCrab\Core\Services\Registration\Middleware\Registerable_Middleware;
 use PinkCrab\Core\Tests\Fixtures\Mock_Objects\Registerable\Registerable_Mock;
 
 class Test_App_Factory extends WP_UnitTestCase {

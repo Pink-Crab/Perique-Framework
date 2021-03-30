@@ -19,9 +19,11 @@ use ReflectionProperty;
 
 class App_Validation {
 
+	/** @var string */
 	public const ERROR_MESSAGE_TEMPLATE = '%s was not set in App';
+	/** @var string */
 	public const ERROR_MESSAGE_APP_BOOTED = 'App already booted';
-	
+
 	/**
 	 * Required properties
 	 * Key is the propety and value is if "static"

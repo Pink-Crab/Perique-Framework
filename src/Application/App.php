@@ -268,7 +268,7 @@ final class App {
 	 * Gets a value from the internal App_Config
 	 *
 	 * @param string $key The config key to call
-	 * @param ...string $child Additional params passed.
+	 * @param string ...$child Additional params passed.
 	 * @return mixed
 	 * @throws App_Initialization_Exception Code 4
 	 */

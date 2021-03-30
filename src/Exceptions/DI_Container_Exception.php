@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * Registration loader
+ * Wrapper for all DI Container exceptions
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -19,35 +19,13 @@ declare(strict_types=1);
  *
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- * @package PinkCrab\Core\Registration
- * @since 0.4.0
+ * @package PinkCrab\Core\Exceptions
+ * @version 0.4.0
  */
 
-namespace PinkCrab\Core\Services\Registration;
+namespace PinkCrab\Core\Exceptions;
 
-use PinkCrab\Loader\Loader;
-use PinkCrab\Core\Application\App;
-use PinkCrab\Core\Interfaces\Registerable;
+use Exception;
+use Psr\Container\NotFoundExceptionInterface;
 
-
-class Register_Loader {
-
-
-	/**
-	 * Loops through all classes for regisration and regiter
-	 * if they have the Registerable interface.
-	 *
-	 * @param App    $app
-	 * @param array<int, string>  $registerable_classes
-	 * @param Loader $loader
-	 * @return void
-	 */
-	public static function initalise( App $app, array $registerable_classes, Loader $loader ): void {
-		foreach ( $registerable_classes as $class ) {
-			if ( in_array( Registerable::class, class_implements( $class ) ?: array(), true ) ) {
-				/** @phpstan-ignore-next-line class must implement register for interface*/
-				$app::make( $class )->register( $loader );
-			}
-		}
-	}
-}
+class DI_Container_Exception extends Exception implements NotFoundExceptionInterface{}

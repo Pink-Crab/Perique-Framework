@@ -34,11 +34,7 @@ class Test_View extends WP_UnitTestCase {
 	}
 
 
-	/**
-	 * Simple buffer for calling and catching function calls.
-	 *
-	 * @return void
-	 */
+	/** @testdox When a function usually prints to the output, it should be possible to caputure this output and return as a string. */
 	public function test_print_buffer(): void {
 		$result = View::print_buffer(
 			function() {
@@ -49,11 +45,7 @@ class Test_View extends WP_UnitTestCase {
 		$this->assertEquals( 'ECHO...ECHO', $result );
 	}
 
-	/**
-	 * Test view hold instnaces of a render engine.
-	 *
-	 * @return void
-	 */
+	/** @testdox It should be possible to render(print) a template direct to the output, either CLI or in a reposnse. */
 	public function test_can_be_constructed_with_render_engine(): void {
 
 		$view = new View( $this->php_engine );
@@ -64,11 +56,7 @@ class Test_View extends WP_UnitTestCase {
 		);
 	}
 
-	/**
-	 * Test can return the view as a string.
-	 *
-	 * @return void
-	 */
+	/** @testdox A template should be returnable as a string for priting elsewhere */
 	public function test_return_single_template(): void {
 		$this->assertEquals(
 			'Hello World',
@@ -80,11 +68,7 @@ class Test_View extends WP_UnitTestCase {
 		);
 	}
 
-	/**
-	 * Test can render partial template from parent.
-	 *
-	 * @return void
-	 */
+	/** @testdox Partial tempaltes should be renderable within an existsing template. */
 	public function test_render_partial_template(): void {
 		$this->expectOutputString( 'partial_value' );
 		( new View( $this->php_engine ) )->render(
@@ -94,5 +78,11 @@ class Test_View extends WP_UnitTestCase {
 		);
 	}
 
-
+	/** @testdox You should be able to get access to the internal rendering engine, for binding additional directives or access internal functionality */
+	public function test_get_internal_engine(): void {
+		$this->assertInstanceOf(
+			PHP_Engine::class,
+			( new View( $this->php_engine ) )->engine()
+		);
+	}
 }

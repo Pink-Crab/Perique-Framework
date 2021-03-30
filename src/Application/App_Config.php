@@ -180,8 +180,7 @@ final class App_Config {
 	 *
 	 * @return string
 	 */
-	public function version(): string
-	{
+	public function version(): string {
 		return $this->plugin['version'];
 	}
 
