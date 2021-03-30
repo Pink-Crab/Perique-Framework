@@ -58,36 +58,36 @@ class Test_PinkCrab_Dice extends WP_UnitTestCase {
 
 	/** @testdox It should be possible to use the container in a purely fluent without using NEW */
 	public function test_constuctwith_factory(): void {
-		$wp_dice = PinkCrab_Dice::withDice( new Dice() );
-		$this->assertInstanceOf( PinkCrab_Dice::class, $wp_dice );
+		$pc_dice = PinkCrab_Dice::withDice( new Dice() );
+		$this->assertInstanceOf( PinkCrab_Dice::class, $pc_dice );
 
 		// Check hold instance of Dice.
 		$this->assertInstanceOf(
 			Dice::class,
-			WPUnit_HelpersObjects::get_property( $wp_dice, 'dice' )
+			WPUnit_HelpersObjects::get_property( $pc_dice, 'dice' )
 		);
 	}
 
 	/** @testdox Objects with with classes and interfaces as dependencies should be resolved if all rules that can not be determined by type, are supplied as rules. */
 	public function test_can_populate_with_rules(): void {
-		$wp_dice = PinkCrab_Dice::withDice( new Dice() );
-		$wp_dice->addRules( $this->dice_rules );
+		$pc_dice = PinkCrab_Dice::withDice( new Dice() );
+		$pc_dice->addRules( $this->dice_rules );
 
-		$this->assertInstanceOf( Class_H::class, $wp_dice->create( Class_H::class ) );
-		$this->assertInstanceOf( Class_G::class, $wp_dice->create( Class_G::class ) );
-		$this->assertInstanceOf( Class_F::class, $wp_dice->create( Class_F::class ) );
+		$this->assertInstanceOf( Class_H::class, $pc_dice->create( Class_H::class ) );
+		$this->assertInstanceOf( Class_G::class, $pc_dice->create( Class_G::class ) );
+		$this->assertInstanceOf( Class_F::class, $pc_dice->create( Class_F::class ) );
 
 		$this->assertEquals(
 			Dependency_E::class,
-			$wp_dice->create( Class_H::class )->test()
+			$pc_dice->create( Class_H::class )->test()
 		);
 		$this->assertEquals(
 			Dependency_D::class,
-			$wp_dice->create( Class_G::class )->test()
+			$pc_dice->create( Class_G::class )->test()
 		);
 		$this->assertEquals(
 			Dependency_C::class,
-			$wp_dice->create( Class_F::class )->test()
+			$pc_dice->create( Class_F::class )->test()
 		);
 
 	}
@@ -95,23 +95,23 @@ class Test_PinkCrab_Dice extends WP_UnitTestCase {
 	/** @testdox If attemepting to create a class that doesnt exist and error should be generated and the system abort. */
 	public function test_exception_thrown_if_none_existing_class(): void {
 		$this->expectException( ReflectionException::class );
-		$wp_dice = PinkCrab_Dice::withDice( new Dice() );
-		$wp_dice->create( 'NotAClass' );
+		$pc_dice = PinkCrab_Dice::withDice( new Dice() );
+		$pc_dice->create( 'NotAClass' );
 	}
 
 	/** @testdox It should be possible to add single DI rule to the container */
 	public function test_test_can_add_rule(): void {
-		$wp_dice = PinkCrab_Dice::withDice( new Dice() );
-		$result  = $wp_dice->addRule( stdClass::class, array( 'instanceOf' => DateTime::class ) );
+		$pc_dice = PinkCrab_Dice::withDice( new Dice() );
+		$result  = $pc_dice->addRule( stdClass::class, array( 'instanceOf' => DateTime::class ) );
 		$this->assertInstanceOf( DateTime::class, $result->create( stdClass::class ) );
 	}
 
 	/** @testdox It should be possible to check if a class either has a rule defined or exists as a valid class*/
 	public function test_has(): void {
-		$wp_dice = PinkCrab_Dice::withDice( new Dice() );
+		$pc_dice = PinkCrab_Dice::withDice( new Dice() );
 
 		// As a global
-		$wp_dice->addRule(
+		$pc_dice->addRule(
 			'*',
 			array(
 				'substitutions' => array(
@@ -119,32 +119,32 @@ class Test_PinkCrab_Dice extends WP_UnitTestCase {
 				),
 			)
 		);
-		$this->assertTrue( $wp_dice->has( Interface_A::class ) );
+		$this->assertTrue( $pc_dice->has( Interface_A::class ) );
 
 		// As a single rule
-		$wp_dice->addRule(
+		$pc_dice->addRule(
 			Abstract_B::class,
 			array(
 				'instanceOf' => Dependency_C::class,
 			)
 		);
-		$this->assertTrue( $wp_dice->has( Abstract_B::class ) );
+		$this->assertTrue( $pc_dice->has( Abstract_B::class ) );
 
 		// General object.
-		$this->assertTrue( $wp_dice->has( Sample_Class::class ) );
+		$this->assertTrue( $pc_dice->has( Sample_Class::class ) );
 	}
 
 	/** @testdox It should be possible to create objects using only the rules defined and without the option of passing params. It should also be PSR complient. */
 	public function test_can_create_purely_using_autowiring(): void {
-		$wp_dice = PinkCrab_Dice::withDice( new Dice() );
-		$this->assertInstanceOf( Sample_Class::class, $wp_dice->get( Sample_Class::class ) );
+		$pc_dice = PinkCrab_Dice::withDice( new Dice() );
+		$this->assertInstanceOf( Sample_Class::class, $pc_dice->get( Sample_Class::class ) );
 	}
 
 	/** @testdox If attempeting to use the pure autowire on a class that doest exist and error should be generated and the systm aborted */
 	public function test_throws_exception_using_undefined_class_on_get(): void {
 		$this->expectException( DI_Container_Exception::class );
-		$wp_dice = PinkCrab_Dice::withDice( new Dice() );
-		$wp_dice->get( 'NotAClass' );
+		$pc_dice = PinkCrab_Dice::withDice( new Dice() );
+		$pc_dice->get( 'NotAClass' );
 	}
 
 }
