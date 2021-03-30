@@ -19,7 +19,7 @@ use Dice\Dice;
 
 use PinkCrab\Loader\Loader;
 
-use PinkCrab\Core\Services\Dice\PinkCrab_WP_Dice_Adaptor;
+use PinkCrab\Core\Services\Dice\PinkCrab_Dice;
 
 use PinkCrab\Core\Services\Registration\Registration_Service;
 
@@ -59,7 +59,7 @@ trait App_Helper_Trait {
 		// Build and populate the app.
 		$app          = new App();
 		$registration = new Registration_Service();
-		$container    = new PinkCrab_WP_Dice_Adaptor( new Dice() );
+		$container    = new PinkCrab_Dice( new Dice() );
 		$loader       = new Loader();
 
 		$app->set_container( $container );

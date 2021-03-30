@@ -26,12 +26,26 @@ namespace PinkCrab\Core\Services\Dice;
 
 use Dice\Dice;
 use PinkCrab\Core\Application\Hooks;
-use PinkCrab\Core\Services\Dice\WP_Dice;
 use PinkCrab\Core\Interfaces\DI_Container;
-use Psr\Container\NotFoundExceptionInterface;
 use PinkCrab\Core\Exceptions\DI_Container_Exception;
 
-class PinkCrab_WP_Dice_Adaptor extends WP_Dice implements DI_Container {
+class PinkCrab_Dice implements DI_Container {
+
+	/**
+	 * Holds the instnace of DICE to work with.
+	 *
+	 * @var Dice;
+	 */
+	protected $dice;
+
+	/**
+	 * Passes in the inital dice instance.
+	 *
+	 * @param Dice $dice
+	 */
+	public function __construct( Dice $dice ) {
+		$this->dice = $dice;
+	}
 
 	/**
 	 * Lazy stack instancing.
@@ -40,7 +54,7 @@ class PinkCrab_WP_Dice_Adaptor extends WP_Dice implements DI_Container {
 	 * @return self
 	 */
 	public static function withDice( Dice $dice ): self { // phpcs:disable WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
-		return new PinkCrab_WP_Dice_Adaptor( $dice );
+		return new PinkCrab_Dice( $dice );
 	}
 
 	/**
@@ -66,7 +80,6 @@ class PinkCrab_WP_Dice_Adaptor extends WP_Dice implements DI_Container {
 	 */
 	public function has( $id ) {
 		$from_dice = $this->dice->getRule( $id );
-
 		// If set in global rules.
 		if ( array_key_exists( 'substitutions', $from_dice )
 		&& array_key_exists( $id, $from_dice['substitutions'] ) ) {

@@ -21,7 +21,7 @@ use Gin0115\WPUnit_Helpers\Objects;
 use PinkCrab\Core\Application\App_Config;
 use PinkCrab\Core\Interfaces\DI_Container;
 use PinkCrab\Core\Tests\Application\App_Helper_Trait;
-use PinkCrab\Core\Services\Dice\PinkCrab_WP_Dice_Adaptor;
+use PinkCrab\Core\Services\Dice\PinkCrab_Dice;
 use PinkCrab\Core\Exceptions\App_Initialization_Exception;
 use PinkCrab\Core\Services\Registration\Registration_Service;
 use PinkCrab\Core\Interfaces\Registration_Middleware;
