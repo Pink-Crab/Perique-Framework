@@ -29,6 +29,7 @@ namespace PinkCrab\Core\Services\Registration\Middleware;
 use PinkCrab\Loader\Loader;
 use PinkCrab\Core\Interfaces\DI_Container;
 use PinkCrab\Core\Interfaces\Registerable;
+use PinkCrab\Core\Interfaces\Registration_Middleware;
 
 class Registerable_Middleware implements Registration_Middleware {
 

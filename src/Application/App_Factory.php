@@ -45,7 +45,7 @@ class App_Factory {
 	 *
 	 * @return self
 	 */
-	public function with_wp_di( bool $include_default_rules = false ): self {
+	public function with_wp_dice( bool $include_default_rules = false ): self {
 		$loader = new Loader();
 
 		// Setup DI Container

@@ -24,8 +24,9 @@ declare(strict_types=1);
 
 namespace PinkCrab\Core\Services\Registration;
 
+use PinkCrab\Core\Application\Hooks;
 use PinkCrab\Core\Interfaces\DI_Container;
-use PinkCrab\Core\Services\Registration\Middleware\Registration_Middleware;
+use PinkCrab\Core\Interfaces\Registration_Middleware;
 
 class Registration_Service {
 
@@ -100,9 +101,12 @@ class Registration_Service {
 	 * @return void
 	 */
 	public function process(): void {
+		// Filter all classes, before processing.
+		$class_list = apply_filters( Hooks::APP_INIT_REGISTRATION_CLASS_LIST, $this->class_list );
+
 		foreach ( $this->middleware as $middleware ) {
 			// Pass each class to the middleware.
-			foreach ( $this->class_list as $class ) {
+			foreach ( $class_list as $class ) {
 				// Construct class using container,
 				//if valid object process via current middleware
 				$class_instance = $this->di_container->create( $class );

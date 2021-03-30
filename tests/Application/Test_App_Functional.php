@@ -29,7 +29,7 @@ use PinkCrab\Core\Exceptions\App_Initialization_Exception;
 use PinkCrab\Core\Tests\Fixtures\Mock_Objects\Sample_Class;
 use PinkCrab\Core\Services\Registration\Registration_Service;
 use PinkCrab\Core\Tests\Fixtures\Mock_Objects\Parent_Dependency;
-use PinkCrab\Core\Services\Registration\Middleware\Registration_Middleware;
+use PinkCrab\Core\Interfaces\Registration_Middleware;
 
 class Test_App_Functional extends WP_UnitTestCase {
 

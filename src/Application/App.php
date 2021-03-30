@@ -26,12 +26,13 @@ namespace PinkCrab\Core\Application;
 
 use Closure;
 use PinkCrab\Loader\Loader;
+use PinkCrab\Core\Application\Hooks;
 use PinkCrab\Core\Services\View\View;
 use PinkCrab\Core\Application\App_Config;
 use PinkCrab\Core\Interfaces\DI_Container;
+use PinkCrab\Core\Interfaces\Registration_Middleware;
 use PinkCrab\Core\Exceptions\App_Initialization_Exception;
 use PinkCrab\Core\Services\Registration\Registration_Service;
-use PinkCrab\Core\Services\Registration\Middleware\Registration_Middleware;
 
 final class App {
 
@@ -182,7 +183,7 @@ final class App {
 		if ( $this->registration === null ) {
 			throw App_Initialization_Exception::requires_registration_service();
 		}
-		$this->registration->set_classes( apply_filters( Hooks::APP_INIT_REGISTRATION_CLASS_LIST, $class_list ) );
+		$this->registration->set_classes( $class_list );
 		return $this;
 	}
 
@@ -264,14 +265,14 @@ final class App {
 	}
 
 	/**
-	 * Creates an instance using Dice.
+	 * Gets a value from the internal App_Config
 	 *
 	 * @param string $key The config key to call
-	 * @param array<int, mixed> $child Additional params passed.
+	 * @param ...string $child Additional params passed.
 	 * @return mixed
 	 * @throws App_Initialization_Exception Code 4
 	 */
-	public static function config( string $key, ...$child ) {
+	public static function config( string $key, string ...$child ) {
 		if ( self::$booted === false ) {
 			throw App_Initialization_Exception::app_not_initialized( App_Config::class );
 		}
@@ -282,6 +283,7 @@ final class App {
 	 * Returns the View helper, populated with current Renderable engine.
 	 *
 	 * @return View|null
+	 * @throws App_Initialization_Exception Code 4
 	 */
 	public static function view(): ?View {
 		if ( self::$booted === false ) {
