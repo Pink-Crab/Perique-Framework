@@ -102,7 +102,7 @@ class PinkCrab_Dice implements DI_Container {
 	 * @param array<string, string|object|array> $rule
 	 * @return PinkCrab_Dice
 	 */
-	public function addRule( string $name, array $rule ) { // phpcs:disable WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
+	public function addRule( string $name, array $rule ): DI_Container { // phpcs:disable WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
 		$this->dice = $this->dice->addRule( $name, $rule );
 		return $this;
 	}
@@ -113,7 +113,7 @@ class PinkCrab_Dice implements DI_Container {
 	 * @param array<string, array> $rules
 	 * @return PinkCrab_Dice
 	 */
-	public function addRules( array $rules ) { // phpcs:disable WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
+	public function addRules( array $rules ): DI_Container { // phpcs:disable WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
 		$this->dice = $this->dice->addRules( apply_filters( Hooks::APP_INIT_SET_DI_RULES, $rules ) );
 		return $this;
 	}

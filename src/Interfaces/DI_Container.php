@@ -36,7 +36,7 @@ interface DI_Container extends ContainerInterface {
 	 * @param array<string, array> $rule
 	 * @return DI_Container
 	 */
-	public function addRule( string $name, array $rule );
+	public function addRule( string $name, array $rule ): DI_Container;
 
 	/**
 	 * Add multiple rules
@@ -44,7 +44,7 @@ interface DI_Container extends ContainerInterface {
 	 * @param array<string, array> $rules
 	 * @return DI_Container
 	 */
-	public function addRules( array $rules );
+	public function addRules( array $rules ): DI_Container;
 
 	/**
 	 * Create an instance of a class, with optional parameters.
