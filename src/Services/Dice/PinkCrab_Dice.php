@@ -100,9 +100,9 @@ class PinkCrab_Dice implements DI_Container {
 	 *
 	 * @param string $name
 	 * @param array<string, string|object|array> $rule
-	 * @return self
+	 * @return PinkCrab_Dice
 	 */
-	public function addRule( string $name, array $rule ): self { // phpcs:disable WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
+	public function addRule( string $name, array $rule ) { // phpcs:disable WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
 		$this->dice = $this->dice->addRule( $name, $rule );
 		return $this;
 	}
@@ -111,9 +111,9 @@ class PinkCrab_Dice implements DI_Container {
 	 * Proxy for addRules
 	 *
 	 * @param array<string, array> $rules
-	 * @return self
+	 * @return PinkCrab_Dice
 	 */
-	public function addRules( array $rules ): self { // phpcs:disable WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
+	public function addRules( array $rules ) { // phpcs:disable WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
 		$this->dice = $this->dice->addRules( apply_filters( Hooks::APP_INIT_SET_DI_RULES, $rules ) );
 		return $this;
 	}
