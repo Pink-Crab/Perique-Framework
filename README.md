@@ -58,10 +58,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 $app = ( new App_Factory )->with_wp_dice( true );
 
 // Set rules and configure DI Container
-$app->container_config(function(DI_Container $container): void {
-	// Pass an array of rules
-	$container->addRules(include __DIR__ . '/config/dependencies.php');
-});
+$app->di_rules(include __DIR__ . '/config/dependencies.php');
 
 // Pass settings for App_Config
 $app->app_config( include __DIR__ . '/config/settings.php' )
