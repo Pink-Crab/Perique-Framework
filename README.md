@@ -2,7 +2,7 @@
 
 Welcome the main package of the PinkCrab Framwework. 
 
-![alt text](https://img.shields.io/badge/Current_Version-0.4.0-yellow.svg?style=flat " ") 
+![alt text](https://img.shields.io/badge/Current_Version-0.4.1-yellow.svg?style=flat " ") 
 [![Open Source Love](https://badges.frapsoft.com/os/mit/mit.svg?v=102)]()
 ![](https://github.com/Pink-Crab/Framework__core/workflows/GitHub_CI/badge.svg " ")
 [![codecov](https://codecov.io/gh/Pink-Crab/Framework__core/branch/master/graph/badge.svg?token=VW566UL1J6)](https://codecov.io/gh/Pink-Crab/Framework__core)
@@ -12,7 +12,7 @@ For more details please visit our docs.
 https://app.gitbook.com/@glynn-quelch/s/pinkcrab/
 
 
-## Version 0.4.0 ##
+## Version 0.4.1 ##
 
 
 ## Why? ##
@@ -174,10 +174,12 @@ At the heart of the Application is the registration process. Classes can be stac
 
 ### Registerable ###
 
-Included in this framework is a single peice of Registration_Middleware. The Renderable interface and Renderable_Middleware pair make it easy to register any hooks, shortcodes, post types, taxonomies, admin pages, rest endpoints. Any class which needs to be processed, implements the Renderable interface and creates the ```function register(Loader $loader): void {...}```
+> As of 0.4.1 The Hook_Loader package has been updated to use a new internal structure. You can still use the old Loader class name, but ultimately will move to using Hook_Loader. For now Loader is just an alias of Hook_Loader
+
+Included in this framework is a single peice of Registration_Middleware. The Renderable interface and Renderable_Middleware pair make it easy to register any hooks, shortcodes, post types, taxonomies, admin pages, rest endpoints. Any class which needs to be processed, implements the Renderable interface and creates the ```function register(Hook_Hook_Loader $loader): void {...}```
 ```php
 class Some_Controller implements Registerable {
-	public function register(Loader $loader): void{
+	public function register(Hook_Hook_Loader $loader): void{
 		$loader->admin_action('some_action', [$this, 'some_action']);
 	}
 	public function some_action($some_arg): void {...}
@@ -285,7 +287,7 @@ This is primarily used internally to make last minute changes to how the boot pr
 <?php
 add_action( 
 	Hooks::APP_INIT_PRE_BOOT, 
-	function( App_Config $app_config, Loader $loader, DI_Container $container ): void {
+	function( App_Config $app_config, Hook_Loader $loader, DI_Container $container ): void {
 		// do something cool
 	}
 );
@@ -299,7 +301,7 @@ During the boot processes, all classes passed for registration are processed on 
 <?php
 add_action( 
 	Hooks::APP_INIT_PRE_REGISTRATION, 
-	function( App_Config $app_config, Loader $loader, DI_Container $container ): void {
+	function( App_Config $app_config, Hook_Loader $loader, DI_Container $container ): void {
 		$some_controller = $container->create(Some_Other\Namespace\Some_Controller::class);
 		$some_controller->load_hooks($loader);
 	}
@@ -313,7 +315,7 @@ After all the registation process has completed, this hook is fired. This allows
 <?php
 add_action( 
 	Hooks::APP_INIT_POST_REGISTRATION, 
-	function( App_Config $app_config, Loader $loader, DI_Container $container ): void {
+	function( App_Config $app_config, Hook_Loader $loader, DI_Container $container ): void {
 		if( ! has_action('some_action') ){
 			// Do something due to action not being added.
 		}
@@ -395,6 +397,7 @@ $collection->each(function($e){
 http://www.opensource.org/licenses/mit-license.html  
 
 ## Change Log ##
+* 0.4.1 - Updated tests to reflect the new Hook_Loader's internal structure (accessing protected state for tests)
 * 0.4.0 - Introduced new app, with app factory to help with cleaner initalisation. Reintroduced Registation_Middleware which was removed in 0.2.0. Moved the registerables into a default piece of middleware which is automatically added at boot. Added a series of actions around the init callback which runs the registation process.
 * 0.3.9 - Moved Loader into its own library, all tests and use statements updated.
 * 0.3.8 - Added in missing Hook_Removal & Loader tests.
