@@ -42,8 +42,9 @@ class Test_Registerable_Middleware extends WP_UnitTestCase {
 		$registerable->process( new Sample_Class() );
 
 		// Should only be the Registerable_Mock hook added.
-		$hooks = Objects::get_property( $loader, 'global' );
+		$hooks = Objects::get_property( $loader, 'hooks' );
 		$this->assertCount( 1, $hooks );
-		$this->assertEquals( 'Registerable_Mock', $hooks->pop()['handle'] );
+
+		$this->assertEquals( 'Registerable_Mock', $hooks->pop()->get_handle() );
 	}
 }
