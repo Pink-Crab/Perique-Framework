@@ -6,7 +6,8 @@ Welcome the main package of the PinkCrab Framwework.
 [![Open Source Love](https://badges.frapsoft.com/os/mit/mit.svg?v=102)]()
 ![](https://github.com/Pink-Crab/Framework__core/workflows/GitHub_CI/badge.svg " ")
 [![codecov](https://codecov.io/gh/Pink-Crab/Framework__core/branch/master/graph/badge.svg?token=VW566UL1J6)](https://codecov.io/gh/Pink-Crab/Framework__core)
-
+[![Code Coverage](https://scrutinizer-ci.com/g/Pink-Crab/Plugin-Framework/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Pink-Crab/Plugin-Framework/?branch=master)
+[![Code Intelligence Status](https://scrutinizer-ci.com/g/Pink-Crab/Plugin-Framework/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
 
 For more details please visit our docs.
 https://app.gitbook.com/@glynn-quelch/s/pinkcrab/
