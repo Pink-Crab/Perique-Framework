@@ -15,6 +15,15 @@ use OutOfBoundsException;
 
 final class App_Config {
 
+	/**@ var string */
+	public const POST_META = 'post';
+
+	/**@ var string */
+	public const TERM_META = 'term';
+
+	/**@ var string */
+	public const USER_META = 'user';
+
 	/**
 	 * Holds the current sites paths & urls
 	 *
@@ -66,6 +75,17 @@ final class App_Config {
 	protected $additional = array();
 
 	/**
+	 * Holds all the meta keys
+	 *
+	 * @var array{post:array<string,string>,user:array<string,string>,term:array<string,string>}
+	 */
+	protected $meta = array(
+		self::POST_META => array(),
+		self::USER_META => array(),
+		self::TERM_META => array(),
+	);
+
+	/**
 	 * @param array<string, mixed> $settings
 	 */
 	public function __construct( array $settings = array() ) {
@@ -99,6 +119,7 @@ final class App_Config {
 
 		$this->set_post_types( $paths['post_types'] );
 		$this->set_taxonomies( $paths['taxonomies'] );
+		$this->set_meta( $paths['meta'] );
 	}
 
 	/**
@@ -207,6 +228,85 @@ final class App_Config {
 		return $meta_key
 			? $this->post_types[ $key ]['meta'][ $meta_key ]
 			: $this->post_types[ $key ]['meta'];
+	}
+
+	/**
+	 * Returns a valid meta key value, for a defined meta type.
+	 *
+	 * @param string $key
+	 * @param string $type defaults to post
+	 * @return string
+	 * @throws OutOfBoundsException
+	 */
+	public function meta( string $key, string $type = self::POST_META ): string {
+		// Check meta type.
+		if ( ! array_key_exists( $type, $this->meta ) ) {
+			throw new OutOfBoundsException( 'Meta Type doesnt exists' );
+		}
+		// Check key.
+		if ( ! array_key_exists( $key, $this->meta[ $type ] ) ) {
+			throw new OutOfBoundsException( $type . ' meta key doesnt exists' );
+		}
+
+		return $this->meta[ $type ][ $key ];
+	}
+
+	/**
+	 * Retruns the post meta key value
+	 * Alias for meta() with type as POST_META
+	 *
+	 * @param string $key
+	 * @return string
+	 */
+	public function post_meta( string $key ): string {
+		return $this->meta( $key, self::POST_META );
+	}
+
+	/**
+	 * Retruns the user meta key value
+	 * Alias for meta() with type as USER_META
+	 *
+	 * @param string $key
+	 * @return string
+	 */
+	public function user_meta( string $key ): string {
+		return $this->meta( $key, self::USER_META );
+	}
+
+	/**
+	 * Retruns the tern meta key value
+	 * Alias for meta() with type as TERM_META
+	 *
+	 * @param string $key
+	 * @return string
+	 */
+	public function term_meta( string $key ): string {
+		return $this->meta( $key, self::TERM_META );
+	}
+
+	/**
+	 * Sets the meta data
+	 *
+	 * @param array<string, array<string,string>> $meta
+	 * @return void
+	 */
+	public function set_meta( array $meta ): void {
+		$valid_meta_types = array( self::POST_META, self::USER_META, self::TERM_META );
+		foreach ( $meta as $meta_type => $pairs ) {
+			if ( ! in_array( $meta_type, $valid_meta_types, true ) ) {
+				throw new OutOfBoundsException( 'Valid meta type must be used as key.' );
+			}
+
+			// Set all pairs which have both valid key and values.
+			$this->meta[ $meta_type ] = array_filter(
+				$pairs,
+				function( $value, $key ): bool {
+					return is_string( $value ) && \mb_strlen( $value ) > 0
+					&& is_string( $key ) && \mb_strlen( $key ) > 0;
+				},
+				ARRAY_FILTER_USE_BOTH
+			);
+		}
 	}
 
 	/**
@@ -338,13 +438,17 @@ final class App_Config {
 			),
 			'post_types' => array(),
 			'taxonomies' => array(),
+			'meta'       => array(
+				self::POST_META => array(),
+				self::USER_META => array(),
+				self::TERM_META => array(),
+			),
 			'db_tables'  => array(),
 			'namespaces' => array(
 				'rest'  => 'pinkcrab',
 				'cache' => 'pc_cache',
 			),
 			'additional' => array(),
-
 		);
 	}
 }
