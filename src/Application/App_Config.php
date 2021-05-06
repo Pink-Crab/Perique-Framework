@@ -106,20 +106,20 @@ final class App_Config {
 	/**
 	 * Maps the supplied settings array to inner states.
 	 *
-	 * @param array<string, mixed> $paths
+	 * @param array<string, mixed> $settings
 	 * @return void
 	 */
-	private function set_props( array $paths ): void {
-		$this->paths['url']  = $paths['url'];
-		$this->paths['path'] = $paths['path'];
-		$this->namespaces    = $paths['namespaces'];
-		$this->plugin        = $paths['plugin'];
-		$this->additional    = $paths['additional'];
-		$this->db_tables     = $paths['db_tables'];
+	private function set_props( array $settings ): void {
+		$this->paths['url']  = $settings['url'];
+		$this->paths['path'] = $settings['path'];
+		$this->namespaces    = $this->filter_key_value_pair( $settings['namespaces'] );
+		$this->plugin        = $settings['plugin'];
+		$this->additional    = $settings['additional'];
+		$this->db_tables     = $this->filter_key_value_pair( $settings['db_tables'] );
+		$this->post_types    = $this->filter_key_value_pair( $settings['post_types'] );
+		$this->taxonomies    = $this->filter_key_value_pair( $settings['taxonomies'] );
 
-		$this->set_post_types( $paths['post_types'] );
-		$this->set_taxonomies( $paths['taxonomies'] );
-		$this->set_meta( $paths['meta'] );
+		$this->set_meta( $settings['meta'] );
 	}
 
 	/**
@@ -209,25 +209,15 @@ final class App_Config {
 	 * Returns the key for a post type.
 	 *
 	 * @param string $key
-	 * @return string|array<string, mixed>
+	 * @return string
 	 * @throws OutOfBoundsException
 	 */
-	public function post_types( string $key, string $field = 'slug', ?string $meta_key = null ) {
+	public function post_types( string $key ) {
 		if ( ! array_key_exists( $key, $this->post_types ) ) {
-			throw new OutOfBoundsException( 'Post Type doesnt exists' );
+			throw new OutOfBoundsException( 'Post Type not defined.' );
 		}
 
-		if ( $field === 'slug' ) {
-			return $this->post_types[ $key ]['slug'];
-		}
-
-		if ( $meta_key && ! array_key_exists( $meta_key, $this->post_types[ $key ]['meta'] ) ) {
-			throw new OutOfBoundsException( sprintf( 'Meta key doesnt exist for the %s post type in config', $key ) );
-		}
-
-		return $meta_key
-			? $this->post_types[ $key ]['meta'][ $meta_key ]
-			: $this->post_types[ $key ]['meta'];
+		return $this->post_types[ $key ];
 	}
 
 	/**
@@ -298,91 +288,25 @@ final class App_Config {
 			}
 
 			// Set all pairs which have both valid key and values.
-			$this->meta[ $meta_type ] = array_filter(
-				$pairs,
-				function( $value, $key ): bool {
-					return is_string( $value ) && \mb_strlen( $value ) > 0
-					&& is_string( $key ) && \mb_strlen( $key ) > 0;
-				},
-				ARRAY_FILTER_USE_BOTH
-			);
+			$this->meta[ $meta_type ] = $this->filter_key_value_pair( $pairs );
 		}
 	}
 
 	/**
-	 * Set the defined post types.
-	 * Ensures all have valid slug and meta array.
-	 *
-	 * @param array<string, mixed> $post_types
-	 * @return void
-	 */
-	protected function set_post_types( array $post_types ): void {
-		foreach ( $post_types as $label => $post_type ) {
-			// Check we have a slug.
-			if ( empty( $post_type['slug'] ) ) {
-				throw new OutOfBoundsException( 'Post Types must have a defined slug. ' . \wp_json_encode( $post_type, \JSON_PRETTY_PRINT ) );
-			}
-			// Check we have a meta array, even if empty.
-			if ( ! array_key_exists( 'meta', $post_type ) || ! is_array( $post_type['meta'] ) ) {
-				throw new OutOfBoundsException( 'Post Types must have a defined meta array, even if empty. ' . \wp_json_encode( $post_type, \JSON_PRETTY_PRINT ) );
-			}
-
-			$this->post_types[ $label ] = array(
-				'slug' => $post_type['slug'],
-				'meta' => $post_type['meta'],
-			);
-		}
-	}
-
-	/**
-	 * Returns the key for a post type.
+	 * Returns the key for a taxonomy.
 	 *
 	 * @param string $key
-	 * @return string|array<string, mixed>
+	 * @return string
 	 * @throws OutOfBoundsException
 	 */
-	public function taxonomies( string $key, string $field = 'slug', ?string $term_key = null ) {
+	public function taxonomies( string $key ): string {
 		if ( ! array_key_exists( $key, $this->taxonomies ) ) {
-			throw new OutOfBoundsException( 'Taxonomy doesnt exists' );
+			throw new OutOfBoundsException( 'Taxonomy not defined.' );
 		}
 
-		if ( $field === 'slug' ) {
-			return $this->taxonomies[ $key ]['slug'];
-		}
-
-		if ( $term_key && ! array_key_exists( $term_key, $this->taxonomies[ $key ]['term'] ) ) {
-			throw new OutOfBoundsException( sprintf( 'Term key doesnt exist for the %s taxonomy in config', $key ) );
-		}
-
-		return $term_key
-			? $this->taxonomies[ $key ]['term'][ $term_key ]
-			: $this->taxonomies[ $key ]['term'];
+		return $this->taxonomies[ $key ];
 	}
 
-	/**
-	 * Set the definedtaxonomies.
-	 * Ensures all have valid slug and term array.
-	 *
-	 * @param array<string, mixed> $taxonomies
-	 * @return void
-	 */
-	protected function set_taxonomies( array $taxonomies ): void {
-		foreach ( $taxonomies as $label => $taxonomy ) {
-			// Check we have a slug.
-			if ( empty( $taxonomy['slug'] ) ) {
-				throw new OutOfBoundsException( 'Taxonomies must have a defined slug. ' . \wp_json_encode( $taxonomy, \JSON_PRETTY_PRINT ) );
-			}
-			// Check we have a meta array, even if empty.
-			if ( ! array_key_exists( 'term', $taxonomy ) || ! is_array( $taxonomy['term'] ) ) {
-				throw new OutOfBoundsException( 'Taxonomies must have a defined term array, even if empty. ' . \wp_json_encode( $taxonomy, \JSON_PRETTY_PRINT ) );
-			}
-
-			$this->taxonomies[ $label ] = array(
-				'slug' => $taxonomy['slug'],
-				'term' => $taxonomy['term'],
-			);
-		}
-	}
 
 	/**
 	 * Returns a table name based on its key.
@@ -449,6 +373,25 @@ final class App_Config {
 				'cache' => 'pc_cache',
 			),
 			'additional' => array(),
+		);
+	}
+
+	/**
+	 * Filters an array to ensure key and value are both valid strings.
+	 *
+	 * @param array<int|string, mixed> $pairs
+	 * @return array<string, string>
+	 */
+	private function filter_key_value_pair( array $pairs ): array {
+		/** @var array<string, string> (as per filter function)*/
+		return array_filter(
+			$pairs,
+			function( $value, $key ): bool {
+				return is_string( $value )
+				&& \mb_strlen( $value ) > 0
+				&& is_string( $key );
+			},
+			ARRAY_FILTER_USE_BOTH
 		);
 	}
 }

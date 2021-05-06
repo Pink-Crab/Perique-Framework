@@ -42,37 +42,13 @@ class Test_App_Config extends WP_UnitTestCase {
 			'string' => 'HI',
 		),
 		'namespaces' => array( 'rest' => 'fake_rest' ),
-		'post_types' => array(
-			'my_cpt' => array(
-				// Allows expressions for values.
-				'slug' => 'my_slug',
-				'meta' => array(
-					'meta_1' => 'value_1',
-				),
-			),
-		),
-		'taxonomies' => array(
-			'tax' => array(
-				// Allows expressions for values.
-				'slug' => 'my_slug',
-				'term' => array(
-					'term_1' => 'value_1',
-				),
-			),
-		),
-		'db_tables'  => array(
-			'db' => 'db_table',
-		),
+		'post_types' => array( 'my_cpt' => 'my_slug' ),
+		'taxonomies' => array( 'tax' => 'my_slug' ),
+		'db_tables'  => array( 'db' => 'db_table' ),
 		'meta'       => array(
-			App_Config::POST_META => array(
-				'post_meta_1' => 'One Post',
-			),
-			App_Config::USER_META => array(
-				'user_meta_1' => 'One User',
-			),
-			App_Config::TERM_META => array(
-				'term_meta_1' => 'One Term',
-			),
+			'post' => array( 'post_meta_1' => 'One Post' ),
+			'user' => array( 'user_meta_1' => 'One User' ),
+			'term' => array( 'term_meta_1' => 'One Term' ),
 		),
 	);
 
@@ -200,66 +176,30 @@ class Test_App_Config extends WP_UnitTestCase {
 	 *                                 POST TYPES
 	 */
 
-	// /**
-	//  * Check excception thrown with unset key.
-	//  *
-	//  * @return void
-	//  */
-	// public function test_exception_throw_for_unset_posttype_key(): void {
-	// 	$this->expectException( OutOfBoundsException::class );
-	// 	$app_config = new App_Config( self::SAMPLE_SETTINGS );
-	// 	$app_config->post_types( 'invalid' );
-	// }
 
-	// /**
-	//  * Check excception thrown with unset meta_key.
-	//  *
-	//  * @return void
-	//  */
-	// public function test_exception_throw_for_unset_posttype_meta_key(): void {
-	// 	$this->expectException( OutOfBoundsException::class );
-	// 	$app_config = new App_Config( self::SAMPLE_SETTINGS );
-	// 	$app_config->post_types( 'my_cpt', 'meta', 'invalid' );
-	// }
+	/** @testdox Attempting to get the post type key for a post type not defined, an error should be thrown. */
+	public function test_exception_throw_for_unset_posttype(): void {
+		$this->expectException( OutOfBoundsException::class );
+		$app_config = new App_Config( self::SAMPLE_SETTINGS );
+		$app_config->post_types( 'invalid' );
+	}
 
-	// /**
-	//  * Test reutns slug.
-	//  *
-	//  * @return void
-	//  */
-	// public function test_can_get_slug_if_filed_set(): void {
-	// 	$app_config = new App_Config( self::SAMPLE_SETTINGS );
-	// 	$this->assertEquals( 'my_slug', $app_config->post_types( 'my_cpt', 'slug' ) );
-	// }
+	/** @testdox It should be possible to get post type slug from a valid key. */
+	public function test_can_get_slug_if_filed_set(): void {
+		$app_config = new App_Config( self::SAMPLE_SETTINGS );
+		$this->assertEquals( 'my_slug', $app_config->post_types( 'my_cpt' ) );
+	}
 
-	// /**
-	//  * Test you can return all or a single meta key.
-	//  *
-	//  * @return void
-	//  */
-	// public function test_returns_meta_values(): void {
-	// 	$app_config = new App_Config( self::SAMPLE_SETTINGS );
-	// 	$this->assertIsArray( $app_config->post_types( 'my_cpt', 'meta' ) );
-	// 	$this->assertEquals( 'value_1', $app_config->post_types( 'my_cpt', 'meta', 'meta_1' ) );
-	// }
-
-	// /**
-	//  * Test throws exception for missing cpt slug.
-	//  *
-	//  * @return void
-	//  */
-	// public function test_throws_exception_when_postype_without_slug_set(): void {
-	// 	$this->expectException( OutOfBoundsException::class );
-	// 	$app_config = new App_Config(
-	// 		array(
-	// 			'post_types' => array(
-	// 				'cpt' => array(
-	// 					'_slug' => 'failue',
-	// 				),
-	// 			),
-	// 		)
-	// 	);
-	// }
+	/** @testdox When setting post types any key or value which isnt a valid string (string and not empty) will not be set. */
+	public function test_filters_post_type_with_none_string_key_value_pairs(): void {
+		$this->expectException( OutOfBoundsException::class );
+		$app_config = new App_Config(
+			array(
+				'post_types' => array( 'inv_cpt' => false ),
+			)
+		);
+		$app_config->post_types( 'inv_cpt' );
+	}
 
 
 
@@ -267,84 +207,18 @@ class Test_App_Config extends WP_UnitTestCase {
 	 *                                 TAXONMIES
 	 */
 
-	/**
-	 * Check excception thrown with unset key.
-	 *
-	 * @return void
-	 */
+
+	/** @testdox Attempting to get the taxonomuy slug/key for a taxonomy not defined, an error should be thrown. */
 	public function test_exception_throw_for_unset_taxonomy_key(): void {
 		$this->expectException( OutOfBoundsException::class );
 		$app_config = new App_Config( self::SAMPLE_SETTINGS );
 		$app_config->taxonomies( 'invalid' );
 	}
 
-	/**
-	 * Check excception thrown with unset term_key.
-	 *
-	 * @return void
-	 */
-	public function test_exception_throw_for_unset_taxonomy_term_key(): void {
-		$this->expectException( OutOfBoundsException::class );
+	/** @testdox It should be possible to get taxonomy slug from a valid key. */
+	public function test_can_get_taxonomy_slug(): void {
 		$app_config = new App_Config( self::SAMPLE_SETTINGS );
-		$app_config->taxonomies( 'tax', 'term', 'invalid' );
-	}
-
-	/**
-	 * Test reutns slug.
-	 *
-	 * @return void
-	 */
-	public function test_can_get_slug_if_filed_taxonomy_set(): void {
-		$app_config = new App_Config( self::SAMPLE_SETTINGS );
-		$this->assertEquals( 'my_slug', $app_config->taxonomies( 'tax', 'slug' ) );
-	}
-
-	/**
-	 * Test you can return all or a single meta key.
-	 *
-	 * @return void
-	 */
-	public function test_returns_taxonomy_term_values(): void {
-		$app_config = new App_Config( self::SAMPLE_SETTINGS );
-		$this->assertIsArray( $app_config->taxonomies( 'tax', 'term' ) );
-		$this->assertEquals( 'value_1', $app_config->taxonomies( 'tax', 'term', 'term_1' ) );
-	}
-
-	/**
-	 * Test throws exception for missing cpt slug.
-	 *
-	 * @return void
-	 */
-	public function test_throws_exception_when_taxonomy_without_slug_set(): void {
-		$this->expectException( OutOfBoundsException::class );
-		$app_config = new App_Config(
-			array(
-				'taxonomies' => array(
-					'cpt' => array(
-						'_slug' => 'failue',
-					),
-				),
-			)
-		);
-	}
-
-	/**
-	 * Test throws exception for missing cpt meta.
-	 *
-	 * @return void
-	 */
-	public function test_throws_exception_when_taxonomy_without_meta_set(): void {
-		$this->expectException( OutOfBoundsException::class );
-		$app_config = new App_Config(
-			array(
-				'taxonomies' => array(
-					'cpt' => array(
-						'slug'  => 'my_cpt',
-						'_meta' => 'failue',
-					),
-				),
-			)
-		);
+		$this->assertEquals( 'my_slug', $app_config->taxonomies( 'tax' ) );
 	}
 
 
@@ -381,9 +255,9 @@ class Test_App_Config extends WP_UnitTestCase {
 	/** @testdox It should be possible to get a meta key value based on its own key and the type. */
 	public function test_can_get_meta_with_type():void {
 		$app_config = new App_Config( self::SAMPLE_SETTINGS );
-		$this->assertEquals( 'One Post', $app_config->meta( 'post_meta_1', App_Config::POST_META ) );
-		$this->assertEquals( 'One User', $app_config->meta( 'user_meta_1', App_Config::USER_META ) );
-		$this->assertEquals( 'One Term', $app_config->meta( 'term_meta_1', App_Config::TERM_META ) );
+		$this->assertEquals( 'One Post', $app_config->meta( 'post_meta_1', 'post' ) );
+		$this->assertEquals( 'One User', $app_config->meta( 'user_meta_1', 'user' ) );
+		$this->assertEquals( 'One Term', $app_config->meta( 'term_meta_1', 'term' ) );
 	}
 
 	/** @testdox It should be possible to get a post meta key, from its own key value. */
