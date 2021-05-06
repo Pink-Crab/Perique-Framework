@@ -1,7 +1,7 @@
 {
-    "name": "pinkcrab/plugin-framework",
+    "name": "pinkcrab/perqiue-core",
     "type": "library",
-    "description": "The core component of the PinkCrab plugin framework",
+    "description": "The core package of the PinkCrab Perique framework.",
     "keywords": [],
     "homepage": "https://pinkcrab.co.uk",
     "license": "MIT",
