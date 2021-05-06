@@ -158,7 +158,7 @@ class Collection implements Countable {
 	 * @return self
 	 */
 	public function push( ...$data ): self {
-		foreach ( $data as $value ) {
+		foreach ( $this->map_construct( $data ) as $value ) {
 			$this->data[] = $value;
 		}
 		return $this;
@@ -197,7 +197,7 @@ class Collection implements Countable {
 	 * @return self
 	 */
 	public function unshift( ...$items ): self {
-		foreach ( $items as $value ) {
+		foreach ( $this->map_construct( $items ) as $value ) {
 			array_unshift( $this->data, $value );
 		}
 		return $this;
