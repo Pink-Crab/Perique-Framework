@@ -101,19 +101,29 @@ class Registration_Service {
 	 * @return void
 	 */
 	public function process(): void {
+
 		// Filter all classes, before processing.
 		$class_list = apply_filters( Hooks::APP_INIT_REGISTRATION_CLASS_LIST, $this->class_list );
 
 		foreach ( $this->middleware as $middleware ) {
+
+			// Run middleware setup
+			$middleware->setup();
+
 			// Pass each class to the middleware.
 			foreach ( $class_list as $class ) {
+
 				// Construct class using container,
-				//if valid object process via current middleware
 				$class_instance = $this->di_container->create( $class );
+
+				// if valid object process via current middleware
 				if ( is_object( $class_instance ) ) {
 					$middleware->process( $class_instance );
 				}
 			}
+
+			// Run middleware setup
+			$middleware->tear_down();
 		}
 	}
 
