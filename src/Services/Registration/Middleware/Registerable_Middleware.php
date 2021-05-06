@@ -53,4 +53,18 @@ class Registerable_Middleware implements Registration_Middleware {
 		}
 		return $class;
 	}
+
+	/**
+	 * Used to for any middleware setup before process is called
+	 *
+	 * @return void
+	 */
+	public function setup(): void {}
+
+	/**
+	 * Used after all classes have been passed through process.
+	 *
+	 * @return void
+	 */
+	public function tear_down(): void {}
 }
