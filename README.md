@@ -28,8 +28,6 @@ The Core only provides access to the Loader, Registration, Collection, DI (DICE 
 $ composer require pinkcrab/plugin-framework 
 ```
 
-*new setup for v0.4.0 and above*
-
 First you will need to create your composer.json and plugin.php file. 
 
 ### plugin.php ###
