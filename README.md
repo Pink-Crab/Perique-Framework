@@ -2,7 +2,7 @@
 
 Welcome the main package of the PinkCrab Framwework. 
 
-![alt text](https://img.shields.io/badge/Current_Version-0.4.1-yellow.svg?style=flat " ") 
+![alt text](https://img.shields.io/badge/Current_Version-0.5.0beta-yellow.svg?style=flat " ") 
 [![Open Source Love](https://badges.frapsoft.com/os/mit/mit.svg?v=102)]()
 ![](https://github.com/Pink-Crab/Framework__core/workflows/GitHub_CI/badge.svg " ")
 [![codecov](https://codecov.io/gh/Pink-Crab/Framework__core/branch/master/graph/badge.svg?token=VW566UL1J6)](https://codecov.io/gh/Pink-Crab/Framework__core)
@@ -12,7 +12,7 @@ For more details please visit our docs.
 https://app.gitbook.com/@glynn-quelch/s/pinkcrab/
 
 
-## Version 0.4.1 ##
+## Version 0.5.0beta ##
 
 
 ## Why? ##
@@ -394,6 +394,7 @@ $collection->each(function($e){
 http://www.opensource.org/licenses/mit-license.html  
 
 ## Change Log ##
+* 0.5.0 - Updates to App_Config (creation of meta sub section and move to simple key/value pairs for post type and taxonmies)
 * 0.4.1 - Updated tests to reflect the new Hook_Loader's internal structure (accessing protected state for tests)
 * 0.4.0 - Introduced new app, with app factory to help with cleaner initalisation. Reintroduced Registation_Middleware which was removed in 0.2.0. Moved the registerables into a default piece of middleware which is automatically added at boot. Added a series of actions around the init callback which runs the registation process.
 * 0.3.9 - Moved Loader into its own library, all tests and use statements updated.
