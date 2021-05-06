@@ -24,7 +24,7 @@ The Core only provides access to the Loader, Registration, Collection, DI (DICE 
 
 ## What is Perique ##
 
-Perique is rare form of pipe tobacco produced in the St Jame Parish of Louisiana. This historic tobacco has been produced in the region for centuries and sees tobaccos taken, packed into a barrels under pressure and left to fermemnt for over 12 months. The resulting tobacco has a strong and pungent quality, which is often used to enhance a tobaccos flavour, nicotine content and aroma in small qualities. Something we strived to produce in this framework, while its there holding everything together, it should be only a small part of the whole.
+Perique is rare form of pipe tobacco produced in the St James Parish of Louisiana. This historic tobacco has been produced in the region for centuries and sees tobaccos taken, packed into a barrels under pressure and left to fermemnt for over 12 months. The resulting tobacco has a strong and pungent quality, which is used to heavily enhance a tobaccos flavour, nicotine content and aroma with only a small quantity used. Something we strived to produce in this framework, a small amount of existing code that can be used to enhance any codebase to be big, bold and striking.
 
 ## Setup ##
 
