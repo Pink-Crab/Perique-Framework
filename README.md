@@ -67,7 +67,7 @@ $app->app_config( include __DIR__ . '/config/settings.php' )
 $app->registration_classses(include __DIR__ . '/config/registration.php' );
 
 // Add custom Regisration Middleware
-$app->registration_middleware(new Rest_Route_Registration_Middleware('my_base/route'));
+$app->registration_middleware(new Eaxmple_Rest_Route_Registration_Middleware('my_base/route'));
 
 // Then can just boot the application.
 $app->boot();
