@@ -1,6 +1,6 @@
-# PinkCrab Framework Core #
+# PinkCrab **Perique** Plugin Framework #
 
-Welcome the main package of the PinkCrab Framwework. 
+Welcome to the core package of the PinkCrab **Perique** plugin framework, formally known as just the PinkCrab Plugin Framwework. 
 
 ![alt text](https://img.shields.io/badge/Current_Version-0.4.1-yellow.svg?style=flat " ") 
 [![Open Source Love](https://badges.frapsoft.com/os/mit/mit.svg?v=102)]()
@@ -18,14 +18,18 @@ https://app.gitbook.com/@glynn-quelch/s/pinkcrab/
 ## Why? ##
 WordPress is powerful tool for building a wide range of website, but due to its age and commitment to backwards compatibility. Its often fustrating to work with using more modern tools. 
 
-The PinkCrab Framework allows the creation of Plugins, Themes and MU Libraries for use on more complex websites.
+Perique allows the creation of Plugins, Themes and MU Libraries for use on more complex websites.
 
 The Core only provides access to the Loader, Registration, Collection, DI (DICE Dependency Injection Container), App_Config and basic (native) PHP render engine for view.
+
+## What is Perique ##
+
+Perique is rare form of pipe tobacco produced in the St Jame Parish of Louisiana. This historic tobacco has been produced in the region for centuries and sees tobaccos taken, packed into a barrels under pressure and left to fermemnt for over 12 months. The resulting tobacco has a strong and pungent quality, which is often used to enhance a tobaccos flavour, nicotine content and aroma in small qualities. Something we strived to produce in this framework, while its there holding everything together, it should be only a small part of the whole.
 
 ## Setup ##
 
 ```bash 
-$ composer require pinkcrab/plugin-framework 
+$ composer require pinkcrab/perqiue-core
 ```
 
 *new setup for v0.4.0 and above*
@@ -173,7 +177,7 @@ At the heart of the Application is the registration process. Classes can be stac
 
 > As of 0.4.1 The Hook_Loader package has been updated to use a new internal structure. You can still use the old Loader class name, but ultimately will move to using Hook_Loader. For now Loader is just an alias of Hook_Loader
 
-Included in this framework is a single peice of Registration_Middleware. The Renderable interface and Renderable_Middleware pair make it easy to register any hooks, shortcodes, post types, taxonomies, admin pages, rest endpoints. Any class which needs to be processed, implements the Renderable interface and creates the ```function register(Hook_Hook_Loader $loader): void {...}```
+Included with Perique is a single peice of Registration_Middleware. The Renderable interface and Renderable_Middleware pair make it easy to register any hooks, shortcodes, post types, taxonomies, admin pages, rest endpoints. Any class which needs to be processed, implements the Renderable interface and creates the ```function register(Hook_Hook_Loader $loader): void {...}```
 ```php
 class Some_Controller implements Registerable {
 	public function register(Hook_Hook_Loader $loader): void{
@@ -364,7 +368,7 @@ add_filter(Hooks::APP_INIT_SET_DI_RULES,
 
 ## Collection ##
 
-The framework gives you access to an extendable Collection which can be used in place of arrays throughout your application. Can even be configured to only accept a specific type, making simple generic collections a possibility.
+Perqiue gives you access to an extendable Collection which can be used in place of arrays throughout your application. Can even be configured to only accept a specific type, making simple generic collections a possibility.
 
 ```php 
 <?php
