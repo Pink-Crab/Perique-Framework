@@ -363,7 +363,6 @@ add_filter(Hooks::APP_INIT_SET_DI_RULES,
 	}
 );
 ```
-/app.gitbook.com/@glynn-quelch/s/pinkcrab/)
 
 ## License ##
 
