@@ -1,6 +1,6 @@
 # PinkCrab **Perique** Plugin Framework #
 
-Welcome to the core package of the PinkCrab **Perique** plugin framework, formally known as just the PinkCrab Plugin Framwework. 
+Welcome to the core package of the PinkCrab Plugin Framwework. 
 
 ![alt text](https://img.shields.io/badge/Current_Version-0.5.0beta-yellow.svg?style=flat " ") 
 [![Open Source Love](https://badges.frapsoft.com/os/mit/mit.svg?v=102)]()
@@ -16,15 +16,15 @@ https://app.gitbook.com/@glynn-quelch/s/pinkcrab/
 
 
 ## Why? ##
-WordPress is powerful tool for building a wide range of website, but due to its age and commitment to backwards compatibility. Its often fustrating to work with using more modern tools. 
+WordPress is a powerful tool for building a wide range of websites, but due to its age and commitment to backwards compatibility it's often fustrating to work with using more modern tools.
 
-Perique allows the creation of Plugins, Themes and MU Libraries for use on more complex websites.
+Perique allows the creation of plugins, themes and MU libraries for use on more complex websites.
 
 The Core only provides access to the Loader, Registration, DI (DICE Dependency Injection Container), App_Config and basic (native) PHP render engine for view.
 
-## What is Perique ##
+## What is Perique? ##
 
-Perique is rare form of pipe tobacco produced in the St James Parish of Louisiana. This historic tobacco has been produced in the region for centuries and sees tobaccos taken, packed into a barrels under pressure and left to fermemnt for over 12 months. The resulting tobacco has a strong and pungent quality, which is used to heavily enhance a tobaccos flavour, nicotine content and aroma with only a small quantity used. Something we strived to produce in this framework, a small amount of existing code that can be used to enhance any codebase to be big, bold and striking.
+Perique is rare form of pipe tobacco produced in the St James Parish of Louisiana. This historic tobacco has been produced in the region for centuries and sees tobaccos taken, packed into a barrels under pressure and left to fermemnt for over 12 months. The resulting tobacco has a strong and pungent quality, which is used to heavily enhance a tobaccos flavour, nicotine content and aroma with only a small quantity used. This is something we strived to produce in this framework; a small amount of existing code that can be used to enhance any codebase to be big, bold and striking.
 
 ## Setup ##
 
@@ -71,13 +71,13 @@ $app->registration_classses(include __DIR__ . '/config/registration.php' );
 // Add custom Regisration Middleware
 $app->registration_middleware(new Eaxmple_Rest_Route_Registration_Middleware('my_base/route'));
 
-// Then can just boot the application.
+// Then just boot the application.
 $app->boot();
 
 ````
 ## Config files ##
 
-While you can pass arrays to the container_config(), app_config() and registration_classes(), these can get quite large. So its best to have them returned from 
+While you can pass arrays to the container_config(), app_config() and registration_classes(), these can get quite large. It can help return them from files.
 
 > These files can be placed anywhere, but in the above example and our boilerplates, these 3 files are placed in the /config directory.
 
@@ -125,7 +125,7 @@ return array(
 
 The App holds an internal config class, this can be used as an injectable collection of helper methods in place of defining lots of constants.
 
-Alongside the usual path and url values that are needed frequently. You can also set namesapces (rest, cache), post types (meta and slug), taxonomies (slug & termmeta), database table names and custon values. 
+Alongside the usual path and url values that are needed frequently. You can also set namespaces (rest, cache), post types (meta and slug), taxonomies (slug & term meta), database table names and custom values. 
 ````php
 // @file config/settings.php
 <?php
@@ -164,18 +164,18 @@ return array(g
 	),
 );
 ````
-> For the full set of options can be found in the [docs](https://app.gitbook.com/@glynn-quelch/s/pinkcrab/application/app_config).
+> The full set of options can be found in the [docs](https://app.gitbook.com/@glynn-quelch/s/pinkcrab/application/app_config).
 
 
 ## Registration Service ##
 
-At the heart of the Application is the registration process. Classes can be stacked up and executed at initalisation, this allows for registering into core WP apis, triggering remote api calls and anything else which needs to be setup when all of WP's core is loaded.
+At the heart of the application is the registration process. Classes can be stacked up and executed at initalisation. This allows for registering into core WP APIs, triggering remote API calls and anything else which needs to be set up when all of WP core is loaded.
 
 ### Registerable ###
 
 > As of 0.4.1 The Hook_Loader package has been updated to use a new internal structure. You can still use the old Loader class name, but ultimately will move to using Hook_Loader. For now Loader is just an alias of Hook_Loader
 
-Included with Perique is a single peice of Registration_Middleware. The Renderable interface and Renderable_Middleware pair make it easy to register any hooks, shortcodes, post types, taxonomies, admin pages, rest endpoints. Any class which needs to be processed, implements the Renderable interface and creates the ```function register(Hook_Hook_Loader $loader): void {...}```
+Included with Perique is a single piece of Registration_Middleware. The Renderable interface and Renderable_Middleware pair make it easy to register any hooks, shortcodes, post types, taxonomies, admin pages, and rest endpoints. Any class which needs to be processed, implements the Renderable interface and creates the ```function register(Hook_Hook_Loader $loader): void {...}```
 ```php
 class Some_Controller implements Registerable {
 	public function register(Hook_Hook_Loader $loader): void{
@@ -190,7 +190,7 @@ Now when the init hook is called (priority 1), the some_action hook will be adde
 
 ### Registration Middleware ###
 
-Custom registration processes can be added using Registration_Middleware, you can easily create your own middleware that implements the ```PinkCrab\Core\Interfaces\Registration_Middleware``` interface. This interface consists of a single method ```process(object $class): void``` which is passed each class.
+Custom registration processes can be added using Registration_Middleware. You can easily create your own middleware that implements the ```PinkCrab\Core\Interfaces\Registration_Middleware``` interface. This interface consists of a single method ```process(object $class): void``` which is available to each class.
 
 ```php
 <?php
@@ -228,7 +228,7 @@ $app = ( new App_Factory )->with_wp_dice( true )
 
 ## Static Helpers ##
 
-The App object has a few helper methods, which can be called statically (either from an instance, or from its name). 
+The App object has a few helper methods which can be called statically (either from an instance or from its name). 
 
 ### App::make(string $class, array $args = array()): object ###
 * @param string $class Fully namespaced class name
@@ -236,7 +236,7 @@ The App object has a few helper methods, which can be called statically (either 
 * @return object Object instance
 * @throws App_Initialization_Exception Code 4 If app isnt intialised.
 
-```make()``` can be used to access the Apps DI Container to fully resuolve the depenecies of an object. 
+```make()``` can be used to access the DI Container to fully resolve the dependencies of an object. 
 
 ```php 
 $emailer = App::make(Customer_Emailer::class);
@@ -250,7 +250,7 @@ $emailer->send();
 * @return mixed
 * @throws App_Initialization_Exception Code 4 If app isnt intialised.
 
-Once the app has been booted, you can access the App_Config values by either passing App_Config as a dependency, or by using the Apps helper.
+Once the app has been booted you can access the App_Config values by either passing App_Config as a dependency or by using the Apps helper.
 
 ```php
 
@@ -261,7 +261,7 @@ $args = ['post_type' => App::config('post_types', 'my_cpt')];
 $version = App::config('version');
 ```
 
-> For more details on App_Config and its various usecases, [please checkout the full docs](https://app.gitbook.com/@glynn-quelch/s/pinkcrab/application/app_config).
+> For more details on App_Config and its various use cases, [please checkout the full docs](https://app.gitbook.com/@glynn-quelch/s/pinkcrab/application/app_config).
 
 ### App::view(): View ###
 * @return View
@@ -308,7 +308,7 @@ add_action(
 ```
 ### Hooks::APP_INIT_POST_REGISTRATION ###
 
-After all the registation process has completed, this hook is fired. This allows you to check all has loaded correctly or if anything is missing. You can then fire off notification or diable functionality based on its results. *The internal loader is fired after this, so you can still hook in later hooks before initialisation.*
+After all the registration process has completed, this hook is fired. This allows you to check all has loaded correctly or if anything is missing. You can then fire notifications or disable functionality based on its results. *The internal loader is fired after this, so you can still use later hooks before initialisation.*
 
 ```php
 <?php
@@ -324,7 +324,7 @@ add_action(
 
 ### Hooks::APP_INIT_CONFIG_VALUES ###
 
-When the App_Config class is constructed with all values passed from ```config/settings.php``` this filter is fired during the initial boot process and should only really be used for internal purposes. Sadly due to the timing in which we use this filter, its not really suited for extending the plugin due.
+When the App_Config class is constructed with all values passed from ```config/settings.php``` this filter is fired during the initial boot process and should only really be used for internal purposes. Sadly due to the timing in which we use this filter, its not really suited for extending the plugin.
 
 ```php
 <?php
@@ -337,7 +337,7 @@ add_filter(Hooks::APP_INIT_CONFIG_VALUES,
 ```
 ### Hooks::APP_INIT_REGISTRATION_CLASS_LIST ###
 
-Filters all classes passed to the Registration Service before they are processed. This allows for the hooking in from other plugins.
+Filters all classes passed to the Registration Service before they are processed. This allows for hooking in from other plugins.
 
 ```php
 <?php
