@@ -20,7 +20,7 @@ WordPress is powerful tool for building a wide range of website, but due to its 
 
 Perique allows the creation of Plugins, Themes and MU Libraries for use on more complex websites.
 
-The Core only provides access to the Loader, Registration, Collection, DI (DICE Dependency Injection Container), App_Config and basic (native) PHP render engine for view.
+The Core only provides access to the Loader, Registration, DI (DICE Dependency Injection Container), App_Config and basic (native) PHP render engine for view.
 
 ## What is Perique ##
 
@@ -363,32 +363,7 @@ add_filter(Hooks::APP_INIT_SET_DI_RULES,
 	}
 );
 ```
-
-## Collection ##
-
-Perqiue gives you access to an extendable Collection which can be used in place of arrays throughout your application. Can even be configured to only accept a specific type, making simple generic collections a possibility.
-
-```php 
-<?php
-
-class Post_Collection extends Collection {
-	// Filter out anything not matching.
-	protected function map_construct( array $data ): array {
-		return array_filter(fn($e): bool => is_a($data, \WP_Post::class));
-	}
-}
-
-$posts = Post_Collection::from([$post1, null, $post2, false, WP_Error]);
-var_dump($posts->to_array()); // [$post1, $post2];
-
-$collection->each(function($e){
-	print $e->post_title . PHP_EOL;
-}); 
-// Post Title 1
-// Post Title 2
-```
-
-> For more details on the PinkCrab Collection [please visit the full docs](https://app.gitbook.com/@glynn-quelch/s/pinkcrab/application/base-collection)
+/app.gitbook.com/@glynn-quelch/s/pinkcrab/)
 
 ## License ##
 
@@ -396,7 +371,7 @@ $collection->each(function($e){
 http://www.opensource.org/licenses/mit-license.html  
 
 ## Change Log ##
-* 0.5.0 - Updates to App_Config (creation of meta sub section and move to simple key/value pairs for post type and taxonmies), added setup() and tear_down() methods to the Registration_Middleware interface. Enforced typed collection checks during push, unshift and constuctors
+* 0.5.0 - Updates to App_Config (creation of meta sub section and move to simple key/value pairs for post type and taxonmies), added setup() and tear_down() methods to the Registration_Middleware interface. Removed Collection into its [own repository](https://github.com/Pink-Crab/Collection)
 * 0.4.1 - Updated tests to reflect the new Hook_Loader's internal structure (accessing protected state for tests)
 * 0.4.0 - Introduced new app, with app factory to help with cleaner initalisation. Reintroduced Registation_Middleware which was removed in 0.2.0. Moved the registerables into a default piece of middleware which is automatically added at boot. Added a series of actions around the init callback which runs the registation process.
 * 0.3.9 - Moved Loader into its own library, all tests and use statements updated.
