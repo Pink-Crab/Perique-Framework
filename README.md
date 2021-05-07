@@ -20,7 +20,7 @@ WordPress is a powerful tool for building a wide range of websites, but due to i
 
 Perique allows the creation of plugins, themes and MU libraries for use on more complex websites.
 
-The Core only provides access to the Loader, Registration, DI (DICE Dependency Injection Container), App_Config and basic (native) PHP render engine for view.
+The Core only provides access to the Hook_Loader, Registration, DI (DICE Dependency Injection Container), App_Config and basic (native) PHP render engine for view.
 
 ## What is Perique? ##
 
@@ -173,12 +173,12 @@ At the heart of the application is the registration process. Classes can be stac
 
 ### Registerable ###
 
-> As of 0.4.1 The Hook_Loader package has been updated to use a new internal structure. You can still use the old Loader class name, but ultimately will move to using Hook_Loader. For now Loader is just an alias of Hook_Loader
+> The `Loader::class` loader has been deprecated and replaced with the new `Hook_Loader::class`
 
 Included with Perique is a single piece of Registration_Middleware. The Renderable interface and Renderable_Middleware pair make it easy to register any hooks, shortcodes, post types, taxonomies, admin pages, and rest endpoints. Any class which needs to be processed, implements the Renderable interface and creates the ```function register(Hook_Hook_Loader $loader): void {...}```
 ```php
 class Some_Controller implements Registerable {
-	public function register(Hook_Hook_Loader $loader): void{
+	public function register(Hook_Loader $loader): void{
 		$loader->admin_action('some_action', [$this, 'some_action']);
 	}
 	public function some_action($some_arg): void {...}
@@ -186,7 +186,7 @@ class Some_Controller implements Registerable {
 ```
 Now when the init hook is called (priority 1), the some_action hook will be added. So long as the request comes from wp-admin. 
 
-> For more details on Registerable and the Hook Loader please see the full docs
+> For more details on Registerable and the Hook_Loader please see the full docs
 
 ### Registration Middleware ###
 
@@ -372,6 +372,7 @@ http://www.opensource.org/licenses/mit-license.html
 
 ## Change Log ##
 * 0.5.0  
+  * Moved to the new Hook_Loader type. 
   * Updates to App_Config (creation of meta sub section and move to simple key/value pairs for post type and taxonmies).
   * Added setup() and tear_down() methods to the Registration_Middleware interface. 
   * Moved Collection into its [own repository](https://github.com/Pink-Crab/Collection). 
