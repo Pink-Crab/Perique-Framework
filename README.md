@@ -1,6 +1,6 @@
 # PinkCrab **Perique** Plugin Framework #
 
-Welcome to the core package of the PinkCrab Plugin Framwework. 
+Welcome to the core package of the PinkCrab **Perique** plugin framework, formally known as just the PinkCrab Plugin Framwework. 
 
 ![alt text](https://img.shields.io/badge/Current_Version-0.5.0beta-yellow.svg?style=flat " ") 
 [![Open Source Love](https://badges.frapsoft.com/os/mit/mit.svg?v=102)]()
