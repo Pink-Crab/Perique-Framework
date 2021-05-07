@@ -371,7 +371,11 @@ add_filter(Hooks::APP_INIT_SET_DI_RULES,
 http://www.opensource.org/licenses/mit-license.html  
 
 ## Change Log ##
-* 0.5.0 - Updates to App_Config (creation of meta sub section and move to simple key/value pairs for post type and taxonmies), added setup() and tear_down() methods to the Registration_Middleware interface. Removed Collection into its [own repository](https://github.com/Pink-Crab/Collection)
+* 0.5.0  
+  * Updates to App_Config (creation of meta sub section and move to simple key/value pairs for post type and taxonmies).
+  * Added setup() and tear_down() methods to the Registration_Middleware interface. 
+  * Moved Collection into its [own repository](https://github.com/Pink-Crab/Collection). 
+  * Removed unused service container interface.
 * 0.4.1 - Updated tests to reflect the new Hook_Loader's internal structure (accessing protected state for tests)
 * 0.4.0 - Introduced new app, with app factory to help with cleaner initalisation. Reintroduced Registation_Middleware which was removed in 0.2.0. Moved the registerables into a default piece of middleware which is automatically added at boot. Added a series of actions around the init callback which runs the registation process.
 * 0.3.9 - Moved Loader into its own library, all tests and use statements updated.
