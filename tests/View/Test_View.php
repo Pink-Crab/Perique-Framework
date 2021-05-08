@@ -8,15 +8,15 @@ declare(strict_types=1);
  * @since 0.1.0
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- * @package PinkCrab\Core
+ * @package PinkCrab\Perique
  */
 
-namespace PinkCrab\Core\Tests\View;
+namespace PinkCrab\Perique\Tests\View;
 
 use WP_UnitTestCase;
 use Gin0115\WPUnit_Helpers\Objects;
-use PinkCrab\Core\Services\View\View;
-use PinkCrab\Core\Services\View\PHP_Engine;
+use PinkCrab\Perique\Services\View\View;
+use PinkCrab\Perique\Services\View\PHP_Engine;
 
 class Test_View extends WP_UnitTestCase {
 

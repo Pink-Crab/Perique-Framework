@@ -7,29 +7,29 @@ declare(strict_types=1);
  * @since 0.4.0
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- * @package PinkCrab\Core
+ * @package PinkCrab\Perique
  */
 
-namespace PinkCrab\Core\Tests\Application;
+namespace PinkCrab\Perique\Tests\Application;
 
 use Dice\Dice;
 use Exception;
 use WP_UnitTestCase;
 use PinkCrab\Loader\Hook_Loader;
-use PinkCrab\Core\Application\App;
+use PinkCrab\Perique\Application\App;
 use Gin0115\WPUnit_Helpers\Objects;
-use PinkCrab\Core\Application\Hooks;
-use PinkCrab\Core\Interfaces\Renderable;
-use PinkCrab\Core\Application\App_Config;
-use PinkCrab\Core\Interfaces\DI_Container;
-use PinkCrab\Core\Services\View\PHP_Engine;
-use PinkCrab\Core\Tests\Application\App_Helper_Trait;
-use PinkCrab\Core\Services\Dice\PinkCrab_Dice;
-use PinkCrab\Core\Exceptions\App_Initialization_Exception;
-use PinkCrab\Core\Tests\Fixtures\Mock_Objects\Sample_Class;
-use PinkCrab\Core\Services\Registration\Registration_Service;
-use PinkCrab\Core\Tests\Fixtures\Mock_Objects\Parent_Dependency;
-use PinkCrab\Core\Interfaces\Registration_Middleware;
+use PinkCrab\Perique\Application\Hooks;
+use PinkCrab\Perique\Interfaces\Renderable;
+use PinkCrab\Perique\Application\App_Config;
+use PinkCrab\Perique\Interfaces\DI_Container;
+use PinkCrab\Perique\Services\View\PHP_Engine;
+use PinkCrab\Perique\Tests\Application\App_Helper_Trait;
+use PinkCrab\Perique\Services\Dice\PinkCrab_Dice;
+use PinkCrab\Perique\Exceptions\App_Initialization_Exception;
+use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Sample_Class;
+use PinkCrab\Perique\Services\Registration\Registration_Service;
+use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Parent_Dependency;
+use PinkCrab\Perique\Interfaces\Registration_Middleware;
 
 class Test_App_Functional extends WP_UnitTestCase {
 

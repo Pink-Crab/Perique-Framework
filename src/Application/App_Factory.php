@@ -6,21 +6,21 @@ declare(strict_types=1);
  *
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- * @package PinkCrab\Core
+ * @package PinkCrab\Perique
  * @since 0.4.0
  */
 
-namespace PinkCrab\Core\Application;
+namespace PinkCrab\Perique\Application;
 
 use Dice\Dice;
 use PinkCrab\Loader\Hook_Loader;
-use PinkCrab\Core\Application\App;
-use PinkCrab\Core\Interfaces\Renderable;
-use PinkCrab\Core\Interfaces\DI_Container;
-use PinkCrab\Core\Services\View\PHP_Engine;
-use PinkCrab\Core\Services\Dice\PinkCrab_Dice;
-use PinkCrab\Core\Services\Registration\Registration_Service;
-use PinkCrab\Core\Services\Registration\Middleware\Registerable_Middleware;
+use PinkCrab\Perique\Application\App;
+use PinkCrab\Perique\Interfaces\Renderable;
+use PinkCrab\Perique\Interfaces\DI_Container;
+use PinkCrab\Perique\Services\View\PHP_Engine;
+use PinkCrab\Perique\Services\Dice\PinkCrab_Dice;
+use PinkCrab\Perique\Services\Registration\Registration_Service;
+use PinkCrab\Perique\Services\Registration\Middleware\Registerable_Middleware;
 
 class App_Factory {
 
@@ -128,7 +128,7 @@ class App_Factory {
 	/**
 	 * Returns the populated app.
 	 *
-	 * @return \PinkCrab\Core\Application\App
+	 * @return \PinkCrab\Perique\Application\App
 	 */
 	public function app(): App {
 		return $this->app;
@@ -137,7 +137,7 @@ class App_Factory {
 	/**
 	 * Returns a booted version of the app.
 	 *
-	 * @return \PinkCrab\Core\Application\App
+	 * @return \PinkCrab\Perique\Application\App
 	 */
 	public function boot(): App {
 		// Sets defualt settings if not already set.

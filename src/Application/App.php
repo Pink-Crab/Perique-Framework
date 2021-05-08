@@ -18,21 +18,21 @@ declare(strict_types=1);
  *
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- * @package PinkCrab\Core
+ * @package PinkCrab\Perique
  * @since 0.4.0
  */
 
-namespace PinkCrab\Core\Application;
+namespace PinkCrab\Perique\Application;
 
 use Closure;
 use PinkCrab\Loader\Hook_Loader;
-use PinkCrab\Core\Application\Hooks;
-use PinkCrab\Core\Services\View\View;
-use PinkCrab\Core\Application\App_Config;
-use PinkCrab\Core\Interfaces\DI_Container;
-use PinkCrab\Core\Interfaces\Registration_Middleware;
-use PinkCrab\Core\Exceptions\App_Initialization_Exception;
-use PinkCrab\Core\Services\Registration\Registration_Service;
+use PinkCrab\Perique\Application\Hooks;
+use PinkCrab\Perique\Services\View\View;
+use PinkCrab\Perique\Application\App_Config;
+use PinkCrab\Perique\Interfaces\DI_Container;
+use PinkCrab\Perique\Interfaces\Registration_Middleware;
+use PinkCrab\Perique\Exceptions\App_Initialization_Exception;
+use PinkCrab\Perique\Services\Registration\Registration_Service;
 
 final class App {
 
@@ -84,7 +84,7 @@ final class App {
 	/**
 	 * Sets the DI Constainer.
 	 *
-	 * @param \PinkCrab\Core\Interfaces\DI_Container $container
+	 * @param \PinkCrab\Perique\Interfaces\DI_Container $container
 	 * @return self
 	 * @throws App_Initialization_Exception Code 2
 	 */
@@ -116,7 +116,7 @@ final class App {
 	/**
 	 * Sets the Registration service and loader.
 	 *
-	 * @param \PinkCrab\Core\Services\Registration\Registration_Service $registration
+	 * @param \PinkCrab\Perique\Services\Registration\Registration_Service $registration
 	 * @return self
 	 */
 	public function set_registration_services( Registration_Service $registration ): self {

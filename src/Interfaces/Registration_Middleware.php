@@ -19,11 +19,11 @@ declare(strict_types=1);
  *
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- * @package PinkCrab\Core\Registration
+ * @package PinkCrab\Perique\Registration
  * @since 0.4.0
  */
 
-namespace PinkCrab\Core\Interfaces;
+namespace PinkCrab\Perique\Interfaces;
 
 interface Registration_Middleware {
 

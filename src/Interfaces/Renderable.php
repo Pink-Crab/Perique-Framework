@@ -16,10 +16,10 @@
  *
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- * @package PinkCrab\Core
+ * @package PinkCrab\Perique
  */
 
-namespace PinkCrab\Core\Interfaces;
+namespace PinkCrab\Perique\Interfaces;
 
 interface Renderable {
 

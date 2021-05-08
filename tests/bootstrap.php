@@ -2,12 +2,12 @@
 
 use Dice\Dice;
 use PinkCrab\Loader\Hook_Loader;
-use PinkCrab\Core\Application\App;
-use PinkCrab\Core\Application\Boot;
-use PinkCrab\Core\Services\Dice\WP_Dice;
-use PinkCrab\Core\Application\App_Config;
-use PinkCrab\Core\Services\ServiceContainer\Container;
-use PinkCrab\Core\Services\Registration\Register_Loader;
+use PinkCrab\Perique\Application\App;
+use PinkCrab\Perique\Application\Boot;
+use PinkCrab\Perique\Services\Dice\WP_Dice;
+use PinkCrab\Perique\Application\App_Config;
+use PinkCrab\Perique\Services\ServiceContainer\Container;
+use PinkCrab\Perique\Services\Registration\Register_Loader;
 /**
  * PHPUnit bootstrap file
  */

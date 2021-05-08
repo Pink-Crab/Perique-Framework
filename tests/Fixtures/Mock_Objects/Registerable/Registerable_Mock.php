@@ -8,13 +8,13 @@ declare(strict_types=1);
  * @since 0.2.3
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- * @package PinkCrab\Core
+ * @package PinkCrab\Perique
  */
 
-namespace PinkCrab\Core\Tests\Fixtures\Mock_Objects\Registerable;
+namespace PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Registerable;
 
 use PinkCrab\Loader\Hook_Loader;
-use PinkCrab\Core\Interfaces\Registerable;
+use PinkCrab\Perique\Interfaces\Registerable;
 
 class Registerable_Mock implements Registerable {
 

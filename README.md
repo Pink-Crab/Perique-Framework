@@ -189,12 +189,12 @@ Now when the init hook is called (priority 1), the some_action hook will be adde
 
 ### Registration Middleware ###
 
-Custom registration processes can be added using Registration_Middleware. You can easily create your own middleware that implements the ```PinkCrab\Core\Interfaces\Registration_Middleware``` interface. This interface consists of a single method ```process(object $class): void``` which is available to each class.
+Custom registration processes can be added using Registration_Middleware. You can easily create your own middleware that implements the ```PinkCrab\Perique\Interfaces\Registration_Middleware``` interface. This interface consists of a single method ```process(object $class): void``` which is available to each class.
 
 ```php
 <?php
 
-class Does_Something implements PinkCrab\Core\Interfaces\Registration_Middleware {
+class Does_Something implements PinkCrab\Perique\Interfaces\Registration_Middleware {
 
 	/** @var Some_Service */
 	protected $some_service;
@@ -276,7 +276,7 @@ App::view()->render('signup/form', ['user' => wp_get_current_user(), 'nonce' => 
 
 ## Hooks ##
 
-We have a number of hooks you can use to extend or modify how the app works. All of our internal hooks have pinkcrab/pf/app/ prefix, but we have a class of constants you can use ```PinkCrab\Core\Application\Hooks::APP_INIT_*```
+We have a number of hooks you can use to extend or modify how the app works. All of our internal hooks have pinkcrab/pf/app/ prefix, but we have a class of constants you can use ```PinkCrab\Perique\Application\Hooks::APP_INIT_*```
 
 ### Hooks::APP_INIT_PRE_BOOT ###
 This is primarily used internally to make last minute changes to how the boot process works. Due to the way this hook is used (called when plugin.php is loaded) it should not be used from outside of your own code, as you can be 100% external code will load first.
@@ -369,11 +369,12 @@ add_filter(Hooks::APP_INIT_SET_DI_RULES,
 http://www.opensource.org/licenses/mit-license.html  
 
 ## Change Log ##
+* 0.5.2 - Updated the primary namespace from PinkCrab\Perique to PinkCrab\Perique. Corrected typo on package name in composer.json, from perqiue to perique.
 * 0.5.1 - Removed last Loader::class type hints and references. All now working with Hook_Loader::class
 * 0.5.0  
   * Moved to the new Hook_Loader type. 
   * Updates to App_Config (creation of meta sub section and move to simple key/value pairs for post type and taxonmies).
-  * Added setup() and tear_down() methods to the Registration_Middleware interface. 
+  * Added setup() and teaspotifyr_down() methods to the Registration_Middleware interface. 
   * Moved Collection into its [own repository](https://github.com/Pink-Crab/Collection). 
   * Removed unused service container interface.
 * 0.4.1 - Updated tests to reflect the new Hook_Loader's internal structure (accessing protected state for tests)

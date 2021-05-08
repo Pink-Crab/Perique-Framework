@@ -8,15 +8,15 @@ declare(strict_types=1);
  * @since 0.4.0
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- * @package PinkCrab\Core
+ * @package PinkCrab\Perique
  */
 
-namespace PinkCrab\Core\Tests\Application;
+namespace PinkCrab\Perique\Tests\Application;
 
 use WP_UnitTestCase;
-use PinkCrab\Core\Application\App;
-use PinkCrab\Core\Application\App_Validation;
-use PinkCrab\Core\Tests\Application\App_Helper_Trait;
+use PinkCrab\Perique\Application\App;
+use PinkCrab\Perique\Application\App_Validation;
+use PinkCrab\Perique\Tests\Application\App_Helper_Trait;
 
 class Test_App_Validation extends WP_UnitTestCase {
 
