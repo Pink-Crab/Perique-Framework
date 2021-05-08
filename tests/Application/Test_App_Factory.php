@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace PinkCrab\Core\Tests\Application;
 
 use WP_UnitTestCase;
-use PinkCrab\Loader\Loader;
+use PinkCrab\Loader\Hook_Loader;
 use PinkCrab\Core\Application\App;
 use Gin0115\WPUnit_Helpers\Objects;
 use PinkCrab\Core\Application\App_Factory;
@@ -44,7 +44,7 @@ class Test_App_Factory extends WP_UnitTestCase {
 			Objects::get_property( $app, 'container' )
 		);
 		$this->assertInstanceOf(
-			Loader::class,
+			Hook_Loader::class,
 			Objects::get_property( $app, 'loader' )
 		);
 	}

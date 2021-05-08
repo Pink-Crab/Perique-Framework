@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace PinkCrab\Core\Application;
 
 use Dice\Dice;
-use PinkCrab\Loader\Loader;
+use PinkCrab\Loader\Hook_Loader;
 use PinkCrab\Core\Application\App;
 use PinkCrab\Core\Interfaces\Renderable;
 use PinkCrab\Core\Interfaces\DI_Container;
@@ -46,7 +46,7 @@ class App_Factory {
 	 * @return self
 	 */
 	public function with_wp_dice( bool $include_default_rules = false ): self {
-		$loader = new Loader();
+		$loader = new Hook_Loader();
 
 		// Setup DI Container
 		$container = PinkCrab_Dice::withDice( new Dice() );

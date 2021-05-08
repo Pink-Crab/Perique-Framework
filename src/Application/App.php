@@ -25,7 +25,7 @@ declare(strict_types=1);
 namespace PinkCrab\Core\Application;
 
 use Closure;
-use PinkCrab\Loader\Loader;
+use PinkCrab\Loader\Hook_Loader;
 use PinkCrab\Core\Application\Hooks;
 use PinkCrab\Core\Services\View\View;
 use PinkCrab\Core\Application\App_Config;
@@ -67,7 +67,7 @@ final class App {
 	/**
 	 * Hook Loader
 	 *
-	 * @var Loader
+	 * @var Hook_Loader
 	 */
 	protected $loader;
 
@@ -130,10 +130,10 @@ final class App {
 	/**
 	 * Sets the loader to the app
 	 *
-	 * @param \PinkCrab\Loader\Loader $loader
+	 * @param \PinkCrab\Loader\Hook_Loader $loader
 	 * @return self
 	 */
-	public function set_loader( Loader $loader ): self {
+	public function set_loader( Hook_Loader $loader ): self {
 		if ( $this->loader !== null ) {
 			throw App_Initialization_Exception::loader_exists();
 		}

@@ -17,7 +17,7 @@ namespace PinkCrab\Core\Tests\Application;
 use PinkCrab\Core\Application\App;
 use Dice\Dice;
 
-use PinkCrab\Loader\Loader;
+use PinkCrab\Loader\Hook_Loader;
 
 use PinkCrab\Core\Services\Dice\PinkCrab_Dice;
 
@@ -60,7 +60,7 @@ trait App_Helper_Trait {
 		$app          = new App();
 		$registration = new Registration_Service();
 		$container    = new PinkCrab_Dice( new Dice() );
-		$loader       = new Loader();
+		$loader       = new Hook_Loader();
 
 		$app->set_container( $container );
 		$app->set_registration_services( $registration );
