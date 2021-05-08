@@ -19,14 +19,14 @@ declare(strict_types=1);
  *
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- * @package PinkCrab\Core\Registration
+ * @package PinkCrab\Perique\Registration
  */
 
-namespace PinkCrab\Core\Services\Registration;
+namespace PinkCrab\Perique\Services\Registration;
 
-use PinkCrab\Core\Application\Hooks;
-use PinkCrab\Core\Interfaces\DI_Container;
-use PinkCrab\Core\Interfaces\Registration_Middleware;
+use PinkCrab\Perique\Application\Hooks;
+use PinkCrab\Perique\Interfaces\DI_Container;
+use PinkCrab\Perique\Interfaces\Registration_Middleware;
 
 class Registration_Service {
 

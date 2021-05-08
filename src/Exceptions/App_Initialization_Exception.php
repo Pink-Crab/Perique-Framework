@@ -19,11 +19,11 @@ declare(strict_types=1);
  *
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- * @package PinkCrab\Core\Exceptions
+ * @package PinkCrab\Perique\Exceptions
  * @version 0.4.0
  */
 
-namespace PinkCrab\Core\Exceptions;
+namespace PinkCrab\Perique\Exceptions;
 
 use Exception;
 

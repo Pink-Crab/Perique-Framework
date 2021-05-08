@@ -7,20 +7,20 @@ declare(strict_types=1);
  * @since 0.1.0
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- * @package PinkCrab\Core
+ * @package PinkCrab\Perique
  */
 
-namespace PinkCrab\Core\Tests\Fixtures\Mock_Objects;
+namespace PinkCrab\Perique\Tests\Fixtures\Mock_Objects;
 
-use PinkCrab\Core\Tests\Fixtures\Mock_Objects\Sample_Class;
-use PinkCrab\Core\Tests\Fixtures\Mock_Objects\Interface_Get;
+use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Sample_Class;
+use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Interface_Get;
 
 class Parent_Dependency implements Interface_Get {
 
 	/**
 	 * Test property
 	 *
-	 * @var \PinkCrab\Core\Tests\Fixtures\Mock_Objects\Sample_Class
+	 * @var \PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Sample_Class
 	 */
 	public $sample_class;
 
@@ -31,7 +31,7 @@ class Parent_Dependency implements Interface_Get {
 	/**
 	 * Returns its nested dependecny.
 	 *
-	 * @return \PinkCrab\Core\Tests\Fixtures\Mock_Objects\Sample_Class
+	 * @return \PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Sample_Class
 	 */
 	public function get_sample_class(): Sample_Class {
 		return $this->sample_class;

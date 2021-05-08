@@ -7,16 +7,16 @@ declare(strict_types=1);
  * @since 0.2.0
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- * @package PinkCrab\Core
+ * @package PinkCrab\Perique
  */
 
-namespace PinkCrab\Core\Tests\Application;
+namespace PinkCrab\Perique\Tests\Application;
 
 use WP_UnitTestCase;
 use OutOfBoundsException;
-use PinkCrab\Core\Application\App;
-use PinkCrab\Core\Application\Config;
-use PinkCrab\Core\Application\App_Config;
+use PinkCrab\Perique\Application\App;
+use PinkCrab\Perique\Application\Config;
+use PinkCrab\Perique\Application\App_Config;
 
 class Test_App_Config extends WP_UnitTestCase {
 

@@ -8,23 +8,23 @@ declare(strict_types=1);
  * @since 0.4.0
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- * @package PinkCrab\Core
+ * @package PinkCrab\Perique
  */
 
-namespace PinkCrab\Core\Tests\Registration;
+namespace PinkCrab\Perique\Tests\Registration;
 
 use Dice\Dice;
 use WP_UnitTestCase;
 use Gin0115\WPUnit_Helpers\Objects;
-use PinkCrab\Core\Application\Hooks;
-use PinkCrab\Core\Interfaces\DI_Container;
-use PinkCrab\Core\Services\Dice\PinkCrab_Dice;
-use PinkCrab\Core\Interfaces\Registration_Middleware;
-use PinkCrab\Core\Tests\Fixtures\Mock_Objects\Sample_Class;
-use PinkCrab\Core\Services\Registration\Registration_Service;
-use PinkCrab\Core\Tests\Fixtures\Mock_Objects\Parent_Dependency;
-use PinkCrab\Core\Tests\Fixtures\Mock_Objects\Mock_Registation_Middleware;
-use PinkCrab\Core\Services\Registration\Middleware\Registerable_Middleware;
+use PinkCrab\Perique\Application\Hooks;
+use PinkCrab\Perique\Interfaces\DI_Container;
+use PinkCrab\Perique\Services\Dice\PinkCrab_Dice;
+use PinkCrab\Perique\Interfaces\Registration_Middleware;
+use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Sample_Class;
+use PinkCrab\Perique\Services\Registration\Registration_Service;
+use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Parent_Dependency;
+use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Mock_Registation_Middleware;
+use PinkCrab\Perique\Services\Registration\Middleware\Registerable_Middleware;
 
 class Test_Registration_Service extends WP_UnitTestCase {
 

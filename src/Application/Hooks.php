@@ -7,10 +7,10 @@ declare(strict_types=1);
  * @since 0.4.0
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- * @package PinkCrab\Core
+ * @package PinkCrab\Perique
  */
 
-namespace PinkCrab\Core\Application;
+namespace PinkCrab\Perique\Application;
 
 class Hooks {
 	/** @var string */
