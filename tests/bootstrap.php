@@ -1,7 +1,7 @@
 <?php
 
 use Dice\Dice;
-use PinkCrab\Loader\Loader;
+use PinkCrab\Loader\Hook_Loader;
 use PinkCrab\Core\Application\App;
 use PinkCrab\Core\Application\Boot;
 use PinkCrab\Core\Services\Dice\WP_Dice;

@@ -15,7 +15,7 @@ namespace PinkCrab\Core\Tests\Application;
 use Dice\Dice;
 use Exception;
 use WP_UnitTestCase;
-use PinkCrab\Loader\Loader;
+use PinkCrab\Loader\Hook_Loader;
 use PinkCrab\Core\Application\App;
 use Gin0115\WPUnit_Helpers\Objects;
 use PinkCrab\Core\Application\App_Config;
@@ -95,7 +95,7 @@ class Test_App extends WP_UnitTestCase {
 	/** @testdox The loader should be setable and bound to the loader property */
 	public function test_set_loader(): void {
 		$app    = new App();
-		$loader = $this->createMock( Loader::class );
+		$loader = $this->createMock( Hook_Loader::class );
 		$app->set_loader( $loader );
 		$this->assertSame( $loader, Objects::get_property( $app, 'loader' ) );
 	}
@@ -106,7 +106,7 @@ class Test_App extends WP_UnitTestCase {
 		$this->expectExceptionCode( 8 );
 
 		$app    = new App();
-		$loader = $this->createMock( Loader::class );
+		$loader = $this->createMock( Hook_Loader::class );
 		$app->set_loader( $loader );
 		$app->set_loader( $loader );
 	}

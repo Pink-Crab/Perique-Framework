@@ -24,7 +24,7 @@ declare(strict_types=1);
 
 namespace PinkCrab\Core\Interfaces;
 
-use PinkCrab\Loader\Loader;
+use PinkCrab\Loader\Hook_Loader;
 use Psr\Container\ContainerInterface;
 
 interface DI_Container extends ContainerInterface {
