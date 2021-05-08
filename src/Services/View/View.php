@@ -19,12 +19,12 @@ declare(strict_types=1);
  *
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- * @package PinkCrab\Core\View
+ * @package PinkCrab\Perique\View
  */
 
-namespace PinkCrab\Core\Services\View;
+namespace PinkCrab\Perique\Services\View;
 
-use PinkCrab\Core\Interfaces\Renderable;
+use PinkCrab\Perique\Interfaces\Renderable;
 
 class View {
 

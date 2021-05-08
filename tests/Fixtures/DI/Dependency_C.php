@@ -8,12 +8,12 @@ declare(strict_types=1);
  * @since 0.2.0
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- * @package PinkCrab\Core
+ * @package PinkCrab\Perique
  */
 
-namespace PinkCrab\Core\Tests\Fixtures\DI;
+namespace PinkCrab\Perique\Tests\Fixtures\DI;
 
-use PinkCrab\Core\Tests\Fixtures\DI\Abstract_B;
+use PinkCrab\Perique\Tests\Fixtures\DI\Abstract_B;
 
 class Dependency_C extends Abstract_B {
 	public function foo() {

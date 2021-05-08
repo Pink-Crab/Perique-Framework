@@ -8,12 +8,12 @@ declare(strict_types=1);
  * @since 0.2.0
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- * @package PinkCrab\Core
+ * @package PinkCrab\Perique
  */
 
-namespace PinkCrab\Core\Tests\Fixtures\DI;
+namespace PinkCrab\Perique\Tests\Fixtures\DI;
 
-use PinkCrab\Core\Tests\Fixtures\DI\Interface_A;
+use PinkCrab\Perique\Tests\Fixtures\DI\Interface_A;
 
 class Class_G {
 
@@ -27,7 +27,7 @@ class Class_G {
 	/**
 	 * Create class.
 	 *
-	 * @param \PinkCrab\Core\Tests\Fixtures\DI\Interface_A $dependency
+	 * @param \PinkCrab\Perique\Tests\Fixtures\DI\Interface_A $dependency
 	 */
 	public function __construct( Interface_A $dependency ) {
 		$this->dependency = $dependency;

@@ -8,27 +8,27 @@ declare(strict_types=1);
  * @since 0.3.1
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- * @package PinkCrab\Core
+ * @package PinkCrab\Perique
  */
 
-namespace PinkCrab\Core\Tests\DI;
+namespace PinkCrab\Perique\Tests\DI;
 
 use DateTime;
 use stdClass;
 use Dice\Dice;
 use WP_UnitTestCase;
 use ReflectionException;
-use PinkCrab\Core\Tests\Fixtures\DI\Class_F;
-use PinkCrab\Core\Tests\Fixtures\DI\Class_G;
-use PinkCrab\Core\Tests\Fixtures\DI\Class_H;
-use PinkCrab\Core\Services\Dice\PinkCrab_Dice;
-use PinkCrab\Core\Tests\Fixtures\DI\Abstract_B;
-use PinkCrab\Core\Tests\Fixtures\DI\Interface_A;
-use PinkCrab\Core\Tests\Fixtures\DI\Dependency_C;
-use PinkCrab\Core\Tests\Fixtures\DI\Dependency_D;
-use PinkCrab\Core\Tests\Fixtures\DI\Dependency_E;
-use PinkCrab\Core\Exceptions\DI_Container_Exception;
-use PinkCrab\Core\Tests\Fixtures\Mock_Objects\Sample_Class;
+use PinkCrab\Perique\Tests\Fixtures\DI\Class_F;
+use PinkCrab\Perique\Tests\Fixtures\DI\Class_G;
+use PinkCrab\Perique\Tests\Fixtures\DI\Class_H;
+use PinkCrab\Perique\Services\Dice\PinkCrab_Dice;
+use PinkCrab\Perique\Tests\Fixtures\DI\Abstract_B;
+use PinkCrab\Perique\Tests\Fixtures\DI\Interface_A;
+use PinkCrab\Perique\Tests\Fixtures\DI\Dependency_C;
+use PinkCrab\Perique\Tests\Fixtures\DI\Dependency_D;
+use PinkCrab\Perique\Tests\Fixtures\DI\Dependency_E;
+use PinkCrab\Perique\Exceptions\DI_Container_Exception;
+use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Sample_Class;
 use Gin0115\WPUnit_Helpers\Objects as WPUnit_HelpersObjects;
 
 class Test_PinkCrab_Dice extends WP_UnitTestCase {

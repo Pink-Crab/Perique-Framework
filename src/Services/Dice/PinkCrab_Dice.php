@@ -19,15 +19,15 @@ declare(strict_types=1);
  *
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- * @package PinkCrab\Core\Dice
+ * @package PinkCrab\Perique\Dice
  */
 
-namespace PinkCrab\Core\Services\Dice;
+namespace PinkCrab\Perique\Services\Dice;
 
 use Dice\Dice;
-use PinkCrab\Core\Application\Hooks;
-use PinkCrab\Core\Interfaces\DI_Container;
-use PinkCrab\Core\Exceptions\DI_Container_Exception;
+use PinkCrab\Perique\Application\Hooks;
+use PinkCrab\Perique\Interfaces\DI_Container;
+use PinkCrab\Perique\Exceptions\DI_Container_Exception;
 
 class PinkCrab_Dice implements DI_Container {
 

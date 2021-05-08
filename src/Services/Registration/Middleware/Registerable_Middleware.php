@@ -20,16 +20,16 @@ declare(strict_types=1);
  *
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- * @package PinkCrab\Core\Registration
+ * @package PinkCrab\Perique\Registration
  * @since 0.4.0
  */
 
-namespace PinkCrab\Core\Services\Registration\Middleware;
+namespace PinkCrab\Perique\Services\Registration\Middleware;
 
 use PinkCrab\Loader\Hook_Loader;
-use PinkCrab\Core\Interfaces\DI_Container;
-use PinkCrab\Core\Interfaces\Registerable;
-use PinkCrab\Core\Interfaces\Registration_Middleware;
+use PinkCrab\Perique\Interfaces\DI_Container;
+use PinkCrab\Perique\Interfaces\Registerable;
+use PinkCrab\Perique\Interfaces\Registration_Middleware;
 
 class Registerable_Middleware implements Registration_Middleware {
 
