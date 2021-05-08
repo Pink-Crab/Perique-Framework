@@ -15,6 +15,15 @@ use OutOfBoundsException;
 
 final class App_Config {
 
+	/**@ var string */
+	public const POST_META = 'post';
+
+	/**@ var string */
+	public const TERM_META = 'term';
+
+	/**@ var string */
+	public const USER_META = 'user';
+
 	/**
 	 * Holds the current sites paths & urls
 	 *
@@ -66,6 +75,17 @@ final class App_Config {
 	protected $additional = array();
 
 	/**
+	 * Holds all the meta keys
+	 *
+	 * @var array{post:array<string,string>,user:array<string,string>,term:array<string,string>}
+	 */
+	protected $meta = array(
+		self::POST_META => array(),
+		self::USER_META => array(),
+		self::TERM_META => array(),
+	);
+
+	/**
 	 * @param array<string, mixed> $settings
 	 */
 	public function __construct( array $settings = array() ) {
@@ -86,19 +106,20 @@ final class App_Config {
 	/**
 	 * Maps the supplied settings array to inner states.
 	 *
-	 * @param array<string, mixed> $paths
+	 * @param array<string, mixed> $settings
 	 * @return void
 	 */
-	private function set_props( array $paths ): void {
-		$this->paths['url']  = $paths['url'];
-		$this->paths['path'] = $paths['path'];
-		$this->namespaces    = $paths['namespaces'];
-		$this->plugin        = $paths['plugin'];
-		$this->additional    = $paths['additional'];
-		$this->db_tables     = $paths['db_tables'];
+	private function set_props( array $settings ): void {
+		$this->paths['url']  = $settings['url'];
+		$this->paths['path'] = $settings['path'];
+		$this->namespaces    = $this->filter_key_value_pair( $settings['namespaces'] );
+		$this->plugin        = $settings['plugin'];
+		$this->additional    = $settings['additional'];
+		$this->db_tables     = $this->filter_key_value_pair( $settings['db_tables'] );
+		$this->post_types    = $this->filter_key_value_pair( $settings['post_types'] );
+		$this->taxonomies    = $this->filter_key_value_pair( $settings['taxonomies'] );
 
-		$this->set_post_types( $paths['post_types'] );
-		$this->set_taxonomies( $paths['taxonomies'] );
+		$this->set_meta( $settings['meta'] );
 	}
 
 	/**
@@ -188,101 +209,104 @@ final class App_Config {
 	 * Returns the key for a post type.
 	 *
 	 * @param string $key
-	 * @return string|array<string, mixed>
+	 * @return string
 	 * @throws OutOfBoundsException
 	 */
-	public function post_types( string $key, string $field = 'slug', ?string $meta_key = null ) {
+	public function post_types( string $key ) {
 		if ( ! array_key_exists( $key, $this->post_types ) ) {
-			throw new OutOfBoundsException( 'Post Type doesnt exists' );
+			throw new OutOfBoundsException( 'Post Type not defined.' );
 		}
 
-		if ( $field === 'slug' ) {
-			return $this->post_types[ $key ]['slug'];
-		}
-
-		if ( $meta_key && ! array_key_exists( $meta_key, $this->post_types[ $key ]['meta'] ) ) {
-			throw new OutOfBoundsException( sprintf( 'Meta key doesnt exist for the %s post type in config', $key ) );
-		}
-
-		return $meta_key
-			? $this->post_types[ $key ]['meta'][ $meta_key ]
-			: $this->post_types[ $key ]['meta'];
+		return $this->post_types[ $key ];
 	}
 
 	/**
-	 * Set the defined post types.
-	 * Ensures all have valid slug and meta array.
-	 *
-	 * @param array<string, mixed> $post_types
-	 * @return void
-	 */
-	protected function set_post_types( array $post_types ): void {
-		foreach ( $post_types as $label => $post_type ) {
-			// Check we have a slug.
-			if ( empty( $post_type['slug'] ) ) {
-				throw new OutOfBoundsException( 'Post Types must have a defined slug. ' . \wp_json_encode( $post_type, \JSON_PRETTY_PRINT ) );
-			}
-			// Check we have a meta array, even if empty.
-			if ( ! array_key_exists( 'meta', $post_type ) || ! is_array( $post_type['meta'] ) ) {
-				throw new OutOfBoundsException( 'Post Types must have a defined meta array, even if empty. ' . \wp_json_encode( $post_type, \JSON_PRETTY_PRINT ) );
-			}
-
-			$this->post_types[ $label ] = array(
-				'slug' => $post_type['slug'],
-				'meta' => $post_type['meta'],
-			);
-		}
-	}
-
-	/**
-	 * Returns the key for a post type.
+	 * Returns a valid meta key value, for a defined meta type.
 	 *
 	 * @param string $key
-	 * @return string|array<string, mixed>
+	 * @param string $type defaults to post
+	 * @return string
 	 * @throws OutOfBoundsException
 	 */
-	public function taxonomies( string $key, string $field = 'slug', ?string $term_key = null ) {
-		if ( ! array_key_exists( $key, $this->taxonomies ) ) {
-			throw new OutOfBoundsException( 'Taxonomy doesnt exists' );
+	public function meta( string $key, string $type = self::POST_META ): string {
+		// Check meta type.
+		if ( ! array_key_exists( $type, $this->meta ) ) {
+			throw new OutOfBoundsException( 'Meta Type doesnt exists' );
+		}
+		// Check key.
+		if ( ! array_key_exists( $key, $this->meta[ $type ] ) ) {
+			throw new OutOfBoundsException( $type . ' meta key doesnt exists' );
 		}
 
-		if ( $field === 'slug' ) {
-			return $this->taxonomies[ $key ]['slug'];
-		}
-
-		if ( $term_key && ! array_key_exists( $term_key, $this->taxonomies[ $key ]['term'] ) ) {
-			throw new OutOfBoundsException( sprintf( 'Term key doesnt exist for the %s taxonomy in config', $key ) );
-		}
-
-		return $term_key
-			? $this->taxonomies[ $key ]['term'][ $term_key ]
-			: $this->taxonomies[ $key ]['term'];
+		return $this->meta[ $type ][ $key ];
 	}
 
 	/**
-	 * Set the definedtaxonomies.
-	 * Ensures all have valid slug and term array.
+	 * Retruns the post meta key value
+	 * Alias for meta() with type as POST_META
 	 *
-	 * @param array<string, mixed> $taxonomies
+	 * @param string $key
+	 * @return string
+	 */
+	public function post_meta( string $key ): string {
+		return $this->meta( $key, self::POST_META );
+	}
+
+	/**
+	 * Retruns the user meta key value
+	 * Alias for meta() with type as USER_META
+	 *
+	 * @param string $key
+	 * @return string
+	 */
+	public function user_meta( string $key ): string {
+		return $this->meta( $key, self::USER_META );
+	}
+
+	/**
+	 * Retruns the tern meta key value
+	 * Alias for meta() with type as TERM_META
+	 *
+	 * @param string $key
+	 * @return string
+	 */
+	public function term_meta( string $key ): string {
+		return $this->meta( $key, self::TERM_META );
+	}
+
+	/**
+	 * Sets the meta data
+	 *
+	 * @param array<string, array<string,string>> $meta
 	 * @return void
 	 */
-	protected function set_taxonomies( array $taxonomies ): void {
-		foreach ( $taxonomies as $label => $taxonomy ) {
-			// Check we have a slug.
-			if ( empty( $taxonomy['slug'] ) ) {
-				throw new OutOfBoundsException( 'Taxonomies must have a defined slug. ' . \wp_json_encode( $taxonomy, \JSON_PRETTY_PRINT ) );
-			}
-			// Check we have a meta array, even if empty.
-			if ( ! array_key_exists( 'term', $taxonomy ) || ! is_array( $taxonomy['term'] ) ) {
-				throw new OutOfBoundsException( 'Taxonomies must have a defined term array, even if empty. ' . \wp_json_encode( $taxonomy, \JSON_PRETTY_PRINT ) );
+	public function set_meta( array $meta ): void {
+		$valid_meta_types = array( self::POST_META, self::USER_META, self::TERM_META );
+		foreach ( $meta as $meta_type => $pairs ) {
+			if ( ! in_array( $meta_type, $valid_meta_types, true ) ) {
+				throw new OutOfBoundsException( 'Valid meta type must be used as key.' );
 			}
 
-			$this->taxonomies[ $label ] = array(
-				'slug' => $taxonomy['slug'],
-				'term' => $taxonomy['term'],
-			);
+			// Set all pairs which have both valid key and values.
+			$this->meta[ $meta_type ] = $this->filter_key_value_pair( $pairs );
 		}
 	}
+
+	/**
+	 * Returns the key for a taxonomy.
+	 *
+	 * @param string $key
+	 * @return string
+	 * @throws OutOfBoundsException
+	 */
+	public function taxonomies( string $key ): string {
+		if ( ! array_key_exists( $key, $this->taxonomies ) ) {
+			throw new OutOfBoundsException( 'Taxonomy not defined.' );
+		}
+
+		return $this->taxonomies[ $key ];
+	}
+
 
 	/**
 	 * Returns a table name based on its key.
@@ -338,13 +362,36 @@ final class App_Config {
 			),
 			'post_types' => array(),
 			'taxonomies' => array(),
+			'meta'       => array(
+				self::POST_META => array(),
+				self::USER_META => array(),
+				self::TERM_META => array(),
+			),
 			'db_tables'  => array(),
 			'namespaces' => array(
 				'rest'  => 'pinkcrab',
 				'cache' => 'pc_cache',
 			),
 			'additional' => array(),
+		);
+	}
 
+	/**
+	 * Filters an array to ensure key and value are both valid strings.
+	 *
+	 * @param array<int|string, mixed> $pairs
+	 * @return array<string, string>
+	 */
+	private function filter_key_value_pair( array $pairs ): array {
+		/** @var array<string, string> (as per filter function)*/
+		return array_filter(
+			$pairs,
+			function( $value, $key ): bool {
+				return is_string( $value )
+				&& \mb_strlen( $value ) > 0
+				&& is_string( $key );
+			},
+			ARRAY_FILTER_USE_BOTH
 		);
 	}
 }

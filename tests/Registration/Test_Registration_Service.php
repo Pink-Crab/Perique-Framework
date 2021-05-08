@@ -18,8 +18,8 @@ use WP_UnitTestCase;
 use Gin0115\WPUnit_Helpers\Objects;
 use PinkCrab\Core\Application\Hooks;
 use PinkCrab\Core\Interfaces\DI_Container;
-use PinkCrab\Core\Interfaces\Registration_Middleware;
 use PinkCrab\Core\Services\Dice\PinkCrab_Dice;
+use PinkCrab\Core\Interfaces\Registration_Middleware;
 use PinkCrab\Core\Tests\Fixtures\Mock_Objects\Sample_Class;
 use PinkCrab\Core\Services\Registration\Registration_Service;
 use PinkCrab\Core\Tests\Fixtures\Mock_Objects\Parent_Dependency;
@@ -102,7 +102,7 @@ class Test_Registration_Service extends WP_UnitTestCase {
 		$registration_service->process();
 	}
 
-    /** @testdox External codebase should be able to use a filter to add additional classes to the classlist. */
+	/** @testdox External codebase should be able to use a filter to add additional classes to the classlist. */
 	public function test_process_registation_middleware_using_filter(): void {
 
 		$this->expectOutputRegex( '/Sample_Class/' );
@@ -124,5 +124,26 @@ class Test_Registration_Service extends WP_UnitTestCase {
 			->process();
 
 		// $registration_service->set_classes( array( Sample_Class::class, Parent_Dependency::class ) );
+	}
+
+	/** @testdox It should be possible to setup and teardown internal state within the middleware, around processing classes passed */
+	public function test_middleware_setup_and_tear_down(): void {
+		$registration_service = new Registration_Service;
+		$container            = new PinkCrab_Dice( new Dice );
+		$middleware           = new Mock_Registation_Middleware();
+
+		$registration_service->set_container( $container );
+
+		$registration_service->push_middleware( $middleware );
+
+		$registration_service->set_classes( array( Sample_Class::class, Parent_Dependency::class ) );
+
+		$this->setOutputCallback( function() {} );
+		$registration_service->process();
+
+		$this->assertContains( 'setup', $middleware->message_log );
+		$this->assertContains( 'tear_down', $middleware->message_log );
+		$this->assertContains( Sample_Class::class, $middleware->message_log );
+		$this->assertContains( Parent_Dependency::class, $middleware->message_log );
 	}
 }
