@@ -1,5 +1,5 @@
 {
-    "name": "pinkcrab/perqiue-core",
+    "name": "pinkcrab/perique-core",
     "type": "library",
     "description": "The core package of the PinkCrab Perique framework.",
     "keywords": [],
@@ -13,12 +13,12 @@
     }],
     "autoload": {
         "psr-4": {
-            "PinkCrab\\Core\\": "src"
+            "PinkCrab\\Perique\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "PinkCrab\\Core\\Tests\\": "tests/"
+            "PinkCrab\\Perique\\Tests\\": "tests/"
         },
         "files": ["tests/Fixtures/functions.php"]
     },

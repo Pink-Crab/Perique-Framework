@@ -8,17 +8,17 @@ declare(strict_types=1);
  * @since 0.4.0
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- * @package PinkCrab\Core
+ * @package PinkCrab\Perique
  */
 
-namespace PinkCrab\Core\Tests\Registration;
+namespace PinkCrab\Perique\Tests\Registration;
 
 use WP_UnitTestCase;
 use PinkCrab\Loader\Hook_Loader;
 use Gin0115\WPUnit_Helpers\Objects;
-use PinkCrab\Core\Tests\Fixtures\Mock_Objects\Sample_Class;
-use PinkCrab\Core\Services\Registration\Middleware\Registerable_Middleware;
-use PinkCrab\Core\Tests\Fixtures\Mock_Objects\Registerable\Registerable_Mock;
+use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Sample_Class;
+use PinkCrab\Perique\Services\Registration\Middleware\Registerable_Middleware;
+use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Registerable\Registerable_Mock;
 
 class Test_Registerable_Middleware extends WP_UnitTestCase {
 

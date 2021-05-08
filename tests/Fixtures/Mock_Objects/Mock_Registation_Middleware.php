@@ -10,12 +10,12 @@ declare(strict_types=1);
  * @since 0.4.0
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- * @package PinkCrab\Core
+ * @package PinkCrab\Perique
  */
 
-namespace PinkCrab\Core\Tests\Fixtures\Mock_Objects;
+namespace PinkCrab\Perique\Tests\Fixtures\Mock_Objects;
 
-use PinkCrab\Core\Interfaces\Registration_Middleware;
+use PinkCrab\Perique\Interfaces\Registration_Middleware;
 
 class Mock_Registation_Middleware implements Registration_Middleware {
 
