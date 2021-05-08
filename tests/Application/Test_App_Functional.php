@@ -15,7 +15,7 @@ namespace PinkCrab\Core\Tests\Application;
 use Dice\Dice;
 use Exception;
 use WP_UnitTestCase;
-use PinkCrab\Loader\Loader;
+use PinkCrab\Loader\Hook_Loader;
 use PinkCrab\Core\Application\App;
 use Gin0115\WPUnit_Helpers\Objects;
 use PinkCrab\Core\Application\Hooks;
@@ -48,19 +48,19 @@ class Test_App_Functional extends WP_UnitTestCase {
         
         // Pre boot hook.
         $this->expectOutputRegex('/Pre Boot Hook/');
-        \add_action(Hooks::APP_INIT_PRE_BOOT, function(App_Config $config, Loader $loader, DI_Container $container){
+        \add_action(Hooks::APP_INIT_PRE_BOOT, function(App_Config $config, Hook_Loader $loader, DI_Container $container){
             echo 'Pre Boot Hook';
         }, 10, 3);
 
         // Pre registration hook.
         $this->expectOutputRegex('/Pre Registration Hook/');
-        \add_action(Hooks::APP_INIT_PRE_REGISTRATION, function(App_Config $config, Loader $loader, DI_Container $container){
+        \add_action(Hooks::APP_INIT_PRE_REGISTRATION, function(App_Config $config, Hook_Loader $loader, DI_Container $container){
             echo 'Pre Registration Hook';
         }, 10, 3);
 
         // Post registration.
         $this->expectOutputRegex('/Post Registration Hook/');
-        \add_action(Hooks::APP_INIT_POST_REGISTRATION, function(App_Config $config, Loader $loader, DI_Container $container){
+        \add_action(Hooks::APP_INIT_POST_REGISTRATION, function(App_Config $config, Hook_Loader $loader, DI_Container $container){
             echo 'Post Registration Hook';
         }, 10, 3);
         
