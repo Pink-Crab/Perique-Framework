@@ -1,3 +1,5 @@
+# MOVED TO NEW REPO, PLEASE VISIT [https://github.com/Pink-Crab/Perqiue-Framework](https://github.com/Pink-Crab/Perqiue-Framework) #
+
 # PinkCrab **Perique** Plugin Framework #
 
 Welcome to the core package of the PinkCrab **Perique** plugin framework, formally known as just the PinkCrab Plugin Framwework. 
