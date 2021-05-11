@@ -2,7 +2,7 @@
 
 Welcome to the core package of the PinkCrab **Perique** plugin framework, formally known as just the PinkCrab Plugin Framwework. 
 
-![alt text](https://img.shields.io/badge/Current_Version-0.5.3-yellow.svg?style=flat " ") 
+![alt text](https://img.shields.io/badge/Current_Version-0.5.4-yellow.svg?style=flat " ") 
 [![Open Source Love](https://badges.frapsoft.com/os/mit/mit.svg?v=102)]()
 ![](https://github.com/Pink-Crab/Perqiue-Framework/workflows/GitHub_CI/badge.svg " ")
 [![codecov](https://codecov.io/gh/Pink-Crab/Perqiue-Framework/branch/master/graph/badge.svg?token=yNsRq7Bq1s)](https://codecov.io/gh/Pink-Crab/Perqiue-Framework)
@@ -11,7 +11,7 @@ For more details please visit our docs.
 https://app.gitbook.com/@glynn-quelch/s/pinkcrab/
 
 
-## Version 0.5.3 ##
+## Version 0.5.4 ##
 
 
 ## Why? ##
@@ -369,6 +369,7 @@ add_filter(Hooks::APP_INIT_SET_DI_RULES,
 http://www.opensource.org/licenses/mit-license.html  
 
 ## Change Log ##
+* 0.5.4 - Moved to new repo to allow renaming via Packagist
 * 0.5.3 - Move to new composer name due to issue with existing.
 * 0.5.2 - Updated the primary namespace from PinkCrab\Perique to PinkCrab\Perique. Corrected typo on package name in composer.json, from perqiue to perique.
 * 0.5.1 - Removed last Loader::class type hints and references. All now working with Hook_Loader::class
