@@ -28,7 +28,7 @@ Perique is rare form of pipe tobacco produced in the St James Parish of Louisian
 ## Setup ##
 
 ```bash 
-$ composer require pinkcrab/perique
+$ composer require pinkcrab/perique-framework-core
 ```
 
 First you will need to create your composer.json and plugin.php file. 
