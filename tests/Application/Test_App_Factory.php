@@ -14,11 +14,12 @@ namespace PinkCrab\Perique\Tests\Application;
 
 use WP_UnitTestCase;
 use PinkCrab\Loader\Hook_Loader;
-use PinkCrab\Perique\Application\App;
 use Gin0115\WPUnit_Helpers\Objects;
+use PinkCrab\Perique\Application\App;
 use PinkCrab\Perique\Application\App_Factory;
 use PinkCrab\Perique\Interfaces\DI_Container;
 use PinkCrab\Perique\Tests\Fixtures\DI\Interface_A;
+use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Has_DI_Container;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Registerable\Registerable_Mock;
 
 class Test_App_Factory extends WP_UnitTestCase {
@@ -90,6 +91,16 @@ class Test_App_Factory extends WP_UnitTestCase {
 			->with_wp_dice( true )
 			->boot();
 		$this->assertTrue( $app::is_booted() );
+	}
+
+	/** @testdox It shoud be possble to pass the DI_Container interface as a depenedcy and have it populated with the current DI_Container implementation at initalisation.  */
+	public function test_di_container_rule_defined_at_init(Type $var = null)
+	{
+		$app = ( new App_Factory )
+			->with_wp_dice( true )
+			->boot();
+		$has_di_container = $app::make(Has_DI_Container::class);
+		$this->assertTrue($has_di_container->di_set());
 	}
 
 }

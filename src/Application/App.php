@@ -223,8 +223,9 @@ final class App {
 			'*',
 			array(
 				'substitutions' => array(
-					self::class       => $this,
-					App_Config::class => self::$app_config,
+					self::class         => $this,
+					App_Config::class   => self::$app_config,
+					DI_Container::class => self::$container,
 				),
 			)
 		);
@@ -309,5 +310,19 @@ final class App {
 	 */
 	public function has_app_config(): bool {
 		return is_a( self::$app_config, App_Config::class );
+	}
+
+	/**
+	 * Returns the defined container.
+	 *
+	 * @return DI_Container
+	 * @throws App_Initialization_Exception (Code 1)
+	 */
+	public function get_container(): DI_Container {
+		if ( self::$container === null ) {
+			// Throw container not set.
+			throw App_Initialization_Exception::requires_di_container();
+		}
+		return self::$container;
 	}
 }
