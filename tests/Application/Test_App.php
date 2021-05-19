@@ -211,4 +211,20 @@ class Test_App extends WP_UnitTestCase {
 		$app = $this->pre_populated_app_provider();
 		$app::view();
 	}
+
+	/** @testdox It should be possible to access the current DI container from the App instance, for use in additional libraies that need access. */
+	public function test_can_get_container_from_app(): void
+	{
+		$app = $this->pre_populated_app_provider();
+		$this->assertInstanceOf(DI_Container::class, $app->get_container());
+	}
+
+	/** @testdox Attemptingt to access the DI Container before it has been defiend, should resutl in an Application Intialization exception. */
+	public function test_throws_exception_if_attempting_to_access_undefined_di_container(): void
+	{
+		$this->expectException( App_Initialization_Exception::class );
+		$this->expectExceptionCode( 1 );
+		$app = new App();
+		$app->get_container();
+	}
 }
