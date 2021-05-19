@@ -19,7 +19,9 @@ use PinkCrab\Perique\Application\App;
 use PinkCrab\Perique\Application\App_Factory;
 use PinkCrab\Perique\Interfaces\DI_Container;
 use PinkCrab\Perique\Tests\Fixtures\DI\Interface_A;
+use PinkCrab\Perique\Interfaces\Registration_Middleware;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Has_DI_Container;
+use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Mock_Registation_Middleware;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Registerable\Registerable_Mock;
 
 class Test_App_Factory extends WP_UnitTestCase {
@@ -101,6 +103,21 @@ class Test_App_Factory extends WP_UnitTestCase {
 			->boot();
 		$has_di_container = $app::make(Has_DI_Container::class);
 		$this->assertTrue($has_di_container->di_set());
+	}
+
+	/** @testdox It should be possible to define additional registration middleware during the factory chained called. */
+	public function test_pass_registration_middleware_during_factory_init(): void
+	{
+		$mock_middleware = $this->createMock(Registration_Middleware::class);
+		
+		$app = ( new App_Factory )
+			->with_wp_dice( true )
+			->registration_middleware( $mock_middleware )
+			->boot();
+
+		$registration = Objects::get_property( $app, 'registration' );
+		$middleware_list = Objects::get_property( $registration, 'middleware' );
+		$this->assertContains($mock_middleware, $middleware_list);
 	}
 
 }
