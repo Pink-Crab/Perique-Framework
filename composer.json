@@ -43,7 +43,7 @@
     },
     "scripts": {
         "test": "phpunit --coverage-clover coverage.xml --testdox",
-        "coverage": "phpunit --coverage-html coverage-report --testdox",
+        "coverage": "XDEBUG_MODE=coverage  phpunit --coverage-html coverage-report --testdox",
         "analyse": "vendor/bin/phpstan analyse src -l8",
         "sniff": "./vendor/bin/phpcs src/ -v",
         "all": "composer test && composer analyse && composer sniff"

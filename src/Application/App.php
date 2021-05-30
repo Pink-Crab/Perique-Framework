@@ -34,8 +34,8 @@ use PinkCrab\Perique\Interfaces\Registration_Middleware;
 use PinkCrab\Perique\Exceptions\App_Initialization_Exception;
 use PinkCrab\Perique\Services\Registration\Registration_Service;
 
-final class App
-{
+final class App {
+
 
 	/**
 	 * Defines if the app has already been booted.
@@ -77,8 +77,7 @@ final class App
 	 *
 	 * @return bool
 	 */
-	public static function is_booted(): bool
-	{
+	public static function is_booted(): bool {
 		return self::$booted;
 	}
 
@@ -90,9 +89,8 @@ final class App
 	 * @return self
 	 * @throws App_Initialization_Exception Code 2
 	 */
-	public function set_container(DI_Container $container): self
-	{
-		if (self::$container !== null) {
+	public function set_container( DI_Container $container ): self {
+		if ( self::$container !== null ) {
 			throw App_Initialization_Exception::di_container_exists();
 		}
 
@@ -107,13 +105,12 @@ final class App
 	 * @return self
 	 * @throws App_Initialization_Exception Code 5
 	 */
-	public function set_app_config(array $settings): self
-	{
-		if (self::$app_config !== null) {
+	public function set_app_config( array $settings ): self {
+		if ( self::$app_config !== null ) {
 			throw App_Initialization_Exception::app_config_exists();
 		}
 
-		self::$app_config = new App_Config(apply_filters(Hooks::APP_INIT_CONFIG_VALUES, $settings));
+		self::$app_config = new App_Config( apply_filters( Hooks::APP_INIT_CONFIG_VALUES, $settings ) );
 		return $this;
 	}
 
@@ -123,9 +120,8 @@ final class App
 	 * @param \PinkCrab\Perique\Services\Registration\Registration_Service $registration
 	 * @return self
 	 */
-	public function set_registration_services(Registration_Service $registration): self
-	{
-		if ($this->registration !== null) {
+	public function set_registration_services( Registration_Service $registration ): self {
+		if ( $this->registration !== null ) {
 			throw App_Initialization_Exception::registation_exists();
 		}
 		$this->registration = $registration;
@@ -138,9 +134,8 @@ final class App
 	 * @param \PinkCrab\Loader\Hook_Loader $loader
 	 * @return self
 	 */
-	public function set_loader(Hook_Loader $loader): self
-	{
-		if ($this->loader !== null) {
+	public function set_loader( Hook_Loader $loader ): self {
+		if ( $this->loader !== null ) {
 			throw App_Initialization_Exception::loader_exists();
 		}
 		$this->loader = $loader;
@@ -154,12 +149,11 @@ final class App
 	 * @return self
 	 * @throws App_Initialization_Exception Code 1
 	 */
-	public function container_config(callable $callback): self
-	{
-		if (self::$container === null) {
+	public function container_config( callable $callback ): self {
+		if ( self::$container === null ) {
 			throw App_Initialization_Exception::requires_di_container();
 		}
-		$callback(self::$container);
+		$callback( self::$container );
 		return $this;
 	}
 
@@ -170,13 +164,12 @@ final class App
 	 * @return self
 	 * @throws App_Initialization_Exception Code 3
 	 */
-	public function registration_middleware(Registration_Middleware $middleware): self
-	{
-		if ($this->registration === null) {
+	public function registration_middleware( Registration_Middleware $middleware ): self {
+		if ( $this->registration === null ) {
 			throw App_Initialization_Exception::requires_registration_service();
 		}
 
-		$this->registration->push_middleware($middleware);
+		$this->registration->push_middleware( $middleware );
 		return $this;
 	}
 
@@ -187,12 +180,11 @@ final class App
 	 * @return self
 	 * @throws App_Initialization_Exception Code 3
 	 */
-	public function registration_classses(array $class_list): self
-	{
-		if ($this->registration === null) {
+	public function registration_classses( array $class_list ): self {
+		if ( $this->registration === null ) {
 			throw App_Initialization_Exception::requires_registration_service();
 		}
-		$this->registration->set_classes($class_list);
+		$this->registration->set_classes( $class_list );
 		return $this;
 	}
 
@@ -201,19 +193,18 @@ final class App
 	 *
 	 * @return self
 	 */
-	public function boot(): self
-	{
+	public function boot(): self {
 
 		// Validate.
-		$validate = new App_Validation($this);
-		if ($validate->validate() === false || $this->registration === null) {
+		$validate = new App_Validation( $this );
+		if ( $validate->validate() === false || $this->registration === null ) {
 			throw App_Initialization_Exception::failed_boot_validation(
 				$validate->errors
 			);
 		}
 
 		// Process registration
-		$this->registration->set_container(self::$container);
+		$this->registration->set_container( self::$container );
 
 		// Run the final process, where all are loaded in via
 		$this->finalise();
@@ -226,8 +217,7 @@ final class App
 	 *
 	 * @return self
 	 */
-	protected function finalise(): self
-	{
+	protected function finalise(): self {
 
 		// Bind self to container.
 		self::$container->addRule(
@@ -238,28 +228,27 @@ final class App
 					DI_Container::class => self::$container,
 				),
 			)
-
 		);
 
 		self::$container->addRule(
 			App_Config::class,
-			[
-				'constructor' => [
-					self::$app_config
-				]
-			]
+			array(
+				'constructor' => array(
+					self::$app_config->export_settings(),
+				),
+			)
 		);
 
 		/** @hook{string, App_Config, Loader, DI_Container} */
-		do_action(Hooks::APP_INIT_PRE_BOOT, self::$app_config, $this->loader, self::$container); // phpcs:disable WordPress.NamingConventions.ValidHookName.*
+		do_action( Hooks::APP_INIT_PRE_BOOT, self::$app_config, $this->loader, self::$container ); // phpcs:disable WordPress.NamingConventions.ValidHookName.*
 
 		// Initialise on init
 		add_action(
 			'init',
 			function () {
-				do_action(Hooks::APP_INIT_PRE_REGISTRATION, self::$app_config, $this->loader, self::$container);
+				do_action( Hooks::APP_INIT_PRE_REGISTRATION, self::$app_config, $this->loader, self::$container );
 				$this->registration->process();
-				do_action(Hooks::APP_INIT_POST_REGISTRATION, self::$app_config, $this->loader, self::$container);
+				do_action( Hooks::APP_INIT_POST_REGISTRATION, self::$app_config, $this->loader, self::$container );
 				$this->loader->register_hooks();
 			},
 			1
@@ -278,12 +267,11 @@ final class App
 	 * @return object|null
 	 * @throws App_Initialization_Exception Code 4
 	 */
-	public static function make(string $class, array $args = array())
-	{
-		if (self::$booted === false) {
-			throw App_Initialization_Exception::app_not_initialized(DI_Container::class);
+	public static function make( string $class, array $args = array() ) {
+		if ( self::$booted === false ) {
+			throw App_Initialization_Exception::app_not_initialized( DI_Container::class );
 		}
-		return self::$container->create($class, $args);
+		return self::$container->create( $class, $args );
 	}
 
 	/**
@@ -294,12 +282,11 @@ final class App
 	 * @return mixed
 	 * @throws App_Initialization_Exception Code 4
 	 */
-	public static function config(string $key, string ...$child)
-	{
-		if (self::$booted === false) {
-			throw App_Initialization_Exception::app_not_initialized(App_Config::class);
+	public static function config( string $key, string ...$child ) {
+		if ( self::$booted === false ) {
+			throw App_Initialization_Exception::app_not_initialized( App_Config::class );
 		}
-		return self::$app_config->{$key}(...$child);
+		return self::$app_config->{$key}( ...$child );
 	}
 
 	/**
@@ -308,18 +295,16 @@ final class App
 	 * @return View|null
 	 * @throws App_Initialization_Exception Code 4
 	 */
-	public static function view(): ?View
-	{
-		if (self::$booted === false) {
-			throw App_Initialization_Exception::app_not_initialized(View::class);
+	public static function view(): ?View {
+		if ( self::$booted === false ) {
+			throw App_Initialization_Exception::app_not_initialized( View::class );
 		}
 		/** @var ?View */
-		return self::$container->create(View::class);
+		return self::$container->create( View::class );
 	}
 
 	/** @return array{container:DI_Container,app_config:App_Config,booted:bool} */
-	public function __debugInfo()
-	{
+	public function __debugInfo() {
 		return array(
 			'container'  => self::$container,
 			'app_config' => self::$app_config,
@@ -332,9 +317,8 @@ final class App
 	 *
 	 * @return bool
 	 */
-	public function has_app_config(): bool
-	{
-		return is_a(self::$app_config, App_Config::class);
+	public function has_app_config(): bool {
+		return is_a( self::$app_config, App_Config::class );
 	}
 
 	/**
@@ -343,9 +327,8 @@ final class App
 	 * @return DI_Container
 	 * @throws App_Initialization_Exception (Code 1)
 	 */
-	public function get_container(): DI_Container
-	{
-		if (self::$container === null) {
+	public function get_container(): DI_Container {
+		if ( self::$container === null ) {
 			// Throw container not set.
 			throw App_Initialization_Exception::requires_di_container();
 		}

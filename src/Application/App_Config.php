@@ -13,8 +13,8 @@ namespace PinkCrab\Perique\Application;
 
 use OutOfBoundsException;
 
-final class App_Config
-{
+final class App_Config {
+
 
 	/**@ var string */
 	public const POST_META = 'post';
@@ -89,10 +89,9 @@ final class App_Config
 	/**
 	 * @param array<string, mixed> $settings
 	 */
-	public function __construct(array $settings = array())
-	{
-		$settings = $this->set_defaults($settings);
-		$this->set_props($settings);
+	public function __construct( array $settings = array() ) {
+		$settings = $this->set_defaults( $settings );
+		$this->set_props( $settings );
 	}
 
 	/**
@@ -101,9 +100,8 @@ final class App_Config
 	 * @param array<string, mixed> $settings
 	 * @return array<string, mixed>
 	 */
-	private function set_defaults(array $settings): array
-	{
-		return array_replace_recursive($this->settings_defaults(), $settings);
+	private function set_defaults( array $settings ): array {
+		return array_replace_recursive( $this->settings_defaults(), $settings );
 	}
 
 	/**
@@ -112,18 +110,17 @@ final class App_Config
 	 * @param array<string, mixed> $settings
 	 * @return void
 	 */
-	private function set_props(array $settings): void
-	{
+	private function set_props( array $settings ): void {
 		$this->paths['url']  = $settings['url'];
 		$this->paths['path'] = $settings['path'];
-		$this->namespaces    = $this->filter_key_value_pair($settings['namespaces']);
+		$this->namespaces    = $this->filter_key_value_pair( $settings['namespaces'] );
 		$this->plugin        = $settings['plugin'];
 		$this->additional    = $settings['additional'];
-		$this->db_tables     = $this->filter_key_value_pair($settings['db_tables']);
-		$this->post_types    = $this->filter_key_value_pair($settings['post_types']);
-		$this->taxonomies    = $this->filter_key_value_pair($settings['taxonomies']);
+		$this->db_tables     = $this->filter_key_value_pair( $settings['db_tables'] );
+		$this->post_types    = $this->filter_key_value_pair( $settings['post_types'] );
+		$this->taxonomies    = $this->filter_key_value_pair( $settings['taxonomies'] );
 
-		$this->set_meta($settings['meta']);
+		$this->set_meta( $settings['meta'] );
 	}
 
 	/**
@@ -132,15 +129,14 @@ final class App_Config
 	 * @param string|null $path
 	 * @return array<string, mixed>|string|null
 	 */
-	public function path(?string $path = null)
-	{
+	public function path( ?string $path = null ) {
 
-		if (is_null($path)) {
+		if ( is_null( $path ) ) {
 			return $this->paths['path'];
 		}
 
-		return \array_key_exists($path, $this->paths['path'])
-			? trailingslashit($this->paths['path'][$path])
+		return \array_key_exists( $path, $this->paths['path'] )
+			? trailingslashit( $this->paths['path'][ $path ] )
 			: null;
 	}
 
@@ -150,15 +146,14 @@ final class App_Config
 	 * @param string|null $url
 	 * @return array<string, mixed>|string|null
 	 */
-	public function url(?string $url = null)
-	{
+	public function url( ?string $url = null ) {
 
-		if (is_null($url)) {
+		if ( is_null( $url ) ) {
 			return $this->paths['url'];
 		}
 
-		return \array_key_exists($url, $this->paths['url'])
-			? trailingslashit($this->paths['url'][$url])
+		return \array_key_exists( $url, $this->paths['url'] )
+			? trailingslashit( $this->paths['url'][ $url ] )
 			: null;
 	}
 
@@ -167,8 +162,7 @@ final class App_Config
 	 *
 	 * @return string
 	 */
-	public function rest(): string
-	{
+	public function rest(): string {
 		return $this->namespaces['rest'];
 	}
 
@@ -177,8 +171,7 @@ final class App_Config
 	 *
 	 * @return string
 	 */
-	public function cache(): string
-	{
+	public function cache(): string {
 		return $this->namespaces['cache'];
 	}
 
@@ -188,10 +181,9 @@ final class App_Config
 	 * @param string $key
 	 * @return string|null
 	 */
-	public function namespace(string $key): ?string
-	{
-		return array_key_exists($key, $this->namespaces)
-			? $this->namespaces[$key] : null;
+	public function namespace( string $key ): ?string {
+		return array_key_exists( $key, $this->namespaces )
+			? $this->namespaces[ $key ] : null;
 	}
 
 	/**
@@ -200,10 +192,9 @@ final class App_Config
 	 * @param string $key
 	 * @return mixed
 	 */
-	public function additional(string $key)
-	{
-		return array_key_exists($key, $this->additional)
-			? $this->additional[$key] : null;
+	public function additional( string $key ) {
+		return array_key_exists( $key, $this->additional )
+			? $this->additional[ $key ] : null;
 	}
 
 	/**
@@ -211,8 +202,7 @@ final class App_Config
 	 *
 	 * @return string
 	 */
-	public function version(): string
-	{
+	public function version(): string {
 		return $this->plugin['version'];
 	}
 
@@ -223,13 +213,12 @@ final class App_Config
 	 * @return string
 	 * @throws OutOfBoundsException
 	 */
-	public function post_types(string $key)
-	{
-		if (!array_key_exists($key, $this->post_types)) {
-			throw new OutOfBoundsException('Post Type not defined.');
+	public function post_types( string $key ) {
+		if ( ! array_key_exists( $key, $this->post_types ) ) {
+			throw new OutOfBoundsException( 'Post Type not defined.' );
 		}
 
-		return $this->post_types[$key];
+		return $this->post_types[ $key ];
 	}
 
 	/**
@@ -240,18 +229,17 @@ final class App_Config
 	 * @return string
 	 * @throws OutOfBoundsException
 	 */
-	public function meta(string $key, string $type = self::POST_META): string
-	{
+	public function meta( string $key, string $type = self::POST_META ): string {
 		// Check meta type.
-		if (!array_key_exists($type, $this->meta)) {
-			throw new OutOfBoundsException('Meta Type doesnt exists');
+		if ( ! array_key_exists( $type, $this->meta ) ) {
+			throw new OutOfBoundsException( 'Meta Type doesnt exists' );
 		}
 		// Check key.
-		if (!array_key_exists($key, $this->meta[$type])) {
-			throw new OutOfBoundsException($type . ' meta key doesnt exists');
+		if ( ! array_key_exists( $key, $this->meta[ $type ] ) ) {
+			throw new OutOfBoundsException( $type . ' meta key doesnt exists' );
 		}
 
-		return $this->meta[$type][$key];
+		return $this->meta[ $type ][ $key ];
 	}
 
 	/**
@@ -261,9 +249,8 @@ final class App_Config
 	 * @param string $key
 	 * @return string
 	 */
-	public function post_meta(string $key): string
-	{
-		return $this->meta($key, self::POST_META);
+	public function post_meta( string $key ): string {
+		return $this->meta( $key, self::POST_META );
 	}
 
 	/**
@@ -273,9 +260,8 @@ final class App_Config
 	 * @param string $key
 	 * @return string
 	 */
-	public function user_meta(string $key): string
-	{
-		return $this->meta($key, self::USER_META);
+	public function user_meta( string $key ): string {
+		return $this->meta( $key, self::USER_META );
 	}
 
 	/**
@@ -285,9 +271,8 @@ final class App_Config
 	 * @param string $key
 	 * @return string
 	 */
-	public function term_meta(string $key): string
-	{
-		return $this->meta($key, self::TERM_META);
+	public function term_meta( string $key ): string {
+		return $this->meta( $key, self::TERM_META );
 	}
 
 	/**
@@ -296,16 +281,15 @@ final class App_Config
 	 * @param array<string, array<string,string>> $meta
 	 * @return void
 	 */
-	public function set_meta(array $meta): void
-	{
-		$valid_meta_types = array(self::POST_META, self::USER_META, self::TERM_META);
-		foreach ($meta as $meta_type => $pairs) {
-			if (!in_array($meta_type, $valid_meta_types, true)) {
-				throw new OutOfBoundsException('Valid meta type must be used as key.');
+	public function set_meta( array $meta ): void {
+		$valid_meta_types = array( self::POST_META, self::USER_META, self::TERM_META );
+		foreach ( $meta as $meta_type => $pairs ) {
+			if ( ! in_array( $meta_type, $valid_meta_types, true ) ) {
+				throw new OutOfBoundsException( 'Valid meta type must be used as key.' );
 			}
 
 			// Set all pairs which have both valid key and values.
-			$this->meta[$meta_type] = $this->filter_key_value_pair($pairs);
+			$this->meta[ $meta_type ] = $this->filter_key_value_pair( $pairs );
 		}
 	}
 
@@ -316,13 +300,12 @@ final class App_Config
 	 * @return string
 	 * @throws OutOfBoundsException
 	 */
-	public function taxonomies(string $key): string
-	{
-		if (!array_key_exists($key, $this->taxonomies)) {
-			throw new OutOfBoundsException('Taxonomy not defined.');
+	public function taxonomies( string $key ): string {
+		if ( ! array_key_exists( $key, $this->taxonomies ) ) {
+			throw new OutOfBoundsException( 'Taxonomy not defined.' );
 		}
 
-		return $this->taxonomies[$key];
+		return $this->taxonomies[ $key ];
 	}
 
 
@@ -333,12 +316,11 @@ final class App_Config
 	 * @return string
 	 * @throws OutOfBoundsException
 	 */
-	public function db_tables(string $name): string
-	{
-		if (!array_key_exists($name, $this->db_tables)) {
-			throw new OutOfBoundsException('Table doesnt exist');
+	public function db_tables( string $name ): string {
+		if ( ! array_key_exists( $name, $this->db_tables ) ) {
+			throw new OutOfBoundsException( 'Table doesnt exist' );
 		}
-		return $this->db_tables[$name];
+		return $this->db_tables[ $name ];
 	}
 
 	/**
@@ -347,9 +329,8 @@ final class App_Config
 	 * @param string $name
 	 * @return mixed
 	 */
-	public function __get($name)
-	{
-		return $this->additional($name);
+	public function __get( $name ) {
+		return $this->additional( $name );
 	}
 
 	/**
@@ -357,10 +338,9 @@ final class App_Config
 	 *
 	 * @return array<string, mixed>
 	 */
-	private function settings_defaults(): array
-	{
-		$base_path  = \dirname(__DIR__, 2);
-		$plugin_dir = \basename($base_path);
+	private function settings_defaults(): array {
+		$base_path  = \dirname( __DIR__, 2 );
+		$plugin_dir = \basename( $base_path );
 		$wp_uploads = \wp_upload_dir();
 
 		return array(
@@ -375,9 +355,9 @@ final class App_Config
 				'upload_current' => $wp_uploads['path'],
 			),
 			'url'        => array(
-				'plugin'         => plugins_url($plugin_dir),
-				'view'           => plugins_url($plugin_dir) . '/views',
-				'assets'         => plugins_url($plugin_dir) . '/assets',
+				'plugin'         => plugins_url( $plugin_dir ),
+				'view'           => plugins_url( $plugin_dir ) . '/views',
+				'assets'         => plugins_url( $plugin_dir ) . '/assets',
 				'upload_root'    => $wp_uploads['baseurl'],
 				'upload_current' => $wp_uploads['url'],
 			),
@@ -403,15 +383,14 @@ final class App_Config
 	 * @param array<int|string, mixed> $pairs
 	 * @return array<string, string>
 	 */
-	private function filter_key_value_pair(array $pairs): array
-	{
+	private function filter_key_value_pair( array $pairs ): array {
 		/** @var array<string, string> (as per filter function)*/
 		return array_filter(
 			$pairs,
-			function ($value, $key): bool {
-				return is_string($value)
-					&& \mb_strlen($value) > 0
-					&& is_string($key);
+			function ( $value, $key ): bool {
+				return is_string( $value )
+					&& \mb_strlen( $value ) > 0
+					&& is_string( $key );
 			},
 			ARRAY_FILTER_USE_BOTH
 		);
@@ -422,11 +401,10 @@ final class App_Config
 	 *
 	 * @return array<string, string|int|array>
 	 */
-	public function export_settings(): array
-	{
+	public function export_settings(): array {
 		return array(
-			'paths'      => $this->paths['paths'],
-			'urls'       => $this->paths['urls'],
+			'paths'      => $this->paths['path'],
+			'urls'       => $this->paths['url'],
 			'namespaces' => $this->namespaces,
 			'plugin'     => $this->plugin,
 			'additional' => $this->additional,

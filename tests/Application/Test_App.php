@@ -16,15 +16,17 @@ use Dice\Dice;
 use Exception;
 use WP_UnitTestCase;
 use PinkCrab\Loader\Hook_Loader;
-use PinkCrab\Perique\Application\App;
 use Gin0115\WPUnit_Helpers\Objects;
+use PinkCrab\Perique\Application\App;
+use PinkCrab\Perique\Application\Config;
 use PinkCrab\Perique\Application\App_Config;
 use PinkCrab\Perique\Interfaces\DI_Container;
-use PinkCrab\Perique\Tests\Application\App_Helper_Trait;
 use PinkCrab\Perique\Services\Dice\PinkCrab_Dice;
+use PinkCrab\Perique\Tests\Application\Test_App_Config;
+use PinkCrab\Perique\Interfaces\Registration_Middleware;
+use PinkCrab\Perique\Tests\Application\App_Helper_Trait;
 use PinkCrab\Perique\Exceptions\App_Initialization_Exception;
 use PinkCrab\Perique\Services\Registration\Registration_Service;
-use PinkCrab\Perique\Interfaces\Registration_Middleware;
 
 class Test_App extends WP_UnitTestCase {
 
@@ -178,7 +180,7 @@ class Test_App extends WP_UnitTestCase {
 	/** @testdox When a fully populated app is booted, it should pass valdaition and run all internal setups. */
 	public function test_boot(): void {
 		$app = $this->pre_populated_app_provider();
-		
+
 		// Ensure app is not marked as booted before calling boot()
 		$this->assertFalse( $app::is_booted() );
 
@@ -194,8 +196,7 @@ class Test_App extends WP_UnitTestCase {
 	}
 
 	/** @testdox The app should only be bootable only once, trying to reboot should cause an error and abort the request. */
-	public function test_throws_exception_if_trying_to_boot_twice(): void
-	{
+	public function test_throws_exception_if_trying_to_boot_twice(): void {
 		$this->expectException( App_Initialization_Exception::class );
 		$this->expectExceptionCode( 6 );
 		$app = $this->pre_populated_app_provider();
@@ -204,8 +205,7 @@ class Test_App extends WP_UnitTestCase {
 	}
 
 	/** @testdox The apps internal serives (View, DI & App_Config) can only be used once the application has been booted. */
-	public function test_throws_exception_if_view_is_called_before_app_booted(): void
-	{
+	public function test_throws_exception_if_view_is_called_before_app_booted(): void {
 		$this->expectException( App_Initialization_Exception::class );
 		$this->expectExceptionCode( 4 );
 		$app = $this->pre_populated_app_provider();
@@ -213,18 +213,26 @@ class Test_App extends WP_UnitTestCase {
 	}
 
 	/** @testdox It should be possible to access the current DI container from the App instance, for use in additional libraies that need access. */
-	public function test_can_get_container_from_app(): void
-	{
+	public function test_can_get_container_from_app(): void {
 		$app = $this->pre_populated_app_provider();
-		$this->assertInstanceOf(DI_Container::class, $app->get_container());
+		$this->assertInstanceOf( DI_Container::class, $app->get_container() );
 	}
 
 	/** @testdox Attemptingt to access the DI Container before it has been defiend, should resutl in an Application Intialization exception. */
-	public function test_throws_exception_if_attempting_to_access_undefined_di_container(): void
-	{
+	public function test_throws_exception_if_attempting_to_access_undefined_di_container(): void {
 		$this->expectException( App_Initialization_Exception::class );
 		$this->expectExceptionCode( 1 );
 		$app = new App();
 		$app->get_container();
+	}
+
+
+	/** @testdox It should be possible to access App_Config using the Config Facade */
+	public function test_config_facade(): void {
+		$app = $this->pre_populated_app_provider();
+		$app->boot();
+
+		$this->assertEquals( 'pc_cache', Config::cache() );
+		$this->assertEquals( $app::make( Config::class )::cache(), Config::cache() );
 	}
 }
