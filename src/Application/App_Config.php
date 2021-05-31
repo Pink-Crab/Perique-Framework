@@ -386,12 +386,30 @@ final class App_Config {
 		/** @var array<string, string> (as per filter function)*/
 		return array_filter(
 			$pairs,
-			function( $value, $key ): bool {
+			function ( $value, $key ): bool {
 				return is_string( $value )
 				&& \mb_strlen( $value ) > 0
 				&& is_string( $key );
 			},
 			ARRAY_FILTER_USE_BOTH
+		);
+	}
+
+	/**
+	 * Exports the internal settings array.
+	 *
+	 * @return array<string, string|int|array>
+	 */
+	public function export_settings(): array {
+		return array(
+			'path'       => $this->paths['path'],
+			'url'        => $this->paths['url'],
+			'namespaces' => $this->namespaces,
+			'plugin'     => $this->plugin,
+			'additional' => $this->additional,
+			'db_tables'  => $this->db_tables,
+			'post_types' => $this->post_types,
+			'taxonomies' => $this->taxonomies,
 		);
 	}
 }

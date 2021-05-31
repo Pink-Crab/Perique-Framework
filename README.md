@@ -2,7 +2,7 @@
 
 Welcome to the core package of the PinkCrab **Perique** plugin framework, formally known as just the PinkCrab Plugin Framwework. 
 
-![alt text](https://img.shields.io/badge/Current_Version-0.5.5-yellow.svg?style=flat " ") 
+![alt text](https://img.shields.io/badge/Current_Version-0.5.6-yellow.svg?style=flat " ") 
 [![Open Source Love](https://badges.frapsoft.com/os/mit/mit.svg?v=102)]()
 ![](https://github.com/Pink-Crab/Perqiue-Framework/workflows/GitHub_CI/badge.svg " ")
 [![codecov](https://codecov.io/gh/Pink-Crab/Perqiue-Framework/branch/master/graph/badge.svg?token=yNsRq7Bq1s)](https://codecov.io/gh/Pink-Crab/Perqiue-Framework)
@@ -11,7 +11,7 @@ For more details please visit our docs.
 https://app.gitbook.com/@glynn-quelch/s/pinkcrab/
 
 
-## Version 0.5.5 ##
+## Version 0.5.6 ##
 
 
 ## Why? ##
@@ -56,7 +56,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 // Creates an App loaded with the WP_Dice DI container and basic DI rules
 // Allows for the passing of wpdb and the App's own instance.
-$app = ( new App_Factory )->with_wp_dice( true );
+$app = ( new PinkCrab\Perique\Application\App_Factory )->with_wp_dice( true );
 
 // Set rules and configure DI Container
 $app->di_rules(include __DIR__ . '/config/dependencies.php');
@@ -68,7 +68,7 @@ $app->app_config( include __DIR__ . '/config/settings.php' )
 $app->registration_classses(include __DIR__ . '/config/registration.php' );
 
 // Add custom Regisration Middleware
-$app->registration_middleware(new Eaxmple_Rest_Route_Registration_Middleware('my_base/route'));
+$app->registration_middleware(new Example_Rest_Route_Registration_Middleware('my_base/route'));
 
 // Then just boot the application.
 $app->boot();
@@ -137,7 +137,7 @@ $plugin_dir = \basename( $base_path );
 $wp_uploads = \wp_upload_dir();
 global $wpdb;
 
-return array(g
+return array(
 	'plugin'     => array(
 		'version' => '1.2.5',
 	),
@@ -218,7 +218,7 @@ You can then pass these custom Registatration_Middlewares to the app at boot.
 ```php
 <?php 
 
-$app = ( new App_Factory )->with_wp_dice( true )
+$app = ( new PinkCrab\Perique\Application\App_Factory )->with_wp_dice( true )
 	// Rest of bootstrapping
 	->registration_middleware(new Does_Something(new Some_Service()))
 	->boot();
@@ -369,6 +369,7 @@ add_filter(Hooks::APP_INIT_SET_DI_RULES,
 http://www.opensource.org/licenses/mit-license.html  
 
 ## Change Log ##
+* 0.5.6 - Ensure App_Config is not populated as its DI ruleset as part of App->boot(). This ensures Config Facade is populated with the pass App_Config config array.
 * 0.5.5 - Allows passing of registration middleware via App_Factory setup chain. Also allows the passing of DI_Container as a dependency via DI_Container. Allowing for modules to access DI without having to pass App and then use App::make(). 
 * 0.5.4 - Moved to new repo to allow renaming via Packagist
 * 0.5.3 - Move to new composer name due to issue with existing.
