@@ -36,6 +36,7 @@ use PinkCrab\Perique\Services\Registration\Registration_Service;
 
 final class App {
 
+
 	/**
 	 * Defines if the app has already been booted.
 	 *
@@ -224,8 +225,16 @@ final class App {
 			array(
 				'substitutions' => array(
 					self::class         => $this,
-					App_Config::class   => self::$app_config,
 					DI_Container::class => self::$container,
+				),
+			)
+		);
+
+		self::$container->addRule(
+			App_Config::class,
+			array(
+				'constructParams' => array(
+					self::$app_config->export_settings(),
 				),
 			)
 		);
@@ -236,7 +245,7 @@ final class App {
 		// Initialise on init
 		add_action(
 			'init',
-			function() {
+			function () {
 				do_action( Hooks::APP_INIT_PRE_REGISTRATION, self::$app_config, $this->loader, self::$container );
 				$this->registration->process();
 				do_action( Hooks::APP_INIT_POST_REGISTRATION, self::$app_config, $this->loader, self::$container );
