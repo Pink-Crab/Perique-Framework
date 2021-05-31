@@ -233,7 +233,7 @@ final class App {
 		self::$container->addRule(
 			App_Config::class,
 			array(
-				'constructor' => array(
+				'constructParams' => array(
 					self::$app_config->export_settings(),
 				),
 			)

@@ -403,8 +403,8 @@ final class App_Config {
 	 */
 	public function export_settings(): array {
 		return array(
-			'paths'      => $this->paths['path'],
-			'urls'       => $this->paths['url'],
+			'path'       => $this->paths['path'],
+			'url'        => $this->paths['url'],
 			'namespaces' => $this->namespaces,
 			'plugin'     => $this->plugin,
 			'additional' => $this->additional,
