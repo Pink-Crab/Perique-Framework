@@ -15,7 +15,6 @@ use OutOfBoundsException;
 
 final class App_Config {
 
-
 	/**@ var string */
 	public const POST_META = 'post';
 
@@ -389,8 +388,8 @@ final class App_Config {
 			$pairs,
 			function ( $value, $key ): bool {
 				return is_string( $value )
-					&& \mb_strlen( $value ) > 0
-					&& is_string( $key );
+				&& \mb_strlen( $value ) > 0
+				&& is_string( $key );
 			},
 			ARRAY_FILTER_USE_BOTH
 		);
