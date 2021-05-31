@@ -56,7 +56,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 // Creates an App loaded with the WP_Dice DI container and basic DI rules
 // Allows for the passing of wpdb and the App's own instance.
-$app = ( new App_Factory )->with_wp_dice( true );
+$app = ( new PinkCrab\Perique\Application\App_Factory )->with_wp_dice( true );
 
 // Set rules and configure DI Container
 $app->di_rules(include __DIR__ . '/config/dependencies.php');
@@ -68,7 +68,7 @@ $app->app_config( include __DIR__ . '/config/settings.php' )
 $app->registration_classses(include __DIR__ . '/config/registration.php' );
 
 // Add custom Regisration Middleware
-$app->registration_middleware(new Eaxmple_Rest_Route_Registration_Middleware('my_base/route'));
+$app->registration_middleware(new Example_Rest_Route_Registration_Middleware('my_base/route'));
 
 // Then just boot the application.
 $app->boot();
@@ -137,7 +137,7 @@ $plugin_dir = \basename( $base_path );
 $wp_uploads = \wp_upload_dir();
 global $wpdb;
 
-return array(g
+return array(
 	'plugin'     => array(
 		'version' => '1.2.5',
 	),
@@ -218,7 +218,7 @@ You can then pass these custom Registatration_Middlewares to the app at boot.
 ```php
 <?php 
 
-$app = ( new App_Factory )->with_wp_dice( true )
+$app = ( new PinkCrab\Perique\Application\App_Factory )->with_wp_dice( true )
 	// Rest of bootstrapping
 	->registration_middleware(new Does_Something(new Some_Service()))
 	->boot();
