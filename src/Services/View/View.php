@@ -46,7 +46,7 @@ class View {
 	protected $engine;
 
 	/**
-	 * Creates an intance of view with the passed engine.
+	 * Creates an instance of view with the passed engine.
 	 *
 	 * @param Renderable $engine
 	 */

@@ -60,9 +60,9 @@ class App_Initialization_Exception extends Exception {
 	}
 
 	/**
-	 * Returns an exception if App hasnt been intialised and its getters are accessed
+	 * Returns an exception if App hasn't been initialised and its getters are accessed
 	 * @code 4
-	 * @param string $service The service which has been called without intiialising the app.
+	 * @param string $service The service which has been called without initialising the app.
 	 * @return App_Initialization_Exception
 	 */
 	public static function app_not_initialized( string $service ): App_Initialization_Exception {
@@ -85,7 +85,7 @@ class App_Initialization_Exception extends Exception {
 	 * @code 7
 	 * @return App_Initialization_Exception
 	 */
-	public static function registation_exists(): App_Initialization_Exception {
+	public static function registration_exists(): App_Initialization_Exception {
 		$message = 'Can not redeclare Registration_Service as its already set to the application';
 		return new App_Initialization_Exception( $message, 7 );
 	}

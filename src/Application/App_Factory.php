@@ -38,7 +38,7 @@ class App_Factory {
 	}
 
 	/**
-	 * Pre populates a standard isntance of the App
+	 * Pre populates a standard instance of the App
 	 * Uses the PinkCrab_Dice container
 	 * Sets up registration and loader instances.
 	 * Adds Registerable Middleware
@@ -106,13 +106,13 @@ class App_Factory {
 	}
 
 	/**
-	 * Sets the registation class list.
+	 * Sets the registration class list.
 	 *
 	 * @param array<int, string> $class_list Array of fully namespaced class names.
 	 * @return self
 	 */
-	public function registration_classses( array $class_list ): self {
-		$this->app->registration_classses( $class_list );
+	public function registration_classes( array $class_list ): self {
+		$this->app->registration_classes( $class_list );
 		return $this;
 	}
 
@@ -142,7 +142,7 @@ class App_Factory {
 	 * @return \PinkCrab\Perique\Application\App
 	 */
 	public function boot(): App {
-		// Sets defualt settings if not already set.
+		// Sets default settings if not already set.
 		if ( ! $this->app->has_app_config() ) {
 			$this->app_config( array() );
 		}

@@ -63,7 +63,7 @@ class Registration_Service {
 	}
 
 	/**
-	 * Pushes a peice of middleware to the collection.
+	 * Pushes a piece of middleware to the collection.
 	 *
 	 * @param Registration_Middleware $middleware
 	 * @return self

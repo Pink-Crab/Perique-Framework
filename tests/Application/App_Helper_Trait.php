@@ -29,7 +29,7 @@ use Gin0115\WPUnit_Helpers\Objects;
 trait App_Helper_Trait {
 
 	/**
-	 * Resets the any existing App isntance with default properties.
+	 * Resets the any existing App isn'tance with default properties.
 	 *
 	 * @return void
 	 */
