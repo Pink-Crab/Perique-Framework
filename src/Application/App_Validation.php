@@ -26,7 +26,7 @@ class App_Validation {
 
 	/**
 	 * Required properties
-	 * Key is the propety and value is if "static"
+	 * Key is the property and value is if "static"
 	 *
 	 * @var array<string,bool>
 	 */
@@ -48,7 +48,7 @@ class App_Validation {
 	}
 
 	/**
-	 * Checks all properties are set and app isnt already booted
+	 * Checks all properties are set and app isn't already booted
 	 *
 	 * @return bool
 	 */

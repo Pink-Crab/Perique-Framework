@@ -61,7 +61,7 @@ class PHP_Engine implements Renderable {
 	}
 
 	/**
-	 * Include a partial subtemplate
+	 * Include a partial sub template
 	 *
 	 * @param string $view
 	 * @param iterable<string, mixed> $data
@@ -87,7 +87,7 @@ class PHP_Engine implements Renderable {
 	protected function render_buffer( string $view, iterable $data ): string {
 
 		if ( ! file_exists( $this->resolve_file_path( $view ) ) ) {
-			throw new Exception( "{$view} doesnt exist" );
+			throw new Exception( "{$view} doesn't exist" );
 		}
 
 		$output = '';
@@ -147,7 +147,7 @@ class PHP_Engine implements Renderable {
 		$path = rtrim( $path, '/' ) . '/';
 
 		if ( ! \is_dir( $path ) ) {
-			throw new Exception( "{$path} doesnt exist and cant be used as the base view path." );
+			throw new Exception( "{$path} doesn't exist and cant be used as the base view path." );
 		}
 
 		return $path;

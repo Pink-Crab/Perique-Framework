@@ -42,7 +42,7 @@ class Test_App_Functional extends WP_UnitTestCase {
 		self::unset_app_instance();
 	}
 
-    /** @testdox When running the applications setup, hooks should be triggered to allow external codeabases to interact and piggyback into the app initalisation process. */
+    /** @testdox When running the applications setup, hooks should be triggered to allow external codeabases to interact and piggyback into the app initialisation process. */
     public function test_all_hooks_fire_on_finalise_during_boot(): void
     {
         

@@ -39,14 +39,14 @@ final class App_Config {
 	protected $namespaces = array();
 
 	/**
-	 * Holds all additiional array details.
+	 * Holds all plugin details.
 	 *
 	 * @var array<string, mixed>
 	 */
 	protected $plugin = array();
 
 	/**
-	 * Holds all additiional array details.
+	 * Holds all taxonomy terms.
 	 *
 	 * @var array<string, mixed>
 	 */
@@ -242,7 +242,7 @@ final class App_Config {
 	}
 
 	/**
-	 * Retruns the post meta key value
+	 * Returns the post meta key value
 	 * Alias for meta() with type as POST_META
 	 *
 	 * @param string $key
@@ -253,7 +253,7 @@ final class App_Config {
 	}
 
 	/**
-	 * Retruns the user meta key value
+	 * Returns the user meta key value
 	 * Alias for meta() with type as USER_META
 	 *
 	 * @param string $key
@@ -264,7 +264,7 @@ final class App_Config {
 	}
 
 	/**
-	 * Retruns the tern meta key value
+	 * Returns the tern meta key value
 	 * Alias for meta() with type as TERM_META
 	 *
 	 * @param string $key

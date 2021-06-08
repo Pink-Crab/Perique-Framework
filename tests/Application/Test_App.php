@@ -164,7 +164,7 @@ class Test_App extends WP_UnitTestCase {
 		$app          = new App();
 		$registration = new Registration_Service();
 		$app->set_registration_services( $registration );
-		$app->registration_classses( array( Sample_Class::class ) );
+		$app->registration_classes( array( Sample_Class::class ) );
 		$this->assertContains( Sample_Class::class, Objects::get_property( $registration, 'class_list' ) );
 	}
 
@@ -174,7 +174,7 @@ class Test_App extends WP_UnitTestCase {
 		$this->expectExceptionCode( 3 );
 
 		$app = new App();
-		$app->registration_classses( array( Sample_Class::class ) );
+		$app->registration_classes( array( Sample_Class::class ) );
 	}
 
 	/** @testdox When a fully populated app is booted, it should pass valdaition and run all internal setups. */

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 /**
- * Class of contansts and static functions for all hook handles.
+ * Class of constants and static functions for all hook handles.
  *
  * @since 0.4.0
  * @author Glynn Quelch <glynn.quelch@gmail.com>

@@ -56,7 +56,7 @@ class Test_App_Factory extends WP_UnitTestCase {
 	public function test_can_set_registration_classes(): void {
 		$app = ( new App_Factory )
 			->with_wp_dice( true )
-			->registration_classses( array( Registerable_Mock::class ) )->app();
+			->registration_classes( array( Registerable_Mock::class ) )->app();
 
 		$registration_service = Objects::get_property( $app, 'registration' );
 		$this->assertContains(
@@ -95,7 +95,7 @@ class Test_App_Factory extends WP_UnitTestCase {
 		$this->assertTrue( $app::is_booted() );
 	}
 
-	/** @testdox It shoud be possble to pass the DI_Container interface as a depenedcy and have it populated with the current DI_Container implementation at initalisation.  */
+	/** @testdox It shoud be possble to pass the DI_Container interface as a depenedcy and have it populated with the current DI_Container implementation at initialisation.  */
 	public function test_di_container_rule_defined_at_init(Type $var = null)
 	{
 		$app = ( new App_Factory )
