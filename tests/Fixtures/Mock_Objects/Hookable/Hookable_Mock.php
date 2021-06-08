@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * Mock object that implements Registerable
+ * Mock object that implements Hookable
  *
  * @since 0.2.3
  * @author Glynn Quelch <glynn.quelch@gmail.com>
@@ -11,24 +11,24 @@ declare(strict_types=1);
  * @package PinkCrab\Perique
  */
 
-namespace PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Registerable;
+namespace PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Hookable;
 
 use PinkCrab\Loader\Hook_Loader;
-use PinkCrab\Perique\Interfaces\Registerable;
+use PinkCrab\Perique\Interfaces\Hookable;
 
-class Registerable_Mock implements Registerable {
+class Hookable_Mock implements Hookable {
 
 	/**
-	 * Registers a single hook (Registerable_Mock) echos Registerable_Mock
+	 * Registers a single hook (Hookable_Mock) echos Hookable_Mock
 	 *
 	 * @param \PinkCrab\Loader\Hook_Loader $loader
 	 * @return void
 	 */
 	public function register( Hook_Loader $loader ): void {
 		$loader->action(
-			'Registerable_Mock',
+			'Hookable_Mock',
 			function() {
-				echo 'Registerable_Mock';
+				echo 'Hookable_Mock';
 			}
 		);
 	}

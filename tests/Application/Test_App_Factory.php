@@ -21,8 +21,7 @@ use PinkCrab\Perique\Interfaces\DI_Container;
 use PinkCrab\Perique\Tests\Fixtures\DI\Interface_A;
 use PinkCrab\Perique\Interfaces\Registration_Middleware;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Has_DI_Container;
-use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Mock_Registation_Middleware;
-use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Registerable\Registerable_Mock;
+use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Hookable\Hookable_Mock;
 
 class Test_App_Factory extends WP_UnitTestCase {
 
@@ -35,7 +34,7 @@ class Test_App_Factory extends WP_UnitTestCase {
 		self::unset_app_instance();
 	}
 
-	/** @testdox When requested the App Factory can create an instance of App popualted with WP_Dice, Registerables Middleware, Loader and Registration Service. */
+	/** @testdox When requested the App Factory can create an instance of App popualted with WP_Dice, Hookables Middleware, Loader and Registration Service. */
 	public function test_can_create_with_wp_dicece(): void {
 		$app = ( new App_Factory )
 			->with_wp_dice( true )
@@ -56,11 +55,11 @@ class Test_App_Factory extends WP_UnitTestCase {
 	public function test_can_set_registration_classes(): void {
 		$app = ( new App_Factory )
 			->with_wp_dice( true )
-			->registration_classses( array( Registerable_Mock::class ) )->app();
+			->registration_classes( array( Hookable_Mock::class ) )->app();
 
 		$registration_service = Objects::get_property( $app, 'registration' );
 		$this->assertContains(
-			Registerable_Mock::class,
+			Hookable_Mock::class,
 			Objects::get_property( $registration_service, 'class_list' )
 		);
 	}
@@ -95,8 +94,8 @@ class Test_App_Factory extends WP_UnitTestCase {
 		$this->assertTrue( $app::is_booted() );
 	}
 
-	/** @testdox It shoud be possble to pass the DI_Container interface as a depenedcy and have it populated with the current DI_Container implementation at initalisation.  */
-	public function test_di_container_rule_defined_at_init(Type $var = null)
+	/** @testdox It shoud be possble to pass the DI_Container interface as a depenedcy and have it populated with the current DI_Container implementation at initialisation.  */
+	public function test_di_container_rule_defined_at_init(): void
 	{
 		$app = ( new App_Factory )
 			->with_wp_dice( true )

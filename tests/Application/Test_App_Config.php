@@ -190,7 +190,7 @@ class Test_App_Config extends WP_UnitTestCase {
 		$this->assertEquals( 'my_slug', $app_config->post_types( 'my_cpt' ) );
 	}
 
-	/** @testdox When setting post types any key or value which isnt a valid string (string and not empty) will not be set. */
+	/** @testdox When setting post types any key or value which isn't a valid string (string and not empty) will not be set. */
 	public function test_filters_post_type_with_none_string_key_value_pairs(): void {
 		$this->expectException( OutOfBoundsException::class );
 		$app_config = new App_Config(
@@ -245,7 +245,7 @@ class Test_App_Config extends WP_UnitTestCase {
 		$app_config->meta( 'key', 'invalid_type' );
 	}
 
-	/** @testdox When attempting to get a meta key which hasnt been defined, an error should be generated. */
+	/** @testdox When attempting to get a meta key which hasn't been defined, an error should be generated. */
 	public function test_exception_throw_for_unset_meta_key(): void {
 		$this->expectException( OutOfBoundsException::class );
 		$app_config = new App_Config( self::SAMPLE_SETTINGS );

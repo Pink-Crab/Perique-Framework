@@ -32,14 +32,14 @@ use PinkCrab\Perique\Exceptions\DI_Container_Exception;
 class PinkCrab_Dice implements DI_Container {
 
 	/**
-	 * Holds the instnace of DICE to work with.
+	 * Holds the instance of DICE to work with.
 	 *
 	 * @var Dice;
 	 */
 	protected $dice;
 
 	/**
-	 * Passes in the inital dice instance.
+	 * Passes in the initial dice instance.
 	 *
 	 * @param Dice $dice
 	 */
@@ -59,7 +59,7 @@ class PinkCrab_Dice implements DI_Container {
 
 	/**
 	 * ContainerInterface implementation of get.
-	 * Will attemp to construct autowired.
+	 * Will attempt to construct autowired.
 	 *
 	 * @param string $id Class name (fully namespaced.)
 	 * @return object|null
@@ -73,7 +73,7 @@ class PinkCrab_Dice implements DI_Container {
 
 	/**
 	 * Checks if a specific class is registered or exists.
-	 * Doesnt take into account the ability to autowire.
+	 * Doesn't take into account the ability to autowire.
 	 *
 	 * @param string $id Class name (fully namespaced.)
 	 * @return bool
