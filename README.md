@@ -12,7 +12,9 @@ Welcome to the core package of the PinkCrab **Perique** plugin framework, formal
 For more details please visit our docs.
 https://app.gitbook.com/@glynn-quelch/s/pinkcrab/
 
-## Version 0.5.6 ##
+## Version 1.0.0 ##
+
+> First official release.
 
 ## Why? ##
 
@@ -110,7 +112,7 @@ return array(
 
 When the app is booted, all classes which have either hook calls or needed to be called, are passed in this array. 
 
-By default the Registerable middleware is passed, so all classes which implement the Registerable interface will be called. Adding custom Registration Middleware will allow you to pass them in this array for initialisation at boot.
+By default the Hookable middleware is passed, so all classes which implement the Hookable interface will be called. Adding custom Registration Middleware will allow you to pass them in this array for initialisation at boot.
 
 > Using the full class name is essential, so ensure you include all needed use statements.
 
@@ -180,7 +182,7 @@ return array(
 
 At the heart of the application is the registration process. Classes can be stacked up and executed at initialisation. This allows for registering into core WP APIs, triggering remote API calls and anything else which needs to be set up when all of WP core is loaded.
 
-### Registerable ###
+### Hookable ###
 
 > The `Loader::class` loader has been deprecated and replaced with the new `Hook_Loader::class`
 
@@ -188,7 +190,7 @@ Included with Perique is a single piece of Registration_Middleware. The Renderab
 
 ```
 ```php
-class Some_Controller implements Registerable {
+class Some_Controller implements Hookable {
 	public function register(Hook_Loader $loader): void{
 		$loader->admin_action('some_action', [$this, 'some_action']);
 	}
@@ -198,7 +200,7 @@ class Some_Controller implements Registerable {
 
 Now when the init hook is called (priority 1), the some_action hook will be added. So long as the request comes from wp-admin. 
 
-> For more details on Registerable and the Hook_Loader please see the full docs
+> For more details on Hookable and the Hook_Loader please see the full docs
 
 ### Registration Middleware ###
 

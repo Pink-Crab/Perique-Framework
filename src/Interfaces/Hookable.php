@@ -23,7 +23,7 @@ namespace PinkCrab\Perique\Interfaces;
 
 use PinkCrab\Loader\Hook_Loader;
 
-interface Registerable {
+interface Hookable {
 
 	/**
 	 * Register all hooks.

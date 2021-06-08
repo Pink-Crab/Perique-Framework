@@ -22,7 +22,7 @@ use PinkCrab\Perique\Services\Dice\PinkCrab_Dice;
 use PinkCrab\Perique\Interfaces\Registration_Middleware;
 use PinkCrab\Perique\Exceptions\App_Initialization_Exception;
 use PinkCrab\Perique\Services\Registration\Registration_Service;
-use PinkCrab\Perique\Services\Registration\Middleware\Registerable_Middleware;
+use PinkCrab\Perique\Services\Registration\Middleware\Hookable_Middleware;
 
 class App_Factory {
 
@@ -41,7 +41,7 @@ class App_Factory {
 	 * Pre populates a standard instance of the App
 	 * Uses the PinkCrab_Dice container
 	 * Sets up registration and loader instances.
-	 * Adds Registerable Middleware
+	 * Adds Hookable Middleware
 	 *
 	 * Just requires Class List, Config and DI Rules.
 	 *
@@ -64,9 +64,9 @@ class App_Factory {
 
 		$this->app->set_loader( $loader );
 
-		// Include Registerables.
+		// Include Hookable.
 		$this->app->registration_middleware(
-			new Registerable_Middleware( $loader )
+			new Hookable_Middleware( $loader )
 		);
 
 		return $this;

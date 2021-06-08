@@ -59,7 +59,7 @@ final class App {
 	protected static $app_config;
 
 	/**
-	 * Handles all registration of all registerable and custom middlewares.
+	 * Handles all registration of all Hookable and custom middlewares.
 	 *
 	 * @var Registration_Service
 	 */

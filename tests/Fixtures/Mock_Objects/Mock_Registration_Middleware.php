@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 /**
- * Mock Registerable_Middleware implementation
+ * Mock Hookable_Middleware implementation
  *
  * Can pass custom message to be echoed on process
  * if no message passed, echos the name of the class passed
@@ -17,7 +17,7 @@ namespace PinkCrab\Perique\Tests\Fixtures\Mock_Objects;
 
 use PinkCrab\Perique\Interfaces\Registration_Middleware;
 
-class Mock_Registation_Middleware implements Registration_Middleware {
+class Mock_Registration_Middleware implements Registration_Middleware {
 
 	public $message;
 
