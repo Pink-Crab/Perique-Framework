@@ -391,7 +391,7 @@ add_filter(Hooks::APP_INIT_SET_DI_RULES,
 http://www.opensource.org/licenses/mit-license.html  
 
 ## Change Log ##
-
+* 1.0.0 - Corrected typos, App::registration_classses() now App::registration_classes(), App_Initialization_Exception::registation_exists() to App_Initialization_Exception::registration_exists().
 * 0.5.6 - Ensure App_Config is not populated as its DI ruleset as part of App->boot(). This ensures Config Facade is populated with the pass App_Config config array.
 * 0.5.5 - Allows passing of registration middleware via App_Factory setup chain. Also allows the passing of DI_Container as a dependency via DI_Container. Allowing for modules to access DI without having to pass App and then use App::make(). 
 * 0.5.4 - Moved to new repo to allow renaming via Packagist
