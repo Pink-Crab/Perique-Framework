@@ -1,6 +1,6 @@
 # PinkCrab **Perique** Plugin Framework #
 
-Welcome to the core package of the PinkCrab **Perique** plugin framework, formally known as just the PinkCrab Plugin Framwework. 
+Welcome to the core package of the PinkCrab **Perique** plugin framework, formally known as just the PinkCrab Plugin Framework. 
 
 ![alt text](https://img.shields.io/badge/Current_Version-0.5.6-yellow.svg?style=flat " ")
 
@@ -71,7 +71,7 @@ $app->app_config( include __DIR__ . '/config/settings.php' )
 // Pass all class names which should be used during registration
 $app->registration_classes(include __DIR__ . '/config/registration.php' );
 
-// Add custom Registration Middleware
+// Add custom Registration Middleware (Not usually used!!! OPTIONAL!)
 $app->registration_middleware(new Example_Rest_Route_Registration_Middleware('my_base/route'));
 
 // Then just boot the application.
@@ -393,7 +393,7 @@ add_filter(Hooks::APP_INIT_SET_DI_RULES,
 http://www.opensource.org/licenses/mit-license.html  
 
 ## Change Log ##
-* 1.0.0 - Corrected typos, App::registration_classses() now App::registration_classes(), App_Initialization_Exception::registation_exists() to App_Initialization_Exception::registration_exists().
+* 1.0.0 - Renamed Registerable interface to Hookable, including the internal Registerable_Middleware to Hookable_Middleare. Corrected typos, App::registration_classses() now App::registration_classes(), App_Initialization_Exception::registation_exists() to App_Initialization_Exception::registration_exists().
 * 0.5.6 - Ensure App_Config is not populated as its DI ruleset as part of App->boot(). This ensures Config Facade is populated with the pass App_Config config array.
 * 0.5.5 - Allows passing of registration middleware via App_Factory setup chain. Also allows the passing of DI_Container as a dependency via DI_Container. Allowing for modules to access DI without having to pass App and then use App::make(). 
 * 0.5.4 - Moved to new repo to allow renaming via Packagist
