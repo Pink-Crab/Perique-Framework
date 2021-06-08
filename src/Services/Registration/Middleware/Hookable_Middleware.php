@@ -27,11 +27,10 @@ declare(strict_types=1);
 namespace PinkCrab\Perique\Services\Registration\Middleware;
 
 use PinkCrab\Loader\Hook_Loader;
-use PinkCrab\Perique\Interfaces\DI_Container;
-use PinkCrab\Perique\Interfaces\Registerable;
+use PinkCrab\Perique\Interfaces\Hookable;
 use PinkCrab\Perique\Interfaces\Registration_Middleware;
 
-class Registerable_Middleware implements Registration_Middleware {
+class Hookable_Middleware implements Registration_Middleware {
 
 	/** @var Hook_Loader */
 	protected $loader;
@@ -47,7 +46,7 @@ class Registerable_Middleware implements Registration_Middleware {
 	 * @return object
 	 */
 	public function process( $class ) {
-		if ( in_array( Registerable::class, class_implements( $class ) ?: array(), true ) ) {
+		if ( in_array( Hookable::class, class_implements( $class ) ?: array(), true ) ) {
 			/** @phpstan-ignore-next-line class must implement register for interface*/
 			$class->register( $this->loader );
 		}

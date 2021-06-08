@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Stub file for testing Registerables.
+ * Stub file for testing Hookables.
  */
 
-use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Registerable\Registerable_Mock;
+use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Hookable\Hookable_Mock;
 
 return array(
-	Registerable_Mock::class,
+	Hookable_Mock::class,
 );

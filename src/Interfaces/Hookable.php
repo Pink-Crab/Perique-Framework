@@ -23,6 +23,13 @@ namespace PinkCrab\Perique\Interfaces;
 
 use PinkCrab\Loader\Hook_Loader;
 
-interface Registerable {
+interface Hookable {
+
+	/**
+	 * Register all hooks.
+	 *
+	 * @param Hook_Loader $loader
+	 * @return void
+	 */
 	public function register( Hook_Loader $loader ): void;
 }

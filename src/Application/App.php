@@ -59,7 +59,7 @@ final class App {
 	protected static $app_config;
 
 	/**
-	 * Handles all registration of all registerable and custom middlewares.
+	 * Handles all registration of all Hookable and custom middlewares.
 	 *
 	 * @var Registration_Service
 	 */
@@ -83,7 +83,7 @@ final class App {
 
 
 	/**
-	 * Sets the DI Constainer.
+	 * Sets the DI Container.
 	 *
 	 * @param \PinkCrab\Perique\Interfaces\DI_Container $container
 	 * @return self
@@ -99,7 +99,7 @@ final class App {
 	}
 
 	/**
-	 * Define the app condfig.
+	 * Define the app config.
 	 *
 	 * @param array<string, mixed> $settings
 	 * @return self
@@ -122,7 +122,7 @@ final class App {
 	 */
 	public function set_registration_services( Registration_Service $registration ): self {
 		if ( $this->registration !== null ) {
-			throw App_Initialization_Exception::registation_exists();
+			throw App_Initialization_Exception::registration_exists();
 		}
 		$this->registration = $registration;
 		return $this;
@@ -143,7 +143,7 @@ final class App {
 	}
 
 	/**
-	 * Interace with the container using a callable.
+	 * Interface with the container using a callable.
 	 *
 	 * @param callable(DI_Container):void $callback
 	 * @return self
@@ -180,7 +180,7 @@ final class App {
 	 * @return self
 	 * @throws App_Initialization_Exception Code 3
 	 */
-	public function registration_classses( array $class_list ): self {
+	public function registration_classes( array $class_list ): self {
 		if ( $this->registration === null ) {
 			throw App_Initialization_Exception::requires_registration_service();
 		}
@@ -213,7 +213,7 @@ final class App {
 	}
 
 	/**
-	 * Finialises all settings and boots the app on init hook call (pritority 1)
+	 * Finialises all settings and boots the app on init hook call (priority 1)
 	 *
 	 * @return self
 	 */

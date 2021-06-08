@@ -23,8 +23,8 @@ use PinkCrab\Perique\Interfaces\Registration_Middleware;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Sample_Class;
 use PinkCrab\Perique\Services\Registration\Registration_Service;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Parent_Dependency;
-use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Mock_Registation_Middleware;
-use PinkCrab\Perique\Services\Registration\Middleware\Registerable_Middleware;
+use PinkCrab\Perique\Services\Registration\Middleware\Hookable_Middleware;
+use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Mock_Registration_Middleware;
 
 class Test_Registration_Service extends WP_UnitTestCase {
 
@@ -42,7 +42,7 @@ class Test_Registration_Service extends WP_UnitTestCase {
 	public function test_push_middleware_to_internal_stack(): void {
 		$registration_service = new Registration_Service;
 
-		$middleware1 = $this->createMock( Registerable_Middleware::class );
+		$middleware1 = $this->createMock( Hookable_Middleware::class );
 		$registration_service->push_middleware( $middleware1 );
 
 		$middleware2 = $this->createMock( Registration_Middleware::class );
@@ -93,7 +93,7 @@ class Test_Registration_Service extends WP_UnitTestCase {
 
 		$registration_service->set_container( $container );
 
-		$registration_service->push_middleware( new Mock_Registation_Middleware() );
+		$registration_service->push_middleware( new Mock_Registration_Middleware() );
 
 		$registration_service->set_classes( array( Sample_Class::class, Parent_Dependency::class ) );
 
@@ -118,7 +118,7 @@ class Test_Registration_Service extends WP_UnitTestCase {
 			}
 		);
 
-		( new Registration_Service )->push_middleware( new Mock_Registation_Middleware() )
+		( new Registration_Service )->push_middleware( new Mock_Registration_Middleware() )
 			->set_container( $container )
 			->push_class( Sample_Class::class )
 			->process();
@@ -130,7 +130,7 @@ class Test_Registration_Service extends WP_UnitTestCase {
 	public function test_middleware_setup_and_tear_down(): void {
 		$registration_service = new Registration_Service;
 		$container            = new PinkCrab_Dice( new Dice );
-		$middleware           = new Mock_Registation_Middleware();
+		$middleware           = new Mock_Registration_Middleware();
 
 		$registration_service->set_container( $container );
 
