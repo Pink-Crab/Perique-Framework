@@ -27,6 +27,7 @@ use PinkCrab\Perique\Interfaces\Registration_Middleware;
 use PinkCrab\Perique\Tests\Application\App_Helper_Trait;
 use PinkCrab\Perique\Exceptions\App_Initialization_Exception;
 use PinkCrab\Perique\Services\Registration\Registration_Service;
+use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Mock_Registration_Middleware;
 
 class Test_App extends WP_UnitTestCase {
 
@@ -138,7 +139,7 @@ class Test_App extends WP_UnitTestCase {
 		);
 	}
 
-	/** @testdox Additionl functionality should be added at boot up through the means of middleware */
+	/** @testdox Additional functionality should be added at boot up through the means of middleware */
 	public function test_registration_middleware(): void {
 		$app          = new App();
 		$registration = new Registration_Service();
@@ -232,6 +233,6 @@ class Test_App extends WP_UnitTestCase {
 		$app = $this->pre_populated_app_provider();
 		$app->boot();
 		$this->assertEquals( FIXTURES_PATH . '/Views/', Config::path( 'view' ) );
-		$this->assertEquals( 'test_value', Config::additional('test_key') );
+		$this->assertEquals( 'test_value', Config::additional( 'test_key' ) );
 	}
 }

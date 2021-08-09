@@ -22,6 +22,7 @@ use PinkCrab\Perique\Tests\Fixtures\DI\Interface_A;
 use PinkCrab\Perique\Interfaces\Registration_Middleware;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Has_DI_Container;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Hookable\Hookable_Mock;
+use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Mock_Registration_Middleware;
 
 class Test_App_Factory extends WP_UnitTestCase {
 
@@ -95,28 +96,38 @@ class Test_App_Factory extends WP_UnitTestCase {
 	}
 
 	/** @testdox It shoud be possble to pass the DI_Container interface as a depenedcy and have it populated with the current DI_Container implementation at initialisation.  */
-	public function test_di_container_rule_defined_at_init(): void
-	{
-		$app = ( new App_Factory )
+	public function test_di_container_rule_defined_at_init(): void {
+		$app              = ( new App_Factory )
 			->with_wp_dice( true )
 			->boot();
-		$has_di_container = $app::make(Has_DI_Container::class);
-		$this->assertTrue($has_di_container->di_set());
+		$has_di_container = $app::make( Has_DI_Container::class );
+		$this->assertTrue( $has_di_container->di_set() );
 	}
 
 	/** @testdox It should be possible to define additional registration middleware during the factory chained called. */
-	public function test_pass_registration_middleware_during_factory_init(): void
-	{
-		$mock_middleware = $this->createMock(Registration_Middleware::class);
-		
+	public function test_pass_registration_middleware_during_factory_init(): void {
+		$mock_middleware = $this->createMock( Registration_Middleware::class );
+
 		$app = ( new App_Factory )
 			->with_wp_dice( true )
 			->registration_middleware( $mock_middleware )
 			->boot();
 
-		$registration = Objects::get_property( $app, 'registration' );
+		$registration    = Objects::get_property( $app, 'registration' );
 		$middleware_list = Objects::get_property( $registration, 'middleware' );
-		$this->assertContains($mock_middleware, $middleware_list);
+		$this->assertContains( $mock_middleware, $middleware_list );
+	}
+
+	/** @testdox It should be possible to defined additional registration middleware during the factory chained called, but as a class name, not as an instance. */
+	public function test_pass_registration_middleware_as_string_during_factory_init(): void {
+		$app = ( new App_Factory )
+			->with_wp_dice( true )
+			->construct_registration_middleware( Mock_Registration_Middleware::class )
+			->boot();
+
+		$registration    = Objects::get_property( $app, 'registration' );
+		$middleware_list = Objects::get_property( $registration, 'middleware' );
+		$this->assertArrayHasKey( Mock_Registration_Middleware::class, $middleware_list );
 	}
 
 }

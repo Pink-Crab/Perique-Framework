@@ -2,7 +2,7 @@
 
 Welcome to the core package of the PinkCrab **Perique** plugin framework, formally known as just the PinkCrab Plugin Framework. 
 
-![alt text](https://img.shields.io/badge/Current_Version-0.5.6-yellow.svg?style=flat " ")
+![alt text](https://img.shields.io/badge/Current_Version-1.0.1-yellow.svg?style=flat " ")
 
  
 [![Open Source Love](https://badges.frapsoft.com/os/mit/mit.svg?v=102)]()
@@ -12,7 +12,7 @@ Welcome to the core package of the PinkCrab **Perique** plugin framework, formal
 For more details please visit our docs.
 https://app.gitbook.com/@glynn-quelch/s/pinkcrab/
 
-## Version 1.0.0 ##
+## Version 1.0.1 ##
 
 > First official release.
 
@@ -174,7 +174,7 @@ return array(
 		// Custom values go here (Config::additional('key'); = value)
 	),
 );
-````
+```
 
 > The full set of options can be found in the [docs](https://app.gitbook.com/@glynn-quelch/s/pinkcrab/application/app_config).
 
@@ -188,7 +188,7 @@ At the heart of the application is the registration process. Classes can be stac
 
 Included with Perique is a single piece of Registration_Middleware. The Renderable interface and Renderable_Middleware pair make it easy to register any hooks, shortcodes, post types, taxonomies, admin pages, and rest endpoints. Any class which needs to be processed, implements the Renderable interface and creates the ```function register(Hook_Hook_Loader $loader): void {...}
 
-```
+
 ```php
 class Some_Controller implements Hookable {
 	public function register(Hook_Loader $loader): void{
@@ -227,19 +227,32 @@ class Does_Something implements PinkCrab\Perique\Interfaces\Registration_Middlew
 }
 ```
 
-> The objects are passed fully cosntructed using the DI_Container
+> The objects are passed fully constructed using the DI_Container
 
 You can then pass these custom Registration_Middlewares to the app at boot.
 
 ```php
 <?php 
-
+// As an instance.
 $app = ( new PinkCrab\Perique\Application\App_Factory )->with_wp_dice( true )
 	// Rest of bootstrapping
 	->registration_middleware(new Does_Something(new Some_Service()))
 	->boot();
 ```
 
+> Based on the complexity of your Middleware, you can either pass instances of the class's name.
+
+```php
+<?php 
+// As a class name.
+$app = ( new PinkCrab\Perique\Application\App_Factory )->with_wp_dice( true )
+	// Rest of bootstrapping
+	->construct_registration_middleware( Does_Something::class )
+	->boot();
+```
+
+> These can either be passed before the app is booted, or afterwards.
+> 
 ## Static Helpers ##
 
 The App object has a few helper methods which can be called statically (either from an instance or from its name). 
@@ -393,6 +406,7 @@ add_filter(Hooks::APP_INIT_SET_DI_RULES,
 http://www.opensource.org/licenses/mit-license.html  
 
 ## Change Log ##
+* 1.0.1 - Allow all middleware to be passed as classname and then constucted via the container, as well as allowing fully instantiated classes to be passed.
 * 1.0.0 - Renamed Registerable interface to Hookable, including the internal Registerable_Middleware to Hookable_Middleare. Corrected typos, App::registration_classses() now App::registration_classes(), App_Initialization_Exception::registation_exists() to App_Initialization_Exception::registration_exists().
 * 0.5.6 - Ensure App_Config is not populated as its DI ruleset as part of App->boot(). This ensures Config Facade is populated with the pass App_Config config array.
 * 0.5.5 - Allows passing of registration middleware via App_Factory setup chain. Also allows the passing of DI_Container as a dependency via DI_Container. Allowing for modules to access DI without having to pass App and then use App::make(). 

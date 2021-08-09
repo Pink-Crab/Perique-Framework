@@ -174,6 +174,28 @@ final class App {
 	}
 
 	/**
+	 * Adds registration middleware as a string and use container to construct
+	 *
+	 * @param string $class_name
+	 * @return self
+	 * @throws App_Initialization_Exception Code 3 If DI container not registered
+	 * @throws App_Initialization_Exception Code 9 If class doesn't create as middleware.
+	 */
+	public function construct_registration_middleware( string $class_name ): self {
+		if ( self::$container === null ) {
+			throw App_Initialization_Exception::requires_di_container();
+		}
+
+		$middleware = self::$container->create( $class_name );
+		if ( ! is_object( $middleware ) || ! is_a( $middleware, Registration_Middleware::class ) ) {
+			throw App_Initialization_Exception::invalid_registration_middleware_instance( $class_name );
+		}
+
+		return $this->registration_middleware( $middleware );
+
+	}
+
+	/**
 	 * Sets the class list.
 	 *
 	 * @param array<string> $class_list
