@@ -32,162 +32,152 @@ use PinkCrab\Perique\Services\Registration\Registration_Service;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Parent_Dependency;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Mock_Registration_Middleware;
 
-class Test_App_Functional extends WP_UnitTestCase
-{
+class Test_App_Functional extends WP_UnitTestCase {
 
-    /**
-     * @method self::unset_app_instance();
-     */
-    use App_Helper_Trait;
 
-    public function tearDown(): void
-    {
-        self::unset_app_instance();
-    }
+	/**
+	 * @method self::unset_app_instance();
+	 */
+	use App_Helper_Trait;
 
-    /** @testdox When running the applications setup, hooks should be triggered to allow external codeabases to interact and piggyback into the app initialisation process. */
-    public function test_all_hooks_fire_on_finalise_during_boot(): void
-    {
+	public function tearDown(): void {
+		self::unset_app_instance();
+	}
 
-        // Pre boot hook.
-        $this->expectOutputRegex('/Pre Boot Hook/');
-        \add_action(
-            Hooks::APP_INIT_PRE_BOOT,
-            function (App_Config $config, Hook_Loader $loader, DI_Container $container) {
-                echo 'Pre Boot Hook';
-            },
-            10,
-            3
-        );
+	/** @testdox When running the applications setup, hooks should be triggered to allow external codeabases to interact and piggyback into the app initialisation process. */
+	public function test_all_hooks_fire_on_finalise_during_boot(): void {
 
-        // Pre registration hook.
-        $this->expectOutputRegex('/Pre Registration Hook/');
-        \add_action(
-            Hooks::APP_INIT_PRE_REGISTRATION,
-            function (App_Config $config, Hook_Loader $loader, DI_Container $container) {
-                echo 'Pre Registration Hook';
-            },
-            10,
-            3
-        );
+		// Pre boot hook.
+		$this->expectOutputRegex( '/Pre Boot Hook/' );
+		\add_action(
+			Hooks::APP_INIT_PRE_BOOT,
+			function ( App_Config $config, Hook_Loader $loader, DI_Container $container ) {
+				echo 'Pre Boot Hook';
+			},
+			10,
+			3
+		);
 
-        // Post registration.
-        $this->expectOutputRegex('/Post Registration Hook/');
-        \add_action(
-            Hooks::APP_INIT_POST_REGISTRATION,
-            function (App_Config $config, Hook_Loader $loader, DI_Container $container) {
-                echo 'Post Registration Hook';
-            },
-            10,
-            3
-        );
+		// Pre registration hook.
+		$this->expectOutputRegex( '/Pre Registration Hook/' );
+		\add_action(
+			Hooks::APP_INIT_PRE_REGISTRATION,
+			function ( App_Config $config, Hook_Loader $loader, DI_Container $container ) {
+				echo 'Pre Registration Hook';
+			},
+			10,
+			3
+		);
 
-        // Boot app.
-        $app = $this->pre_populated_app_provider()->boot();
+		// Post registration.
+		$this->expectOutputRegex( '/Post Registration Hook/' );
+		\add_action(
+			Hooks::APP_INIT_POST_REGISTRATION,
+			function ( App_Config $config, Hook_Loader $loader, DI_Container $container ) {
+				echo 'Post Registration Hook';
+			},
+			10,
+			3
+		);
 
-        // Run init
-        do_action('init');
+		// Boot app.
+		$app = $this->pre_populated_app_provider()->boot();
 
-        // Cleanup
-        remove_all_actions(Hooks::APP_INIT_PRE_BOOT);
-        remove_all_actions(Hooks::APP_INIT_PRE_REGISTRATION);
-        remove_all_actions(Hooks::APP_INIT_POST_REGISTRATION);
-    }
+		// Run init
+		do_action( 'init' );
 
-    /** @testdox Once the App is booted, it should be possible to create an instance of an object, using the DI Container without acess to an actual instnace of the App. Via a static method */
-    public function test_can_use_static_make_method_to_use_di_container(): void
-    {
-        $app = $this->pre_populated_app_provider()->boot();
+		// Cleanup
+		remove_all_actions( Hooks::APP_INIT_PRE_BOOT );
+		remove_all_actions( Hooks::APP_INIT_PRE_REGISTRATION );
+		remove_all_actions( Hooks::APP_INIT_POST_REGISTRATION );
+	}
 
-        // Fxiture class, has Sample_Class injected as a dependency.
-        $parent = App::make(Parent_Dependency::class);
+	/** @testdox Once the App is booted, it should be possible to create an instance of an object, using the DI Container without acess to an actual instnace of the App. Via a static method */
+	public function test_can_use_static_make_method_to_use_di_container(): void {
+		$app = $this->pre_populated_app_provider()->boot();
 
-        $this->assertInstanceOf(Parent_Dependency::class, $parent);
-        $this->assertInstanceOf(Sample_Class::class, $parent->get_sample_class());
-    }
+		// Fxiture class, has Sample_Class injected as a dependency.
+		$parent = App::make( Parent_Dependency::class );
 
-    /** @testdox When trying to use the DI Container from App as a static instance, an error should be thrown and the request aborted */
-    public function test_cant_use_make_before_app_booted(): void
-    {
-        $this->expectException(App_Initialization_Exception::class);
-        $this->expectExceptionCode(4);
+		$this->assertInstanceOf( Parent_Dependency::class, $parent );
+		$this->assertInstanceOf( Sample_Class::class, $parent->get_sample_class() );
+	}
 
-        App::make(Parent_Dependency::class);
-    }
+	/** @testdox When trying to use the DI Container from App as a static instance, an error should be thrown and the request aborted */
+	public function test_cant_use_make_before_app_booted(): void {
+		$this->expectException( App_Initialization_Exception::class );
+		$this->expectExceptionCode( 4 );
 
-    /** @testdox Once the app is booted, the static method config() should act as a proxy for the internal App_Config settings */
-    public function test_can_use_static_config_to_access_app_config(): void
-    {
-        $app = $this->pre_populated_app_provider()->boot();
+		App::make( Parent_Dependency::class );
+	}
 
-        $version = App::config('version');
-        $this->assertEquals('0.1.0', $version);
-    }
+	/** @testdox Once the app is booted, the static method config() should act as a proxy for the internal App_Config settings */
+	public function test_can_use_static_config_to_access_app_config(): void {
+		$app = $this->pre_populated_app_provider()->boot();
 
-    /** @testdox When trying to call config from app, before app has been booted should result in an error and abort the current request. */
-    public function test_cant_use_config_before_app_has_been_booted(): void
-    {
-        $this->expectException(App_Initialization_Exception::class);
-        $this->expectExceptionCode(4);
+		$version = App::config( 'version' );
+		$this->assertEquals( '0.1.0', $version );
+	}
 
-        App::config('version');
-    }
+	/** @testdox When trying to call config from app, before app has been booted should result in an error and abort the current request. */
+	public function test_cant_use_config_before_app_has_been_booted(): void {
+		$this->expectException( App_Initialization_Exception::class );
+		$this->expectExceptionCode( 4 );
 
-    /** @testdox Once the app is booted, it should be possible to call the current view with it engine, using a static method on the app. */
-    public function test_can_user_static_view_from_app_once_booted(): void
-    {
-        $app = $this->pre_populated_app_provider()
-            ->container_config(
-                function ($di) {
-                    $di->addRules(
-                        array(
-                            '*' => array(
-                                'substitutions' => array(
-                                    Renderable::class => new PHP_Engine(FIXTURES_PATH . '/Views'),
-                                ),
-                            ),
-                        )
-                    );
-                }
-            )->boot();
+		App::config( 'version' );
+	}
 
-        $this->expectOutputString('HI');
-        App::view()->render('hello', array('hello' => 'HI'));
-    }
+	/** @testdox Once the app is booted, it should be possible to call the current view with it engine, using a static method on the app. */
+	public function test_can_user_static_view_from_app_once_booted(): void {
+		$app = $this->pre_populated_app_provider()
+			->container_config(
+				function ( $di ) {
+					$di->addRules(
+						array(
+							'*' => array(
+								'substitutions' => array(
+									Renderable::class => new PHP_Engine( FIXTURES_PATH . '/Views' ),
+								),
+							),
+						)
+					);
+				}
+			)->boot();
 
-    /** @testdox When calling var_dump on the apps instance, the internal static properties should be included to help with debugging. */
-    public function test_debugInfo_dumps_static_properties_values(): void
-    {
-        $app   = $this->pre_populated_app_provider()->boot();
-        $debug = $app->__debugInfo();
+		$this->expectOutputString( 'HI' );
+		App::view()->render( 'hello', array( 'hello' => 'HI' ) );
+	}
 
-        $this->assertArrayHasKey('container', $debug);
-        $this->assertInstanceOf(DI_Container::class, $debug['container']);
+	/** @testdox When calling var_dump on the apps instance, the internal static properties should be included to help with debugging. */
+	public function test_debugInfo_dumps_static_properties_values(): void {
+		$app   = $this->pre_populated_app_provider()->boot();
+		$debug = $app->__debugInfo();
 
-        $this->assertArrayHasKey('app_config', $debug);
-        $this->assertInstanceOf(App_Config::class, $debug['app_config']);
+		$this->assertArrayHasKey( 'container', $debug );
+		$this->assertInstanceOf( DI_Container::class, $debug['container'] );
 
-        $this->assertArrayHasKey('booted', $debug);
-        $this->assertTrue($debug['booted']);
-    }
+		$this->assertArrayHasKey( 'app_config', $debug );
+		$this->assertInstanceOf( App_Config::class, $debug['app_config'] );
 
-    /** @testdox Additional functionality should be added at boot up through the means of middleware */
-    public function test_registration_middleware_as_string(): void
-    {
-        $app = $this->pre_populated_app_provider()->boot();
-        $app->construct_registration_middleware(Mock_Registration_Middleware::class);
-        $registration = Objects::get_property($app, 'registration');
-        $this->assertArrayHasKey(Mock_Registration_Middleware::class, Objects::get_property($registration, 'middleware'));
-    }
+		$this->assertArrayHasKey( 'booted', $debug );
+		$this->assertTrue( $debug['booted'] );
+	}
 
-    /** @testdox When attempting to pass a non registration middleware class name to be constructed an exception should be thrown if invalid type. */
-    public function test_registration_middleware_as_string_throws_invalid_middleware_exception(): void
-    {
+	/** @testdox Additional functionality should be added at boot up through the means of middleware */
+	public function test_registration_middleware_as_string(): void {
+		$app = $this->pre_populated_app_provider()->boot();
+		$app->construct_registration_middleware( Mock_Registration_Middleware::class );
+		$registration = Objects::get_property( $app, 'registration' );
+		$this->assertArrayHasKey( Mock_Registration_Middleware::class, Objects::get_property( $registration, 'middleware' ) );
+	}
 
-        $this->expectException(App_Initialization_Exception::class);
-        $this->expectExceptionCode(9);
-        $app = $this->pre_populated_app_provider()
-            ->boot()
-            ->construct_registration_middleware(Sample_Class::class);
-    }
+	/** @testdox When attempting to pass a non registration middleware class name to be constructed an exception should be thrown if invalid type. */
+	public function test_registration_middleware_as_string_throws_invalid_middleware_exception(): void {
+
+		$this->expectException( App_Initialization_Exception::class );
+		$this->expectExceptionCode( 9 );
+		$app = $this->pre_populated_app_provider()
+			->boot()
+			->construct_registration_middleware( Sample_Class::class );
+	}
 }
