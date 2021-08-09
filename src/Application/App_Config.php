@@ -398,7 +398,7 @@ final class App_Config {
 	/**
 	 * Exports the internal settings array.
 	 *
-	 * @return array<string, string|int|array>
+	 * @return array<string, string|int|array<mixed>>
 	 */
 	public function export_settings(): array {
 		return array(
