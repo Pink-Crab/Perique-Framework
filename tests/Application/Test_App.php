@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace PinkCrab\Perique\Tests\Application;
 
+use stdClass;
 use Dice\Dice;
 use Exception;
 use WP_UnitTestCase;
@@ -151,7 +152,7 @@ class Test_App extends WP_UnitTestCase {
 		$this->assertContains( $middleware, Objects::get_property( $registration, 'middleware' ) );
 	}
 
-	/** @testdox If middleware is added before the registation service has been bound to the app, the system should return an error. */
+	/** @testdox If middleware is added before the registration service has been bound to the app, the system should return an error. */
 	public function test_registration_middleware_exception(): void {
 		$this->expectException( App_Initialization_Exception::class );
 		$this->expectExceptionCode( 3 );
@@ -179,7 +180,7 @@ class Test_App extends WP_UnitTestCase {
 		$app->registration_classes( array( Sample_Class::class ) );
 	}
 
-	/** @testdox When a fully populated app is booted, it should pass valdaition and run all internal setups. */
+	/** @testdox When a fully populated app is booted, it should pass validation and run all internal setups. */
 	public function test_boot(): void {
 		$app = $this->pre_populated_app_provider();
 
@@ -206,7 +207,7 @@ class Test_App extends WP_UnitTestCase {
 		$app->boot();
 	}
 
-	/** @testdox The apps internal serives (View, DI & App_Config) can only be used once the application has been booted. */
+	/** @testdox The apps internal services (View, DI & App_Config) can only be used once the application has been booted. */
 	public function test_throws_exception_if_view_is_called_before_app_booted(): void {
 		$this->expectException( App_Initialization_Exception::class );
 		$this->expectExceptionCode( 4 );
@@ -220,7 +221,7 @@ class Test_App extends WP_UnitTestCase {
 		$this->assertInstanceOf( DI_Container::class, $app->get_container() );
 	}
 
-	/** @testdox Attemptingt to access the DI Container before it has been defiend, should resutl in an Application Intialization exception. */
+	/** @testdox Attempting to access the DI Container before it has been defiend, should resutl in an Application Intialization exception. */
 	public function test_throws_exception_if_attempting_to_access_undefined_di_container(): void {
 		$this->expectException( App_Initialization_Exception::class );
 		$this->expectExceptionCode( 1 );
@@ -243,5 +244,14 @@ class Test_App extends WP_UnitTestCase {
 		$this->expectExceptionCode( 1 );
 		$app = ( new App() )->set_registration_services( new Registration_Service() );
 		$app->construct_registration_middleware( Mock_Registration_Middleware::class );
+	}
+
+	/** @testdox When trying to pass a classname for Registration Middleware an exception should be thrown if its not a valid Middleware Class. */
+	public function test_exception_thrown_if_non_valid_middleware_class_passed(): void {
+		$this->expectException( App_Initialization_Exception::class );
+		$this->expectExceptionCode( 9 );
+		$app = $this->pre_populated_app_provider();
+		$app->construct_registration_middleware( stdClass::class );
+		$app->boot();
 	}
 }
