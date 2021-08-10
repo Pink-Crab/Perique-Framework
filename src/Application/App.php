@@ -73,6 +73,13 @@ final class App {
 	protected $loader;
 
 	/**
+	 * All middleware that need constructing after finalise has been run.
+	 *
+	 * @var class-string<Registration_Middleware>[]
+	 */
+	protected $middleware_class_names = array();
+
+	/**
 	 * Checks if the app has already been booted.
 	 *
 	 * @return bool
@@ -176,7 +183,7 @@ final class App {
 	/**
 	 * Adds registration middleware as a string and use container to construct
 	 *
-	 * @param string $class_name
+	 * @param class-string<Registration_Middleware> $class_name
 	 * @return self
 	 * @throws App_Initialization_Exception Code 1 If DI container not registered
 	 * @throws App_Initialization_Exception Code 9 If class doesn't create as middleware.
@@ -184,6 +191,12 @@ final class App {
 	public function construct_registration_middleware( string $class_name ): self {
 		if ( self::$container === null ) {
 			throw App_Initialization_Exception::requires_di_container();
+		}
+
+		// Add to stack if finalise has not been run.
+		if ( false === self::$booted ) {
+			$this->middleware_class_names[] = $class_name;
+			return $this;
 		}
 
 		$middleware = self::$container->create( $class_name );
@@ -238,6 +251,7 @@ final class App {
 	 * Finialises all settings and boots the app on init hook call (priority 1)
 	 *
 	 * @return self
+	 * @throws App_Initialization_Exception (code 9)
 	 */
 	protected function finalise(): self {
 
@@ -260,6 +274,16 @@ final class App {
 				),
 			)
 		);
+
+		// Process middleware classnames.
+		foreach ( $this->middleware_class_names as $class_name ) {
+			$middleware = self::$container->create( $class_name );
+			if ( ! is_object( $middleware ) || ! is_a( $middleware, Registration_Middleware::class ) ) {
+				throw App_Initialization_Exception::invalid_registration_middleware_instance( $class_name );
+			}
+
+			$this->registration_middleware( $middleware );
+		}
 
 		/** @hook{string, App_Config, Loader, DI_Container} */
 		do_action( Hooks::APP_INIT_PRE_BOOT, self::$app_config, $this->loader, self::$container ); // phpcs:disable WordPress.NamingConventions.ValidHookName.*
