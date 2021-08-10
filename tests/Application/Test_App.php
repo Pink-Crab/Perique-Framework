@@ -27,8 +27,10 @@ use PinkCrab\Perique\Interfaces\Registration_Middleware;
 use PinkCrab\Perique\Tests\Application\App_Helper_Trait;
 use PinkCrab\Perique\Exceptions\App_Initialization_Exception;
 use PinkCrab\Perique\Services\Registration\Registration_Service;
+use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Mock_Registration_Middleware;
 
 class Test_App extends WP_UnitTestCase {
+
 
 	/**
 	 * @method self::unset_app_instance();
@@ -138,7 +140,7 @@ class Test_App extends WP_UnitTestCase {
 		);
 	}
 
-	/** @testdox Additionl functionality should be added at boot up through the means of middleware */
+	/** @testdox Additional functionality should be added at boot up through the means of middleware */
 	public function test_registration_middleware(): void {
 		$app          = new App();
 		$registration = new Registration_Service();
@@ -232,6 +234,14 @@ class Test_App extends WP_UnitTestCase {
 		$app = $this->pre_populated_app_provider();
 		$app->boot();
 		$this->assertEquals( FIXTURES_PATH . '/Views/', Config::path( 'view' ) );
-		$this->assertEquals( 'test_value', Config::additional('test_key') );
+		$this->assertEquals( 'test_value', Config::additional( 'test_key' ) );
+	}
+
+	/** @testdox When trying to pass the class name for Registration Middleware, an exception should be thrown if container not defined. */
+	public function test_throws_exception_if_trying_to_construct_middleware_before_container_initialised(): void {
+		$this->expectException( App_Initialization_Exception::class );
+		$this->expectExceptionCode( 1 );
+		$app = ( new App() )->set_registration_services( new Registration_Service() );
+		$app->construct_registration_middleware( Mock_Registration_Middleware::class );
 	}
 }

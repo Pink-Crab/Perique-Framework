@@ -113,4 +113,18 @@ class App_Initialization_Exception extends Exception {
 		$message = 'Can not redeclare Loader as its already set to the application';
 		return new App_Initialization_Exception( $message, 8 );
 	}
+
+	/**
+	 * Returns an exception for trying to create registration middleware that is not middleware.
+	 * @code 9
+	 * @param string $class
+	 * @return App_Initialization_Exception
+	 */
+	public static function invalid_registration_middleware_instance( string $class ): App_Initialization_Exception {
+		$message = sprintf(
+			'%s is not a valid instance of Registration_Middleware',
+			$class
+		);
+		return new App_Initialization_Exception( $message, 9 );
+	}
 }
