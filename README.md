@@ -2,7 +2,7 @@
 
 Welcome to the core package of the PinkCrab **Perique** plugin framework, formally known as just the PinkCrab Plugin Framework. 
 
-![alt text](https://img.shields.io/badge/Current_Version-1.0.1-yellow.svg?style=flat " ")
+![alt text](https://img.shields.io/badge/Current_Version-1.0.2-yellow.svg?style=flat " ")
 
  
 [![Open Source Love](https://badges.frapsoft.com/os/mit/mit.svg?v=102)]()
@@ -12,9 +12,7 @@ Welcome to the core package of the PinkCrab **Perique** plugin framework, formal
 For more details please visit our docs.
 https://app.gitbook.com/@glynn-quelch/s/pinkcrab/
 
-## Version 1.0.1 ##
-
-> First official release.
+## Version 1.0.2 ##
 
 ## Why? ##
 
@@ -406,8 +404,9 @@ add_filter(Hooks::APP_INIT_SET_DI_RULES,
 http://www.opensource.org/licenses/mit-license.html  
 
 ## Change Log ##
-* 1.0.1 - Allow all middleware to be passed as classname and then constucted via the container, as well as allowing fully instantiated classes to be passed.
-* 1.0.0 - Renamed Registerable interface to Hookable, including the internal Registerable_Middleware to Hookable_Middleare. Corrected typos, App::registration_classses() now App::registration_classes(), App_Initialization_Exception::registation_exists() to App_Initialization_Exception::registration_exists().
+* 1.0.2 - Ensure that middleware class names are only constructed during finalise when all internal DI rules are defined (esc DI Container instance.)
+* 1.0.1 - Allow all middleware to be passed as classname and then constructed via the container, as well as allowing fully instantiated classes to be passed.
+* 1.0.0 - Renamed Registerable interface to Hookable, including the internal Registerable_Middleware to Hookable_Middleware. Corrected typos, App::registration_classses() now App::registration_classes(), App_Initialization_Exception::registration_exists() to App_Initialization_Exception::registration_exists().
 * 0.5.6 - Ensure App_Config is not populated as its DI ruleset as part of App->boot(). This ensures Config Facade is populated with the pass App_Config config array.
 * 0.5.5 - Allows passing of registration middleware via App_Factory setup chain. Also allows the passing of DI_Container as a dependency via DI_Container. Allowing for modules to access DI without having to pass App and then use App::make(). 
 * 0.5.4 - Moved to new repo to allow renaming via Packagist
