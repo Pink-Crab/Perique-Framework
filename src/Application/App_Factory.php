@@ -166,7 +166,7 @@ class App_Factory {
 	 * Add registration middleware as a class string.
 	 * This is constructed via the DI Container before being added.
 	 *
-	 * @param string $class_name
+	 * @param class-string<Registration_Middleware> $class_name
 	 * @return self
 	 * @throws App_Initialization_Exception Code 1 If DI container not registered
 	 * @throws App_Initialization_Exception Code 9 If class doesn't create as middleware.
