@@ -35,7 +35,13 @@ class Hookable_Middleware implements Registration_Middleware {
 	/** @var Hook_Loader */
 	protected $loader;
 
-	public function __construct( Hook_Loader $loader ) {
+	/**
+	 * Sets the hook loader to the middleware.
+	 *
+	 * @param Hook_Loader $loader
+	 * @return void
+	 */
+	public function set_hook_loader( Hook_Loader $loader ):void {
 		$this->loader = $loader;
 	}
 

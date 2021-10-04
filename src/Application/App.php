@@ -28,6 +28,7 @@ use Closure;
 use PinkCrab\Loader\Hook_Loader;
 use PinkCrab\Perique\Application\Hooks;
 use PinkCrab\Perique\Services\View\View;
+use ParagonIE\Sodium\Core\Curve25519\Ge\P2;
 use PinkCrab\Perique\Application\App_Config;
 use PinkCrab\Perique\Interfaces\DI_Container;
 use PinkCrab\Perique\Interfaces\Registration_Middleware;
@@ -68,7 +69,7 @@ final class App {
 	/**
 	 * Hook Loader
 	 *
-	 * @var Hook_Loader
+	 * @var Hook_Loader|null
 	 */
 	protected $loader;
 
@@ -146,6 +147,7 @@ final class App {
 			throw App_Initialization_Exception::loader_exists();
 		}
 		$this->loader = $loader;
+
 		return $this;
 	}
 
@@ -176,7 +178,13 @@ final class App {
 			throw App_Initialization_Exception::requires_registration_service();
 		}
 
+		// Set the loader to the registration service, if defined.
+		if ( ! is_null( $this->loader ) ) {
+			$this->registration->set_loader( $this->loader );
+		}
+
 		$this->registration->push_middleware( $middleware );
+
 		return $this;
 	}
 
@@ -288,6 +296,11 @@ final class App {
 		/** @hook{string, App_Config, Loader, DI_Container} */
 		do_action( Hooks::APP_INIT_PRE_BOOT, self::$app_config, $this->loader, self::$container ); // phpcs:disable WordPress.NamingConventions.ValidHookName.*
 
+		// Ensure loader is set.
+		if ( is_null( $this->loader ) ) {
+			throw App_Initialization_Exception::loader_not_set();
+		}
+
 		// Initialise on init
 		add_action(
 			'init',
@@ -295,7 +308,7 @@ final class App {
 				do_action( Hooks::APP_INIT_PRE_REGISTRATION, self::$app_config, $this->loader, self::$container );
 				$this->registration->process();
 				do_action( Hooks::APP_INIT_POST_REGISTRATION, self::$app_config, $this->loader, self::$container );
-				$this->loader->register_hooks();
+				$this->loader->register_hooks(); // @phpstan-ignore-line, if loader is not defined, exception will be thrown above
 			},
 			1
 		);

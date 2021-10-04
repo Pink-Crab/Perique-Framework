@@ -24,16 +24,18 @@ class Test_Hookable_Middleware extends WP_UnitTestCase {
 
 	/** @testdox Hookable classes must have access to the current loader, for them to register all filter and action hooks. */
 	public function test_can_be_constructed_with_loader(): void {
-		$loader       = new Hook_Loader();
+		$loader   = new Hook_Loader();
 		$hookable = new Hookable_Middleware( $loader );
+		$hookable->set_hook_loader( $loader );
 
 		$this->assertSame( $loader, Objects::get_property( $hookable, 'loader' ) );
 	}
 
 	/** @testdox When processes only classes which implement the Hookable class will be passed the loader for subscribing all hook calls. */
 	public function test_only_processes_classes_that_implement_hookable(): void {
-		$loader       = new Hook_Loader();
+		$loader   = new Hook_Loader();
 		$hookable = new Hookable_Middleware( $loader );
+		$hookable->set_hook_loader( $loader );
 
 		// Process hookable class
 		$hookable->process( new Hookable_Mock() );

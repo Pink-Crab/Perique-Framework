@@ -24,6 +24,7 @@ declare(strict_types=1);
 
 namespace PinkCrab\Perique\Services\Registration;
 
+use PinkCrab\Loader\Hook_Loader;
 use PinkCrab\Perique\Application\Hooks;
 use PinkCrab\Perique\Interfaces\DI_Container;
 use PinkCrab\Perique\Interfaces\Registration_Middleware;
@@ -52,6 +53,13 @@ class Registration_Service {
 	protected $di_container;
 
 	/**
+	 * Access to the Hook Loader
+	 *
+	 * @var Hook_Loader|null
+	 */
+	protected $loader;
+
+	/**
 	 * Sets the DI Container.
 	 *
 	 * @param DI_Container $di_container
@@ -59,6 +67,17 @@ class Registration_Service {
 	 */
 	public function set_container( DI_Container $di_container ): self {
 		$this->di_container = $di_container;
+		return $this;
+	}
+
+	/**
+	 * Sets the DI Container.
+	 *
+	 * @param Hook_Loader $loader
+	 * @return self
+	 */
+	public function set_loader( Hook_Loader $loader ): self {
+		$this->loader = $loader;
 		return $this;
 	}
 
@@ -106,6 +125,16 @@ class Registration_Service {
 		$class_list = apply_filters( Hooks::APP_INIT_REGISTRATION_CLASS_LIST, $this->class_list );
 
 		foreach ( $this->middleware as $middleware ) {
+
+			// Set the container if requested.
+			if ( \method_exists( $middleware, 'set_di_container' ) ) {
+				$middleware->set_di_container( $this->di_container );
+			}
+
+			// Set the hook loader if requested.
+			if ( \method_exists( $middleware, 'set_hook_loader' ) && ! is_null( $this->loader ) ) {
+				$middleware->set_hook_loader( $this->loader );
+			}
 
 			// Run middleware setup
 			$middleware->setup();
