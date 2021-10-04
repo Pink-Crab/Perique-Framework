@@ -2,7 +2,7 @@
 
 Welcome to the core package of the PinkCrab **Perique** plugin framework, formally known as just the PinkCrab Plugin Framework. 
 
-![alt text](https://img.shields.io/badge/Current_Version-1.0.2-yellow.svg?style=flat " ") 
+![alt text](https://img.shields.io/badge/Current_Version-1.0.3-yellow.svg?style=flat " ") 
 [![Open Source Love](https://badges.frapsoft.com/os/mit/mit.svg?v=102)]()
 ![](https://github.com/Pink-Crab/Perqiue-Framework/workflows/GitHub_CI/badge.svg " ")
 [![codecov](https://codecov.io/gh/Pink-Crab/Perqiue-Framework/branch/master/graph/badge.svg?token=yNsRq7Bq1s)](https://codecov.io/gh/Pink-Crab/Perqiue-Framework)
@@ -11,7 +11,7 @@ Welcome to the core package of the PinkCrab **Perique** plugin framework, formal
 For more details please visit our docs.
 https://app.gitbook.com/@glynn-quelch/s/pinkcrab/
 
-## Version 1.0.2 ##
+## Version 1.0.3 ##
 
 ## Why? ##
 
@@ -201,7 +201,7 @@ Now when the init hook is called (priority 1), the some_action hook will be adde
 
 ### Registration Middleware ###
 
-Custom registration processes can be added using Registration_Middleware. You can easily create your own middleware that implements the ` `  ` PinkCrab\Perique\Interfaces\Registration_Middleware `  `  ` interface. This interface consists of a single method `  `  ` process(object $class): void `  ` ` which is available to each class.
+Custom registration processes can be added using Registration_Middleware. You can easily create your own middleware that implements the ```PinkCrab\Perique\Interfaces\Registration_Middleware ``` interface. This interface consists of a single method ``` process(object $class): void ``` which is available to each class.
 
 ```php
 <?php
@@ -223,6 +223,37 @@ class Does_Something implements PinkCrab\Perique\Interfaces\Registration_Middlew
 	}
 }
 ```
+
+As of version 1.0.3 all middleware classes have access to the App's ```Hook_Loader``` and internal ```DI_Container```. These can be accessed using the following methods. This removes the need to create a custom ```Hook_Loader``` for each middleware and have access to the ```DI_Container``` without the need of Static Helpers
+
+```php
+class Does_Something implements PinkCrab\Perique\Interfaces\Registration_Middleware {
+	
+	/** @var Hook_Loader */
+	protected $loader;
+
+	/**	
+	 * The hook loader is passed in, if this method is implemented.
+	 */
+	public function set_hook_loader(Hook_Loader $loader): void{
+		$this->loader = $loader;
+	}
+
+	/** @var DI_Container */
+	protected $container;
+
+	/**	
+	 * The container is passed in, if this method is implemented.
+	 */
+	public function set_di_container(DI_Container $container): void{
+		$this->container = $container;
+	}
+}
+
+```
+> Due to when all of this is loaded, all Dependency rules might not be defined!
+
+***
 
 > The objects are passed fully constructed using the DI_Container
 
@@ -403,6 +434,7 @@ add_filter(Hooks::APP_INIT_SET_DI_RULES,
 http://www.opensource.org/licenses/mit-license.html  
 
 ## Change Log ##
+* 1.0.3 - DI Container and Hook Loader are now auto populated to Middleware if the ```public function set_hook_loader(Hook_Loader $loader):void{}``` and ```public function set_di_container(DI_Container $container):void{}``` methods are defined in the Middleware class.
 * 1.0.2 - Ensure that middleware class names are only constructed during finalise when all internal DI rules are defined (esc DI Container instance.)
 * 1.0.1 - Allow all middleware to be passed as classname and then constructed via the container, as well as allowing fully instantiated classes to be passed.
 * 1.0.0 - Renamed Registerable interface to Hookable, including the internal Registerable_Middleware to Hookable_Middleware. Corrected typos, App::registration_classses() now App::registration_classes(), App_Initialization_Exception::registration_exists() to App_Initialization_Exception::registration_exists().
