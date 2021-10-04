@@ -127,4 +127,5 @@ class App_Initialization_Exception extends Exception {
 		);
 		return new App_Initialization_Exception( $message, 9 );
 	}
+
 }

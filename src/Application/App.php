@@ -68,7 +68,7 @@ final class App {
 	/**
 	 * Hook Loader
 	 *
-	 * @var Hook_Loader
+	 * @var Hook_Loader|null
 	 */
 	protected $loader;
 
@@ -146,6 +146,7 @@ final class App {
 			throw App_Initialization_Exception::loader_exists();
 		}
 		$this->loader = $loader;
+
 		return $this;
 	}
 
@@ -176,7 +177,13 @@ final class App {
 			throw App_Initialization_Exception::requires_registration_service();
 		}
 
+		// Set the loader to the registration service, if defined.
+		if ( ! is_null( $this->loader ) ) {
+			$this->registration->set_loader( $this->loader );
+		}
+
 		$this->registration->push_middleware( $middleware );
+
 		return $this;
 	}
 
@@ -295,7 +302,7 @@ final class App {
 				do_action( Hooks::APP_INIT_PRE_REGISTRATION, self::$app_config, $this->loader, self::$container );
 				$this->registration->process();
 				do_action( Hooks::APP_INIT_POST_REGISTRATION, self::$app_config, $this->loader, self::$container );
-				$this->loader->register_hooks();
+				$this->loader->register_hooks(); // @phpstan-ignore-line, if loader is not defined, exception will be thrown above
 			},
 			1
 		);

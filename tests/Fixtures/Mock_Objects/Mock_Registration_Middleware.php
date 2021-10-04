@@ -15,14 +15,17 @@ declare(strict_types=1);
 
 namespace PinkCrab\Perique\Tests\Fixtures\Mock_Objects;
 
+use PinkCrab\Loader\Hook_Loader;
 use PinkCrab\Perique\Interfaces\Registration_Middleware;
+use PinkCrab\Perique\Interfaces\DI_Container;
+
 
 class Mock_Registration_Middleware implements Registration_Middleware {
 
 	public $message;
 
 	/** Used for testing setup and teardown */
-	public $message_log = [];
+	public $message_log = array();
 
 	public function __construct( ?string $message = null ) {
 		$this->message = $message;
@@ -39,7 +42,7 @@ class Mock_Registration_Middleware implements Registration_Middleware {
 	 * @return void
 	 */
 	public function setup(): void {
-		$this->message_log[] =  'setup';
+		$this->message_log[] = 'setup';
 	}
 
 	/**
@@ -48,6 +51,30 @@ class Mock_Registration_Middleware implements Registration_Middleware {
 	 * @return void
 	 */
 	public function tear_down(): void {
-		$this->message_log[] =  'tear_down';
+		$this->message_log[] = 'tear_down';
+	}
+
+	/**
+	 * Optional
+	 *
+	 * Sets the DI container
+	 *
+	 * @param DI_Container $container
+	 * @return void
+	 */
+	public function set_di_container( DI_Container $container ) {
+		$this->message_log[] = \get_class( $container );
+	}
+
+	/**
+	 * Optional
+	 *
+	 * Sets the Hook Loader
+	 *
+	 * @param Hook_Loader $loader
+	 * @return void
+	 */
+	public function set_hook_loader( Hook_Loader $loader ) {
+		$this->message_log[] = \get_class( $loader );
 	}
 }

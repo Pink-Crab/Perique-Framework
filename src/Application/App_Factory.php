@@ -65,9 +65,7 @@ class App_Factory {
 		$this->app->set_loader( $loader );
 
 		// Include Hookable.
-		$this->app->registration_middleware(
-			new Hookable_Middleware( $loader )
-		);
+		$this->app->registration_middleware( new Hookable_Middleware() );
 
 		return $this;
 	}

@@ -15,6 +15,7 @@ namespace PinkCrab\Perique\Tests\Registration;
 
 use Dice\Dice;
 use WP_UnitTestCase;
+use PinkCrab\Loader\Hook_Loader;
 use Gin0115\WPUnit_Helpers\Objects;
 use PinkCrab\Perique\Application\Hooks;
 use PinkCrab\Perique\Interfaces\DI_Container;
@@ -131,8 +132,10 @@ class Test_Registration_Service extends WP_UnitTestCase {
 		$registration_service = new Registration_Service;
 		$container            = new PinkCrab_Dice( new Dice );
 		$middleware           = new Mock_Registration_Middleware();
+		$loader               = new Hook_Loader();
 
 		$registration_service->set_container( $container );
+		$registration_service->set_loader( $loader );
 
 		$registration_service->push_middleware( $middleware );
 
@@ -145,5 +148,7 @@ class Test_Registration_Service extends WP_UnitTestCase {
 		$this->assertContains( 'tear_down', $middleware->message_log );
 		$this->assertContains( Sample_Class::class, $middleware->message_log );
 		$this->assertContains( Parent_Dependency::class, $middleware->message_log );
+		$this->assertContains( PinkCrab_Dice::class, $middleware->message_log );
+		$this->assertContains( Hook_Loader::class, $middleware->message_log );
 	}
 }
