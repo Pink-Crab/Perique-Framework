@@ -28,7 +28,6 @@ use Closure;
 use PinkCrab\Loader\Hook_Loader;
 use PinkCrab\Perique\Application\Hooks;
 use PinkCrab\Perique\Services\View\View;
-use ParagonIE\Sodium\Core\Curve25519\Ge\P2;
 use PinkCrab\Perique\Application\App_Config;
 use PinkCrab\Perique\Interfaces\DI_Container;
 use PinkCrab\Perique\Interfaces\Registration_Middleware;
@@ -295,11 +294,6 @@ final class App {
 
 		/** @hook{string, App_Config, Loader, DI_Container} */
 		do_action( Hooks::APP_INIT_PRE_BOOT, self::$app_config, $this->loader, self::$container ); // phpcs:disable WordPress.NamingConventions.ValidHookName.*
-
-		// Ensure loader is set.
-		if ( is_null( $this->loader ) ) {
-			throw App_Initialization_Exception::loader_not_set();
-		}
 
 		// Initialise on init
 		add_action(
