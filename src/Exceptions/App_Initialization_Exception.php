@@ -128,14 +128,4 @@ class App_Initialization_Exception extends Exception {
 		return new App_Initialization_Exception( $message, 9 );
 	}
 
-
-	/**
-	 * Returns an exception for trying to boot the app with no loader.
-	 * @code 10
-	 * @return App_Initialization_Exception
-	 */
-	public static function loader_not_set(): App_Initialization_Exception {
-		$message = 'Loader has not been defined.';
-		return new App_Initialization_Exception( $message, 10 );
-	}
 }
