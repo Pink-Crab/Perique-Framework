@@ -77,7 +77,6 @@ class View {
 	 * @return string
 	 */
 	public static function print_buffer( callable $to_buffer ): string {
-		$output = '';
 		ob_start();
 		$to_buffer();
 		$output = ob_get_contents();
