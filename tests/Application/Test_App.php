@@ -26,6 +26,7 @@ use PinkCrab\Perique\Services\Dice\PinkCrab_Dice;
 use PinkCrab\Perique\Tests\Application\Test_App_Config;
 use PinkCrab\Perique\Interfaces\Registration_Middleware;
 use PinkCrab\Perique\Tests\Application\App_Helper_Trait;
+use PinkCrab\Perique\Tests\Fixtures\DI\Has_DI_Dependency;
 use PinkCrab\Perique\Exceptions\App_Initialization_Exception;
 use PinkCrab\Perique\Services\Registration\Registration_Service;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Mock_Registration_Middleware;
@@ -253,5 +254,13 @@ class Test_App extends WP_UnitTestCase {
 		$app = $this->pre_populated_app_provider();
 		$app->construct_registration_middleware( stdClass::class );
 		$app->boot();
+	}
+
+	/** @testdox When the app is booted, it should be possible to pass DI_Container as a dependency and have acess to container */
+	public function test_it_should_be_possible_to_pass_di_as_dependency() {
+		$app = $this->pre_populated_app_provider();
+		$app->boot();
+		$this->assertSame( $app->get_container(), $app::make( Has_DI_Dependency::class )->di );
+		// dump( $app::make( Has_DI_Dependency::class ) );
 	}
 }
