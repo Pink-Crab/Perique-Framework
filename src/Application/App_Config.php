@@ -414,6 +414,7 @@ final class App_Config {
 			'db_tables'  => $this->db_tables,
 			'post_types' => $this->post_types,
 			'taxonomies' => $this->taxonomies,
+			'meta'       => $this->meta,
 		);
 	}
 }
