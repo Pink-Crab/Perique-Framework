@@ -28,8 +28,8 @@ use PinkCrab\Perique\Tests\Fixtures\DI\Dependency_C;
 use PinkCrab\Perique\Tests\Fixtures\DI\Dependency_D;
 use PinkCrab\Perique\Tests\Fixtures\DI\Dependency_E;
 use PinkCrab\Perique\Exceptions\DI_Container_Exception;
-use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Sample_Class;
 use Gin0115\WPUnit_Helpers\Objects as WPUnit_HelpersObjects;
+use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Sample_Class;
 
 class Test_PinkCrab_Dice extends WP_UnitTestCase {
 
