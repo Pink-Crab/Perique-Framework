@@ -320,4 +320,18 @@ class Test_App_Config extends WP_UnitTestCase {
 		$app_config = new App_Config( self::SAMPLE_SETTINGS );
 		$this->assertEquals( 'fallback', $app_config->namespace( 'missing', 'fallback' ) );
 	}
+
+	/** @testdox The export method should export all config settings. */
+	public function test_exports_all_settings(): void {
+		$app_config = new App_Config( self::SAMPLE_SETTINGS );
+
+		$this->assertEquals( self::SAMPLE_SETTINGS['additional'], $app_config->export_settings()['additional'] );
+		$this->assertEquals( self::SAMPLE_SETTINGS['post_types'], $app_config->export_settings()['post_types'] );
+		$this->assertEquals( self::SAMPLE_SETTINGS['taxonomies'], $app_config->export_settings()['taxonomies'] );
+		$this->assertEquals( self::SAMPLE_SETTINGS['namespaces']['rest'], $app_config->export_settings()['namespaces']['rest'] );
+		$this->assertEquals( self::SAMPLE_SETTINGS['db_tables'], $app_config->export_settings()['db_tables'] );
+		$this->assertEquals( self::SAMPLE_SETTINGS['meta']['post'], $app_config->export_settings()['meta']['post'] );
+		$this->assertEquals( self::SAMPLE_SETTINGS['meta']['user'], $app_config->export_settings()['meta']['user'] );
+		$this->assertEquals( self::SAMPLE_SETTINGS['meta']['term'], $app_config->export_settings()['meta']['term'] );
+	}
 }
