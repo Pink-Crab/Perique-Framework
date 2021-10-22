@@ -126,9 +126,10 @@ final class App_Config {
 	 * Gets a path with trailing slash.
 	 *
 	 * @param string|null $path
+	 * @param string|null $default The default value to return if not set.
 	 * @return array<string, mixed>|string|null
 	 */
-	public function path( ?string $path = null ) {
+	public function path( ?string $path = null, ?string $default = null ) {
 
 		if ( is_null( $path ) ) {
 			return $this->paths['path'];
@@ -136,16 +137,17 @@ final class App_Config {
 
 		return \array_key_exists( $path, $this->paths['path'] )
 			? trailingslashit( $this->paths['path'][ $path ] )
-			: null;
+			: $default;
 	}
 
 	/**
 	 * Gets a path with trailing slash.
 	 *
 	 * @param string|null $url
+	 * @param string|null $default The default value to return if not set.
 	 * @return array<string, mixed>|string|null
 	 */
-	public function url( ?string $url = null ) {
+	public function url( ?string $url = null, ?string $default = null ) {
 
 		if ( is_null( $url ) ) {
 			return $this->paths['url'];
@@ -153,7 +155,7 @@ final class App_Config {
 
 		return \array_key_exists( $url, $this->paths['url'] )
 			? trailingslashit( $this->paths['url'][ $url ] )
-			: null;
+			: $default;
 	}
 
 	/**
@@ -178,22 +180,24 @@ final class App_Config {
 	 * Return a namespace by its key.
 	 *
 	 * @param string $key
+	 * @param string|null $default The default value to return if not set.
 	 * @return string|null
 	 */
-	public function namespace( string $key ): ?string {
+	public function namespace( string $key, ?string $default = null ): ?string {
 		return array_key_exists( $key, $this->namespaces )
-			? $this->namespaces[ $key ] : null;
+			? $this->namespaces[ $key ] : $default;
 	}
 
 	/**
 	 * Return a additional by its key.
 	 *
 	 * @param string $key
+	 * @param string|null $default The default value to return if not set.
 	 * @return mixed
 	 */
-	public function additional( string $key ) {
+	public function additional( string $key, ?string $default = null ) {
 		return array_key_exists( $key, $this->additional )
-			? $this->additional[ $key ] : null;
+			? $this->additional[ $key ] : $default;
 	}
 
 	/**

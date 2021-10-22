@@ -279,7 +279,7 @@ class Test_App_Config extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Test can get a defined db name
+	 * @testdox Test can get a defined db name
 	 */
 	public function test_can_get_db_table_name(): void {
 		$app_config = new App_Config( self::SAMPLE_SETTINGS );
@@ -287,7 +287,7 @@ class Test_App_Config extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Test throws eception calling unset DB table
+	 * @testdox Test throws eception calling unset DB table
 	 *
 	 * @return void
 	 */
@@ -295,5 +295,29 @@ class Test_App_Config extends WP_UnitTestCase {
 		$this->expectException( OutOfBoundsException::class );
 		$app_config = new App_Config( self::SAMPLE_SETTINGS );
 		$app_config->db_tables( 'failure' );
+	}
+
+	/** @testdox it should be possible to pass in a fallback value when getting additional settings. */
+	public function test_uses_default_for_additional(): void {
+		$app_config = new App_Config( self::SAMPLE_SETTINGS );
+		$this->assertEquals( 'fallback', $app_config->additional( 'missing', 'fallback' ) );
+	}
+
+	/** @testdox it should be possible to pass in a fallback value when getting path settings. */
+	public function test_uses_default_for_path(): void {
+		$app_config = new App_Config( self::SAMPLE_SETTINGS );
+		$this->assertEquals( 'fallback', $app_config->path( 'missing', 'fallback' ) );
+	}
+
+	/** @testdox it should be possible to pass in a fallback value when getting url settings. */
+	public function test_uses_default_for_url(): void {
+		$app_config = new App_Config( self::SAMPLE_SETTINGS );
+		$this->assertEquals( 'fallback', $app_config->url( 'missing', 'fallback' ) );
+	}
+
+	/** @testdox it should be possible to pass in a fallback value when getting namespace settings. */
+	public function test_uses_default_for_namespace(): void {
+		$app_config = new App_Config( self::SAMPLE_SETTINGS );
+		$this->assertEquals( 'fallback', $app_config->namespace( 'missing', 'fallback' ) );
 	}
 }
