@@ -41,7 +41,7 @@ trait Inject_DI_Container_Aware {
 	 * @param DI_Container $container
 	 * @return void
 	 */
-	public function di_container( DI_Container $container ): void {
+	public function set_di_container( DI_Container $container ): void {
 		$this->di_container = $container;
 	}
 }

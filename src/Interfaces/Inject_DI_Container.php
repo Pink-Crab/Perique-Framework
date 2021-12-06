@@ -33,5 +33,5 @@ interface Inject_DI_Container {
 	 * @param DI_Container $container
 	 * @return void
 	 */
-	public function di_container( DI_Container $container ): void;
+	public function set_di_container( DI_Container $container ): void;
 }

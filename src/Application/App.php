@@ -288,7 +288,7 @@ final class App {
 			Inject_DI_Container::class,
 			array(
 				'call' => array(
-					array( 'di_container', array( self::$container ) ),
+					array( 'set_di_container', array( self::$container ) ),
 				),
 			)
 		);
