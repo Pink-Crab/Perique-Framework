@@ -4,7 +4,7 @@ declare(strict_types=1);
 /**
  * Application test for injecting dependencies via helper interfaces
  *
- * @since 1.1.0
+ * @since 1.0.6
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
  * @package PinkCrab\Perique

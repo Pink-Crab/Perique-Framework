@@ -18,7 +18,7 @@
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
  * @package PinkCrab\Perique
- * @since 1.1.0
+ * @since 1.0.6
  */
 
 namespace PinkCrab\Perique\Interfaces;
