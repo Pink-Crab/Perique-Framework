@@ -296,7 +296,7 @@ final class App {
 			)
 		);
 
-		// Allow the passing of DI Container via interface and method injection.
+		// Allow the passing of Hook Loader via interface and method injection.
 		self::$container->addRule(
 			Inject_Hook_Loader::class,
 			array(
@@ -306,7 +306,7 @@ final class App {
 			)
 		);
 
-		// Allow the passing of DI Container via interface and method injection.
+		// Allow the passing of App Config via interface and method injection.
 		self::$container->addRule(
 			Inject_App_Config_Mock::class,
 			array(
