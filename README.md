@@ -434,7 +434,7 @@ add_filter(Hooks::APP_INIT_SET_DI_RULES,
 http://www.opensource.org/licenses/mit-license.html  
 
 ## Change Log ##
-* 1.1.0 - Added interfaces for injecting DI_Container via a method with the help of an interface.
+* 1.1.0 - Added interfaces for injecting DI_Container, Hook_Loader and App_Config via a method with the help of an interface.
 * 1.0.5 - When exporting the App_Config data, the array of meta data keys is now exported correctly. Also removed a declaration in View that was not needed.
 * 1.0.4 - Added fallback values to url(), path(), additional() and namespaces() in App_Config() 
 * 1.0.3 - DI Container and Hook Loader are now auto populated to Middleware if the ```public function set_hook_loader(Hook_Loader $loader):void{}``` and ```public function set_di_container(DI_Container $container):void{}``` methods are defined in the Middleware class.
