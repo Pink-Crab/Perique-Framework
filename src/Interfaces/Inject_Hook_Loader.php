@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 /**
- * Allows for the injecting of the DI Container during construction using
+ * Allows for the injecting of the Hook Loader during construction using
  * container.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
@@ -23,15 +23,16 @@
 
 namespace PinkCrab\Perique\Interfaces;
 
-use PinkCrab\Perique\Interfaces\DI_Container;
+use PinkCrab\Loader\Hook_Loader;
 
-interface Inject_DI_Container {
+
+interface Inject_Hook_Loader {
 
 	/**
-	 * Accepts the DI Container as a method injectable dependency.
+	 * Accepts the Hook Loader as a method injectable dependency.
 	 *
-	 * @param DI_Container $container
+	 * @param Hook_Loader $hook_loader
 	 * @return void
 	 */
-	public function set_di_container( DI_Container $container ): void;
+	public function set_hook_loader( Hook_Loader $hook_loader ): void;
 }

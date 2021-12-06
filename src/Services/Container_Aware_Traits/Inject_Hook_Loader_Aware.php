@@ -1,7 +1,9 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 /**
- * Allows for the injecting of the DI Container during construction using
- * container.
+ * Trait to give access to DI Container for injectable dependencies.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -17,21 +19,30 @@
  *
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- * @package PinkCrab\Perique
- * @since 1.1.0
+ * @package PinkCrab\Perique\Container_Aware_Traits
  */
 
-namespace PinkCrab\Perique\Interfaces;
+namespace PinkCrab\Perique\Services\Container_Aware_Traits;
 
-use PinkCrab\Perique\Interfaces\DI_Container;
+use PinkCrab\Loader\Hook_Loader;
 
-interface Inject_DI_Container {
+trait Inject_Hook_Loader_Aware {
+
+	/**
+	 * Access to the DI Container
+	 *
+	 * @var Hook_Loader
+	 */
+	protected $loader;
 
 	/**
 	 * Accepts the DI Container as a method injectable dependency.
 	 *
-	 * @param DI_Container $container
+	 * @param Hook_Loader $container
 	 * @return void
 	 */
-	public function set_di_container( DI_Container $container ): void;
+	public function set_hook_loader( Hook_Loader $hook_loader ): void {
+		$this->loader = $hook_loader;
+	}
 }
+
