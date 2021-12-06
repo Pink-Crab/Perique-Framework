@@ -19,6 +19,7 @@ use PinkCrab\Perique\Interfaces\Renderable;
 use PinkCrab\Perique\Interfaces\DI_Container;
 use PinkCrab\Perique\Services\View\PHP_Engine;
 use PinkCrab\Perique\Services\Dice\PinkCrab_Dice;
+use PinkCrab\Perique\Interfaces\Inject_DI_Container;
 use PinkCrab\Perique\Interfaces\Registration_Middleware;
 use PinkCrab\Perique\Exceptions\App_Initialization_Exception;
 use PinkCrab\Perique\Services\Registration\Registration_Service;

@@ -25,11 +25,13 @@ declare(strict_types=1);
 namespace PinkCrab\Perique\Application;
 
 use Closure;
+use Dice\Dice;
 use PinkCrab\Loader\Hook_Loader;
 use PinkCrab\Perique\Application\Hooks;
 use PinkCrab\Perique\Services\View\View;
 use PinkCrab\Perique\Application\App_Config;
 use PinkCrab\Perique\Interfaces\DI_Container;
+use PinkCrab\Perique\Interfaces\Inject_DI_Container;
 use PinkCrab\Perique\Interfaces\Registration_Middleware;
 use PinkCrab\Perique\Exceptions\App_Initialization_Exception;
 use PinkCrab\Perique\Services\Registration\Registration_Service;
@@ -278,6 +280,15 @@ final class App {
 			array(
 				'constructParams' => array(
 					self::$app_config->export_settings(),
+				),
+			)
+		);
+
+		self::$container->addRule(
+			Inject_DI_Container::class,
+			array(
+				'call' => array(
+					array( 'di_container', array( self::$container ) ),
 				),
 			)
 		);
