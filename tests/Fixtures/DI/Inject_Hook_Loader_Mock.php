@@ -12,19 +12,19 @@ declare(strict_types=1);
 
 namespace PinkCrab\Perique\Tests\Fixtures\DI;
 
-use PinkCrab\Perique\Interfaces\Inject_DI_Container;
-use PinkCrab\Perique\Services\Container_Aware_Traits\Inject_DI_Container_Aware;
+use PinkCrab\Perique\Interfaces\Inject_Hook_Loader;
+use PinkCrab\Perique\Services\Container_Aware_Traits\Inject_Hook_Loader_Aware;
 
-class Inject_DI_Container_Mock implements Inject_DI_Container {
+class Inject_Hook_Loader_Mock implements Inject_Hook_Loader {
 
-	use Inject_DI_Container_Aware;
+	use Inject_Hook_Loader_Aware;
 
 	/**
-	 * Check if container injected.
+	 * Check if loader injected.
 	 *
 	 * @return bool
 	 */
-	public function has_container(): bool {
-		return null !== $this->di_container;
+	public function has_loader(): bool {
+		return null !== $this->loader;
 	}
 }

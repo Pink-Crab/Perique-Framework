@@ -31,6 +31,7 @@ use PinkCrab\Perique\Application\Hooks;
 use PinkCrab\Perique\Services\View\View;
 use PinkCrab\Perique\Application\App_Config;
 use PinkCrab\Perique\Interfaces\DI_Container;
+use PinkCrab\Perique\Interfaces\Inject_Hook_Loader;
 use PinkCrab\Perique\Interfaces\Inject_DI_Container;
 use PinkCrab\Perique\Interfaces\Registration_Middleware;
 use PinkCrab\Perique\Exceptions\App_Initialization_Exception;
@@ -284,11 +285,22 @@ final class App {
 			)
 		);
 
+		// Allow the passing of DI Container via interface and method injection.
 		self::$container->addRule(
 			Inject_DI_Container::class,
 			array(
 				'call' => array(
 					array( 'set_di_container', array( self::$container ) ),
+				),
+			)
+		);
+
+		// Allow the passing of DI Container via interface and method injection.
+		self::$container->addRule(
+			Inject_Hook_Loader::class,
+			array(
+				'call' => array(
+					array( 'set_hook_loader', array( $this->loader ) ),
 				),
 			)
 		);
