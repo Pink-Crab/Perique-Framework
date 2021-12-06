@@ -25,13 +25,17 @@ declare(strict_types=1);
 namespace PinkCrab\Perique\Application;
 
 use Closure;
+use Dice\Dice;
 use PinkCrab\Loader\Hook_Loader;
 use PinkCrab\Perique\Application\Hooks;
 use PinkCrab\Perique\Services\View\View;
 use PinkCrab\Perique\Application\App_Config;
 use PinkCrab\Perique\Interfaces\DI_Container;
+use PinkCrab\Perique\Interfaces\Inject_Hook_Loader;
+use PinkCrab\Perique\Interfaces\Inject_DI_Container;
 use PinkCrab\Perique\Interfaces\Registration_Middleware;
 use PinkCrab\Perique\Exceptions\App_Initialization_Exception;
+use PinkCrab\Perique\Tests\Fixtures\DI\Inject_App_Config_Mock;
 use PinkCrab\Perique\Services\Registration\Registration_Service;
 
 final class App {
@@ -278,6 +282,36 @@ final class App {
 			array(
 				'constructParams' => array(
 					self::$app_config->export_settings(),
+				),
+			)
+		);
+
+		// Allow the passing of DI Container via interface and method injection.
+		self::$container->addRule(
+			Inject_DI_Container::class,
+			array(
+				'call' => array(
+					array( 'set_di_container', array( self::$container ) ),
+				),
+			)
+		);
+
+		// Allow the passing of DI Container via interface and method injection.
+		self::$container->addRule(
+			Inject_Hook_Loader::class,
+			array(
+				'call' => array(
+					array( 'set_hook_loader', array( $this->loader ) ),
+				),
+			)
+		);
+
+		// Allow the passing of DI Container via interface and method injection.
+		self::$container->addRule(
+			Inject_App_Config_Mock::class,
+			array(
+				'call' => array(
+					array( 'set_app_config', array( self::$app_config ) ),
 				),
 			)
 		);

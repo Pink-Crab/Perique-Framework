@@ -2,16 +2,16 @@
 
 Welcome to the core package of the PinkCrab **Perique** plugin framework, formally known as just the PinkCrab Plugin Framework. 
 
-![alt text](https://img.shields.io/badge/Current_Version-1.0.5-yellow.svg?style=flat " ") 
+![alt text](https://img.shields.io/badge/Current_Version-1.0.6-yellow.svg?style=flat " ") 
 [![Open Source Love](https://badges.frapsoft.com/os/mit/mit.svg?v=102)]()
 ![](https://github.com/Pink-Crab/Perqiue-Framework/workflows/GitHub_CI/badge.svg " ")
 [![codecov](https://codecov.io/gh/Pink-Crab/Perqiue-Framework/branch/master/graph/badge.svg?token=yNsRq7Bq1s)](https://codecov.io/gh/Pink-Crab/Perqiue-Framework)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Pink-Crab/Perqiue-Framework/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Pink-Crab/Perqiue-Framework/?branch=master)
 
 For more details please visit our docs.
-https://app.gitbook.com/@glynn-quelch/s/pinkcrab/
+https://perique.info
 
-## Version 1.0.5 ##
+## Version 1.0.6 ##
 
 ## Why? ##
 
@@ -434,6 +434,7 @@ add_filter(Hooks::APP_INIT_SET_DI_RULES,
 http://www.opensource.org/licenses/mit-license.html  
 
 ## Change Log ##
+* 1.0.6 - Added interfaces for injecting DI_Container, Hook_Loader and App_Config via a method with the help of an interface.
 * 1.0.5 - When exporting the App_Config data, the array of meta data keys is now exported correctly. Also removed a declaration in View that was not needed.
 * 1.0.4 - Added fallback values to url(), path(), additional() and namespaces() in App_Config() 
 * 1.0.3 - DI Container and Hook Loader are now auto populated to Middleware if the ```public function set_hook_loader(Hook_Loader $loader):void{}``` and ```public function set_di_container(DI_Container $container):void{}``` methods are defined in the Middleware class.
