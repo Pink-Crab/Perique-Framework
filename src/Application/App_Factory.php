@@ -82,7 +82,6 @@ class App_Factory {
 			'*' => array(
 				'substitutions' => array(
 					Renderable::class => new PHP_Engine( __DIR__ ),
-					\wpdb::class      => $GLOBALS['wpdb'],
 				),
 			),
 		);

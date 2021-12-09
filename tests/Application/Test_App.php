@@ -22,12 +22,11 @@ use PinkCrab\Perique\Application\App;
 use PinkCrab\Perique\Application\Config;
 use PinkCrab\Perique\Application\App_Config;
 use PinkCrab\Perique\Interfaces\DI_Container;
-use PinkCrab\Perique\Services\Dice\PinkCrab_Dice;
-use PinkCrab\Perique\Tests\Application\Test_App_Config;
 use PinkCrab\Perique\Interfaces\Registration_Middleware;
 use PinkCrab\Perique\Tests\Application\App_Helper_Trait;
 use PinkCrab\Perique\Tests\Fixtures\DI\Has_DI_Dependency;
 use PinkCrab\Perique\Exceptions\App_Initialization_Exception;
+use PinkCrab\Perique\Tests\Fixtures\DI\With_WPDB_As_Dependency;
 use PinkCrab\Perique\Services\Registration\Registration_Service;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Mock_Registration_Middleware;
 
@@ -261,6 +260,14 @@ class Test_App extends WP_UnitTestCase {
 		$app = $this->pre_populated_app_provider();
 		$app->boot();
 		$this->assertSame( $app->get_container(), $app::make( Has_DI_Dependency::class )->di );
-		// dump( $app::make( Has_DI_Dependency::class ) );
+	}
+
+	/** @testdox The WPDB DI rule should be defined when the app is finalised. */
+	public function test_can_pass_global_wpdb_from_base_di_rules(): void {
+		$app = $this->pre_populated_app_provider();
+		$app->boot();
+
+		$instance = $app::make( With_WPDB_As_Dependency::class );
+		$this->assertSame( $GLOBALS['wpdb'], $instance->wpdb );
 	}
 }

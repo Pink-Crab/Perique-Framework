@@ -273,6 +273,7 @@ final class App {
 				'substitutions' => array(
 					self::class         => $this,
 					DI_Container::class => self::$container,
+					\wpdb::class        => $GLOBALS['wpdb'],
 				),
 			)
 		);
