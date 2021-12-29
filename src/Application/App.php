@@ -31,6 +31,7 @@ use PinkCrab\Perique\Application\Hooks;
 use PinkCrab\Perique\Services\View\View;
 use PinkCrab\Perique\Application\App_Config;
 use PinkCrab\Perique\Interfaces\DI_Container;
+use PinkCrab\Perique\Interfaces\Inject_App_Config;
 use PinkCrab\Perique\Interfaces\Inject_Hook_Loader;
 use PinkCrab\Perique\Interfaces\Inject_DI_Container;
 use PinkCrab\Perique\Interfaces\Registration_Middleware;
@@ -309,7 +310,7 @@ final class App {
 
 		// Allow the passing of App Config via interface and method injection.
 		self::$container->addRule(
-			Inject_App_Config_Mock::class,
+			Inject_App_Config::class,
 			array(
 				'call' => array(
 					array( 'set_app_config', array( self::$app_config ) ),
