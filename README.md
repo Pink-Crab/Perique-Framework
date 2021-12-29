@@ -2,7 +2,7 @@
 
 Welcome to the core package of the PinkCrab **Perique** plugin framework, formally known as just the PinkCrab Plugin Framework. 
 
-![alt text](https://img.shields.io/badge/Current_Version-1.0.7-yellow.svg?style=flat " ") 
+![alt text](https://img.shields.io/badge/Current_Version-1.0.8-yellow.svg?style=flat " ") 
 [![Open Source Love](https://badges.frapsoft.com/os/mit/mit.svg?v=102)]()
 ![](https://github.com/Pink-Crab/Perqiue-Framework/workflows/GitHub_CI/badge.svg " ")
 [![codecov](https://codecov.io/gh/Pink-Crab/Perqiue-Framework/branch/master/graph/badge.svg?token=yNsRq7Bq1s)](https://codecov.io/gh/Pink-Crab/Perqiue-Framework)
@@ -11,7 +11,7 @@ Welcome to the core package of the PinkCrab **Perique** plugin framework, formal
 For more details please visit our docs.
 https://perique.info
 
-## Version 1.0.7 ##
+## Version 1.0.8 ##
 
 ## Why? ##
 
@@ -434,6 +434,7 @@ add_filter(Hooks::APP_INIT_SET_DI_RULES,
 http://www.opensource.org/licenses/mit-license.html  
 
 ## Change Log ##
+* 1.0.8 - Fixed incorrect interface used for Inject_App_Config in default DI rules added when App is initialised. Dev Dependencies updated to use current PinkCrab defaults. Removed .vscode config files from repo
 * 1.0.7 - WPDB is now defined in the DI rules when the app is finailised (via `$app->boot()` method). Before it was only loaded if created using the App_Factory and not available before `init` is called.
 * 1.0.6 - Added interfaces for injecting DI_Container, Hook_Loader and App_Config via a method with the help of an interface.
 * 1.0.5 - When exporting the App_Config data, the array of meta data keys is now exported correctly. Also removed a declaration in View that was not needed.
