@@ -154,10 +154,51 @@ class App_Factory {
 	public function boot(): App {
 		// Sets default settings if not already set.
 		if ( ! $this->app->has_app_config() ) {
-			$this->app_config( array() );
+			$this->app_config( $this->default_config_paths() );
 		}
 
 		return $this->app->boot();
+	}
+
+	/**
+	 * Generates some default paths for the app_config based on base path.
+	 *
+	 * @return array{
+	 *  url:array{
+	 *    plugin:string,
+	 *    view:string,
+	 *    assets:string,
+	 *    upload_root:string,
+	 *    upload_current:string,
+	 *  },
+	 *  path:array{
+	 *    plugin:string,
+	 *    view:string,
+	 *    assets:string,
+	 *    upload_root:string,
+	 *    upload_current:string,
+	 *  }
+	 * }
+	 */
+	private function default_config_paths(): array {
+		$wp_uploads = \wp_upload_dir();
+
+		return array(
+			'path' => array(
+				'plugin'         => rtrim( $this->base_path, \DIRECTORY_SEPARATOR ),
+				'view'           => rtrim( $this->base_path, \DIRECTORY_SEPARATOR ) . '/views',
+				'assets'         => rtrim( $this->base_path, \DIRECTORY_SEPARATOR ) . '/assets',
+				'upload_root'    => $wp_uploads['basedir'],
+				'upload_current' => $wp_uploads['path'],
+			),
+			'url'  => array(
+				'plugin'         => rtrim( plugins_url( basename( $this->base_path ) ), \DIRECTORY_SEPARATOR ),
+				'view'           => rtrim( plugins_url( basename( $this->base_path ) ), \DIRECTORY_SEPARATOR ) . '/views',
+				'assets'         => rtrim( plugins_url( basename( $this->base_path ) ), \DIRECTORY_SEPARATOR ) . '/assets',
+				'upload_root'    => $wp_uploads['baseurl'],
+				'upload_current' => $wp_uploads['url'],
+			),
+		);
 	}
 
 	/**
