@@ -33,8 +33,22 @@ class App_Factory {
 	 */
 	protected $app;
 
-	public function __construct() {
+	/**
+	 * The base path of the app.
+	 *
+	 * @var string
+	 */
+	protected $base_path;
+
+	public function __construct( ?string $base_path = null ) {
 		$this->app = new App();
+
+		if ( null === $base_path ) {
+			$trace           = debug_backtrace(); //phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_debug_backtrace
+			$this->base_path = isset( $trace[0]['file'] ) ? \trailingslashit( dirname( $trace[0]['file'] ) ) : __DIR__;
+		} else {
+			$this->base_path = \trailingslashit( $base_path );
+		}
 	}
 
 	/**
@@ -72,7 +86,6 @@ class App_Factory {
 
 	/**
 	 * Returns the basic DI rules which are used to set.
-	 * WPDB
 	 * Renderable with PHP_Engine implementation
 	 *
 	 * @return array<mixed>
@@ -81,7 +94,7 @@ class App_Factory {
 		return array(
 			'*' => array(
 				'substitutions' => array(
-					Renderable::class => new PHP_Engine( __DIR__ ),
+					Renderable::class => new PHP_Engine( $this->base_path ),
 				),
 			),
 		);
