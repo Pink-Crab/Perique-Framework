@@ -11,8 +11,6 @@ Welcome to the core package of the PinkCrab **Perique** plugin framework, formal
 For more details please visit our docs.
 https://perique.info
 
-## Version 1.0.8 ##
-
 ## Why? ##
 
 WordPress is a powerful tool for building a wide range of websites, but due to its age and commitment to backwards compatibility it's often frustration to work with using more modern tools.
