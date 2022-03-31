@@ -36,7 +36,7 @@ First you will need to create your composer.json and plugin.php file.
 
 ### plugin.php ###
 
-````php
+```php
 // @file plugin.php 
 <?php
      
@@ -57,7 +57,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 // Creates an App loaded with the WP_Dice DI container and basic DI rules
 // Allows for the passing of wpdb and the App's own instance.
-$app = ( new PinkCrab\Perique\Application\App_Factory )->with_wp_dice( true );
+$app = ( new PinkCrab\Perique\Application\App_Factory() )->with_wp_dice( true );
 
 // Set rules and configure DI Container
 $app->di_rules(include __DIR__ . '/config/dependencies.php');
@@ -74,7 +74,9 @@ $app->registration_middleware(new Example_Rest_Route_Registration_Middleware('my
 // Then just boot the application.
 $app->boot();
 
-````
+```
+
+> By default the base path used for default `App_Config` and `View` template path root. Is set from wherever `App_Factory` instance is created. This can changed by passing the path to App_Factory `new App_Factory('some/path')`
 
 ## Config files ##
 
@@ -103,7 +105,7 @@ return array(
 		'instanceOf' => Some_Implementation::class
 	)
 );
-````
+```
 
 ### registration.php ###
 
@@ -125,7 +127,7 @@ use Some\Namespace\{Some_Interface, Some_Implementation};
 return array(
     Some_Controller::class
 );
-````
+```
 
 ### settings.php ###
 

@@ -21,6 +21,7 @@ use PinkCrab\Perique\Application\App;
 use PinkCrab\Perique\Application\Hooks;
 use PinkCrab\Perique\Interfaces\Renderable;
 use PinkCrab\Perique\Application\App_Config;
+use PinkCrab\Perique\Application\App_Factory;
 use PinkCrab\Perique\Interfaces\DI_Container;
 use PinkCrab\Perique\Services\View\PHP_Engine;
 use PinkCrab\Perique\Services\Dice\PinkCrab_Dice;
@@ -179,5 +180,16 @@ class Test_App_Functional extends WP_UnitTestCase {
 		$app = $this->pre_populated_app_provider()
 			->boot()
 			->construct_registration_middleware( Sample_Class::class );
+	}
+
+	/** @testdox When creating a new App instance using the App Factory, the base path should be reflected in App Configs default values. */
+	public function test_app_config_paths_based_on_app_factory_base_path() {
+		$path = \dirname( \dirname( __DIR__, 1 ) . '/Fixtures/' );
+		$app = ( new App_Factory( $path ) )->with_wp_dice( true )->boot();
+		
+		$this->assertEquals(
+			rtrim( $path, \DIRECTORY_SEPARATOR ),
+			rtrim( $app::config( 'path', 'plugin' ), \DIRECTORY_SEPARATOR )
+		);
 	}
 }
