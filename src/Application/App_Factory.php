@@ -33,8 +33,22 @@ class App_Factory {
 	 */
 	protected $app;
 
-	public function __construct() {
+	/**
+	 * The base path of the app.
+	 *
+	 * @var string
+	 */
+	protected $base_path;
+
+	public function __construct( ?string $base_path = null ) {
 		$this->app = new App();
+
+		if ( null === $base_path ) {
+			$trace           = debug_backtrace(); //phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_debug_backtrace
+			$this->base_path = isset( $trace[0]['file'] ) ? \trailingslashit( dirname( $trace[0]['file'] ) ) : __DIR__;
+		} else {
+			$this->base_path = \trailingslashit( $base_path );
+		}
 	}
 
 	/**
@@ -72,7 +86,6 @@ class App_Factory {
 
 	/**
 	 * Returns the basic DI rules which are used to set.
-	 * WPDB
 	 * Renderable with PHP_Engine implementation
 	 *
 	 * @return array<mixed>
@@ -81,7 +94,7 @@ class App_Factory {
 		return array(
 			'*' => array(
 				'substitutions' => array(
-					Renderable::class => new PHP_Engine( __DIR__ ),
+					Renderable::class => new PHP_Engine( $this->base_path ),
 				),
 			),
 		);
@@ -141,10 +154,51 @@ class App_Factory {
 	public function boot(): App {
 		// Sets default settings if not already set.
 		if ( ! $this->app->has_app_config() ) {
-			$this->app_config( array() );
+			$this->app_config( $this->default_config_paths() );
 		}
 
 		return $this->app->boot();
+	}
+
+	/**
+	 * Generates some default paths for the app_config based on base path.
+	 *
+	 * @return array{
+	 *  url:array{
+	 *    plugin:string,
+	 *    view:string,
+	 *    assets:string,
+	 *    upload_root:string,
+	 *    upload_current:string,
+	 *  },
+	 *  path:array{
+	 *    plugin:string,
+	 *    view:string,
+	 *    assets:string,
+	 *    upload_root:string,
+	 *    upload_current:string,
+	 *  }
+	 * }
+	 */
+	private function default_config_paths(): array {
+		$wp_uploads = \wp_upload_dir();
+
+		return array(
+			'path' => array(
+				'plugin'         => rtrim( $this->base_path, \DIRECTORY_SEPARATOR ),
+				'view'           => rtrim( $this->base_path, \DIRECTORY_SEPARATOR ) . '/views',
+				'assets'         => rtrim( $this->base_path, \DIRECTORY_SEPARATOR ) . '/assets',
+				'upload_root'    => $wp_uploads['basedir'],
+				'upload_current' => $wp_uploads['path'],
+			),
+			'url'  => array(
+				'plugin'         => rtrim( plugins_url( basename( $this->base_path ) ), \DIRECTORY_SEPARATOR ),
+				'view'           => rtrim( plugins_url( basename( $this->base_path ) ), \DIRECTORY_SEPARATOR ) . '/views',
+				'assets'         => rtrim( plugins_url( basename( $this->base_path ) ), \DIRECTORY_SEPARATOR ) . '/assets',
+				'upload_root'    => $wp_uploads['baseurl'],
+				'upload_current' => $wp_uploads['url'],
+			),
+		);
 	}
 
 	/**

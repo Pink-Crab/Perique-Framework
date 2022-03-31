@@ -34,7 +34,7 @@ class Test_PHP_Engine extends WP_UnitTestCase {
 	 *
 	 * @return void
 	 */
-	public function setUp() {
+	public function setUp() : void{
 		parent::setUp();
 		$this->view = new PHP_Engine( \dirname( __DIR__, 1 ) . '/Fixtures/Views/' );
 	}

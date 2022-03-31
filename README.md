@@ -11,8 +11,6 @@ Welcome to the core package of the PinkCrab **Perique** plugin framework, formal
 For more details please visit our docs.
 https://perique.info
 
-## Version 1.0.8 ##
-
 ## Why? ##
 
 WordPress is a powerful tool for building a wide range of websites, but due to its age and commitment to backwards compatibility it's often frustration to work with using more modern tools.
@@ -36,7 +34,7 @@ First you will need to create your composer.json and plugin.php file.
 
 ### plugin.php ###
 
-````php
+```php
 // @file plugin.php 
 <?php
      
@@ -57,7 +55,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 // Creates an App loaded with the WP_Dice DI container and basic DI rules
 // Allows for the passing of wpdb and the App's own instance.
-$app = ( new PinkCrab\Perique\Application\App_Factory )->with_wp_dice( true );
+$app = ( new PinkCrab\Perique\Application\App_Factory() )->with_wp_dice( true );
 
 // Set rules and configure DI Container
 $app->di_rules(include __DIR__ . '/config/dependencies.php');
@@ -74,7 +72,9 @@ $app->registration_middleware(new Example_Rest_Route_Registration_Middleware('my
 // Then just boot the application.
 $app->boot();
 
-````
+```
+
+> By default the base path used for default `App_Config` and `View` template path root. Is set from wherever `App_Factory` instance is created. This can changed by passing the path to App_Factory `new App_Factory('some/path')`
 
 ## Config files ##
 
@@ -103,7 +103,7 @@ return array(
 		'instanceOf' => Some_Implementation::class
 	)
 );
-````
+```
 
 ### registration.php ###
 
@@ -125,7 +125,7 @@ use Some\Namespace\{Some_Interface, Some_Implementation};
 return array(
     Some_Controller::class
 );
-````
+```
 
 ### settings.php ###
 
@@ -434,6 +434,7 @@ add_filter(Hooks::APP_INIT_SET_DI_RULES,
 http://www.opensource.org/licenses/mit-license.html  
 
 ## Change Log ##
+* 1.1.0 - Allows the settings of a base path for plugin. Used for fallback app config path/urls and for default `PHP_Engine` template root paths. 
 * 1.0.8 - Fixed incorrect interface used for Inject_App_Config in default DI rules added when App is initialised. Dev Dependencies updated to use current PinkCrab defaults. Removed .vscode config files from repo
 * 1.0.7 - WPDB is now defined in the DI rules when the app is finailised (via `$app->boot()` method). Before it was only loaded if created using the App_Factory and not available before `init` is called.
 * 1.0.6 - Added interfaces for injecting DI_Container, Hook_Loader and App_Config via a method with the help of an interface.

@@ -29,7 +29,7 @@ class Test_App_Config extends WP_UnitTestCase {
 		self::unset_app_instance();
 	}
 
-	public function setup() {
+	public function setUp() : void {
 		$this->pre_populated_app_provider()->boot();
 	}
 
@@ -61,7 +61,7 @@ class Test_App_Config extends WP_UnitTestCase {
 		// With additional settings
 		$this->assertInstanceOf( App_Config::class, new App_Config( self::SAMPLE_SETTINGS ) );
 		// Without additional settings
-		$this->assertInstanceOf( App_Config::class, new App_Config );
+		$this->assertInstanceOf( App_Config::class, new App_Config() );
 	}
 
 	/**
