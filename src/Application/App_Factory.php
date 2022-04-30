@@ -133,7 +133,7 @@ class App_Factory {
 	 * @return self
 	 */
 	public function app_config( array $app_config ): self {
-		$this->app->set_app_config( $app_config );
+		$this->app->set_app_config( array_merge( $this->default_config_paths(), $app_config ) );
 		return $this;
 	}
 
