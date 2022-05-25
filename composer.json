@@ -27,7 +27,7 @@
         "phpstan/phpstan": "^1.0",
         "szepeviktor/phpstan-wordpress": "^1.0",
         "php-stubs/wordpress-stubs": "^5.9.0",
-        "roots/wordpress": "^5.9",
+        "roots/wordpress": "^5.9 || ^6.0",
         "wp-phpunit/wp-phpunit": "^5.9",
         "dealerdirect/phpcodesniffer-composer-installer": "*",
         "wp-coding-standards/wpcs": "*",
