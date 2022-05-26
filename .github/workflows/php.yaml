@@ -67,7 +67,7 @@ jobs:
         env:
           environment_github: true
         run: > 
-          rm -rf wordpress && rm -rf vendor 
+          sudo rm -rf wordpress && rm -rf vendor 
           && rm -rf composer.lock 
           && composer require php-stubs/wordpress-stubs:5.9 --dev 
           && composer require roots/wordpress:5.9 --dev 
