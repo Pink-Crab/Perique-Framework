@@ -45,7 +45,7 @@ jobs:
 
       - name: Clear existing composer
         run: >
-          rm -rf wordpress 
+          sudo rm -rf wordpress 
           && rm -rf vendor 
           && rm -rf composer.lock 
       - name: Validate composer.json and composer.lock
@@ -81,7 +81,7 @@ jobs:
         env:
           environment_github: true
         run: > 
-          rm -rf wordpress && rm -rf vendor 
+          sudo rm -rf wordpress && rm -rf vendor 
           && rm -rf composer.lock 
           && composer require php-stubs/wordpress-stubs:5.8 --dev 
           && composer require roots/wordpress:5.8 --dev 
@@ -95,7 +95,7 @@ jobs:
         env:
           environment_github: true
         run: > 
-          rm -rf wordpress && rm -rf vendor 
+          sudo rm -rf wordpress && rm -rf vendor 
           && rm -rf composer.lock 
           && composer require php-stubs/wordpress-stubs:5.7 --dev 
           && composer require roots/wordpress:5.7 --dev 
@@ -109,7 +109,7 @@ jobs:
         env:
           environment_github: true
         run: > 
-          rm -rf wordpress && rm -rf vendor 
+          sudo rm -rf wordpress && rm -rf vendor 
           && rm -rf composer.lock 
           && composer require php-stubs/wordpress-stubs:5.6 --dev 
           && composer require roots/wordpress:5.6 --dev 
@@ -123,7 +123,7 @@ jobs:
         env:
           environment_github: true
         run: > 
-          rm -rf wordpress && rm -rf vendor 
+          sudo rm -rf wordpress && rm -rf vendor 
           && rm -rf composer.lock 
           && composer require php-stubs/wordpress-stubs:5.5 --dev 
           && composer require roots/wordpress:5.5 --dev 
