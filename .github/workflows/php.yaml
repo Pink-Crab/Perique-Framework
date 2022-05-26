@@ -45,7 +45,7 @@ jobs:
 
       - name: Clear existing composer
         run: >
-          rm -rf wordpress 
+          sudo rm -rf wordpress 
           && rm -rf vendor 
           && rm -rf composer.lock 
       - name: Validate composer.json and composer.lock
@@ -55,20 +55,33 @@ jobs:
         run: >
           composer clearcache && rm -rf composer.lock 
           && composer install --prefer-dist --no-suggest
-      - name: Run Tests on WP5.9
+      - name: Run Tests on WP6.0
         env:
           environment_github: true
         run: composer all
 
       - name: Codecov
         run: bash <(curl -s https://codecov.io/bash) -t ${{ secrets.CORE_CODEV }}
-
+      
+      - name: Test on WP5.9
+        env:
+          environment_github: true
+        run: > 
+          sudo rm -rf wordpress && rm -rf vendor 
+          && rm -rf composer.lock 
+          && composer require php-stubs/wordpress-stubs:5.9 --dev 
+          && composer require roots/wordpress:5.9 --dev 
+          && composer require roots/wordpress:5.9 --dev 
+          && composer clearcache 
+          && rm -rf composer.lock 
+          && composer install --prefer-dist --no-suggest 
+          && composer all
       - name: Test on WP5.8
         if: ${{ matrix.php-versions != '8.0' && matrix.php-versions != '8.1' }}
         env:
           environment_github: true
         run: > 
-          rm -rf wordpress && rm -rf vendor 
+          sudo rm -rf wordpress && rm -rf vendor 
           && rm -rf composer.lock 
           && composer require php-stubs/wordpress-stubs:5.8 --dev 
           && composer require roots/wordpress:5.8 --dev 
@@ -82,7 +95,7 @@ jobs:
         env:
           environment_github: true
         run: > 
-          rm -rf wordpress && rm -rf vendor 
+          sudo rm -rf wordpress && rm -rf vendor 
           && rm -rf composer.lock 
           && composer require php-stubs/wordpress-stubs:5.7 --dev 
           && composer require roots/wordpress:5.7 --dev 
@@ -96,7 +109,7 @@ jobs:
         env:
           environment_github: true
         run: > 
-          rm -rf wordpress && rm -rf vendor 
+          sudo rm -rf wordpress && rm -rf vendor 
           && rm -rf composer.lock 
           && composer require php-stubs/wordpress-stubs:5.6 --dev 
           && composer require roots/wordpress:5.6 --dev 
@@ -110,7 +123,7 @@ jobs:
         env:
           environment_github: true
         run: > 
-          rm -rf wordpress && rm -rf vendor 
+          sudo rm -rf wordpress && rm -rf vendor 
           && rm -rf composer.lock 
           && composer require php-stubs/wordpress-stubs:5.5 --dev 
           && composer require roots/wordpress:5.5 --dev 
