@@ -55,7 +55,7 @@ jobs:
         run: >
           composer clearcache && rm -rf composer.lock 
           && composer install --prefer-dist --no-suggest
-      - name: Run Tests on WP5.9
+      - name: Run Tests on WP6.0
         env:
           environment_github: true
         run: composer all
