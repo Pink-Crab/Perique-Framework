@@ -1,0 +1,1 @@
+<p class="<?php echo $class; ?>"><?php $this->component($span);?></p>

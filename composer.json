@@ -40,7 +40,8 @@
         "php": ">=7.1.0",
         "level-2/dice": "4.0.*",
         "psr/container": "^1.0",
-        "pinkcrab/hook-loader": "^1.1"
+        "pinkcrab/hook-loader": "^1.1",
+        "doctrine/annotations": "^1.13"
     },
     "scripts": {
         "test": "./vendor/bin/phpunit --coverage-clover clover.xml --testdox --colors=always",
