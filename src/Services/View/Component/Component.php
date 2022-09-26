@@ -1,6 +1,9 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 /**
- * The view engine interface.
+ * The base component class.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -16,39 +19,40 @@
  *
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- * @package PinkCrab\Perique
+ * @package PinkCrab\Perique\View
+ * @since 1.2.0
  */
 
-namespace PinkCrab\Perique\Interfaces;
+namespace PinkCrab\Perique\Services\View\Component;
 
-use PinkCrab\Perique\Services\View\Component\Component;
-use PinkCrab\Perique\Services\View\Component\Component_Compiler;
-
-interface Renderable {
+abstract class Component {
 
 	/**
-	 * Display a view and its context.
+	 * Returns all the variables as an array.
 	 *
-	 * @param string $view
-	 * @param iterable<string, mixed> $data
-	 * @param bool $print
-	 * @return void|string
+	 * @return array<string, mixed>
 	 */
-	public function render( string $view, iterable $data, bool $print = true );
+	public function get_variables(): array {
+		// Get all Private, public and protected properties.
+		$reflect = new \ReflectionClass( get_class( $this ) );
+		$vars    = array();
+
+		foreach ( $reflect->getProperties( \ReflectionProperty::IS_PUBLIC | \ReflectionProperty::IS_PRIVATE | \ReflectionProperty::IS_PROTECTED )
+			as $var
+		) {
+			$var->setAccessible( true );
+			$vars[ $var->getName() ] = $var->getValue( $this );
+		}
+
+		return $vars;
+	}
 
 	/**
-	 * Renders a component.
+	 * Returns the defined template path.
 	 *
-	 * @param Component $component
-	 * @return string|void
+	 * @return string|null
 	 */
-	public function component( Component $component, bool $print = true );
-
-	/**
-	 * Sets the component compiler.
-	 *
-	 * @param Component_Compiler $compiler
-	 * @return void
-	 */
-	public function set_component_compiler( Component_Compiler $compiler ): void;
+	public function template(): ?string {
+		return null;
+	}
 }

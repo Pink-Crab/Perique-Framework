@@ -34,7 +34,7 @@ class Registration_Service {
 	/**
 	 * Holds all the defined registration middlewares
 	 *
-	 * @var array<Registration_Middleware>?
+	 * @var array<Registration_Middleware>
 	 */
 	protected $middleware = array();
 
@@ -127,12 +127,12 @@ class Registration_Service {
 		foreach ( $this->middleware as $middleware ) {
 
 			// Set the container if requested.
-			if ( \method_exists( $middleware, 'set_di_container' ) ) {
+			if ( is_object( $middleware ) && \method_exists( $middleware, 'set_di_container' ) ) {
 				$middleware->set_di_container( $this->di_container );
 			}
 
 			// Set the hook loader if requested.
-			if ( \method_exists( $middleware, 'set_hook_loader' ) && ! is_null( $this->loader ) ) {
+			if ( is_object( $middleware ) && \method_exists( $middleware, 'set_hook_loader' ) && ! is_null( $this->loader ) ) {
 				$middleware->set_hook_loader( $this->loader );
 			}
 

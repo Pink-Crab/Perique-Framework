@@ -25,6 +25,8 @@ declare(strict_types=1);
 namespace PinkCrab\Perique\Services\View;
 
 use PinkCrab\Perique\Interfaces\Renderable;
+use PinkCrab\Perique\Services\View\Component\Component;
+use PinkCrab\Perique\Services\View\Component\Component_Compiler;
 
 class View {
 
@@ -46,12 +48,24 @@ class View {
 	protected $engine;
 
 	/**
+	 * The component compiler
+	 *
+	 * @var Component_Compiler
+	 */
+	protected $component_compiler;
+
+
+	/**
 	 * Creates an instance of view with the passed engine.
 	 *
 	 * @param Renderable $engine
 	 */
-	public function __construct( Renderable $engine ) {
-		$this->engine = $engine;
+	public function __construct( Renderable $engine, Component_Compiler $component_compiler ) {
+		$this->engine             = $engine;
+		$this->component_compiler = $component_compiler;
+
+		// Populate engine with compiler.
+		$this->engine->set_component_compiler( $component_compiler );
 	}
 
 	/**
@@ -59,7 +73,7 @@ class View {
 	 *
 	 * @param string $view
 	 * @param iterable<string, mixed> $view_data
-	 * @param bool $print
+	 * @param bool $print Print or Return the HTML
 	 * @return string|void
 	 */
 	public function render( string $view, iterable $view_data = array(), bool $print = true ) {
@@ -67,6 +81,25 @@ class View {
 			$this->engine->render( $view, $view_data, self::PRINT_VIEW );
 		} else {
 			return $this->engine->render( $view, $view_data, self::RETURN_VIEW );
+		}
+	}
+
+	/**
+	 * Renders a component.
+	 *
+	 * @param Component $component
+	 * @param bool $print Print or Return the HTML
+	 * @return string|void
+	 */
+	public function component( Component $component, bool $print = true ) {
+
+		// Cast to view model.
+		$view_model = $this->component_compiler->compile( $component );
+
+		if ( $print ) {
+			$this->render( $view_model->template(), $view_model->data(), $print );
+		} else {
+			return $this->render( $view_model->template(), $view_model->data(), $print );
 		}
 	}
 

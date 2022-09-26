@@ -1,6 +1,9 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 /**
- * The view engine interface.
+ * A base view model
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -16,39 +19,50 @@
  *
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- * @package PinkCrab\Perique
+ * @package PinkCrab\Perique\View
+ * @since 1.2.0
  */
 
-namespace PinkCrab\Perique\Interfaces;
+namespace PinkCrab\Perique\Services\View;
 
-use PinkCrab\Perique\Services\View\Component\Component;
-use PinkCrab\Perique\Services\View\Component\Component_Compiler;
-
-interface Renderable {
+class View_Model {
 
 	/**
-	 * Display a view and its context.
+	 * The path to the template.
 	 *
-	 * @param string $view
-	 * @param iterable<string, mixed> $data
-	 * @param bool $print
-	 * @return void|string
+	 * @var string
 	 */
-	public function render( string $view, iterable $data, bool $print = true );
+	private $template;
 
 	/**
-	 * Renders a component.
+	 * The data to be used with the template.
 	 *
-	 * @param Component $component
-	 * @return string|void
+	 * @var array<string, mixed>
 	 */
-	public function component( Component $component, bool $print = true );
+	private $data = array();
+
+	/** @param array<string, mixed> $data */
+	public function __construct( string $template, array $data = array() ) {
+		$this->template = $template;
+		$this->data     = $data;
+	}
 
 	/**
-	 * Sets the component compiler.
+	 * Returns the template path.
 	 *
-	 * @param Component_Compiler $compiler
-	 * @return void
+	 * @return string
 	 */
-	public function set_component_compiler( Component_Compiler $compiler ): void;
+	public function template(): string {
+		return $this->template;
+	}
+
+	/**
+	 * Returns the data array.
+	 *
+	 * @return array<string, mixed>
+	 */
+	public function data(): array {
+		return $this->data;
+	}
+
 }

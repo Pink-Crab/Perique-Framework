@@ -26,6 +26,8 @@ namespace PinkCrab\Perique\Services\View;
 
 use Exception;
 use PinkCrab\Perique\Interfaces\Renderable;
+use PinkCrab\Perique\Services\View\Component\Component;
+use PinkCrab\Perique\Services\View\Component\Component_Compiler;
 
 class PHP_Engine implements Renderable {
 
@@ -37,6 +39,13 @@ class PHP_Engine implements Renderable {
 	protected $base_view_path;
 
 	/**
+	 * Access to the component compiler.
+	 *
+	 * @var Component_Compiler
+	 */
+	protected $component_compiler;
+
+	/**
 	 * Creates an instance of the PHP_Engine
 	 *
 	 * @param string $base_view_path
@@ -46,18 +55,48 @@ class PHP_Engine implements Renderable {
 	}
 
 	/**
+	 * Sets the component compiler.
+	 *
+	 * @param Component_Compiler $compiler
+	 * @return void
+	 */
+	public function set_component_compiler( Component_Compiler $compiler ): void {
+		$this->component_compiler = $compiler;
+	}
+
+	/**
 	 * Renders a template with data.
 	 *
 	 * @param string $view
 	 * @param iterable<string, mixed> $data
+	 * @param bool $print
 	 * @return string|void
 	 */
 	public function render( string $view, iterable $data, bool $print = true ) {
+
 		if ( $print ) {
 			print( $this->render_buffer( $view, $data ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		} else {
 			return $this->render_buffer( $view, $data );
 		}
+	}
+
+	/**
+	 * Renders a component.
+	 *
+	 * @param Component $component
+	 * @return string|void
+	 */
+	public function component( Component $component, bool $print = true ) {
+
+		// Throw exception of no compiler passed.
+		if ( ! is_a( $this->component_compiler, Component_Compiler::class ) ) {
+			throw new Exception( 'No component compiler passed to PHP_Engine' );
+		}
+
+		// Compile the component.
+		$compiled = $this->component_compiler->compile( $component );
+		return $this->render( $compiled->template(), $compiled->data(), $print );
 	}
 
 	/**
@@ -80,11 +119,11 @@ class PHP_Engine implements Renderable {
 	 * Builds the view.
 	 *
 	 * @param string $view
-	 * @param iterable<string, mixed> $data
+	 * @param iterable<string, mixed> $__data
 	 * @return string
 	 * @throws Exception
 	 */
-	protected function render_buffer( string $view, iterable $data ): string {
+	protected function render_buffer( string $view, iterable $__data ): string {
 
 		if ( ! file_exists( $this->resolve_file_path( $view ) ) ) {
 			throw new Exception( "{$view} doesn't exist" );
@@ -94,10 +133,13 @@ class PHP_Engine implements Renderable {
 		ob_start();
 
 		// Set all the data values a parameters.
-		foreach ( $data as $key => $value ) {
-			if ( is_string( $key ) ) {
-				${\wp_strip_all_tags( $key )} = $value;
+		foreach ( $__data as $__key => $__value ) {
+			if ( is_string( $__key ) ) {
+				${\wp_strip_all_tags( $__key )} = $__value;
 			}
+
+			// Unset the key and value.
+			unset( $__key, $__value, $__data );
 		}
 
 		include $this->resolve_file_path( $view );
