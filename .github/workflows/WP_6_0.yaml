@@ -1,4 +1,4 @@
-name: WP_6_0
+name: WordPress 6.0 Test Suite
 
 on:
   push:
