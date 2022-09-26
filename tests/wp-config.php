@@ -32,18 +32,18 @@ define( 'WP_DEBUG', true );
 // DO NOT use a production database or one that is shared with something else.
 // If being ran by github CLI use these DB values.
 if ( getenv( 'environment_github' ) ) {
-	define( 'DB_NAME', 'pc_core_tests' );
+	define( 'DB_NAME', 'pc_queue' );
 	define( 'DB_USER', 'root' );
 	define( 'DB_PASSWORD', 'crab' );
 	define( 'DB_HOST', '0.0.0.0' );
 	define( 'DB_CHARSET', 'utf8' );
 	define( 'DB_COLLATE', '' );
 } else {
-	// IF YOU ARE PLANNING TO RUN THESE TESTS, SET THESE TO MATCH YOUR DB.
-	define( 'DB_NAME', getenv( 'WP_DB_NAME' ) ?: 'pc_core_tests' );
-	define( 'DB_USER', getenv( 'WP_DB_USER' ) ?: 'root' );
-	define( 'DB_PASSWORD', getenv( 'WP_DB_PASS' ) ?: '' );
-	define( 'DB_HOST', '127.0.0.1' );
+	// IF YOU ARE PLANNING TO RUN THESE TESTS LOCALLY, SET THESE TO MATCH YOUR DB.
+	define( 'DB_NAME', getenv( 'WP_DB_NAME' ) );
+	define( 'DB_USER', getenv( 'WP_DB_USER' ) );
+	define( 'DB_PASSWORD', getenv( 'WP_DB_PASS' ) );
+	define( 'DB_HOST', getenv( 'WP_DB_HOST' ) );
 	define( 'DB_CHARSET', 'utf8' );
 	define( 'DB_COLLATE', '' );
 }
