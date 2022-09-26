@@ -1,4 +1,4 @@
-name: WP_5_9
+name: WordPress 5.9 Test Suite
 
 on:
   push:

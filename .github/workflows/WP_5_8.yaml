@@ -1,4 +1,4 @@
-name: WP_5_8
+name: WordPress 5.8 Test Suite
 
 on:
   push:
