@@ -6,3 +6,4 @@ coverage.xml
 .vscode
 .phpunit.result.cache
 clover.xml
+tests/.env
