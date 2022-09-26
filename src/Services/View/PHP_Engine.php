@@ -43,6 +43,7 @@ class PHP_Engine implements Renderable {
 	 *
 	 * @var Component_Compiler
 	 */
+	protected $component_compiler;
 
 	/**
 	 * Creates an instance of the PHP_Engine
@@ -89,7 +90,7 @@ class PHP_Engine implements Renderable {
 	public function component( Component $component, bool $print = true ) {
 
 		// Throw exception of no compiler passed.
-		if ( ! isset( $this->component_compiler ) ) {
+		if ( ! is_a( $this->component_compiler, Component_Compiler::class ) ) {
 			throw new Exception( 'No component compiler passed to PHP_Engine' );
 		}
 
