@@ -10,7 +10,7 @@ parameters:
         - %currentWorkingDirectory%/src/
     excludePaths:
         - %currentWorkingDirectory%/tests/*
+        - %currentWorkingDirectory%/src/Services/Container_Aware_Traits/*
     bootstrapFiles:
         - vendor/php-stubs/wordpress-stubs/wordpress-stubs.php
-    ignoreErrors:
-        - '#is used zero times and is not analysed#'
+
