@@ -4,7 +4,7 @@ Welcome to the core package of the PinkCrab **Perique** plugin framework, formal
 
 ![alt text](https://img.shields.io/badge/Current_Version-1.1.2-yellow.svg?style=flat " ") 
 [![Open Source Love](https://badges.frapsoft.com/os/mit/mit.svg?v=102)]()
-![](https://github.com/Pink-Crab/Perqiue-Framework/workflows/GitHub_CI/badge.svg " ")
+![](https://github.com/Pink-Crab/Perqiue-Framework/workflows/WP_6_0/badge.svg " ")
 [![codecov](https://codecov.io/gh/Pink-Crab/Perique-Framework/branch/master/graph/badge.svg?token=yNsRq7Bq1s)](https://codecov.io/gh/Pink-Crab/Perique-Framework)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Pink-Crab/Perique-Framework/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Pink-Crab/Perique-Framework/?branch=master)
 
