@@ -34,7 +34,7 @@ class PinkCrab_Dice implements DI_Container {
 	/**
 	 * Holds the instance of DICE to work with.
 	 *
-	 * @var Dice;
+	 * @var Dice $dice
 	 */
 	protected $dice;
 

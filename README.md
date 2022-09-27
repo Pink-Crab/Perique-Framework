@@ -2,9 +2,9 @@
 
 Welcome to the core package of the PinkCrab **Perique** plugin framework, formally known as just the PinkCrab Plugin Framework. 
 
-![alt text](https://img.shields.io/badge/Current_Version-1.1.2-yellow.svg?style=flat " ") 
+![alt text](https://img.shields.io/badge/Current_Version-1.1.2-yellow.svg?style=flat " ")
 [![Open Source Love](https://badges.frapsoft.com/os/mit/mit.svg?v=102)]()
-![](https://github.com/Pink-Crab/Perqiue-Framework/workflows/GitHub_CI/badge.svg " ")
+[![WordPress 6.0 Test Suite](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_0.yaml/badge.svg)](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_0.yaml)
 [![codecov](https://codecov.io/gh/Pink-Crab/Perique-Framework/branch/master/graph/badge.svg?token=yNsRq7Bq1s)](https://codecov.io/gh/Pink-Crab/Perique-Framework)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Pink-Crab/Perique-Framework/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Pink-Crab/Perique-Framework/?branch=master)
 
@@ -185,7 +185,6 @@ At the heart of the application is the registration process. Classes can be stac
 
 Included with Perique is a single piece of Registration_Middleware. The Renderable interface and Renderable_Middleware pair make it easy to register any hooks, shortcodes, post types, taxonomies, admin pages, and rest endpoints. Any class which needs to be processed, implements the Renderable interface and creates the ```function register(Hook_Hook_Loader $loader): void {...}
 
-
 ```php
 class Some_Controller implements Hookable {
 	public function register(Hook_Loader $loader): void{
@@ -201,7 +200,7 @@ Now when the init hook is called (priority 1), the some_action hook will be adde
 
 ### Registration Middleware ###
 
-Custom registration processes can be added using Registration_Middleware. You can easily create your own middleware that implements the ```PinkCrab\Perique\Interfaces\Registration_Middleware ``` interface. This interface consists of a single method ``` process(object $class): void ``` which is available to each class.
+Custom registration processes can be added using Registration_Middleware. You can easily create your own middleware that implements the `` `PinkCrab\Perique\Interfaces\Registration_Middleware ` ` ` interface. This interface consists of a single method ` ` ` process(object $class): void ` `` which is available to each class.
 
 ```php
 <?php
@@ -224,7 +223,7 @@ class Does_Something implements PinkCrab\Perique\Interfaces\Registration_Middlew
 }
 ```
 
-As of version 1.0.3 all middleware classes have access to the App's ```Hook_Loader``` and internal ```DI_Container```. These can be accessed using the following methods. This removes the need to create a custom ```Hook_Loader``` for each middleware and have access to the ```DI_Container``` without the need of Static Helpers
+As of version 1.0.3 all middleware classes have access to the App's `` `Hook_Loader` ` ` and internal ` ` `DI_Container` ` `. These can be accessed using the following methods. This removes the need to create a custom ` ` `Hook_Loader` ` ` for each middleware and have access to the ` ` `DI_Container` `` without the need of Static Helpers
 
 ```php
 class Does_Something implements PinkCrab\Perique\Interfaces\Registration_Middleware {
@@ -251,6 +250,7 @@ class Does_Something implements PinkCrab\Perique\Interfaces\Registration_Middlew
 }
 
 ```
+
 > Due to when all of this is loaded, all Dependency rules might not be defined!
 
 ***
@@ -280,7 +280,8 @@ $app = ( new PinkCrab\Perique\Application\App_Factory )->with_wp_dice( true )
 ```
 
 > These can either be passed before the app is booted, or afterwards.
-> 
+>  
+
 ## Static Helpers ##
 
 The App object has a few helper methods which can be called statically (either from an instance or from its name). 
@@ -292,7 +293,7 @@ The App object has a few helper methods which can be called statically (either f
 * @return object Object instance
 * @throws App_Initialization_Exception Code 4 If app isn't initialised.
 
-` `  ` make() `  ` ` can be used to access the DI Container to fully resolve the dependencies of an object. 
+``` make() ``` can be used to access the DI Container to fully resolve the dependencies of an object. 
 
 ```php 
 $emailer = App::make(Customer_Emailer::class); 
@@ -326,30 +327,71 @@ $version = App::config('version');
 * @return View
 * @throws App_Initialization_Exception Code 4
 
-If you need to render or return a template, you can use the ` `  ` view() `  ` ` helper. Returns an instance of the View class, populated with the current defined engine (use PHP by default).
+If you need to render or return a template, you can use the ``` view() ``` helper. Returns an instance of the View class, populated with the current defined engine (use PHP by default).
 
 ```php
 App::view()->render('signup/form', ['user' => wp_get_current_user(), 'nonce' => $nonce]);
 ```
 
+Components and View Models where added in 1.2.* and can be used to render templates in a more modular way. 
+
+```php
+class Input extends Component{
+   public $name;
+   public function __construct( string $name ) {
+      $this->name = $name;
+   }
+
+   /** Template method for the component.*/
+   public function template(): string {
+      return 'custom-components/input-text';
+   }
+}
+```
+
+> The path should be relative to the base component path.
+
+```php
+App::view()->component( new Input('name') );
+
+//this is similar to, but you can so more logic with a component internally.
+App::view()->render('path/to/views/custom-components/input-text', ['name' => 'name']);
+```
+
 > While the View and Config helpers are useful at times, its always better to inject them (App_Config::class or View::class).
+
+### Setup Component Compiler Path ###
+Out of the box, Perique expects components to found in a `components` directory, inside your defined view path. 
+
+You can change this by setting the path in the dependency rules.
+```php
+// @file config/dependencies.php
+return array(
+   ....,
+   Component_Compiler::class => array(
+      'constructParams' => array(
+         'some/new/path', // Path to components
+         array( Input::class => 'custom/path/for/component' ),
+      ),
+   )
+)
+```
 
 ## Hooks ##
 
 We have a number of hooks you can use to extend or modify how the app works. All of our internal hooks have pinkcrab/pf/app/ prefix, but we have a class of constants you can use ```PinkCrab\Perique\Application\Hooks:: APP_INIT_*```
 
-
-### Hooks::APP_INIT_PRE_BOOT ###
+### Hooks:: APP_INIT_PRE_BOOT ###
 
 This is primarily used internally to make last minute changes to how the boot process works. Due to the way this hook is used (called when plugin.php is loaded) it should not be used from outside of your own code, as you can be 100% external code will load first.
 
 ```php
 <?php
 add_action( 
-	Hooks::APP_INIT_PRE_BOOT, 
-	function( App_Config $app_config, Hook_Loader $loader, DI_Container $container ): void {
-		// do something cool
-	}
+   Hooks::APP_INIT_PRE_BOOT, 
+   function( App_Config $app_config, Hook_Loader $loader, DI_Container $container ): void {
+      // do something cool
+   }
 );
 ```
 
@@ -386,7 +428,7 @@ add_action(
 
 ### Hooks:: APP_INIT_CONFIG_VALUES ###
 
-When the App_Config class is constructed with all values passed from ``` config/settings.php ``` this filter is fired during the initial boot process and should only really be used for internal purposes. Sadly due to the timing in which we use this filter, its not really suited for extending the plugin.
+When the App_Config class is constructed with all values passed from `` ` config/settings.php ` `` this filter is fired during the initial boot process and should only really be used for internal purposes. Sadly due to the timing in which we use this filter, its not really suited for extending the plugin.
 
 ```php
 <?php
@@ -434,6 +476,8 @@ add_filter(Hooks::APP_INIT_SET_DI_RULES,
 http://www.opensource.org/licenses/mit-license.html  
 
 ## Change Log ##
+
+* 1.2.0 - Added Component and View Model support to View and Renderable Interface
 * 1.1.2 - Update all dependencies for WP6.0
 * 1.1.1 - Improved default paths/urls
 * 1.1.0 - Allows the settings of a base path for plugin. Used for fallback app config path/urls and for default `PHP_Engine` template root paths. 

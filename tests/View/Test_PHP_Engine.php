@@ -17,8 +17,7 @@ use Exception;
 use WP_UnitTestCase;
 use PinkCrab\Perique\Services\View\View;
 use PinkCrab\Perique\Services\View\PHP_Engine;
-
-
+use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\View_Components\Span;
 
 class Test_PHP_Engine extends WP_UnitTestCase {
 
@@ -34,7 +33,7 @@ class Test_PHP_Engine extends WP_UnitTestCase {
 	 *
 	 * @return void
 	 */
-	public function setUp() : void{
+	public function setUp() : void {
 		parent::setUp();
 		$this->view = new PHP_Engine( \dirname( __DIR__, 1 ) . '/Fixtures/Views/' );
 	}
@@ -159,6 +158,13 @@ class Test_PHP_Engine extends WP_UnitTestCase {
 		$this->expectOutputString( 'Hello World' );
 		$view = new PHP_Engine( \dirname( __DIR__, 1 ) . '/Fixtures/Views' );
 		$view->render( '/hello.php', array( 'hello' => 'Hello World' ) );
+	}
+
+	/** @testdox An exception should be thrown if the engine attempts to render a component with setting the compiler. */
+	public function test_throws_exception_if_component_not_set(): void {
+		$this->expectException( Exception::class );
+		$this->expectExceptionMessage( 'No component compiler passed to PHP_Engine' );
+		$this->view->component( new Span( 'class', 'value' ) );
 	}
 
 
