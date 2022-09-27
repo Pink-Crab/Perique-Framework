@@ -25,6 +25,7 @@ declare(strict_types=1);
 namespace PinkCrab\Perique\Services\View;
 
 use PinkCrab\Perique\Interfaces\Renderable;
+use PinkCrab\Perique\Services\View\View_Model;
 use PinkCrab\Perique\Services\View\Component\Component;
 use PinkCrab\Perique\Services\View\Component\Component_Compiler;
 
@@ -76,12 +77,8 @@ class View {
 	 * @param bool $print Print or Return the HTML
 	 * @return string|void
 	 */
-	public function render( string $view, iterable $view_data = array(), bool $print = true ) {
-		if ( $print ) {
-			$this->engine->render( $view, $view_data, self::PRINT_VIEW );
-		} else {
-			return $this->engine->render( $view, $view_data, self::RETURN_VIEW );
-		}
+	public function render( string $view, iterable $view_data = array(), bool $print = self::PRINT_VIEW ) {
+		return $this->engine->render( $view, $view_data, $print );
 	}
 
 	/**
@@ -91,16 +88,19 @@ class View {
 	 * @param bool $print Print or Return the HTML
 	 * @return string|void
 	 */
-	public function component( Component $component, bool $print = true ) {
+	public function component( Component $component, bool $print = self::PRINT_VIEW ) {
+		return $this->engine->component( $component, $print );
+	}
 
-		// Cast to view model.
-		$view_model = $this->component_compiler->compile( $component );
-
-		if ( $print ) {
-			$this->render( $view_model->template(), $view_model->data(), $print );
-		} else {
-			return $this->render( $view_model->template(), $view_model->data(), $print );
-		}
+	/**
+	 * Renders a view model
+	 *
+	 * @param View_Model $view_model
+	 * @param bool $print Print or Return the HTML
+	 * @return string|void
+	 */
+	public function view_model( View_Model $view_model, bool $print = self::PRINT_VIEW ) {
+		return $this->engine->view_model( $view_model, $print );
 	}
 
 	/**
