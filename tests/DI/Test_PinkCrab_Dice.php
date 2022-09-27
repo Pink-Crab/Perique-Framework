@@ -30,6 +30,7 @@ use PinkCrab\Perique\Tests\Fixtures\DI\Dependency_E;
 use PinkCrab\Perique\Exceptions\DI_Container_Exception;
 use Gin0115\WPUnit_Helpers\Objects as WPUnit_HelpersObjects;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Sample_Class;
+use PinkCrab\Perique\Services\View\Component\Component_Compiler;
 
 class Test_PinkCrab_Dice extends WP_UnitTestCase {
 
@@ -145,6 +146,35 @@ class Test_PinkCrab_Dice extends WP_UnitTestCase {
 		$this->expectException( DI_Container_Exception::class );
 		$pc_dice = PinkCrab_Dice::withDice( new Dice() );
 		$pc_dice->get( 'NotAClass' );
+	}
+
+	/** @testdox It should be possible to set a constructor property using the DI rules. */
+	public function test_set_class_constructor_prop_using_rules(): void {
+		$pc_dice = PinkCrab_Dice::withDice( new Dice() );
+
+		$without_custom = $pc_dice->get( Component_Compiler::class );
+
+		$this->assertEquals( '', WPUnit_HelpersObjects::get_property( $without_custom, 'component_base_path' ) );
+		$this->assertEmpty( WPUnit_HelpersObjects::get_property( $without_custom, 'component_aliases' ) );
+
+		// dump( $path );
+		// dump( $aliases );
+		// Add rules.
+		$pc_dice->addRule(
+			Component_Compiler::class,
+			array(
+				'constructParams' => array(
+					'some/new/path',
+					array( 'Class' => 'custom/path/for/component' ),
+				),
+			)
+		);
+
+		$with_custom = $pc_dice->get( Component_Compiler::class );
+		$this->assertEquals( 'some/new/path', WPUnit_HelpersObjects::get_property( $with_custom, 'component_base_path' ) );
+		$this->assertArrayHasKey( 'Class', WPUnit_HelpersObjects::get_property( $with_custom, 'component_aliases' ) );
+		$this->assertEquals( 'custom/path/for/component', WPUnit_HelpersObjects::get_property( $with_custom, 'component_aliases' )['Class'] );
+		dump( $pc_dice->get( Component_Compiler::class ) );
 	}
 
 }
