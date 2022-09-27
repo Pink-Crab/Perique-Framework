@@ -339,15 +339,15 @@ Components and View Models where added in 1.2.* and can be used to render templa
 
 ```php
 class Input extends Component{
-	public $name;
-	public function __construct( string $name ) {
-		$this->name = $name;
-	}
+   public $name;
+   public function __construct( string $name ) {
+      $this->name = $name;
+   }
 
-	/** Template method for the component.*/
-	public function template(): string {
-		return 'path/to/template/file';
-	}
+   /** Template method for the component.*/
+   public function template(): string {
+      return 'path/to/template/file';
+   }
 }
 ```
 
@@ -369,13 +369,13 @@ You can change this by setting the path in the dependency rules.
 ```php
 // @file config/dependencies.php
 return array(
-	....,
-	Component_Compiler::class => array(
-		'constructParams' => array(
-			'some/new/path', // Path to components
-			array( Input::class => 'custom/path/for/component' ),
-		),
-	)
+   ....,
+   Component_Compiler::class => array(
+      'constructParams' => array(
+         'some/new/path', // Path to components
+         array( Input::class => 'custom/path/for/component' ),
+      ),
+   )
 )
 ```
 
@@ -390,10 +390,10 @@ This is primarily used internally to make last minute changes to how the boot pr
 ```php
 <?php
 add_action( 
-	Hooks::APP_INIT_PRE_BOOT, 
-	function( App_Config $app_config, Hook_Loader $loader, DI_Container $container ): void {
-		// do something cool
-	}
+   Hooks::APP_INIT_PRE_BOOT, 
+   function( App_Config $app_config, Hook_Loader $loader, DI_Container $container ): void {
+      // do something cool
+   }
 );
 ```
 
