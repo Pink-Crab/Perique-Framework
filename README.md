@@ -346,7 +346,7 @@ class Input extends Component{
 
    /** Template method for the component.*/
    public function template(): string {
-      return 'path/to/template/file';
+      return 'custom-components/input-text';
    }
 }
 ```
@@ -357,7 +357,7 @@ class Input extends Component{
 App::view()->component( new Input('name') );
 
 //this is similar to, but you can so more logic with a component internally.
-App::view()->render('path/to/template/file', ['name' => 'name']);
+App::view()->render('path/to/views/custom-components/input-text', ['name' => 'name']);
 ```
 
 > While the View and Config helpers are useful at times, its always better to inject them (App_Config::class or View::class).
