@@ -157,9 +157,6 @@ class Test_PinkCrab_Dice extends WP_UnitTestCase {
 		$this->assertEquals( '', WPUnit_HelpersObjects::get_property( $without_custom, 'component_base_path' ) );
 		$this->assertEmpty( WPUnit_HelpersObjects::get_property( $without_custom, 'component_aliases' ) );
 
-		// dump( $path );
-		// dump( $aliases );
-		// Add rules.
 		$pc_dice->addRule(
 			Component_Compiler::class,
 			array(
@@ -174,7 +171,6 @@ class Test_PinkCrab_Dice extends WP_UnitTestCase {
 		$this->assertEquals( 'some/new/path', WPUnit_HelpersObjects::get_property( $with_custom, 'component_base_path' ) );
 		$this->assertArrayHasKey( 'Class', WPUnit_HelpersObjects::get_property( $with_custom, 'component_aliases' ) );
 		$this->assertEquals( 'custom/path/for/component', WPUnit_HelpersObjects::get_property( $with_custom, 'component_aliases' )['Class'] );
-		dump( $pc_dice->get( Component_Compiler::class ) );
 	}
 
 }
