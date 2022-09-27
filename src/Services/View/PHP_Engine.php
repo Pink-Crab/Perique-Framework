@@ -26,6 +26,7 @@ namespace PinkCrab\Perique\Services\View;
 
 use Exception;
 use PinkCrab\Perique\Interfaces\Renderable;
+use PinkCrab\Perique\Services\View\View_Model;
 use PinkCrab\Perique\Services\View\Component\Component;
 use PinkCrab\Perique\Services\View\Component\Component_Compiler;
 
@@ -97,6 +98,17 @@ class PHP_Engine implements Renderable {
 		// Compile the component.
 		$compiled = $this->component_compiler->compile( $component );
 		return $this->render( $compiled->template(), $compiled->data(), $print );
+	}
+
+
+	/**
+	 * Renders a view Model
+	 *
+	 * @param View_Model $view_model
+	 * @return string|void
+	 */
+	public function view_model( View_Model $view_model, bool $print = true ) {
+		return $this->render( $view_model->template(), $view_model->data(), $print );
 	}
 
 	/**

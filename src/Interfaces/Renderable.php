@@ -21,6 +21,7 @@
 
 namespace PinkCrab\Perique\Interfaces;
 
+use PinkCrab\Perique\Services\View\View_Model;
 use PinkCrab\Perique\Services\View\Component\Component;
 use PinkCrab\Perique\Services\View\Component\Component_Compiler;
 
@@ -43,6 +44,14 @@ interface Renderable {
 	 * @return string|void
 	 */
 	public function component( Component $component, bool $print = true );
+
+	/**
+	 * Renders a view Model
+	 *
+	 * @param View_Model $view_model
+	 * @return string|void
+	 */
+	public function view_model( View_Model $view_model, bool $print = true );
 
 	/**
 	 * Sets the component compiler.
