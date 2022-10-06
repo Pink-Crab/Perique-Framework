@@ -469,6 +469,19 @@ add_filter(Hooks::APP_INIT_SET_DI_RULES,
 );
 ```
 
+### Hooks:: COMPONENT_ALIASES ###
+
+This can be used to add custom Component Path Aliases after the app has been booted. These aliases are recompiled (via this filter) every time a components path is determined. This should be used by modules or plugins to add their own component paths.
+
+```php
+add_filter(
+	Hooks::COMPONENT_ALIASES,
+	function( array $aliases ): array {
+		$aliases[ MyComponent::class ] = 'some/custom/other/path';
+		return $aliases;
+	}
+);
+```
 ## License ##
 
 ### MIT License ###
@@ -477,6 +490,7 @@ http://www.opensource.org/licenses/mit-license.html
 
 ## Change Log ##
 
+* 1.2.1 - Added filter to allow for custom component path aliases.
 * 1.2.0 - Added Component and View Model support to View and Renderable Interface
 * 1.1.2 - Update all dependencies for WP6.0
 * 1.1.1 - Improved default paths/urls
