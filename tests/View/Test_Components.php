@@ -117,5 +117,6 @@ class Test_Components extends \WP_UnitTestCase {
 			'input--the_id--value--number',
 			$view->component( new Input( 'input', 'the_id', 'value', 'number' ), false )
 		);
+
 	}
 }
