@@ -469,7 +469,7 @@ add_filter(Hooks::APP_INIT_SET_DI_RULES,
 );
 ```
 
-### Hooks:: COMPONENT_ALIASES ###
+### Hooks::COMPONENT_ALIASES ###
 
 This can be used to add custom Component Path Aliases after the app has been booted. These aliases are recompiled (via this filter) every time a components path is determined. This should be used by modules or plugins to add their own component paths.
 
