@@ -2,7 +2,7 @@
 
 Welcome to the core package of the PinkCrab **Perique** plugin framework, formally known as just the PinkCrab Plugin Framework. 
 
-![alt text](https://img.shields.io/badge/Current_Version-1.1.2-yellow.svg?style=flat " ")
+![alt text](https://img.shields.io/badge/Current_Version-1.2.1-yellow.svg?style=flat " ")
 [![Open Source Love](https://badges.frapsoft.com/os/mit/mit.svg?v=102)]()
 [![WordPress 6.0 Test Suite](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_0.yaml/badge.svg)](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_0.yaml)
 [![codecov](https://codecov.io/gh/Pink-Crab/Perique-Framework/branch/master/graph/badge.svg?token=yNsRq7Bq1s)](https://codecov.io/gh/Pink-Crab/Perique-Framework)
@@ -469,6 +469,19 @@ add_filter(Hooks::APP_INIT_SET_DI_RULES,
 );
 ```
 
+### Hooks::COMPONENT_ALIASES ###
+
+This can be used to add custom Component Path Aliases after the app has been booted. These aliases are recompiled (via this filter) every time a components path is determined. This should be used by modules or plugins to add their own component paths.
+
+```php
+add_filter(
+	Hooks::COMPONENT_ALIASES,
+	function( array $aliases ): array {
+		$aliases[ MyComponent::class ] = 'some/custom/other/path';
+		return $aliases;
+	}
+);
+```
 ## License ##
 
 ### MIT License ###
@@ -477,6 +490,7 @@ http://www.opensource.org/licenses/mit-license.html
 
 ## Change Log ##
 
+* 1.2.1 - Added filter to allow for custom component path aliases.
 * 1.2.0 - Added Component and View Model support to View and Renderable Interface
 * 1.1.2 - Update all dependencies for WP6.0
 * 1.1.1 - Improved default paths/urls

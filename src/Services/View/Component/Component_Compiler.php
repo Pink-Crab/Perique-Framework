@@ -25,6 +25,7 @@ declare(strict_types=1);
 
 namespace PinkCrab\Perique\Services\View\Component;
 
+use PinkCrab\Perique\Application\Hooks;
 use PinkCrab\Perique\Services\View\View_Model;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
@@ -73,8 +74,10 @@ class Component_Compiler {
 	private function get_component_path( Component $component ): string {
 
 		// Check aliases.
-		if ( isset( $this->component_aliases[ get_class( $component ) ] ) ) {
-			return esc_html( $this->component_aliases[ get_class( $component ) ] );
+		$aliases = \apply_filters( Hooks::COMPONENT_ALIASES, $this->component_aliases );
+
+		if ( isset( $aliases[ get_class( $component ) ] ) ) {
+			return esc_attr( $aliases[ get_class( $component ) ] );
 		}
 
 		$from_annotation = $this->get_annotation( 'view', $component );
