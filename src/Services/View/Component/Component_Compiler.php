@@ -52,7 +52,7 @@ class Component_Compiler {
 	/** @param array<string, string> $component_aliases */
 	public function __construct( string $component_base_path = '', array $component_aliases = array() ) {
 		$this->component_base_path = $component_base_path;
-		$this->component_aliases   = $component_aliases;
+		$this->component_aliases   = \apply_filters( Hooks::COMPONENT_ALIASES, $component_aliases );
 	}
 
 	/**
