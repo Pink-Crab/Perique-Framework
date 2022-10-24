@@ -74,7 +74,7 @@ class PHP_Engine implements Renderable {
 	 * @return string|void
 	 */
 	public function render( string $view, iterable $data, bool $print = true ) {
-
+		$view = $this->resolve_file_path( $view );
 		if ( $print ) {
 			print( $this->render_buffer( $view, $data ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		} else {
@@ -97,7 +97,12 @@ class PHP_Engine implements Renderable {
 
 		// Compile the component.
 		$compiled = $this->component_compiler->compile( $component );
-		return $this->render( $compiled->template(), $compiled->data(), $print );
+		$view     = sprintf( '%s%s.php', \DIRECTORY_SEPARATOR, $this->clean_filename( $compiled->template() ) );
+		if ( $print ) {
+			print( $this->render_buffer( $view, $compiled->data() ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		} else {
+			return $this->render_buffer( $view, $compiled->data() );
+		}
 	}
 
 
@@ -137,7 +142,7 @@ class PHP_Engine implements Renderable {
 	 */
 	protected function render_buffer( string $view, iterable $__data ): string {
 
-		if ( ! file_exists( $this->resolve_file_path( $view ) ) ) {
+		if ( ! file_exists( $view ) ) {
 			throw new Exception( "{$view} doesn't exist" );
 		}
 
@@ -154,7 +159,7 @@ class PHP_Engine implements Renderable {
 			unset( $__key, $__value, $__data );
 		}
 
-		include $this->resolve_file_path( $view );
+		include $view;
 		$output = ob_get_contents();
 		ob_end_clean();
 		return $output ?: '';
@@ -167,8 +172,8 @@ class PHP_Engine implements Renderable {
 	 * @return string
 	 */
 	protected function clean_filename( string $file ): string {
-			$file = ltrim( $file, '/' );
-			return substr( $file, -4 ) === '.php'
+		$file = ltrim( $file, '/' );
+		return substr( $file, -4 ) === '.php'
 			? substr( $file, 0, -4 )
 			: $file;
 

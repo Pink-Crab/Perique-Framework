@@ -33,7 +33,7 @@ class Test_Components extends \WP_UnitTestCase {
 	private static $php_engine;
 
 	public static function setUpBeforeClass(): void {
-		self::$component_path = 'components/';
+		self::$component_path = \dirname( __DIR__, 1 ) . '/Fixtures/Views/components/';
 		self::$php_engine     = new PHP_Engine( \dirname( __DIR__, 1 ) . '/Fixtures/Views/' );
 	}
 
@@ -101,17 +101,22 @@ class Test_Components extends \WP_UnitTestCase {
 
 	/** @testdox It should be possible to add additional Component Aliases after setup and still have this reflected in paths. */
 	public function test_can_add_component_aliases_after_setup(): void {
-		$compiler = new Component_Compiler( self::$component_path );
-		$view     = new View( self::$php_engine, $compiler );
-
+		
 		// Add alias.
 		\add_filter(
 			Hooks::COMPONENT_ALIASES,
 			function( array $aliases ): array {
-				$aliases[ Input::class ] = self::$component_path . '/other/other.php';
+				$aliases[ Input::class ] = self::$component_path . 'other/other.php';
 				return $aliases;
 			}
 		);
+
+		$compiler = new Component_Compiler( self::$component_path );
+		$view     = new View( self::$php_engine, $compiler );
+
+		// Remove all hooks.
+		\remove_all_filters( Hooks::COMPONENT_ALIASES );
+
 
 		$this->assertEquals(
 			'input--the_id--value--number',
