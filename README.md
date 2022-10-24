@@ -2,7 +2,7 @@
 
 Welcome to the core package of the PinkCrab **Perique** plugin framework, formally known as just the PinkCrab Plugin Framework. 
 
-![alt text](https://img.shields.io/badge/Current_Version-1.2.1-yellow.svg?style=flat " ")
+![alt text](https://img.shields.io/badge/Current_Version-1.2.2-yellow.svg?style=flat " ")
 [![Open Source Love](https://badges.frapsoft.com/os/mit/mit.svg?v=102)]()
 [![WordPress 6.0 Test Suite](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_0.yaml/badge.svg)](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_0.yaml)
 [![codecov](https://codecov.io/gh/Pink-Crab/Perique-Framework/branch/master/graph/badge.svg?token=yNsRq7Bq1s)](https://codecov.io/gh/Pink-Crab/Perique-Framework)
@@ -490,6 +490,7 @@ http://www.opensource.org/licenses/mit-license.html
 
 ## Change Log ##
 
+* 1.2.2 - Fixes bug where component paths were not independent of the base view path.
 * 1.2.1 - Added filter to allow for custom component path aliases.
 * 1.2.0 - Added Component and View Model support to View and Renderable Interface
 * 1.1.2 - Update all dependencies for WP6.0
