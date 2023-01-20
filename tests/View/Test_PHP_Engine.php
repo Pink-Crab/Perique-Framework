@@ -167,5 +167,25 @@ class Test_PHP_Engine extends WP_UnitTestCase {
 		$this->view->component( new Span( 'class', 'value' ) );
 	}
 
+	/* @testdox A test where a template can be loaded from a sub directory using dot notation without file extension. */
+	public function test_can_render_path_using_dot_notation(): void {
+		$this->expectOutputString( 'foo' );
+		$this->view->render(
+			'sub_path.template',
+			array( 'variable' => 'foo' ),
+			View::PRINT_VIEW // Optional as print view is default.
+		);
+	}
+
+	/* @testdox A test where a template can be loaded from a sub directory using dot notation with file extension. */
+	public function test_can_render_path_using_dot_notation_with_extension(): void {
+		$this->expectOutputString( 'foo' );
+		$this->view->render(
+			'sub_path.php.bar.php',
+			array( 'variable' => 'foo' ),
+			View::PRINT_VIEW // Optional as print view is default.
+		);
+	}
+
 
 }
