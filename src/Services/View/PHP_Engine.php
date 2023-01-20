@@ -180,17 +180,47 @@ class PHP_Engine implements Renderable {
 	}
 
 	/**
-	 * Resolves the filepath from a filenane.
+	 * Resolves the filepath from a filename.
 	 *
 	 * @param string $filename
 	 * @return string
 	 */
 	protected function resolve_file_path( string $filename ): string {
+		$filename = $this->maybe_resolve_dot_notation( $filename );
 		return sprintf(
 			'%s%s.php',
 			$this->base_view_path,
 			$this->clean_filename( $filename )
 		);
+	}
+
+	/**
+	 * Replaces dots with directory separator based on OS from $filename
+	 *
+	 * @param string $filename
+	 * @return string
+	 */
+	protected function maybe_resolve_dot_notation( string $filename ): string {
+		if ( $this->str_ends_with( '.php', $filename ) ) {
+			$filename = substr( $filename, 0, -4 );
+		}
+
+		$parts    = explode( '.', $filename );
+		$filename = implode( DIRECTORY_SEPARATOR, $parts );
+
+		return $filename;
+	}
+
+	/**
+	 * Polyfill with str_replace for str_ends_with
+	 *
+	 * @param string $needle
+	 * @param string $haystack
+	 * @return bool
+	 */
+	protected function str_ends_with( string $needle, string $haystack ): bool {
+		$needle_len = strlen( $needle );
+		return ( $needle_len === 0 || 0 === substr_compare( $haystack, $needle, - $needle_len ) );
 	}
 
 
