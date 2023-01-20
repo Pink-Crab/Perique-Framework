@@ -7,3 +7,4 @@ coverage.xml
 .phpunit.result.cache
 clover.xml
 tests/.env
+.idea
