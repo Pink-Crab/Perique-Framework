@@ -55,7 +55,7 @@ jobs:
           && composer clearcache
           && composer require php-stubs/wordpress-stubs:5.8.1 --dev --no-update
           && composer require roots/wordpress:5.8.1 --dev --no-update
-          && composer require wp-phpunit/wp-phpunit:6.1.1 --dev --no-update
+          && composer require wp-phpunit/wp-phpunit:5.8.1 --dev --no-update
           && composer update --no-cache
       
       - name: Run Tests on WP5.8 (Pre php8 support)
