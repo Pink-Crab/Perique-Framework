@@ -12,12 +12,6 @@ Welcome to the core package of the PinkCrab **Perique** plugin framework, formal
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Pink-Crab/Perique-Framework/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Pink-Crab/Perique-Framework/?branch=master)
 [![WP6.1 [PHP7.2-8.1] Tests](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_1.yaml/badge.svg)](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_1.yaml)
 
-![alt text](https://img.shields.io/badge/Current_Version-1.3.0-yellow.svg?style=flat " ")
-[![Open Source Love](https://badges.frapsoft.com/os/mit/mit.svg?v=102)]()
-[![WordPress 6.1 Test Suite](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_1.yaml/badge.svg)](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_1.yaml)
-[![codecov](https://codecov.io/gh/Pink-Crab/Perique-Framework/branch/master/graph/badge.svg?token=yNsRq7Bq1s)](https://codecov.io/gh/Pink-Crab/Perique-Framework)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Pink-Crab/Perique-Framework/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Pink-Crab/Perique-Framework/?branch=master)
-
 For more details please visit our docs.
 https://perique.info
 
