@@ -27,18 +27,17 @@
         "phpstan/phpstan": "^1.0",
         "szepeviktor/phpstan-wordpress": "^1.0",
         "php-stubs/wordpress-stubs": "^6.0 || ^5.9",
-        "roots/wordpress": "^6.0",
-        "wp-phpunit/wp-phpunit": "6.0.*",
+        "roots/wordpress": "^6.1",
+        "wp-phpunit/wp-phpunit": "^6.1",
         "dealerdirect/phpcodesniffer-composer-installer": "*",
         "wp-coding-standards/wpcs": "*",
-        "object-calisthenics/phpcs-calisthenics-rules": "*",
         "yoast/phpunit-polyfills": "^0.2.0 || ^1.0.0",
         "symfony/var-dumper": "*",
         "gin0115/wpunit-helpers": "~1",
         "vlucas/phpdotenv": "^5.4"
     },
     "require": {
-        "php": ">=7.1.0",
+        "php": ">=7.2.0",
         "level-2/dice": "4.0.*",
         "psr/container": "^1.0",
         "pinkcrab/hook-loader": "^1.1"
