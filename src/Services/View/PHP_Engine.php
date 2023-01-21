@@ -97,7 +97,8 @@ class PHP_Engine implements Renderable {
 
 		// Compile the component.
 		$compiled = $this->component_compiler->compile( $component );
-		$view     = sprintf( '%s%s.php', \DIRECTORY_SEPARATOR, $this->clean_filename( $compiled->template() ) );
+		$template = $this->maybe_resolve_dot_notation( $compiled->template() );
+		$view     = sprintf( '%s%s.php', \DIRECTORY_SEPARATOR, $this->clean_filename( $template ) );
 		if ( $print ) {
 			print( $this->render_buffer( $view, $compiled->data() ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		} else {
@@ -232,7 +233,7 @@ class PHP_Engine implements Renderable {
 	 * @throws Exception
 	 */
 	protected function verify_view_path( string $path ): string {
-
+		$path = $this->maybe_resolve_dot_notation( $path );
 		$path = rtrim( $path, '/' ) . '/';
 
 		if ( ! \is_dir( $path ) ) {

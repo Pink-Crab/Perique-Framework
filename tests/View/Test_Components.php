@@ -20,6 +20,7 @@ use PinkCrab\Perique\Services\View\Component\Component_Compiler;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\View_Components\P;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\View_Components\Span;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\View_Components\Input;
+use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\View_Components\Dot_Notation;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\View_Components\Input_Attribute_Path;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\View_Components\Input_Template_Method;
 
@@ -101,7 +102,7 @@ class Test_Components extends \WP_UnitTestCase {
 
 	/** @testdox It should be possible to add additional Component Aliases after setup and still have this reflected in paths. */
 	public function test_can_add_component_aliases_after_setup(): void {
-		
+
 		// Add alias.
 		\add_filter(
 			Hooks::COMPONENT_ALIASES,
@@ -117,11 +118,40 @@ class Test_Components extends \WP_UnitTestCase {
 		// Remove all hooks.
 		\remove_all_filters( Hooks::COMPONENT_ALIASES );
 
-
 		$this->assertEquals(
 			'input--the_id--value--number',
 			$view->component( new Input( 'input', 'the_id', 'value', 'number' ), false )
 		);
+	}
 
+	/** @testdox It should be possible to render a component that uses dot natation for its path */
+	public function test_can_render_component_with_dot_noatation(): void {
+		$compiler = new Component_Compiler( self::$component_path );
+		$view     = new View( self::$php_engine, $compiler );
+		$this->assertEquals( 'as dots', $view->component( new Dot_Notation( 'as dots' ), false ) );
+	}
+
+		/** @testdox It should be possible to add additional Component Aliases after setup and still have this reflected in paths using DOT notation. */
+	public function test_can_add_component_aliases_after_setup_with_dot_notation(): void {
+
+		// Add alias.
+		\add_filter(
+			Hooks::COMPONENT_ALIASES,
+			function( array $aliases ): array {
+				$aliases[ Input::class ] = self::$component_path . 'other.other';
+				return $aliases;
+			}
+		);
+
+		$compiler = new Component_Compiler( self::$component_path );
+		$view     = new View( self::$php_engine, $compiler );
+
+		// Remove all hooks.
+		\remove_all_filters( Hooks::COMPONENT_ALIASES );
+
+		$this->assertEquals(
+			'dot--not--ation--aa',
+			$view->component( new Input( 'dot', 'not', 'ation', 'aa' ), false )
+		);
 	}
 }
