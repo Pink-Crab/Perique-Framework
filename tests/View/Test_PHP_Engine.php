@@ -187,5 +187,16 @@ class Test_PHP_Engine extends WP_UnitTestCase {
 		);
 	}
 
+	/** @testdox It should be possible to define the base path for view using dot notation. */
+	public function test_can_set_base_path_using_dot_notation(): void {
+		$this->expectOutputString( 'foo' );
+		$view = new PHP_Engine( \dirname( __DIR__, 1 ) . '.Fixtures.Views.' );
+		$view->render(
+			'sub_path.template',
+			array( 'variable' => 'foo' ),
+			View::PRINT_VIEW // Optional as print view is default.
+		);
+	}
+
 
 }

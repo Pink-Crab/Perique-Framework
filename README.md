@@ -2,11 +2,15 @@
 
 Welcome to the core package of the PinkCrab **Perique** plugin framework, formally known as just the PinkCrab Plugin Framework. 
 
-![alt text](https://img.shields.io/badge/Current_Version-1.2.3-yellow.svg?style=flat " ")
-[![Open Source Love](https://badges.frapsoft.com/os/mit/mit.svg?v=102)]()
-[![WordPress 6.0 Test Suite](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_0.yaml/badge.svg)](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_0.yaml)
-[![codecov](https://codecov.io/gh/Pink-Crab/Perique-Framework/branch/master/graph/badge.svg?token=yNsRq7Bq1s)](https://codecov.io/gh/Pink-Crab/Perique-Framework)
+[![Latest Stable Version](http://poser.pugx.org/pinkcrab/perique-framework-core/v)](https://packagist.org/packages/pinkcrab/perique-framework-core)
+[![Total Downloads](http://poser.pugx.org/pinkcrab/perique-framework-core/downloads)](https://packagist.org/packages/pinkcrab/perique-framework-core)
+[![License](http://poser.pugx.org/pinkcrab/perique-framework-core/license)](https://packagist.org/packages/pinkcrab/perique-framework-core)
+[![PHP Version Require](http://poser.pugx.org/pinkcrab/perique-framework-core/require/php)](https://packagist.org/packages/pinkcrab/perique-framework-core)
+![GitHub contributors](https://img.shields.io/github/contributors/Pink-Crab/Perique-Framework?label=Contributors)
+![GitHub issues](https://img.shields.io/github/issues-raw/Pink-Crab/Perique-Framework)
+[![codecov](https://codecov.io/gh/Pink-Crab/Perique-Framework/branch/master/graph/badge.svg)](https://codecov.io/gh/Pink-Crab/Perique-Framework)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Pink-Crab/Perique-Framework/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Pink-Crab/Perique-Framework/?branch=master)
+[![WP6.1 [PHP7.2-8.1] Tests](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_1.yaml/badge.svg)](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_1.yaml)
 
 For more details please visit our docs.
 https://perique.info
@@ -333,6 +337,19 @@ If you need to render or return a template, you can use the ``` view() ``` helpe
 App::view()->render('signup/form', ['user' => wp_get_current_user(), 'nonce' => $nonce]);
 ```
 
+
+It is possible to use dot notation in all view file paths. This allows for a simple way of defining paths for use on either Win or Unix filesystems.
+
+```php
+$view->render('path.to.file',['var' => 'foo']);
+```
+Would equate to 
+```php
+$view->render('path/to/file',['var' => 'foo']);
+```
+
+> As with regular paths, the .php can be omitted. However having a file called `php.php` could cause problems if the final .php is not included.
+
 Components and View Models where added in 1.2.* and can be used to render templates in a more modular way. 
 
 ```php
@@ -348,6 +365,7 @@ class Input extends Component{
    }
 }
 ```
+
 
 > The path should be relative to the base component path.
 
@@ -490,6 +508,7 @@ http://www.opensource.org/licenses/mit-license.html
 
 ## Change Log ##
 
+* 1.3.0 - Dropped testing for WP5.8 and introduced WP6.1 testing
 * 1.2.3 - Allow dot notation in view paths.
 * 1.2.2 - Fixes bug where component paths were not independent of the base view path.
 * 1.2.1 - Added filter to allow for custom component path aliases.

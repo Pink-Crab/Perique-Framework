@@ -1,4 +1,4 @@
-name: WordPress 6.0 Test Suite
+name: WordPress 6.0 Test Suite [PHP7.2-8.1]
 
 on:
   push:
@@ -54,7 +54,8 @@ jobs:
           rm -rf composer.lock 
           && composer clearcache
           && composer require php-stubs/wordpress-stubs:6.0.0 --dev --no-update
-          && composer require roots/wordpress:6.0 --dev --no-update
+          && composer require roots/wordpress:6.0.0 --dev --no-update
+          && composer require wp-phpunit/wp-phpunit:6.0.0 --dev --no-update
           && composer update --no-cache
 
       - name: Run Tests on Latest Version - WP6.0
