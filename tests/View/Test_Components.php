@@ -130,4 +130,28 @@ class Test_Components extends \WP_UnitTestCase {
 		$view     = new View( self::$php_engine, $compiler );
 		$this->assertEquals( 'as dots', $view->component( new Dot_Notation( 'as dots' ), false ) );
 	}
+
+		/** @testdox It should be possible to add additional Component Aliases after setup and still have this reflected in paths using DOT notation. */
+	public function test_can_add_component_aliases_after_setup_with_dot_notation(): void {
+
+		// Add alias.
+		\add_filter(
+			Hooks::COMPONENT_ALIASES,
+			function( array $aliases ): array {
+				$aliases[ Input::class ] = self::$component_path . 'other.other';
+				return $aliases;
+			}
+		);
+
+		$compiler = new Component_Compiler( self::$component_path );
+		$view     = new View( self::$php_engine, $compiler );
+
+		// Remove all hooks.
+		\remove_all_filters( Hooks::COMPONENT_ALIASES );
+
+		$this->assertEquals(
+			'dot--not--ation--aa',
+			$view->component( new Input( 'dot', 'not', 'ation', 'aa' ), false )
+		);
+	}
 }
