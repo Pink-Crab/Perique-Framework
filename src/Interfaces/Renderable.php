@@ -60,4 +60,13 @@ interface Renderable {
 	 * @return void
 	 */
 	public function set_component_compiler( Component_Compiler $compiler ): void;
+
+	/**
+	 * Returns the base view path.
+	 *
+	 * @return string
+	 * @since 1.4.0
+	 */
+	public function base_view_path(): string;
+
 }

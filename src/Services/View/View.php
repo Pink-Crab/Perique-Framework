@@ -126,4 +126,14 @@ class View {
 		return $this->engine;
 	}
 
+	/**
+	 * Returns the base path for the view.
+	 *
+	 * @return string
+	 * @since 1.4.0
+	 */
+	public function base_path(): string {
+		return $this->engine->base_view_path();
+	}
+
 }

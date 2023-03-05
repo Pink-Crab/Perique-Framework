@@ -116,5 +116,16 @@ class Test_View extends WP_UnitTestCase {
 		);
 	}
 
+	/** @testdox It should be possible to access the base path used by the renderable instance */
+	public function test_get_base_path(): void {
+		$path       = \dirname( __DIR__, 1 ) . '/Fixtures/Views/';
+		$renderable = new PHP_Engine( $path );
+
+		$this->assertEquals(
+			$path,
+			( new View( $renderable, $this->createMock( Component_Compiler::class ) ) )->base_path()
+		);
+	}
+
 
 }
