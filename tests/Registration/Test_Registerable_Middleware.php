@@ -49,4 +49,6 @@ class Test_Hookable_Middleware extends WP_UnitTestCase {
 
 		$this->assertEquals( 'Hookable_Mock', $hooks->pop()->get_handle() );
 	}
+
+
 }

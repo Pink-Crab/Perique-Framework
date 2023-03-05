@@ -22,6 +22,7 @@ use PinkCrab\Perique\Tests\Fixtures\DI\Interface_A;
 use PinkCrab\Perique\Interfaces\Registration_Middleware;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Has_DI_Container;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Hookable\Hookable_Mock;
+use PinkCrab\Perique\Services\Registration\Middleware\Hookable_Middleware;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Mock_Registration_Middleware;
 
 class Test_App_Factory extends WP_UnitTestCase {
@@ -160,5 +161,16 @@ class Test_App_Factory extends WP_UnitTestCase {
 			\trailingslashit( Objects::get_property( $engine, 'base_view_path' ) )
 		);
 	}
+
+	/** @testdox When creating with WP_Dice, the hookable middleware should be included by default */
+	// public function test_hookable_middleware_included_by_default(): void {
+	// 	$app = ( new App_Factory() )
+	// 		->with_wp_dice( true )
+	// 		->boot();
+
+	// 	$registration    = Objects::get_property( $app, 'registration' );
+	// 	$middleware_list = Objects::get_property( $registration, 'middleware' );
+	// 	$this->assertArrayHasKey( Hookable_Middleware::class, $middleware_list );
+	// }
 
 }

@@ -120,10 +120,8 @@ class Registration_Service {
 	 * @return void
 	 */
 	public function process(): void {
-
 		// Filter all classes, before processing.
 		$class_list = apply_filters( Hooks::APP_INIT_REGISTRATION_CLASS_LIST, $this->class_list );
-
 		foreach ( $this->middleware as $middleware ) {
 
 			// Set the container if requested.
@@ -141,7 +139,6 @@ class Registration_Service {
 
 			// Pass each class to the middleware.
 			foreach ( $class_list as $class ) {
-
 				// Construct class using container,
 				$class_instance = $this->di_container->create( $class );
 
