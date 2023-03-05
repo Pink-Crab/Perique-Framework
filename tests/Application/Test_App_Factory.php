@@ -162,15 +162,4 @@ class Test_App_Factory extends WP_UnitTestCase {
 		);
 	}
 
-	/** @testdox When creating with WP_Dice, the hookable middleware should be included by default */
-	// public function test_hookable_middleware_included_by_default(): void {
-	// 	$app = ( new App_Factory() )
-	// 		->with_wp_dice( true )
-	// 		->boot();
-
-	// 	$registration    = Objects::get_property( $app, 'registration' );
-	// 	$middleware_list = Objects::get_property( $registration, 'middleware' );
-	// 	$this->assertArrayHasKey( Hookable_Middleware::class, $middleware_list );
-	// }
-
 }
