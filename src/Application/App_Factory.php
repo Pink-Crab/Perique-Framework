@@ -64,6 +64,18 @@ class App_Factory {
 
 	/**
 	 * Pre populates a standard instance of the App
+	 *
+	 * THIS WAS REPLACED IN 1.4.0
+	 * THIS IS KEPT FOR BACKWARDS COMPATIBILITY
+	 *
+	 * @return self
+	 */
+	public function with_wp_dice( bool $include_default_rules = false ): self {
+		return $this->default_setup( $include_default_rules );
+	}
+
+	/**
+	 * Pre populates a standard instance of the App
 	 * Uses the PinkCrab_Dice container
 	 * Sets up registration and loader instances.
 	 * Adds Hookable Middleware
@@ -71,8 +83,9 @@ class App_Factory {
 	 * Just requires Class List, Config and DI Rules.
 	 *
 	 * @return self
+	 * @since 1.4.0
 	 */
-	public function with_wp_dice( bool $include_default_rules = false ): self {
+	public function default_setup( bool $include_default_rules = false ): self {
 		$loader = new Hook_Loader();
 
 		// Setup DI Container
