@@ -198,5 +198,24 @@ class Test_PHP_Engine extends WP_UnitTestCase {
 		);
 	}
 
+	/** @testdox It should be possible to use filepaths with or without the .php extensions */
+	public function test_can_render_path_with_or_without_php_extension(): void {
+		function(){
+			$this->expectOutputString( 'foo' );
+			$this->view->render(
+				'sub_path.template',
+				array( 'variable' => 'foo' ),
+				View::PRINT_VIEW // Optional as print view is default.
+			);
+		};
+		
+		$this->expectOutputString( 'foo' );
+		$this->view->render(
+			'sub_path.template.php',
+			array( 'variable' => 'foo' ),
+			View::PRINT_VIEW // Optional as print view is default.
+		);
+	}
+
 
 }

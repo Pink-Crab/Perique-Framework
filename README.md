@@ -8,9 +8,14 @@ Welcome to the core package of the PinkCrab **Perique** plugin framework, formal
 [![PHP Version Require](http://poser.pugx.org/pinkcrab/perique-framework-core/require/php)](https://packagist.org/packages/pinkcrab/perique-framework-core)
 ![GitHub contributors](https://img.shields.io/github/contributors/Pink-Crab/Perique-Framework?label=Contributors)
 ![GitHub issues](https://img.shields.io/github/issues-raw/Pink-Crab/Perique-Framework)
+
+[![WP5.9 [PHP7.2-8.1] Tests](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_5_9.yaml/badge.svg)](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_5_9.yaml)
+[![WP6.0 [PHP7.2-8.1] Tests](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_0.yaml/badge.svg)](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_0.yaml)
+[![WP6.1 [PHP7.2-8.1] Tests](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_1.yaml/badge.svg)](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_1.yaml)
 [![codecov](https://codecov.io/gh/Pink-Crab/Perique-Framework/branch/master/graph/badge.svg)](https://codecov.io/gh/Pink-Crab/Perique-Framework)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Pink-Crab/Perique-Framework/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Pink-Crab/Perique-Framework/?branch=master)
-[![WP6.1 [PHP7.2-8.1] Tests](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_1.yaml/badge.svg)](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_1.yaml)
+[![Maintainability](https://api.codeclimate.com/v1/badges/4a28004ae09a8cd37edf/maintainability)](https://codeclimate.com/github/Pink-Crab/Perique-Framework/maintainability)
+
 
 For more details please visit our docs.
 https://perique.info
@@ -508,6 +513,7 @@ http://www.opensource.org/licenses/mit-license.html
 
 ## Change Log ##
 
+* 1.3.1 - Added more meaningful errors for App_Config, updated dependencies and removed unused function in PHP_Engine
 * 1.3.0 - Dropped testing for WP5.8 and introduced WP6.1 testing
 * 1.2.3 - Allow dot notation in view paths.
 * 1.2.2 - Fixes bug where component paths were not independent of the base view path.

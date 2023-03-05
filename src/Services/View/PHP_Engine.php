@@ -98,7 +98,7 @@ class PHP_Engine implements Renderable {
 		// Compile the component.
 		$compiled = $this->component_compiler->compile( $component );
 		$template = $this->maybe_resolve_dot_notation( $compiled->template() );
-		$view     = sprintf( '%s%s.php', \DIRECTORY_SEPARATOR, $this->clean_filename( $template ) );
+		$view     = sprintf( '%s%s.php', \DIRECTORY_SEPARATOR, ltrim( $template ) );
 		if ( $print ) {
 			print( $this->render_buffer( $view, $compiled->data() ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		} else {
@@ -157,27 +157,16 @@ class PHP_Engine implements Renderable {
 			}
 
 			// Unset the key and value.
-			unset( $__key, $__value, $__data );
+			unset( $__key, $__value );
 		}
+
+		// Unset the data.
+		unset( $__data );
 
 		include $view;
 		$output = ob_get_contents();
 		ob_end_clean();
 		return $output ?: '';
-	}
-
-	/**
-	 * Trims any leading slash and removes .php
-	 *
-	 * @param string $file
-	 * @return string
-	 */
-	protected function clean_filename( string $file ): string {
-		$file = ltrim( $file, '/' );
-		return substr( $file, -4 ) === '.php'
-			? substr( $file, 0, -4 )
-			: $file;
-
 	}
 
 	/**
@@ -191,7 +180,7 @@ class PHP_Engine implements Renderable {
 		return sprintf(
 			'%s%s.php',
 			$this->base_view_path,
-			$this->clean_filename( $filename )
+			ltrim( $filename )
 		);
 	}
 

@@ -218,7 +218,7 @@ final class App_Config {
 	 */
 	public function post_types( string $key ) {
 		if ( ! array_key_exists( $key, $this->post_types ) ) {
-			throw new OutOfBoundsException( 'Post Type not defined.' );
+			throw new OutOfBoundsException( "App Config :: \"{$key}\" is not a defined post type" );
 		}
 
 		return $this->post_types[ $key ];
@@ -235,11 +235,11 @@ final class App_Config {
 	public function meta( string $key, string $type = self::POST_META ): string {
 		// Check meta type.
 		if ( ! array_key_exists( $type, $this->meta ) ) {
-			throw new OutOfBoundsException( 'Meta Type doesnt exists' );
+			throw new OutOfBoundsException( "App Config :: \"{$type}\" is not a valid meta type and cant be fetched" );
 		}
 		// Check key.
 		if ( ! array_key_exists( $key, $this->meta[ $type ] ) ) {
-			throw new OutOfBoundsException( $type . ' meta key doesnt exists' );
+			throw new OutOfBoundsException( "App Config :: \"{$key}\" is not a defined {$type} meta key" );
 		}
 
 		return $this->meta[ $type ][ $key ];
@@ -288,7 +288,7 @@ final class App_Config {
 		$valid_meta_types = array( self::POST_META, self::USER_META, self::TERM_META );
 		foreach ( $meta as $meta_type => $pairs ) {
 			if ( ! in_array( $meta_type, $valid_meta_types, true ) ) {
-				throw new OutOfBoundsException( 'Valid meta type must be used as key.' );
+				throw new OutOfBoundsException( "App Config :: \"{$meta_type}\" is not a valid meta type and cant be defined" );
 			}
 
 			// Set all pairs which have both valid key and values.
@@ -305,7 +305,7 @@ final class App_Config {
 	 */
 	public function taxonomies( string $key ): string {
 		if ( ! array_key_exists( $key, $this->taxonomies ) ) {
-			throw new OutOfBoundsException( 'Taxonomy not defined.' );
+			throw new OutOfBoundsException( "App Config :: \"{$key}\" is not a defined taxonomy" );
 		}
 
 		return $this->taxonomies[ $key ];
@@ -321,7 +321,7 @@ final class App_Config {
 	 */
 	public function db_tables( string $name ): string {
 		if ( ! array_key_exists( $name, $this->db_tables ) ) {
-			throw new OutOfBoundsException( 'Table doesnt exist' );
+			throw new OutOfBoundsException( "App Config :: \"{$name}\" is not a defined DB table" );
 		}
 		return $this->db_tables[ $name ];
 	}
