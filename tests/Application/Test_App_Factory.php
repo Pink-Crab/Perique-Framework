@@ -134,24 +134,13 @@ class Test_App_Factory extends WP_UnitTestCase {
 
 	/** @testdox It should be possible to create and instance of the App Factory and have the file instance created as the plugin base path for the App. */
 	public function test_detect_base_path(): void {
-		$app = ( new App_Factory() )
-			->with_wp_dice( true )
-			->boot();
-
-		$path = $app::view()->base_path();
-		$this->assertEquals( \trailingslashit( __DIR__ ), \trailingslashit( $path ) );
+		$this->assertEquals( \trailingslashit( __DIR__ ), ( new App_Factory() )->get_base_path() );
 	}
 
 	/** @testdox It should be possible to create and instance of the App Factory and be able to define the base path used for the App. */
 	public function test_custom_base_path(): void {
-		$dir = dirname( __DIR__, 1 );
-
-		$app = ( new App_Factory( $dir ) )
-			->with_wp_dice( true )
-			->boot();
-
-		$path = $app::view()->base_path();
-		$this->assertEquals( \trailingslashit( $dir ), \trailingslashit( $path ) );
+		$dir = \trailingslashit( dirname( __DIR__, 1 ) );
+		$this->assertEquals( $dir, ( new App_Factory( $dir ) )->get_base_path() );
 	}
 
 }

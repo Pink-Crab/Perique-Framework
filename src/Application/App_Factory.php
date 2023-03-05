@@ -53,6 +53,16 @@ class App_Factory {
 	}
 
 	/**
+	 * Gets the defined base path.
+	 *
+	 * @return string
+	 * @since 1.4.0
+	 */
+	public function get_base_path(): string {
+		return $this->base_path;
+	}
+
+	/**
 	 * Pre populates a standard instance of the App
 	 * Uses the PinkCrab_Dice container
 	 * Sets up registration and loader instances.
