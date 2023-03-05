@@ -157,8 +157,11 @@ class PHP_Engine implements Renderable {
 			}
 
 			// Unset the key and value.
-			unset( $__key, $__value, $__data );
+			unset( $__key, $__value );
 		}
+
+		// Unset the data.
+		unset( $__data );
 
 		include $view;
 		$output = ob_get_contents();
