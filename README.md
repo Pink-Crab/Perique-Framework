@@ -8,9 +8,14 @@ Welcome to the core package of the PinkCrab **Perique** plugin framework, formal
 [![PHP Version Require](http://poser.pugx.org/pinkcrab/perique-framework-core/require/php)](https://packagist.org/packages/pinkcrab/perique-framework-core)
 ![GitHub contributors](https://img.shields.io/github/contributors/Pink-Crab/Perique-Framework?label=Contributors)
 ![GitHub issues](https://img.shields.io/github/issues-raw/Pink-Crab/Perique-Framework)
+
+[![WP5.9 [PHP7.2-8.1] Tests](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_5_9.yaml/badge.svg)](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_5_9.yaml)
+[![WP6.0 [PHP7.2-8.1] Tests](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_0.yaml/badge.svg)](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_0.yaml)
+[![WP6.1 [PHP7.2-8.1] Tests](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_1.yaml/badge.svg)](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_1.yaml)
 [![codecov](https://codecov.io/gh/Pink-Crab/Perique-Framework/branch/master/graph/badge.svg)](https://codecov.io/gh/Pink-Crab/Perique-Framework)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Pink-Crab/Perique-Framework/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Pink-Crab/Perique-Framework/?branch=master)
-[![WP6.1 [PHP7.2-8.1] Tests](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_1.yaml/badge.svg)](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_1.yaml)
+[![Maintainability](https://api.codeclimate.com/v1/badges/4a28004ae09a8cd37edf/maintainability)](https://codeclimate.com/github/Pink-Crab/Perique-Framework/maintainability)
+
 
 For more details please visit our docs.
 https://perique.info
