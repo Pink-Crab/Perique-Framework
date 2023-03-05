@@ -231,4 +231,14 @@ class PHP_Engine implements Renderable {
 
 		return $path;
 	}
+
+	/**
+	 * Returns the base view path.
+	 *
+	 * @return string
+	 * @since 1.4.0
+	 */
+	public function base_view_path(): string {
+		return $this->base_view_path;
+	}
 }
