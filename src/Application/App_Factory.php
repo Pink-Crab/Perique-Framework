@@ -40,6 +40,14 @@ class App_Factory {
 	 */
 	protected $base_path;
 
+	/**
+	 * The base view path
+	 *
+	 * @var string|null
+	 * @since 1.4.0
+	 */
+	protected $base_view_path;
+
 	public function __construct( ?string $base_path = null ) {
 		$this->app = new App();
 
@@ -52,7 +60,7 @@ class App_Factory {
 		}
 	}
 
-	/**
+		/**
 	 * Gets the defined base path.
 	 *
 	 * @return string
@@ -60,6 +68,30 @@ class App_Factory {
 	 */
 	public function get_base_path(): string {
 		return $this->base_path;
+	}
+
+	/**
+	 * Sets the base view path.
+	 *
+	 * @since 1.4.0
+	 * @param string $base_view_path
+	 * @return self
+	 */
+	public function set_base_view_path( string $base_view_path ): self {
+		$this->base_view_path = \trailingslashit( $base_view_path );
+		return $this;
+	}
+
+	/**
+	 * Get the base view path.
+	 *
+	 * @since 1.4.0
+	 * @return string
+	 */
+	public function get_base_view_path(): string {
+		return null !== $this->base_view_path
+			? $this->base_view_path
+			: \trailingslashit( $this->default_config_paths()['path']['view'] );
 	}
 
 	/**
@@ -71,6 +103,10 @@ class App_Factory {
 	 * @return self
 	 */
 	public function with_wp_dice( bool $include_default_rules = false ): self {
+		// If the view path is not set, set it to the same as base path.
+		if ( null === $this->base_view_path ) {
+			$this->base_view_path = $this->base_path;
+		}
 		return $this->default_setup( $include_default_rules );
 	}
 

@@ -143,4 +143,43 @@ class Test_App_Factory extends WP_UnitTestCase {
 		$this->assertEquals( $dir, ( new App_Factory( $dir ) )->get_base_path() );
 	}
 
+	/** @testdox It should be possible to set and get the base view path */
+	public function test_set_and_get_base_view_path(): void {
+		$path    = '/test/path/';
+		$factory = new App_Factory();
+		$factory->set_base_view_path( $path );
+		$this->assertEquals( $path, $factory->get_base_view_path() );
+	}
+
+	/** @testdox The base view path should be appended with a slash automatically */
+	public function test_base_view_path_has_trailing_slash(): void {
+		$path    = '/test/path';
+		$factory = new App_Factory();
+		$factory->set_base_view_path( $path );
+		$this->assertEquals( \trailingslashit( $path ), $factory->get_base_view_path() );
+	}
+
+	/** @testdox Not setting the base view path, should see it set as the default app config value */
+	public function test_base_view_path_default(): void {
+		$factory = new App_Factory( __DIR__ );
+		$this->assertEquals( __DIR__ . '/views/', $factory->get_base_view_path() );
+	}
+
+	/** @testdox When using with_wp_dice() the base view path should be set to the project base*/
+	public function test_base_view_path_default_with_wp_dice(): void {
+		$path    = __DIR__ . '/';
+		$factory = new App_Factory( $path );
+		$factory->with_wp_dice();
+		$this->assertEquals( $path, $factory->get_base_view_path() );
+	}
+
+	/** When using with_wp_dice() the base view path should not be set to project base if already defined. */
+	public function test_base_view_path_not_changed_if_using_with_wp_dice(): void {
+		$path    = '/test/path/';
+		$factory = new App_Factory( __DIR__ );
+		$factory->set_base_view_path( $path );
+		$factory->with_wp_dice();
+		$this->assertEquals( $path, $factory->get_base_view_path() );
+	}
+
 }
