@@ -8,3 +8,5 @@ coverage.xml
 clover.xml
 tests/.env
 .idea
+infection.html
+infection.log

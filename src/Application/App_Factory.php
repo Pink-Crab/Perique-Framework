@@ -44,8 +44,9 @@ class App_Factory {
 		$this->app = new App();
 
 		if ( null === $base_path ) {
+			$file_index      = 0;
 			$trace           = debug_backtrace(); //phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_debug_backtrace
-			$this->base_path = isset( $trace[0]['file'] ) ? \trailingslashit( dirname( $trace[0]['file'] ) ) : __DIR__;
+			$this->base_path = isset( $trace[ $file_index ]['file'] ) ? \trailingslashit( dirname( $trace[ $file_index ]['file'] ) ) : __DIR__;
 		} else {
 			$this->base_path = \trailingslashit( $base_path );
 		}
