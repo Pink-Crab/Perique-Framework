@@ -180,6 +180,8 @@ class Test_App_Config extends WP_UnitTestCase {
 	/** @testdox Attempting to get the post type key for a post type not defined, an error should be thrown. */
 	public function test_exception_throw_for_unset_posttype(): void {
 		$this->expectException( OutOfBoundsException::class );
+		// Exception message should contain "invalid is not a defined post type"
+		$this->expectExceptionMessage( 'App Config :: "invalid" is not a defined post type' );
 		$app_config = new App_Config( self::SAMPLE_SETTINGS );
 		$app_config->post_types( 'invalid' );
 	}
@@ -193,9 +195,10 @@ class Test_App_Config extends WP_UnitTestCase {
 	/** @testdox When setting post types any key or value which isn't a valid string (string and not empty) will not be set. */
 	public function test_filters_post_type_with_none_string_key_value_pairs(): void {
 		$this->expectException( OutOfBoundsException::class );
+		$this->expectExceptionMessage( 'App Config :: "inv_cpt" is not a defined post type' );
 		$app_config = new App_Config(
 			array(
-				'post_types' => array( 'inv_cpt' => false ),
+				'post_types' => array( 'inv_cpt' => ['a','b'] ),
 			)
 		);
 		$app_config->post_types( 'inv_cpt' );
@@ -211,6 +214,7 @@ class Test_App_Config extends WP_UnitTestCase {
 	/** @testdox Attempting to get the taxonomuy slug/key for a taxonomy not defined, an error should be thrown. */
 	public function test_exception_throw_for_unset_taxonomy_key(): void {
 		$this->expectException( OutOfBoundsException::class );
+		$this->expectExceptionMessage( 'App Config :: "invalid" is not a defined taxonomy' );
 		$app_config = new App_Config( self::SAMPLE_SETTINGS );
 		$app_config->taxonomies( 'invalid' );
 	}
@@ -226,9 +230,10 @@ class Test_App_Config extends WP_UnitTestCase {
 	 *                                 META
 	 */
 
-	/** @testdox It should not be possible to define meta with an invlaid type. */
-	public function test_exception_throw_for_setting_invalid_meta_type(): void {
+	/** @testdox Attempting to set a meta type which is not valid, should result in an OutOfBounds exception being thrown */
+	public function test_exception_throw_for_setting_invalid_meta_type_key(): void {
 		$this->expectException( OutOfBoundsException::class );
+		$this->expectExceptionMessage( 'App Config :: "invalid" is not a valid meta type and cant be defined' );
 		$app_config = new App_Config(
 			array(
 				'meta' => array(
@@ -241,6 +246,7 @@ class Test_App_Config extends WP_UnitTestCase {
 	/** @testdox When attempting to get meta data, and incorrect meta type is used, an error should be gnerated */
 	public function test_exception_throw_for_calling_invalid_meta_type(): void {
 		$this->expectException( OutOfBoundsException::class );
+		$this->expectExceptionMessage( 'App Config :: "invalid_type" is not a valid meta type and cant be fetched' );
 		$app_config = new App_Config( self::SAMPLE_SETTINGS );
 		$app_config->meta( 'key', 'invalid_type' );
 	}
@@ -248,6 +254,8 @@ class Test_App_Config extends WP_UnitTestCase {
 	/** @testdox When attempting to get a meta key which hasn't been defined, an error should be generated. */
 	public function test_exception_throw_for_unset_meta_key(): void {
 		$this->expectException( OutOfBoundsException::class );
+		$this->expectExceptionMessage( 'App Config :: "invalid_key" is not a defined post meta key' );
+		
 		$app_config = new App_Config( self::SAMPLE_SETTINGS );
 		$app_config->meta( 'invalid_key', 'post' );
 	}
@@ -293,6 +301,7 @@ class Test_App_Config extends WP_UnitTestCase {
 	 */
 	public function test_throws_exception_for_unset_db_table(): void {
 		$this->expectException( OutOfBoundsException::class );
+		$this->expectExceptionMessage( 'App Config :: "failure" is not a defined DB table' );
 		$app_config = new App_Config( self::SAMPLE_SETTINGS );
 		$app_config->db_tables( 'failure' );
 	}
