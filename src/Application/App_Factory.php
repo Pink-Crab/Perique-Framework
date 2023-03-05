@@ -154,7 +154,7 @@ class App_Factory {
 		return array(
 			'*' => array(
 				'substitutions' => array(
-					Renderable::class => new PHP_Engine( $this->base_path ),
+					Renderable::class => new PHP_Engine( $this->get_base_view_path() ),
 				),
 			),
 		);
