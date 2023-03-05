@@ -513,6 +513,7 @@ http://www.opensource.org/licenses/mit-license.html
 
 ## Change Log ##
 
+* 1.3.1 - Added more meaningful errors for App_Config, updated dependencies and removed unused function in PHP_Engine
 * 1.3.0 - Dropped testing for WP5.8 and introduced WP6.1 testing
 * 1.2.3 - Allow dot notation in view paths.
 * 1.2.2 - Fixes bug where component paths were not independent of the base view path.
