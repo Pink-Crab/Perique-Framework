@@ -64,7 +64,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 // Creates an App loaded with the WP_Dice DI container and basic DI rules
 // Allows for the passing of wpdb and the App's own instance.
-$app = ( new PinkCrab\Perique\Application\App_Factory() )->with_wp_dice( true );
+$app = ( new PinkCrab\Perique\Application\App_Factory() )->default_setup( true );
 
 // Set rules and configure DI Container
 $app->di_rules(include __DIR__ . '/config/dependencies.php');
@@ -209,7 +209,7 @@ Now when the init hook is called (priority 1), the some_action hook will be adde
 
 ### Registration Middleware ###
 
-Custom registration processes can be added using Registration_Middleware. You can easily create your own middleware that implements the `` `PinkCrab\Perique\Interfaces\Registration_Middleware ` ` ` interface. This interface consists of a single method ` ` ` process(object $class): void ` `` which is available to each class.
+Custom registration processes can be added using Registration_Middleware. You can easily create your own middleware that implements the `` `PinkCrab\Perique\Interfaces\Registration_Middleware `` interface. This interface consists of a single method `` process(object $class): void ` `` which is available to each class.
 
 ```php
 <?php
@@ -232,7 +232,7 @@ class Does_Something implements PinkCrab\Perique\Interfaces\Registration_Middlew
 }
 ```
 
-As of version 1.0.3 all middleware classes have access to the App's `` `Hook_Loader` ` ` and internal ` ` `DI_Container` ` `. These can be accessed using the following methods. This removes the need to create a custom ` ` `Hook_Loader` ` ` for each middleware and have access to the ` ` `DI_Container` `` without the need of Static Helpers
+As of version 1.0.3 all middleware classes have access to the App's `Hook_Loader` and internal `DI_Container`. These can be accessed using the following methods. This removes the need to create a custom `Hook_Loader` for each middleware and have access to the `DI_Container`  without the need of Static Helpers
 
 ```php
 class Does_Something implements PinkCrab\Perique\Interfaces\Registration_Middleware {
@@ -271,7 +271,7 @@ You can then pass these custom Registration_Middlewares to the app at boot.
 ```php
 <?php 
 // As an instance.
-$app = ( new PinkCrab\Perique\Application\App_Factory )->with_wp_dice( true )
+$app = ( new PinkCrab\Perique\Application\App_Factory )->default_setup( true )
 	// Rest of bootstrapping
 	->registration_middleware(new Does_Something(new Some_Service()))
 	->boot();
@@ -282,7 +282,7 @@ $app = ( new PinkCrab\Perique\Application\App_Factory )->with_wp_dice( true )
 ```php
 <?php 
 // As a class name.
-$app = ( new PinkCrab\Perique\Application\App_Factory )->with_wp_dice( true )
+$app = ( new PinkCrab\Perique\Application\App_Factory )->default_setup( true )
 	// Rest of bootstrapping
 	->construct_registration_middleware( Does_Something::class )
 	->boot();
@@ -451,7 +451,7 @@ add_action(
 
 ### Hooks:: APP_INIT_CONFIG_VALUES ###
 
-When the App_Config class is constructed with all values passed from `` ` config/settings.php ` `` this filter is fired during the initial boot process and should only really be used for internal purposes. Sadly due to the timing in which we use this filter, its not really suited for extending the plugin.
+When the App_Config class is constructed with all values passed from ``config/settings.php ` `` this filter is fired during the initial boot process and should only really be used for internal purposes. Sadly due to the timing in which we use this filter, its not really suited for extending the plugin.
 
 ```php
 <?php

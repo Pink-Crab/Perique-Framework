@@ -37,10 +37,10 @@ class Test_App_Factory extends WP_UnitTestCase {
 		self::unset_app_instance();
 	}
 
-	/** @testdox When requested the App Factory can create an instance of App popualted with WP_Dice, Hookables Middleware, Loader and Registration Service. */
-	public function test_can_create_with_wp_dicece(): void {
+	/** @testdox When requested the App Factory can create an instance of App populated with WP_Dice, Hookables Middleware, Loader and Registration Service. */
+	public function test_can_create_with_default_setup(): void {
 		$app = ( new App_Factory() )
-			->with_wp_dice( true )
+			->default_setup( true )
 			->app();
 
 		$this->assertInstanceOf( App::class, $app );
@@ -57,7 +57,7 @@ class Test_App_Factory extends WP_UnitTestCase {
 	/** @testdox A classes which need to be registered, should be passable at setup. Allowing plugins to register hooks with WordPress */
 	public function test_can_set_registration_classes(): void {
 		$app = ( new App_Factory() )
-			->with_wp_dice( true )
+			->default_setup( true )
 			->registration_classes( array( Hookable_Mock::class ) )->app();
 
 		$registration_service = Objects::get_property( $app, 'registration' );
@@ -70,7 +70,7 @@ class Test_App_Factory extends WP_UnitTestCase {
 	/** @testdox It should be possible to pass custom rules to the Dependency Injection container to handle classes whos depenedencies cant be inferred. */
 	public function test_can_set_di_rule() {
 		$app = ( new App_Factory() )
-			->with_wp_dice( true )
+			->default_setup( true )
 			->di_rules( include FIXTURES_PATH . '/Application/dependencies.php' )
 			->app();
 
@@ -81,7 +81,7 @@ class Test_App_Factory extends WP_UnitTestCase {
 	/** @testdox It should be possible to set custom settings to the apps config. */
 	public function test_can_set_config(): void {
 		$app = ( new App_Factory() )
-			->with_wp_dice( true )
+			->default_setup( true )
 			->app_config( include FIXTURES_PATH . '/Application/settings.php' )
 			->app();
 
@@ -92,7 +92,7 @@ class Test_App_Factory extends WP_UnitTestCase {
 	/** @testdox It should be possible to boot the app from a chained factory call. If no config is set, the defaults should be used. */
 	public function test_can_boot_app_from_factory_chain(): void {
 		$app = ( new App_Factory() )
-			->with_wp_dice( true )
+			->default_setup( true )
 			->boot();
 		$this->assertTrue( $app::is_booted() );
 	}
@@ -100,7 +100,7 @@ class Test_App_Factory extends WP_UnitTestCase {
 	/** @testdox It shoud be possble to pass the DI_Container interface as a depenedcy and have it populated with the current DI_Container implementation at initialisation.  */
 	public function test_di_container_rule_defined_at_init(): void {
 		$app              = ( new App_Factory() )
-			->with_wp_dice( true )
+			->default_setup( true )
 			->boot();
 		$has_di_container = $app::make( Has_DI_Container::class );
 		$this->assertTrue( $has_di_container->di_set() );
@@ -111,7 +111,7 @@ class Test_App_Factory extends WP_UnitTestCase {
 		$mock_middleware = $this->createMock( Registration_Middleware::class );
 
 		$app = ( new App_Factory() )
-			->with_wp_dice( true )
+			->default_setup( true )
 			->registration_middleware( $mock_middleware )
 			->boot();
 
@@ -123,7 +123,7 @@ class Test_App_Factory extends WP_UnitTestCase {
 	/** @testdox It should be possible to defined additional registration middleware during the factory chained called, but as a class name, not as an instance. */
 	public function test_pass_registration_middleware_as_string_during_factory_init(): void {
 		$app = ( new App_Factory() )
-			->with_wp_dice( true )
+			->default_setup( true )
 			->construct_registration_middleware( Mock_Registration_Middleware::class )
 			->boot();
 
