@@ -22,6 +22,7 @@ use PinkCrab\Perique\Tests\Fixtures\DI\Interface_A;
 use PinkCrab\Perique\Interfaces\Registration_Middleware;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Has_DI_Container;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Hookable\Hookable_Mock;
+use PinkCrab\Perique\Services\Registration\Middleware\Hookable_Middleware;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Mock_Registration_Middleware;
 
 class Test_App_Factory extends WP_UnitTestCase {
