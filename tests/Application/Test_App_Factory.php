@@ -138,12 +138,8 @@ class Test_App_Factory extends WP_UnitTestCase {
 			->with_wp_dice( true )
 			->boot();
 
-		$engine = $app::view()->engine();
-
-		$this->assertEquals(
-			\trailingslashit( __DIR__ ),
-			\trailingslashit( Objects::get_property( $engine, 'base_view_path' ) )
-		);
+		$path = $app::view()->base_path();
+		$this->assertEquals( \trailingslashit( __DIR__ ), \trailingslashit( $path ) );
 	}
 
 	/** @testdox It should be possible to create and instance of the App Factory and be able to define the base path used for the App. */
@@ -154,12 +150,8 @@ class Test_App_Factory extends WP_UnitTestCase {
 			->with_wp_dice( true )
 			->boot();
 
-		$engine = $app::view()->engine();
-
-		$this->assertEquals(
-			\trailingslashit( $dir ),
-			\trailingslashit( Objects::get_property( $engine, 'base_view_path' ) )
-		);
+		$path = $app::view()->base_path();
+		$this->assertEquals( \trailingslashit( $dir ), \trailingslashit( $path ) );
 	}
 
 }
