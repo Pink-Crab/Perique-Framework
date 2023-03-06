@@ -12,13 +12,17 @@ declare(strict_types=1);
 
 namespace PinkCrab\Perique\Tests\Application;
 
+use TypeError;
 use WP_UnitTestCase;
 use PinkCrab\Loader\Hook_Loader;
 use Gin0115\WPUnit_Helpers\Objects;
 use PinkCrab\Perique\Application\App;
 use PinkCrab\Perique\Application\App_Factory;
 use PinkCrab\Perique\Interfaces\DI_Container;
+use PinkCrab\Perique\Services\View\PHP_Engine;
+use PinkCrab\Perique\Tests\Fixtures\DI\Class_G;
 use PinkCrab\Perique\Tests\Fixtures\DI\Interface_A;
+use PinkCrab\Perique\Tests\Fixtures\DI\Dependency_E;
 use PinkCrab\Perique\Interfaces\Registration_Middleware;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Has_DI_Container;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Hookable\Hookable_Mock;
@@ -181,5 +185,116 @@ class Test_App_Factory extends WP_UnitTestCase {
 		$factory->with_wp_dice();
 		$this->assertEquals( $path, $factory->get_base_view_path() );
 	}
+
+	/** @testdox When using the default_setup the default_di_rules should be inclued, this will set Renderable to use the PHP_Engine */
+	public function test_default_setup_includes_default_di_rules(): void {
+		$factory = new App_Factory( \FIXTURES_PATH );
+		$factory->default_setup()->boot();
+
+		$engine = $factory->app()->view()->engine();
+		$this->assertInstanceOf( PHP_Engine::class, $engine );
+	}
+
+	/** @testdox Attempting to use the default_config without setting the default_di_rules, should result in a TypeError being thrown as Renderable implementation is not defined. */
+	public function test_default_config_without_default_di_rules_throws_error(): void {
+		$this->expectException( \TypeError::class );
+		$factory = new App_Factory( \FIXTURES_PATH );
+		$factory->default_setup(false)->boot();
+		$factory->app()->view();
+	}
+
+	/** @testdox It should be possible to extend the factory and define a set of custom DI rules. */
+	public function test_extend_app_factory(): void {
+		$factory = new class() extends App_Factory {
+			public function __construct(){
+				parent::__construct( FIXTURES_PATH );
+			}
+			protected function default_di_rules(): array {
+				return array(
+					'*' => array(
+						'substitutions' => array(
+							Interface_A::class => new Dependency_E(),
+						),
+					),
+				);
+			}
+		};
+		$factory->default_setup()->boot();
+		$dependency = $factory->app()->make( Class_G::class );
+		$this->assertSame( Dependency_E::class, $dependency->test() );
+	}
+
+	/** @testdox When adding the App_Config array, this should be merged with the default, so any values not present will be populate from the defaults. */
+	public function test_add_app_config_uses_defaults_for_undefined(): void {
+		$factory = new App_Factory( FIXTURES_PATH );
+		$factory
+			->default_setup()
+			->app_config( array(
+			'path' => array(
+				'assets' => '/some/path/',
+			),
+			'url' => array(
+				'plugin' => 'https://some.url/',
+				'view'   => 'https://some.url/',
+				'assets' => 'https://some.url/',
+			),
+		) );
+
+		// Get the config from using using the debug info.
+		/** @var \PinkCrab\Perique\Application\App_Config $config */
+		$config = $factory->boot()->__debugInfo()['app_config'];
+
+		// Has changed values.
+		$this->assertEquals( '/some/path/', $config->path( 'assets' ) );
+		$this->assertEquals( 'https://some.url/', $config->url( 'plugin' ) );
+		$this->assertEquals( 'https://some.url/', $config->url( 'view' ) );
+		$this->assertEquals( 'https://some.url/', $config->url( 'assets' ) );
+
+		// Uses defaults.
+		$this->assertEquals( FIXTURES_PATH .'/', $config->path( 'plugin' ) );
+		$this->assertEquals( FIXTURES_PATH . '/views/', $config->path( 'view' ) );
+
+		// WP Uploads
+		$this->assertEquals( \trailingslashit(\wp_upload_dir()['basedir']) , $config->path( 'upload_root' ) );
+		$this->assertEquals( \trailingslashit(\wp_upload_dir()['path']) , $config->path( 'upload_current' ) );
+		$this->assertEquals( \trailingslashit(\wp_upload_dir()['baseurl']) , $config->url( 'upload_root' ) );
+		$this->assertEquals( \trailingslashit(\wp_upload_dir()['url']) , $config->url( 'upload_current' ) );
+		
+		// Namespaces
+		$this->assertEquals( 'pinkcrab', $config->rest() );
+		$this->assertEquals( 'pc_cache', $config->cache() );
+
+		// Version
+		$this->assertEquals( '0.1.0', $config->version() );
+	}
+
+	/** @testdox When no App_Config is defined, a set of defaults should be used, based on the base path defined in the App_Factory */
+	public function test_default_app_config(): void {
+		$factory = new App_Factory( FIXTURES_PATH );
+		
+		// Use reflection to get the default config.
+		$default_config = Objects::invoke_method($factory, 'default_config_paths', []);
+		
+		// Get base paths from WP.
+		$uploads = \wp_upload_dir();
+		$plugin_url = \get_option( 'siteurl' ) . '/wp-content/plugins/Fixtures';
+		$base_path = FIXTURES_PATH;
+
+		// Check the paths.
+		$this->assertEquals( $base_path, $default_config['path']['plugin'] );
+		$this->assertEquals( $base_path . '/views', $default_config['path']['view'] );
+		$this->assertEquals( $base_path . '/assets', $default_config['path']['assets'] );
+		$this->assertEquals( $uploads['basedir'], $default_config['path']['upload_root'] );
+		$this->assertEquals( $uploads['path'], $default_config['path']['upload_current'] );
+
+		// Check the urls.
+		$this->assertEquals( $plugin_url, $default_config['url']['plugin'] );
+		$this->assertEquals( $plugin_url . '/views', $default_config['url']['view'] );
+		$this->assertEquals( $plugin_url . '/assets', $default_config['url']['assets'] );
+		$this->assertEquals( $uploads['baseurl'], $default_config['url']['upload_root'] );
+		$this->assertEquals( $uploads['url'], $default_config['url']['upload_current'] );
+	}
+
+	
 
 }

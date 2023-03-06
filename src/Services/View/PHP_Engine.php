@@ -30,21 +30,21 @@ use PinkCrab\Perique\Services\View\View_Model;
 use PinkCrab\Perique\Services\View\Component\Component;
 use PinkCrab\Perique\Services\View\Component\Component_Compiler;
 
-class PHP_Engine implements Renderable {
+final class PHP_Engine implements Renderable {
 
 	/**
 	 * The path to base of templates.
 	 *
 	 * @var string
 	 */
-	protected $base_view_path;
+	private $base_view_path;
 
 	/**
 	 * Access to the component compiler.
 	 *
 	 * @var Component_Compiler
 	 */
-	protected $component_compiler;
+	private $component_compiler;
 
 	/**
 	 * Creates an instance of the PHP_Engine
@@ -141,7 +141,7 @@ class PHP_Engine implements Renderable {
 	 * @return string
 	 * @throws Exception
 	 */
-	protected function render_buffer( string $view, iterable $__data ): string {
+	private function render_buffer( string $view, iterable $__data ): string {
 
 		if ( ! file_exists( $view ) ) {
 			throw new Exception( "{$view} doesn't exist" );
@@ -175,7 +175,7 @@ class PHP_Engine implements Renderable {
 	 * @param string $filename
 	 * @return string
 	 */
-	protected function resolve_file_path( string $filename ): string {
+	private function resolve_file_path( string $filename ): string {
 		$filename = $this->maybe_resolve_dot_notation( $filename );
 		return sprintf(
 			'%s%s.php',
@@ -190,7 +190,7 @@ class PHP_Engine implements Renderable {
 	 * @param string $filename
 	 * @return string
 	 */
-	protected function maybe_resolve_dot_notation( string $filename ): string {
+	private function maybe_resolve_dot_notation( string $filename ): string {
 		if ( $this->str_ends_with( '.php', $filename ) ) {
 			$filename = substr( $filename, 0, -4 );
 		}
@@ -208,7 +208,7 @@ class PHP_Engine implements Renderable {
 	 * @param string $haystack
 	 * @return bool
 	 */
-	protected function str_ends_with( string $needle, string $haystack ): bool {
+	private function str_ends_with( string $needle, string $haystack ): bool {
 		$needle_len = strlen( $needle );
 		return ( $needle_len === 0 || 0 === substr_compare( $haystack, $needle, - $needle_len ) );
 	}
@@ -221,7 +221,7 @@ class PHP_Engine implements Renderable {
 	 * @return string
 	 * @throws Exception
 	 */
-	protected function verify_view_path( string $path ): string {
+	private function verify_view_path( string $path ): string {
 		$path = $this->maybe_resolve_dot_notation( $path );
 		$path = rtrim( $path, '/' ) . '/';
 

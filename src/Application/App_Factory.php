@@ -98,6 +98,7 @@ class App_Factory {
 	 * Pre populates a standard instance of the App
 	 *
 	 * THIS WAS REPLACED IN 1.4.0
+	 * ASSUMES THE VIEW BASE PATH IS THE SAME AS THE BASE PATH
 	 * THIS IS KEPT FOR BACKWARDS COMPATIBILITY
 	 *
 	 * @return self
@@ -117,11 +118,12 @@ class App_Factory {
 	 * Adds Hookable Middleware
 	 *
 	 * Just requires Class List, Config and DI Rules.
-	 *
-	 * @return self
 	 * @since 1.4.0
+	 *
+	 * @param bool $include_default_rules
+	 * @return self
 	 */
-	public function default_setup( bool $include_default_rules = false ): self {
+	public function default_setup( bool $include_default_rules = true ): self {
 		$loader = new Hook_Loader();
 
 		// Setup DI Container
@@ -193,7 +195,7 @@ class App_Factory {
 	 * @return self
 	 */
 	public function app_config( array $app_config ): self {
-		$this->app->set_app_config( array_merge( $this->default_config_paths(), $app_config ) );
+		$this->app->set_app_config( \array_replace_recursive( $this->default_config_paths(), $app_config ) );
 		return $this;
 	}
 
@@ -242,7 +244,6 @@ class App_Factory {
 	 */
 	private function default_config_paths(): array {
 		$wp_uploads = \wp_upload_dir();
-
 		return array(
 			'path' => array(
 				'plugin'         => rtrim( $this->base_path, \DIRECTORY_SEPARATOR ),
@@ -252,9 +253,9 @@ class App_Factory {
 				'upload_current' => $wp_uploads['path'],
 			),
 			'url'  => array(
-				'plugin'         => rtrim( plugins_url( basename( $this->base_path ) ), \DIRECTORY_SEPARATOR ),
-				'view'           => rtrim( plugins_url( basename( $this->base_path ) ), \DIRECTORY_SEPARATOR ) . '/views',
-				'assets'         => rtrim( plugins_url( basename( $this->base_path ) ), \DIRECTORY_SEPARATOR ) . '/assets',
+				'plugin'         => plugins_url( basename( $this->base_path ) ),
+				'view'           => plugins_url( basename( $this->base_path ) ) . '/views',
+				'assets'         => plugins_url( basename( $this->base_path ) ) . '/assets',
 				'upload_root'    => $wp_uploads['baseurl'],
 				'upload_current' => $wp_uploads['url'],
 			),
