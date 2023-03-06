@@ -388,9 +388,9 @@ class Test_App_Config extends WP_UnitTestCase {
 		$this->assertEquals( array(), $defaults['meta']['user'] );
 		$this->assertEquals( array(), $defaults['meta']['term'] );
 
-		// Meta should have 3 empty indexes
-		$this->assertEquals( array(), $defaults['meta']['post'] );
-		$this->assertEquals( array(), $defaults['meta']['user'] );
-		$this->assertEquals( array(), $defaults['meta']['term'] );
+		// Meta should have 3 empty indexes (also checks for the class Constants.)
+		$this->assertEquals( array(), $defaults['meta'][App_Config::POST_META] );
+		$this->assertEquals( array(), $defaults['meta'][App_Config::TERM_META] );
+		$this->assertEquals( array(), $defaults['meta'][App_Config::USER_META] );
 	}
 }
