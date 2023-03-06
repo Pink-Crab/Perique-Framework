@@ -234,7 +234,7 @@ class Test_App extends WP_UnitTestCase {
 	public function test_config_facade(): void {
 		$app = $this->pre_populated_app_provider();
 		$app->boot();
-		$this->assertEquals( FIXTURES_PATH . '/Views/', Config::path( 'view' ) );
+		$this->assertEquals( FIXTURES_PATH . '/views/', Config::path( 'view' ) );
 		$this->assertEquals( 'test_value', Config::additional( 'test_key' ) );
 	}
 

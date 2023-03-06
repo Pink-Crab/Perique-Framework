@@ -7,7 +7,7 @@
 return array(
 	'additional' => array( 'test_key' => 'test_value' ),
 	'path'       => array(
-		'view' => FIXTURES_PATH . '/Views',
+		'view' => FIXTURES_PATH . '/views',
 	),
 	'meta'       => array(
 		'post' => array( 'post_meta_1' => 'One Post' ),

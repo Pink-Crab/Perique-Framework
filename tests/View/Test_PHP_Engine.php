@@ -35,7 +35,7 @@ class Test_PHP_Engine extends WP_UnitTestCase {
 	 */
 	public function setUp() : void {
 		parent::setUp();
-		$this->view = new PHP_Engine( \dirname( __DIR__, 1 ) . '/Fixtures/Views/' );
+		$this->view = new PHP_Engine( \dirname( __DIR__, 1 ) . '/Fixtures/views/' );
 	}
 
 	/**
@@ -145,7 +145,7 @@ class Test_PHP_Engine extends WP_UnitTestCase {
 	 */
 	public function test_throws_exception_view_dir_not_exists(): void {
 		$this->expectException( Exception::class );
-		new PHP_Engine( \dirname( __DIR__, 1 ) . '/Fixtures/Fake_Views/' );
+		new PHP_Engine( \dirname( __DIR__, 1 ) . '/Fixtures/Fake_views/' );
 	}
 
 	/**
@@ -156,7 +156,7 @@ class Test_PHP_Engine extends WP_UnitTestCase {
 	 */
 	public function test_adds_trailing_slash_to_view_path(): void {
 		$this->expectOutputString( 'Hello World' );
-		$view = new PHP_Engine( \dirname( __DIR__, 1 ) . '/Fixtures/Views' );
+		$view = new PHP_Engine( \dirname( __DIR__, 1 ) . '/Fixtures/views' );
 		$view->render( '/hello.php', array( 'hello' => 'Hello World' ) );
 	}
 
@@ -190,7 +190,7 @@ class Test_PHP_Engine extends WP_UnitTestCase {
 	/** @testdox It should be possible to define the base path for view using dot notation. */
 	public function test_can_set_base_path_using_dot_notation(): void {
 		$this->expectOutputString( 'foo' );
-		$view = new PHP_Engine( \dirname( __DIR__, 1 ) . '.Fixtures.Views.' );
+		$view = new PHP_Engine( \dirname( __DIR__, 1 ) . '.Fixtures.views.' );
 		$view->render(
 			'sub_path.template',
 			array( 'variable' => 'foo' ),
@@ -219,7 +219,7 @@ class Test_PHP_Engine extends WP_UnitTestCase {
 
 	/** @testdox It should be possible to access the base_path from the engine. */
 	public function test_can_get_base_path(): void {
-		$path = \dirname( __DIR__, 1 ) . '/Fixtures/Views/';
+		$path = \dirname( __DIR__, 1 ) . '/Fixtures/views/';
 		$this->assertEquals(
 			$path,
 			( new PHP_Engine( $path ) )->base_view_path()
