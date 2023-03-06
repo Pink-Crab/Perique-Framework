@@ -138,7 +138,7 @@ class Test_App_Functional extends WP_UnitTestCase {
 						array(
 							'*' => array(
 								'substitutions' => array(
-									Renderable::class => new PHP_Engine( FIXTURES_PATH . '/Views' ),
+									Renderable::class => new PHP_Engine( FIXTURES_PATH . '/views' ),
 								),
 							),
 						)

@@ -34,8 +34,8 @@ class Test_Components extends \WP_UnitTestCase {
 	private static $php_engine;
 
 	public static function setUpBeforeClass(): void {
-		self::$component_path = \dirname( __DIR__, 1 ) . '/Fixtures/Views/components/';
-		self::$php_engine     = new PHP_Engine( \dirname( __DIR__, 1 ) . '/Fixtures/Views/' );
+		self::$component_path = \dirname( __DIR__, 1 ) . '/Fixtures/views/components/';
+		self::$php_engine     = new PHP_Engine( \dirname( __DIR__, 1 ) . '/Fixtures/views/' );
 	}
 
 	/** @testdox It should be possible to assume the path of a component based on its name in relationship to the base path when using the compiler.. */
