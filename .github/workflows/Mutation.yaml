@@ -1,0 +1,13 @@
+name: Infection Mutation Testing
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master, develop ]
+
+jobs:
+  ci:
+    uses: shlinkio/github-actions/.github/workflows/php-lib-ci.yml@main
+    secrets:
+      INFECTION_BADGE_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}

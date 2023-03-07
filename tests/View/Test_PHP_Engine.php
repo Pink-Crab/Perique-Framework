@@ -17,6 +17,7 @@ use Exception;
 use WP_UnitTestCase;
 use PinkCrab\Perique\Services\View\View;
 use PinkCrab\Perique\Services\View\PHP_Engine;
+use PinkCrab\Perique\Services\View\View_Model;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\View_Components\Span;
 
 class Test_PHP_Engine extends WP_UnitTestCase {
@@ -24,7 +25,7 @@ class Test_PHP_Engine extends WP_UnitTestCase {
 	/**
 	 * View
 	 *
-	 * @var View
+	 * @var PHP_Engine
 	 */
 	public $view;
 
@@ -73,8 +74,7 @@ class Test_PHP_Engine extends WP_UnitTestCase {
 		$this->expectOutputString( 'partial_value' );
 		$this->view->render(
 			'layout',
-			array( 'partial_data' => array( 'partial' => 'partial_value' ) ),
-			View::PRINT_VIEW // Optional as print view is default.
+			array( 'partial_data' => array( 'partial' => 'partial_value' ) )
 		);
 	}
 
@@ -83,7 +83,7 @@ class Test_PHP_Engine extends WP_UnitTestCase {
 	 *
 	 * @return void
 	 */
-	public function test_returns_partial_from_template(): void {
+	public function test_returns_partial_from_template_using_render_in_view(): void {
 		$this->expectOutputString( 'partial_value' );
 		$this->view->render(
 			'returns_partial',
@@ -223,6 +223,24 @@ class Test_PHP_Engine extends WP_UnitTestCase {
 		$this->assertEquals(
 			$path,
 			( new PHP_Engine( $path ) )->base_view_path()
+		);
+	}
+
+	/** @testdox By default view_models should be printed, unless false is passed as the param for $print */
+	public function test_view_models_print_by_default(): void {
+		$this->expectOutputString( 'partial_value' );
+		$this->view->view_model(new View_Model(
+			'layout',
+			array( 'partial_data' => array( 'partial' => 'partial_value' ) ),
+		));
+	}
+
+	/** @testdox By default the partial() method should print the view, unless false is passed as the param for $prinr */
+	public function test_returns_partial_from_template(): void {
+		$this->expectOutputString( 'rendered partial using PHPEngine->partial()' );
+		$this->view->partial(
+			'returns_partial',
+			array( 'partial_data' => array( 'partial' => 'rendered partial using PHPEngine->partial()' ) )
 		);
 	}
 

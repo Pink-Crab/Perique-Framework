@@ -154,4 +154,26 @@ class Test_Components extends \WP_UnitTestCase {
 			$view->component( new Input( 'dot', 'not', 'ation', 'aa' ), false )
 		);
 	}
+
+	/** @testdox A components template path should always be trimmed of any whitespace */
+	public function test_component_template_path_is_trimmed(): void {
+		// Add alias.
+		\add_filter(
+			Hooks::COMPONENT_ALIASES,
+			function( array $aliases ): array {
+				// Add whitespace to the path.
+				$aliases[ Input::class ] = '     ' . self::$component_path . 'other/other     ';
+				return $aliases;
+			}
+		);
+
+		$compiler = new Component_Compiler( self::$component_path );
+		$view     = new View( self::$php_engine, $compiler );
+
+		// Remove all hooks.
+		\remove_all_filters( Hooks::COMPONENT_ALIASES );
+
+		$this->expectOutputString( 'dot--not--ation--aa');
+		$view->component( new Input( 'dot', 'not', 'ation', 'aa' ), true );
+	}
 }
