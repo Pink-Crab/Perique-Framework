@@ -366,11 +366,7 @@ final class App_Config {
 			),
 			'post_types' => array(),
 			'taxonomies' => array(),
-			'meta'       => array(
-				self::POST_META => array(),
-				self::USER_META => array(),
-				self::TERM_META => array(),
-			),
+			'meta'       => array(),
 			'db_tables'  => array(),
 			'namespaces' => array(
 				'rest'  => 'pinkcrab',
@@ -392,8 +388,9 @@ final class App_Config {
 			$pairs,
 			function ( $value, $key ): bool {
 				return is_string( $value )
-				&& \mb_strlen( $value ) > 0
-				&& is_string( $key );
+				&& \strlen( $value ) > 0
+				&& is_string( $key )
+				&& \strlen( $key ) > 0;
 			},
 			ARRAY_FILTER_USE_BOTH
 		);
