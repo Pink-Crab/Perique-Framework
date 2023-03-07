@@ -1,4 +1,4 @@
-name: Infection Mutation Testing
+name: Infection Mutation Testing (Stryker)
 
 on:
   push:
