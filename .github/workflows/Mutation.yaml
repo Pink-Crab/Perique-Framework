@@ -58,7 +58,7 @@ jobs:
           && composer update --no-cache
 
       - name: Run Infection on WP6.1
-        env: >
+        env: 
           environment_github: true
           INFECTION_BADGE_API_KEY: ${{ secrets.INFECTION_BADGE_API_KEY }}
         run: composer requrie --dev infection/infection && composer infection
