@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         operating-system: [ubuntu-latest]
-        php-versions: [ '7.2', '7.3', '7.4', '8.0', '8.1']
+        php-versions: [ '8.0']
     runs-on: ${{ matrix.operating-system }}
     services:
       # Setup MYSQL
@@ -61,5 +61,5 @@ jobs:
         env: 
           environment_github: true
           STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
-        run: composer config --no-plugins allow-plugins.infection/extension && composer require --dev infection/infection && composer infection
+        run: composer mutation
           

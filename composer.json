@@ -34,7 +34,8 @@
         "yoast/phpunit-polyfills": "^0.2.0 || ^1.0.0",
         "symfony/var-dumper": "<=6.2.7",
         "gin0115/wpunit-helpers": "1.1.*",
-        "vlucas/phpdotenv": "<=5.5.0"
+        "vlucas/phpdotenv": "<=5.5.0",
+        "infection/infection": "^0.26.6"
     },
     "require": {
         "php": ">=7.2.0",
@@ -47,12 +48,14 @@
         "coverage": "./vendor/bin/phpunit --coverage-html coverage-report --testdox --colors=always",
         "analyse": "./vendor/bin/phpstan analyse src -l8",
         "sniff": "./vendor/bin/phpcs src/ -v",
-        "all": "composer test && composer analyse && composer sniff"
+        "all": "composer test && composer analyse && composer sniff",
+        "mutation": "./vendor/bin/infection"
     },
     "config": {
         "allow-plugins": {
             "roots/wordpress-core-installer": true,
-            "dealerdirect/phpcodesniffer-composer-installer": true
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "infection/extension-installer": true
         }
     }
 }
