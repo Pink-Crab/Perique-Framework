@@ -34,8 +34,7 @@
         "yoast/phpunit-polyfills": "^0.2.0 || ^1.0.0",
         "symfony/var-dumper": "<=6.2.7",
         "gin0115/wpunit-helpers": "1.1.*",
-        "vlucas/phpdotenv": "<=5.5.0",
-        "infection/infection": "^0.26.6"
+        "vlucas/phpdotenv": "<=5.5.0"
     },
     "require": {
         "php": ">=7.2.0",
