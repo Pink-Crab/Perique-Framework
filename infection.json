@@ -9,7 +9,7 @@
         "text": "infection.log",
         "html": "infection.html",
         "stryker": {
-            "report": "main"
+            "report": "master"
         }
     },
     "mutators": {
