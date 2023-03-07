@@ -229,10 +229,12 @@ class Test_PHP_Engine extends WP_UnitTestCase {
 	/** @testdox By default view_models should be printed, unless false is passed as the param for $print */
 	public function test_view_models_print_by_default(): void {
 		$this->expectOutputString( 'partial_value' );
-		$this->view->view_model(new View_Model(
-			'layout',
-			array( 'partial_data' => array( 'partial' => 'partial_value' ) ),
-		));
+		$this->view->view_model(
+			new View_Model(
+				'layout',
+				array( 'partial_data' => array( 'partial' => 'partial_value' ) )
+			)
+		);
 	}
 
 	/** @testdox By default the partial() method should print the view, unless false is passed as the param for $prinr */
