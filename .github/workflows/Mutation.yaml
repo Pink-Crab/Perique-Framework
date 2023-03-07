@@ -61,5 +61,5 @@ jobs:
         env: 
           environment_github: true
           STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
-        run: composer require --dev infection/infection && composer infection
+        run: composer config --no-plugins allow-plugins.infection/extension && composer require --dev infection/infection && composer infection
           
