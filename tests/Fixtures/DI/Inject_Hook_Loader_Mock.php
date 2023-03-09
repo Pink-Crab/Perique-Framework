@@ -27,4 +27,13 @@ class Inject_Hook_Loader_Mock implements Inject_Hook_Loader {
 	public function has_loader(): bool {
 		return null !== $this->loader;
 	}
+
+	/**
+	 * Get the loader instance.
+	 *
+	 * @return \PinkCrab\Loader\Hook_Loader
+	 */
+	public function get_loader(): \PinkCrab\Loader\Hook_Loader {
+		return $this->loader;
+	}
 }

@@ -353,7 +353,6 @@ class Test_App_Config extends WP_UnitTestCase {
 
 		$app_config = new App_Config();
 		$defaults   = $app_config->export_settings();
-		dump( $defaults );
 
 		// Check paths.
 		$this->assertEquals( $base_path, $defaults['path']['plugin'] );

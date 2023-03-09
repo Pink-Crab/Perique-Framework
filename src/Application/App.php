@@ -31,12 +31,12 @@ use PinkCrab\Perique\Application\Hooks;
 use PinkCrab\Perique\Services\View\View;
 use PinkCrab\Perique\Application\App_Config;
 use PinkCrab\Perique\Interfaces\DI_Container;
+use PinkCrab\Perique\Application\App_Validation;
 use PinkCrab\Perique\Interfaces\Inject_App_Config;
 use PinkCrab\Perique\Interfaces\Inject_Hook_Loader;
 use PinkCrab\Perique\Interfaces\Inject_DI_Container;
 use PinkCrab\Perique\Interfaces\Registration_Middleware;
 use PinkCrab\Perique\Exceptions\App_Initialization_Exception;
-use PinkCrab\Perique\Tests\Fixtures\DI\Inject_App_Config_Mock;
 use PinkCrab\Perique\Services\Registration\Registration_Service;
 
 final class App {
@@ -47,42 +47,42 @@ final class App {
 	 *
 	 * @var bool
 	 */
-	protected static $booted = false;
+	private static $booted = false;
 
 	/**
 	 * Dependency Injection Container
 	 *
 	 * @var DI_Container
 	 */
-	protected static $container;
+	private static $container;
 
 	/**
 	 * The Apps Config
 	 *
 	 * @var App_Config
 	 */
-	protected static $app_config;
+	private static $app_config;
 
 	/**
 	 * Handles all registration of all Hookable and custom middlewares.
 	 *
 	 * @var Registration_Service
 	 */
-	protected $registration;
+	private $registration;
 
 	/**
 	 * Hook Loader
 	 *
 	 * @var Hook_Loader|null
 	 */
-	protected $loader;
+	private $loader;
 
 	/**
 	 * All middleware that need constructing after finalise has been run.
 	 *
 	 * @var class-string<Registration_Middleware>[]
 	 */
-	protected $middleware_class_names = array();
+	private $middleware_class_names = array();
 
 	/**
 	 * Checks if the app has already been booted.
@@ -265,7 +265,7 @@ final class App {
 	 * @return self
 	 * @throws App_Initialization_Exception (code 9)
 	 */
-	protected function finalise(): self {
+	private function finalise(): self {
 
 		// Bind self to container.
 		self::$container->addRule(
@@ -308,7 +308,7 @@ final class App {
 			)
 		);
 
-		// Allow the passing of App Config via interface and method injection.
+		//Allow the passing of App Config via interface and method injection.
 		self::$container->addRule(
 			Inject_App_Config::class,
 			array(
