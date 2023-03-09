@@ -13,6 +13,8 @@ declare(strict_types=1);
 namespace PinkCrab\Perique\Tests\Application;
 
 use WP_UnitTestCase;
+use Gin0115\WPUnit_Helpers\Objects;
+use PinkCrab\Perique\Application\App_Config;
 use PinkCrab\Perique\Tests\Application\App_Helper_Trait;
 use PinkCrab\Perique\Tests\Fixtures\DI\Inject_App_Config_Mock;
 use PinkCrab\Perique\Tests\Fixtures\DI\Inject_Hook_Loader_Mock;
@@ -38,6 +40,9 @@ class Test_Di_Container_Injectables extends WP_UnitTestCase {
 
 		$mock = $app::make( Inject_DI_Container_Mock::class );
 		$this->assertTrue( $mock->has_container() );
+
+		// Check the container is the same as the app.
+		$this->assertSame( $app->__debugInfo()[ 'container' ], $mock->get_container() );
 	}
 
 	/** @testdox It should be possible to pass the Hook Loader to a dependency using an interface. */
@@ -48,9 +53,12 @@ class Test_Di_Container_Injectables extends WP_UnitTestCase {
 
 		$mock = $app::make( Inject_Hook_Loader_Mock::class );
 		$this->assertTrue( $mock->has_loader() );
+
+		$loader = Objects::get_property( $app, 'loader' );
+		$this->assertSame( $loader, $mock->get_loader() );
 	}
 
-    /** @testdox It should be possible to pass theApp Config to a dependency using an interface. */
+	/** @testdox It should be possible to pass theApp Config to a dependency using an interface. */
 	public function test_inject_app_config(): void {
 		// Populate the APP
 		$app = $this->pre_populated_app_provider()->boot();
@@ -58,5 +66,8 @@ class Test_Di_Container_Injectables extends WP_UnitTestCase {
 
 		$mock = $app::make( Inject_App_Config_Mock::class );
 		$this->assertTrue( $mock->has_app_config() );
+
+		// Check the config is the same as the app.
+		$this->assertSame( $app->__debugInfo()[ 'app_config' ], $mock->get_app_config() );
 	}
 }
