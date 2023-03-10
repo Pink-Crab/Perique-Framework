@@ -124,9 +124,9 @@ use Some\Namespace\Some_Controller;
 
 return array(
     // Your custom rules
-	Some_Interface::class => array(
-		'instanceOf' => Some_Implementation::class
-	)
+    Some_Interface::class => array(
+        'instanceOf' => Some_Implementation::class
+    )
 );
 ```
 
