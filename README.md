@@ -84,10 +84,7 @@ $app->registration_middleware(new Example_Rest_Route_Registration_Middleware('my
 $app->boot();
 
 ```
-
-> By default the base path used for default `App_Config` and `View` template path root. Is set from wherever `App_Factory` instance is created. This can changed by passing the path to App_Factory `new App_Factory('some/path')`
-
-> Previously `with_wp_dice()` was used to create the App, this is now deprecated, but will remain for a while to account for any legacy code. The main different between `with_wp_dice()` and `default_setup()` is originally a bug existed where view paths by default where the same as the base path, now this is fixed and the default view path is set to the base path + `/views`. (Applies to all versions 1.4 and above)
+> Previously (pre 1.4.0) `with_wp_dice()` was used to create the App, this is now deprecated, but will remain for a while to account for any legacy code. The main different between `with_wp_dice()` and `default_setup()` is originally a bug existed where view paths by default where the same as the base path, now this is fixed and the default view path is set to the base path + `/views`. (Applies to all versions 1.4 and above)
 
 ### Custom View Path
 If you wish to use a custom view path, you can can call `$app_factory->set_base_view_path('path/to/views')` before calling `default_setup()`.
