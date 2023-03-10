@@ -21,7 +21,6 @@ class Input_Template_Method extends Component {
 
 	public $name;
 
-	// constructor
 	public function __construct( string $name ) {
 		$this->name = $name;
 	}

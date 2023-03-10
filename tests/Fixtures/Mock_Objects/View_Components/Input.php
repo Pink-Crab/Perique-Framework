@@ -26,7 +26,6 @@ class Input extends Component {
 	private $type;
 
 
-	// constructor
 	public function __construct( string $name, string $id, string $value, string $type = 'text' ) {
 		$this->name  = $name;
 		$this->id    = $id;

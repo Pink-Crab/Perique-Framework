@@ -22,7 +22,6 @@ class P_Tag_Component extends Component {
 
 	private $span;
 
-	// constructor
 	public function __construct( string $class, Span $span ) {
 		$this->class = $class;
 		$this->span  = $span;
