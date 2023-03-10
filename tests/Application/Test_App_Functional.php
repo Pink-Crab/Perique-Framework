@@ -203,7 +203,7 @@ class Test_App_Functional extends WP_UnitTestCase {
 			->registration_classes( array( Hookable_Mock::class ) )
 			->boot();
 
-		// Simulate booting the app.	
+		// Simulate booting the app.
 		do_action( 'init' );
 		do_action( 'plugins_loaded' );
 
@@ -213,4 +213,101 @@ class Test_App_Functional extends WP_UnitTestCase {
 		// Remove the action so it doesn't affect other tests.
 		\remove_all_actions( 'Hookable_Mock' );
 	}
+
+	/** @testdox When the App Init Pre Boot hook is called, the current instances of App_Config, Hook_Loader and DI_Container should be passed to the actions callback. */
+	public function test_app_init_pre_boot_hook() {
+		\add_action(
+			Hooks::APP_INIT_PRE_BOOT,
+			function ( App_Config $config, Hook_Loader $hook_loader, DI_Container $container ) {
+				$this->assertInstanceOf( App_Config::class, $config );
+				$this->assertInstanceOf( Hook_Loader::class, $hook_loader );
+				$this->assertInstanceOf( DI_Container::class, $container );
+			},
+			10,
+			3
+		);
+
+		( new App_Factory( __DIR__ ) )
+			->with_wp_dice( true )
+			->boot();
+		do_action( 'init' );
+		do_action( 'plugins_loaded' );
+
+		// Remove the action so it doesn't affect other tests.
+		\remove_all_actions( Hooks::APP_INIT_PRE_BOOT );
+	}
+
+	/** @testdox When the App Init Pre Registration hook is called, the current instances of App_Config, Hook_Loader and DI_Container should be passed to the actions callback. */
+	public function test_app_init_pre_registration_hook() {
+		\add_action(
+			Hooks::APP_INIT_PRE_REGISTRATION,
+			function ( App_Config $config, Hook_Loader $hook_loader, DI_Container $container ) {
+				$this->assertInstanceOf( App_Config::class, $config );
+				$this->assertInstanceOf( Hook_Loader::class, $hook_loader );
+				$this->assertInstanceOf( DI_Container::class, $container );
+			},
+			10,
+			3
+		);
+
+		( new App_Factory( __DIR__ ) )
+			->with_wp_dice( true )
+			->boot();
+		do_action( 'init' );
+		do_action( 'plugins_loaded' );
+
+		// Remove the action so it doesn't affect other tests.
+		\remove_all_actions( Hooks::APP_INIT_PRE_REGISTRATION );
+	}
+
+	/** @testdox When the App Init Post Registration hook is called, the current instances of App_Config, Hook_Loader and DI_Container should be passed to the actions callback. */
+	public function test_app_init_post_registration_hook() {
+		\add_action(
+			Hooks::APP_INIT_POST_REGISTRATION,
+			function ( App_Config $config, Hook_Loader $hook_loader, DI_Container $container ) {
+				$this->assertInstanceOf( App_Config::class, $config );
+				$this->assertInstanceOf( Hook_Loader::class, $hook_loader );
+				$this->assertInstanceOf( DI_Container::class, $container );
+			},
+			10,
+			3
+		);
+
+		( new App_Factory( __DIR__ ) )
+			->with_wp_dice( true )
+			->boot();
+		do_action( 'init' );
+		do_action( 'plugins_loaded' );
+
+		// Remove the action so it doesn't affect other tests.
+		\remove_all_actions( Hooks::APP_INIT_POST_REGISTRATION );
+	}
+
+	/** @testdox The App should be intialised on the init hook with a priority of 1 */
+	public function test_app_init_on_init_hook() {
+		// Backup and clear all init @ 1 hooks.
+		$backup                          = $GLOBALS['wp_filter']['init'][1];
+		$GLOBALS['wp_filter']['init'][1] = array();
+
+		$app = ( new App_Factory( __DIR__ ) )
+			->with_wp_dice( true )
+			->boot();
+
+		// Get all hooks that are closures.
+		$all_hooks = function() use ( $app ) {
+			return array_filter(
+				$GLOBALS['wp_filter']['init'][1],
+				function ( $hook ) use ( $app ) {
+					return $hook['function'] instanceof \Closure
+					&& $hook['function']->bindTo( $app, $app ) instanceof \Closure;
+				}
+			);
+		};
+
+		$this->assertCount( 1, $all_hooks() );
+
+		// Restore the backup.
+		$GLOBALS['wp_filter']['init'][1] = $backup;
+	}
+
 }

@@ -180,7 +180,7 @@ final class PHP_Engine implements Renderable {
 		return sprintf(
 			'%s%s.php',
 			$this->base_view_path,
-			ltrim( $filename )
+			trim( $filename )
 		);
 	}
 
