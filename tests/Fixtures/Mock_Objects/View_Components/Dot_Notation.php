@@ -21,7 +21,6 @@ class Dot_Notation extends Component {
 
 	public $variable;
 
-	// constructor
 	public function __construct( string $variable ) {
 		$this->variable = $variable;
 	}

@@ -16,13 +16,12 @@ namespace PinkCrab\Perique\Tests\Fixtures\Mock_Objects\View_Components;
 use PinkCrab\Perique\Services\View\Component\Component;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\View_Components\Span;
 
-class P extends Component {
+class P_Tag_Component extends Component {
 
 	public $class;
 
 	private $span;
 
-	// constructor
 	public function __construct( string $class, Span $span ) {
 		$this->class = $class;
 		$this->span  = $span;

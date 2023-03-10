@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace PinkCrab\Perique\Tests\Fixtures\DI;
 
+use PinkCrab\Perique\Interfaces\DI_Container;
 use PinkCrab\Perique\Interfaces\Inject_DI_Container;
 use PinkCrab\Perique\Services\Container_Aware_Traits\Inject_DI_Container_Aware;
 
@@ -26,5 +27,14 @@ class Inject_DI_Container_Mock implements Inject_DI_Container {
 	 */
 	public function has_container(): bool {
 		return null !== $this->di_container;
+	}
+
+	/**
+	 * Get the container instance.
+	 *
+	 * @return \PinkCrab\Perique\Services\DI_Container
+	 */
+	public function get_container(): DI_Container {
+		return $this->di_container;
 	}
 }

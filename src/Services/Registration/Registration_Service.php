@@ -120,19 +120,17 @@ class Registration_Service {
 	 * @return void
 	 */
 	public function process(): void {
-
 		// Filter all classes, before processing.
 		$class_list = apply_filters( Hooks::APP_INIT_REGISTRATION_CLASS_LIST, $this->class_list );
-
 		foreach ( $this->middleware as $middleware ) {
 
 			// Set the container if requested.
-			if ( is_object( $middleware ) && \method_exists( $middleware, 'set_di_container' ) ) {
+			if ( \method_exists( $middleware, 'set_di_container' ) && ! is_null( $this->di_container ) ) {
 				$middleware->set_di_container( $this->di_container );
 			}
 
 			// Set the hook loader if requested.
-			if ( is_object( $middleware ) && \method_exists( $middleware, 'set_hook_loader' ) && ! is_null( $this->loader ) ) {
+			if ( \method_exists( $middleware, 'set_hook_loader' ) && ! is_null( $this->loader ) ) {
 				$middleware->set_hook_loader( $this->loader );
 			}
 
@@ -141,7 +139,6 @@ class Registration_Service {
 
 			// Pass each class to the middleware.
 			foreach ( $class_list as $class ) {
-
 				// Construct class using container,
 				$class_instance = $this->di_container->create( $class );
 

@@ -12,6 +12,8 @@ Welcome to the core package of the PinkCrab **Perique** plugin framework, formal
 [![WP5.9 [PHP7.2-8.1] Tests](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_5_9.yaml/badge.svg)](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_5_9.yaml)
 [![WP6.0 [PHP7.2-8.1] Tests](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_0.yaml/badge.svg)](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_0.yaml)
 [![WP6.1 [PHP7.2-8.1] Tests](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_1.yaml/badge.svg)](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_1.yaml)
+
+[![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2FPink-Crab%2FPerique-Framework%2Fmaster)](https://dashboard.stryker-mutator.io/reports/github.com/Pink-Crab/Perique-Framework/master)
 [![codecov](https://codecov.io/gh/Pink-Crab/Perique-Framework/branch/master/graph/badge.svg)](https://codecov.io/gh/Pink-Crab/Perique-Framework)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Pink-Crab/Perique-Framework/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Pink-Crab/Perique-Framework/?branch=master)
 [![Maintainability](https://api.codeclimate.com/v1/badges/4a28004ae09a8cd37edf/maintainability)](https://codeclimate.com/github/Pink-Crab/Perique-Framework/maintainability)
@@ -64,7 +66,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 // Creates an App loaded with the WP_Dice DI container and basic DI rules
 // Allows for the passing of wpdb and the App's own instance.
-$app = ( new PinkCrab\Perique\Application\App_Factory() )->with_wp_dice( true );
+$app = ( new PinkCrab\Perique\Application\App_Factory() )->default_setup( true );
 
 // Set rules and configure DI Container
 $app->di_rules(include __DIR__ . '/config/dependencies.php');
@@ -82,8 +84,23 @@ $app->registration_middleware(new Example_Rest_Route_Registration_Middleware('my
 $app->boot();
 
 ```
+> Previously (pre 1.4.0) `with_wp_dice()` was used to create the App, this is now deprecated, but will remain for a while to account for any legacy code. The main different between `with_wp_dice()` and `default_setup()` is originally a bug existed where view paths by default where the same as the base path, now this is fixed and the default view path is set to the base path + `/views`. (Applies to all versions 1.4 and above)
 
-> By default the base path used for default `App_Config` and `View` template path root. Is set from wherever `App_Factory` instance is created. This can changed by passing the path to App_Factory `new App_Factory('some/path')`
+### Custom View Path
+If you wish to use a custom view path, you can can call `$app_factory->set_base_view_path('path/to/views')` before calling `default_setup()`.
+
+You can still set this afterwards by redefining the Renderable instance in the DI container.
+
+```php
+return [
+  '*' => [
+    'substitutions' => [
+      Renderable::class => new PHP_Engine( 'some/custom/path' )
+    ]
+  ],
+];
+```
+
 
 ## Config files ##
 
@@ -97,7 +114,6 @@ Used to define all of your custom rules for Dice, for more details on how to wor
 
 > Using the full class name is essential, so ensure you include all needed use statements.
 
-`
 
 ```php
 // @file config/dependencies.php
@@ -108,9 +124,9 @@ use Some\Namespace\Some_Controller;
 
 return array(
     // Your custom rules
-	Some_Interface::class => array(
-		'instanceOf' => Some_Implementation::class
-	)
+    Some_Interface::class => array(
+        'instanceOf' => Some_Implementation::class
+    )
 );
 ```
 
@@ -177,7 +193,9 @@ return array(
 		'subscriptions' => $wpdb->table_prefix . 'some_plugin_subscribers'
 	),
 	'additional' => array(
-		// Custom values go here (Config::additional('key'); = value)
+		// Custom values go here 
+		'key' => 'value'   // Config::additional('key'); = value
+		'other' => 'value' // $app_config->other = value
 	),
 );
 ```
@@ -209,7 +227,7 @@ Now when the init hook is called (priority 1), the some_action hook will be adde
 
 ### Registration Middleware ###
 
-Custom registration processes can be added using Registration_Middleware. You can easily create your own middleware that implements the `` `PinkCrab\Perique\Interfaces\Registration_Middleware ` ` ` interface. This interface consists of a single method ` ` ` process(object $class): void ` `` which is available to each class.
+Custom registration processes can be added using Registration_Middleware. You can easily create your own middleware that implements the `` `PinkCrab\Perique\Interfaces\Registration_Middleware `` interface. This interface consists of a single method `` process(object $class): void ` `` which is available to each class.
 
 ```php
 <?php
@@ -232,7 +250,7 @@ class Does_Something implements PinkCrab\Perique\Interfaces\Registration_Middlew
 }
 ```
 
-As of version 1.0.3 all middleware classes have access to the App's `` `Hook_Loader` ` ` and internal ` ` `DI_Container` ` `. These can be accessed using the following methods. This removes the need to create a custom ` ` `Hook_Loader` ` ` for each middleware and have access to the ` ` `DI_Container` `` without the need of Static Helpers
+As of version 1.0.3 all middleware classes have access to the App's `Hook_Loader` and internal `DI_Container`. These can be accessed using the following methods. This removes the need to create a custom `Hook_Loader` for each middleware and have access to the `DI_Container`  without the need of Static Helpers
 
 ```php
 class Does_Something implements PinkCrab\Perique\Interfaces\Registration_Middleware {
@@ -271,7 +289,7 @@ You can then pass these custom Registration_Middlewares to the app at boot.
 ```php
 <?php 
 // As an instance.
-$app = ( new PinkCrab\Perique\Application\App_Factory )->with_wp_dice( true )
+$app = ( new PinkCrab\Perique\Application\App_Factory )->default_setup( true )
 	// Rest of bootstrapping
 	->registration_middleware(new Does_Something(new Some_Service()))
 	->boot();
@@ -282,7 +300,7 @@ $app = ( new PinkCrab\Perique\Application\App_Factory )->with_wp_dice( true )
 ```php
 <?php 
 // As a class name.
-$app = ( new PinkCrab\Perique\Application\App_Factory )->with_wp_dice( true )
+$app = ( new PinkCrab\Perique\Application\App_Factory )->default_setup( true )
 	// Rest of bootstrapping
 	->construct_registration_middleware( Does_Something::class )
 	->boot();
@@ -302,7 +320,7 @@ The App object has a few helper methods which can be called statically (either f
 * @return object Object instance
 * @throws App_Initialization_Exception Code 4 If app isn't initialised.
 
-``` make() ``` can be used to access the DI Container to fully resolve the dependencies of an object. 
+ `make()` can be used to access the DI Container to fully resolve the dependencies of an object. 
 
 ```php 
 $emailer = App::make(Customer_Emailer::class); 
@@ -336,14 +354,14 @@ $version = App::config('version');
 * @return View
 * @throws App_Initialization_Exception Code 4
 
-If you need to render or return a template, you can use the ``` view() ``` helper. Returns an instance of the View class, populated with the current defined engine (use PHP by default).
+If you need to render or return a template, you can use the `view()` helper. Returns an instance of the View class, populated with the current defined engine (use PHP by default).
 
 ```php
 App::view()->render('signup/form', ['user' => wp_get_current_user(), 'nonce' => $nonce]);
 ```
 
 
-It is possible to use dot notation in all view file paths. This allows for a simple way of defining paths for use on either Win or Unix filesystems.
+It is possible to use dot notation in all view file paths. This allows for a simple way of defining paths for use on either Win or Unix file systems.
 
 ```php
 $view->render('path.to.file',['var' => 'foo']);
@@ -451,7 +469,7 @@ add_action(
 
 ### Hooks:: APP_INIT_CONFIG_VALUES ###
 
-When the App_Config class is constructed with all values passed from `` ` config/settings.php ` `` this filter is fired during the initial boot process and should only really be used for internal purposes. Sadly due to the timing in which we use this filter, its not really suited for extending the plugin.
+When the App_Config class is constructed with all values passed from ``config/settings.php ` `` this filter is fired during the initial boot process and should only really be used for internal purposes. Sadly due to the timing in which we use this filter, its not really suited for extending the plugin.
 
 ```php
 <?php
@@ -513,6 +531,15 @@ http://www.opensource.org/licenses/mit-license.html
 
 ## Change Log ##
 
+* 1.4.0 - 
+   * Added `set_base_view_path()` and `get_base_view_path()` to App_Factory
+   * Changed how the base view path is used during App_Factory, it will now default to base path (passed when creating the factory) + '/views'
+   * Added `get_base_path()` to App_Factory, this gets the base path for the plugin.
+   * Fixed bug where defaults App_Config paths were not being set correctly, now are based on the base path used when creating App_Factory. 
+   * Added `base_view_path()` to Renderable and PHP_Engine instances.
+   * Fixed bug in Component_Compiler where paths from classname added 2 dashes per underscore.
+   * Cleaned up various internal objects, replacing many protected properties with private and making final.
+   * Expanded testing to cover Infection (Mutation Testing), this has seen the tests become more robust.
 * 1.3.1 - Added more meaningful errors for App_Config, updated dependencies and removed unused function in PHP_Engine
 * 1.3.0 - Dropped testing for WP5.8 and introduced WP6.1 testing
 * 1.2.3 - Allow dot notation in view paths.

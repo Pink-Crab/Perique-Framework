@@ -17,7 +17,7 @@ use PinkCrab\Perique\Application\App;
 use Reflection;
 use ReflectionProperty;
 
-class App_Validation {
+final class App_Validation {
 
 	/** @var string */
 	public const ERROR_MESSAGE_TEMPLATE = '%s was not set in App';
@@ -30,7 +30,7 @@ class App_Validation {
 	 *
 	 * @var array<string,bool>
 	 */
-	protected $required_properties = array(
+	private $required_properties = array(
 		'container'    => true,
 		'app_config'   => true,
 		'registration' => false,
@@ -41,7 +41,7 @@ class App_Validation {
 	public $errors = array();
 
 	/** @var App */
-	protected $app;
+	private $app;
 
 	public function __construct( App $app ) {
 		$this->app = $app;
@@ -64,7 +64,7 @@ class App_Validation {
 	 *
 	 * @return void
 	 */
-	protected function validate_properties_set(): void {
+	private function validate_properties_set(): void {
 		foreach ( $this->required_properties as $property => $is_static ) {
 			$property_reflection = new ReflectionProperty( $this->app, $property );
 			$property_reflection->setAccessible( true );
@@ -79,7 +79,7 @@ class App_Validation {
 	 *
 	 * @return void
 	 */
-	protected function already_booted(): void {
+	private function already_booted(): void {
 		if ( $this->app->is_booted() === true ) {
 			$this->errors[] = self::ERROR_MESSAGE_APP_BOOTED;
 		}

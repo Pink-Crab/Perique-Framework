@@ -198,7 +198,7 @@ class Test_App_Config extends WP_UnitTestCase {
 		$this->expectExceptionMessage( 'App Config :: "inv_cpt" is not a defined post type' );
 		$app_config = new App_Config(
 			array(
-				'post_types' => array( 'inv_cpt' => ['a','b'] ),
+				'post_types' => array( 'inv_cpt' => array( 'a', 'b' ) ),
 			)
 		);
 		$app_config->post_types( 'inv_cpt' );
@@ -255,7 +255,7 @@ class Test_App_Config extends WP_UnitTestCase {
 	public function test_exception_throw_for_unset_meta_key(): void {
 		$this->expectException( OutOfBoundsException::class );
 		$this->expectExceptionMessage( 'App Config :: "invalid_key" is not a defined post meta key' );
-		
+
 		$app_config = new App_Config( self::SAMPLE_SETTINGS );
 		$app_config->meta( 'invalid_key', 'post' );
 	}
@@ -295,7 +295,7 @@ class Test_App_Config extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @testdox Test throws eception calling unset DB table
+	 * @testdox Test throws exception calling unset DB table
 	 *
 	 * @return void
 	 */
@@ -343,4 +343,95 @@ class Test_App_Config extends WP_UnitTestCase {
 		$this->assertEquals( self::SAMPLE_SETTINGS['meta']['user'], $app_config->export_settings()['meta']['user'] );
 		$this->assertEquals( self::SAMPLE_SETTINGS['meta']['term'], $app_config->export_settings()['meta']['term'] );
 	}
+
+	/** @testdox If no settings are defined, defaults will be assumed treating the base as 2 levels above the location of this file. */
+	public function test_app_config_defaults(): void {
+		// Base paths
+		$base_path  = dirname( ABSPATH );
+		$plugin_url = \plugins_url( \basename( $base_path ) );
+		$wp_uploads = \wp_upload_dir();
+
+		$app_config = new App_Config();
+		$defaults   = $app_config->export_settings();
+
+		// Check paths.
+		$this->assertEquals( $base_path, $defaults['path']['plugin'] );
+		$this->assertEquals( $base_path . '/views', $defaults['path']['view'] );
+		$this->assertEquals( $base_path . '/assets', $defaults['path']['assets'] );
+		$this->assertEquals( $wp_uploads['basedir'], $defaults['path']['upload_root'] );
+		$this->assertEquals( $wp_uploads['path'], $defaults['path']['upload_current'] );
+
+		// Check URLs.
+		$this->assertEquals( $plugin_url, $defaults['url']['plugin'] );
+		$this->assertEquals( $plugin_url . '/views', $defaults['url']['view'] );
+		$this->assertEquals( $plugin_url . '/assets', $defaults['url']['assets'] );
+		$this->assertEquals( $wp_uploads['baseurl'], $defaults['url']['upload_root'] );
+		$this->assertEquals( $wp_uploads['url'], $defaults['url']['upload_current'] );
+
+		// Namespaces
+		$this->assertEquals( 'pinkcrab', $defaults['namespaces']['rest'] );
+		$this->assertEquals( 'pc_cache', $defaults['namespaces']['cache'] );
+		// $this->assertEquals( 'pc_cache', $config->cache() );
+
+		// Version
+		$this->assertEquals( '0.1.0', $defaults['plugin']['version'] );
+
+		// Empty indexes
+		$this->assertEquals( array(), $defaults['additional'] );
+		$this->assertEquals( array(), $defaults['post_types'] );
+		$this->assertEquals( array(), $defaults['taxonomies'] );
+		$this->assertEquals( array(), $defaults['db_tables'] );
+
+		// Meta should have 3 indexes
+		$this->assertArrayHasKey( 'post', $defaults['meta'] );
+		$this->assertArrayHasKey( 'user', $defaults['meta'] );
+		$this->assertArrayHasKey( 'term', $defaults['meta'] );
+
+		// Meta should have 3 empty indexes (also checks for the class Constants.)
+		$this->assertEquals( array(), $defaults['meta'][ App_Config::POST_META ] );
+		$this->assertEquals( array(), $defaults['meta'][ App_Config::TERM_META ] );
+		$this->assertEquals( array(), $defaults['meta'][ App_Config::USER_META ] );
+	}
+
+	/** @testdox It should be possible to set meta using a valid keys in the array used */
+	public function test_set_meta(): void {
+		$app_config = new App_Config();
+		$app_config->set_meta( array( 'post' => array( 'test' => 'test' ) ) );
+		$this->assertEquals( 'test', $app_config->post_meta( 'test' ) );
+	}
+
+	/** @testdox Attempting to set meta with an invalid meta type should result in an OutOfBoundException being thrown */
+	public function test_set_meta_throws_exception(): void {
+		$this->expectException( \OutOfBoundsException::class );
+		$app_config = new App_Config();
+		$app_config->set_meta( array( 'invalid' => array( 'test' => 'test' ) ) );
+	}
+
+	/**
+	 * @testdox When settings either db_table, post_types, namespaces or taxonomies, any key of value that is either not a string or empty, will not see them set.
+	 * @dataProvider setting_with_invalid_key_or_values
+	 */
+
+	public function test_setting_with_invalid_key_or_values( string $setting, array $values ): void {
+		$app_config = new App_Config( array( $setting => $values ) );
+
+		// If namespace, the 'rest' and 'cache' should still be set.
+		if ( 'namespaces' === $setting ) {
+			$this->assertCount( 2, $app_config->export_settings()[ $setting ] );
+		} else {
+			$this->assertCount( 0, $app_config->export_settings()[ $setting ] );
+		}
+
+	}
+
+	/** Data provider for test_setting_with_invalid_key_or_values */
+	public function setting_with_invalid_key_or_values(): array {
+		return array(
+			array( 'db_tables', array( 'test' => '' ) ),
+			array( 'post_types', array( 'test' => '' ) ),
+			array( 'namespaces', array( '' => 'test' ) ),
+			array( 'taxonomies', array( 'test2' ) ),
+		);
+	}
+
 }

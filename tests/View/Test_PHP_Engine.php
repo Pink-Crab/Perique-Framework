@@ -17,6 +17,7 @@ use Exception;
 use WP_UnitTestCase;
 use PinkCrab\Perique\Services\View\View;
 use PinkCrab\Perique\Services\View\PHP_Engine;
+use PinkCrab\Perique\Services\View\View_Model;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\View_Components\Span;
 
 class Test_PHP_Engine extends WP_UnitTestCase {
@@ -24,7 +25,7 @@ class Test_PHP_Engine extends WP_UnitTestCase {
 	/**
 	 * View
 	 *
-	 * @var View
+	 * @var PHP_Engine
 	 */
 	public $view;
 
@@ -35,7 +36,7 @@ class Test_PHP_Engine extends WP_UnitTestCase {
 	 */
 	public function setUp() : void {
 		parent::setUp();
-		$this->view = new PHP_Engine( \dirname( __DIR__, 1 ) . '/Fixtures/Views/' );
+		$this->view = new PHP_Engine( \dirname( __DIR__, 1 ) . '/Fixtures/views/' );
 	}
 
 	/**
@@ -73,8 +74,7 @@ class Test_PHP_Engine extends WP_UnitTestCase {
 		$this->expectOutputString( 'partial_value' );
 		$this->view->render(
 			'layout',
-			array( 'partial_data' => array( 'partial' => 'partial_value' ) ),
-			View::PRINT_VIEW // Optional as print view is default.
+			array( 'partial_data' => array( 'partial' => 'partial_value' ) )
 		);
 	}
 
@@ -83,7 +83,7 @@ class Test_PHP_Engine extends WP_UnitTestCase {
 	 *
 	 * @return void
 	 */
-	public function test_returns_partial_from_template(): void {
+	public function test_returns_partial_from_template_using_render_in_view(): void {
 		$this->expectOutputString( 'partial_value' );
 		$this->view->render(
 			'returns_partial',
@@ -145,7 +145,7 @@ class Test_PHP_Engine extends WP_UnitTestCase {
 	 */
 	public function test_throws_exception_view_dir_not_exists(): void {
 		$this->expectException( Exception::class );
-		new PHP_Engine( \dirname( __DIR__, 1 ) . '/Fixtures/Fake_Views/' );
+		new PHP_Engine( \dirname( __DIR__, 1 ) . '/Fixtures/Fake_views/' );
 	}
 
 	/**
@@ -156,7 +156,7 @@ class Test_PHP_Engine extends WP_UnitTestCase {
 	 */
 	public function test_adds_trailing_slash_to_view_path(): void {
 		$this->expectOutputString( 'Hello World' );
-		$view = new PHP_Engine( \dirname( __DIR__, 1 ) . '/Fixtures/Views' );
+		$view = new PHP_Engine( \dirname( __DIR__, 1 ) . '/Fixtures/views' );
 		$view->render( '/hello.php', array( 'hello' => 'Hello World' ) );
 	}
 
@@ -190,7 +190,7 @@ class Test_PHP_Engine extends WP_UnitTestCase {
 	/** @testdox It should be possible to define the base path for view using dot notation. */
 	public function test_can_set_base_path_using_dot_notation(): void {
 		$this->expectOutputString( 'foo' );
-		$view = new PHP_Engine( \dirname( __DIR__, 1 ) . '.Fixtures.Views.' );
+		$view = new PHP_Engine( \dirname( __DIR__, 1 ) . '.Fixtures.views.' );
 		$view->render(
 			'sub_path.template',
 			array( 'variable' => 'foo' ),
@@ -200,7 +200,7 @@ class Test_PHP_Engine extends WP_UnitTestCase {
 
 	/** @testdox It should be possible to use filepaths with or without the .php extensions */
 	public function test_can_render_path_with_or_without_php_extension(): void {
-		function(){
+		function() {
 			$this->expectOutputString( 'foo' );
 			$this->view->render(
 				'sub_path.template',
@@ -208,13 +208,48 @@ class Test_PHP_Engine extends WP_UnitTestCase {
 				View::PRINT_VIEW // Optional as print view is default.
 			);
 		};
-		
+
 		$this->expectOutputString( 'foo' );
 		$this->view->render(
 			'sub_path.template.php',
 			array( 'variable' => 'foo' ),
 			View::PRINT_VIEW // Optional as print view is default.
 		);
+	}
+
+	/** @testdox It should be possible to access the base_path from the engine. */
+	public function test_can_get_base_path(): void {
+		$path = \dirname( __DIR__, 1 ) . '/Fixtures/views/';
+		$this->assertEquals(
+			$path,
+			( new PHP_Engine( $path ) )->base_view_path()
+		);
+	}
+
+	/** @testdox By default view_models should be printed, unless false is passed as the param for $print */
+	public function test_view_models_print_by_default(): void {
+		$this->expectOutputString( 'partial_value' );
+		$this->view->view_model(
+			new View_Model(
+				'layout',
+				array( 'partial_data' => array( 'partial' => 'partial_value' ) )
+			)
+		);
+	}
+
+	/** @testdox By default the partial() method should print the view, unless false is passed as the param for $prinr */
+	public function test_returns_partial_from_template(): void {
+		$this->expectOutputString( 'rendered partial using PHPEngine->partial()' );
+		$this->view->partial(
+			'returns_partial',
+			array( 'partial_data' => array( 'partial' => 'rendered partial using PHPEngine->partial()' ) )
+		);
+	}
+
+	/** @testdox Any path passed as a view, should be trimmed for all whitespace. */
+	public function test_view_path_is_trimmed(): void {
+		$this->expectOutputString( 'Hello World' );
+		$this->view->render( ' hello ', array( 'hello' => 'Hello World' ) );
 	}
 
 

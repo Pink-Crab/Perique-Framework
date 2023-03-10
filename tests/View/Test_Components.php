@@ -21,6 +21,7 @@ use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\View_Components\P;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\View_Components\Span;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\View_Components\Input;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\View_Components\Dot_Notation;
+use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\View_Components\P_Tag_Component;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\View_Components\Input_Attribute_Path;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\View_Components\Input_Template_Method;
 
@@ -34,8 +35,8 @@ class Test_Components extends \WP_UnitTestCase {
 	private static $php_engine;
 
 	public static function setUpBeforeClass(): void {
-		self::$component_path = \dirname( __DIR__, 1 ) . '/Fixtures/Views/components/';
-		self::$php_engine     = new PHP_Engine( \dirname( __DIR__, 1 ) . '/Fixtures/Views/' );
+		self::$component_path = \dirname( __DIR__, 1 ) . '/Fixtures/views/components/';
+		self::$php_engine     = new PHP_Engine( \dirname( __DIR__, 1 ) . '/Fixtures/views/' );
 	}
 
 	/** @testdox It should be possible to assume the path of a component based on its name in relationship to the base path when using the compiler.. */
@@ -94,9 +95,10 @@ class Test_Components extends \WP_UnitTestCase {
 	public function test_can_render_component_inside_component(): void {
 		$compiler = new Component_Compiler( self::$component_path );
 		$view     = new View( self::$php_engine, $compiler );
+
 		$this->assertEquals(
 			'<p class="class_p"><span class="class_s">value_s</span></p>',
-			$view->component( new P( 'class_p', new Span( 'class_s', 'value_s' ) ), false )
+			$view->component( new P_Tag_Component( 'class_p', new Span( 'class_s', 'value_s' ) ), false )
 		);
 	}
 
@@ -153,5 +155,27 @@ class Test_Components extends \WP_UnitTestCase {
 			'dot--not--ation--aa',
 			$view->component( new Input( 'dot', 'not', 'ation', 'aa' ), false )
 		);
+	}
+
+	/** @testdox A components template path should always be trimmed of any whitespace */
+	public function test_component_template_path_is_trimmed(): void {
+		// Add alias.
+		\add_filter(
+			Hooks::COMPONENT_ALIASES,
+			function( array $aliases ): array {
+				// Add whitespace to the path.
+				$aliases[ Input::class ] = '     ' . self::$component_path . 'other/other     ';
+				return $aliases;
+			}
+		);
+
+		$compiler = new Component_Compiler( self::$component_path );
+		$view     = new View( self::$php_engine, $compiler );
+
+		// Remove all hooks.
+		\remove_all_filters( Hooks::COMPONENT_ALIASES );
+
+		$this->expectOutputString( 'dot--not--ation--aa');
+		$view->component( new Input( 'dot', 'not', 'ation', 'aa' ), true );
 	}
 }

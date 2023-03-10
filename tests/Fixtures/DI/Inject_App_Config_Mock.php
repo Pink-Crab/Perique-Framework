@@ -27,4 +27,13 @@ class Inject_App_Config_Mock implements Inject_App_Config {
 	public function has_app_config(): bool {
 		return null !== $this->app_config;
 	}
+
+	/**
+	 * Get the app config instance.
+	 * 
+	 * @return \PinkCrab\Perique\Application\App_Config
+	 */
+	public function get_app_config(): \PinkCrab\Perique\Application\App_Config {
+		return $this->app_config;
+	}
 }
