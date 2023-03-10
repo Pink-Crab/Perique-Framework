@@ -246,5 +246,11 @@ class Test_PHP_Engine extends WP_UnitTestCase {
 		);
 	}
 
+	/** @testdox Any path passed as a view, should be trimmed for all whitespace. */
+	public function test_view_path_is_trimmed(): void {
+		$this->expectOutputString( 'Hello World' );
+		$this->view->render( ' hello ', array( 'hello' => 'Hello World' ) );
+	}
+
 
 }

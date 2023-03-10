@@ -21,6 +21,7 @@ use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\View_Components\P;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\View_Components\Span;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\View_Components\Input;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\View_Components\Dot_Notation;
+use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\View_Components\P_Tag_Component;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\View_Components\Input_Attribute_Path;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\View_Components\Input_Template_Method;
 
@@ -94,9 +95,10 @@ class Test_Components extends \WP_UnitTestCase {
 	public function test_can_render_component_inside_component(): void {
 		$compiler = new Component_Compiler( self::$component_path );
 		$view     = new View( self::$php_engine, $compiler );
+
 		$this->assertEquals(
 			'<p class="class_p"><span class="class_s">value_s</span></p>',
-			$view->component( new P( 'class_p', new Span( 'class_s', 'value_s' ) ), false )
+			$view->component( new P_Tag_Component( 'class_p', new Span( 'class_s', 'value_s' ) ), false )
 		);
 	}
 

@@ -295,6 +295,23 @@ class Test_App_Factory extends WP_UnitTestCase {
 		$this->assertEquals( $uploads['url'], $default_config['url']['upload_current'] );
 	}
 
-	
+	/** @testdox Once the app has been booted and finalise has been run, the default object instances should be added as rules to the DI Container */
+	public function test_default_object_instances_are_added_to_di_container(): void {
+		$factory = new App_Factory( FIXTURES_PATH );
+		$app = $factory->default_setup()->boot();
+		$container = $app->__debugInfo()['container'];
+		$dice = Objects::get_property($container, 'dice');
+		$rules = Objects::get_property($dice, 'rules');
+
+		$base_substitution_rules = $rules['*']['substitutions'];
+
+		$this->assertArrayHasKey(  App::class, $base_substitution_rules  );
+		$this->assertArrayHasKey(  \wpdb::class, $base_substitution_rules  );
+		$this->assertArrayHasKey(  DI_Container::class, $base_substitution_rules  );
+
+		// Check instances.
+		$this->assertSame( $app, $base_substitution_rules[ App::class ] );
+		$this->assertSame( $container, $base_substitution_rules[ DI_Container::class ] );
+	}
 
 }

@@ -81,6 +81,7 @@ class Component_Compiler {
 		}
 
 		$from_annotation = $this->get_annotation( 'view', $component );
+
 		// If it does have a path defined, use that.
 		if ( ! empty( $from_annotation ) ) {
 			return \trailingslashit( $this->component_base_path ) . $from_annotation;
@@ -95,9 +96,8 @@ class Component_Compiler {
 		$reflect    = new \ReflectionClass( $component );
 		$short_name = $reflect->getShortName();
 		// Add space between capitals, make lowercase and replace underscores with dashes.
-		$short_name = strtolower( preg_replace( '/(?<!^)[A-Z]/', '-$0', $short_name ) ?? '' );
+		$short_name = strtolower( preg_replace( '/(?<!^)[A-Z]/', '$0', $short_name ) ?? '' );
 		$short_name = str_replace( '_', '-', $short_name );
-
 		return \trailingslashit( $this->component_base_path ) . $short_name;
 	}
 
@@ -117,23 +117,10 @@ class Component_Compiler {
 			return null;
 		}
 
-		// If comment contains the annotation, return the value.
-		return strpos( $comment, "@{$annotation}" ) !== false
-			? $this->extract_annotation_value( $comment, $annotation )
-			: null;
-	}
-
-	/**
-	 * Extracts the value from the annotation.
-	 *
-	 * @param string $comment
-	 * @param string $annotation
-	 * @return string|null
-	 */
-	private function extract_annotation_value( string $comment, string $annotation ): ?string {
+		// Check if the comment contains the annotation "@{$annotation}" using regex.
 		$pattern = "/@{$annotation}\s+(.*)/";
 		preg_match( $pattern, $comment, $matches );
+
 		return $matches[1] ?? null;
 	}
-
 }

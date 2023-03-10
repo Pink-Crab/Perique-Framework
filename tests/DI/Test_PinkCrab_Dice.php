@@ -141,8 +141,9 @@ class Test_PinkCrab_Dice extends WP_UnitTestCase {
 		$this->assertInstanceOf( Sample_Class::class, $pc_dice->get( Sample_Class::class ) );
 	}
 
-	/** @testdox If attempeting to use the pure autowire on a class that doest exist and error should be generated and the systm aborted */
+	/** @testdox If attempting to use the pure autowire on a class that doest exist and error should be generated and the systm aborted */
 	public function test_throws_exception_using_undefined_class_on_get(): void {
+		$this->expectExceptionCode( 1 );
 		$this->expectException( DI_Container_Exception::class );
 		$pc_dice = PinkCrab_Dice::withDice( new Dice() );
 		$pc_dice->get( 'NotAClass' );
