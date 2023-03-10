@@ -28,6 +28,7 @@ use Exception;
 use PinkCrab\Perique\Interfaces\Renderable;
 use PinkCrab\Perique\Services\View\View_Model;
 use PinkCrab\Perique\Services\View\Component\Component;
+use function PinkCrab\FunctionConstructors\Strings\endsWith;
 use PinkCrab\Perique\Services\View\Component\Component_Compiler;
 
 final class PHP_Engine implements Renderable {
@@ -191,7 +192,7 @@ final class PHP_Engine implements Renderable {
 	 * @return string
 	 */
 	private function maybe_resolve_dot_notation( string $filename ): string {
-		if ( $this->str_ends_with( '.php', $filename ) ) {
+		if ( endsWith( '.php' )( $filename ) ) {
 			$filename = substr( $filename, 0, -4 );
 		}
 
@@ -200,19 +201,6 @@ final class PHP_Engine implements Renderable {
 
 		return $filename;
 	}
-
-	/**
-	 * Polyfill with str_replace for str_ends_with
-	 *
-	 * @param string $needle
-	 * @param string $haystack
-	 * @return bool
-	 */
-	private function str_ends_with( string $needle, string $haystack ): bool {
-		$needle_len = strlen( $needle );
-		return ( $needle_len === 0 || 0 === substr_compare( $haystack, $needle, - $needle_len ) );
-	}
-
 
 	/**
 	 * Verifies the view path exists and it has the trailing slash.
