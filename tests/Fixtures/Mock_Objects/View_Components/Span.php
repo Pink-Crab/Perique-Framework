@@ -21,7 +21,6 @@ class Span extends Component {
 
 	private $contents;
 
-	// constructor
 	public function __construct( string $class, string $contents ) {
 		$this->class    = $class;
 		$this->contents = $contents;

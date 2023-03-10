@@ -25,7 +25,6 @@ class Input_Attribute_Path extends Component {
 
 	public $name;
 
-	// constructor
 	public function __construct( string $name ) {
 		$this->name = $name;
 	}
