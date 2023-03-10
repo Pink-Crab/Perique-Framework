@@ -125,12 +125,12 @@ class Registration_Service {
 		foreach ( $this->middleware as $middleware ) {
 
 			// Set the container if requested.
-			if ( is_object( $middleware ) && \method_exists( $middleware, 'set_di_container' ) ) {
+			if ( \method_exists( $middleware, 'set_di_container' ) && ! is_null( $this->di_container ) ) {
 				$middleware->set_di_container( $this->di_container );
 			}
 
 			// Set the hook loader if requested.
-			if ( is_object( $middleware ) && \method_exists( $middleware, 'set_hook_loader' ) && ! is_null( $this->loader ) ) {
+			if ( \method_exists( $middleware, 'set_hook_loader' ) && ! is_null( $this->loader ) ) {
 				$middleware->set_hook_loader( $this->loader );
 			}
 
