@@ -93,11 +93,11 @@ You can still set this afterwards by redefining the Renderable instance in the D
 
 ```php
 return [
-	'*' => [
-		'substitutions' => [
-			Renderable::class => new PHP_Engine( 'some/custom/path' )
-		]
-	],
+  '*' => [
+    'substitutions' => [
+      Renderable::class => new PHP_Engine( 'some/custom/path' )
+    ]
+  ],
 ];
 ```
 
