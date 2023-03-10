@@ -64,7 +64,7 @@ class PinkCrab_Dice implements DI_Container {
 	 * @param string $id Class name (fully namespaced.)
 	 * @return object|null
 	 */
-	public function get( $id ) {
+	public function get( string $id ) {
 		if ( ! $this->has( $id ) ) {
 			throw new DI_Container_Exception( "{$id} not defined in container", 1 );
 		}
@@ -78,7 +78,7 @@ class PinkCrab_Dice implements DI_Container {
 	 * @param string $id Class name (fully namespaced.)
 	 * @return bool
 	 */
-	public function has( $id ) {
+	public function has( string $id ): bool {
 		$from_dice = $this->dice->getRule( $id );
 		// If set in global rules.
 		if ( array_key_exists( 'substitutions', $from_dice )

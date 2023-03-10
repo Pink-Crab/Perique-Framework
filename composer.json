@@ -39,7 +39,7 @@
     "require": {
         "php": ">=7.2.0",
         "level-2/dice": "4.0.*",
-        "psr/container": "^1.0",
+        "psr/container": "^1.1",
         "pinkcrab/hook-loader": "^1.1"
     },
     "scripts": {
