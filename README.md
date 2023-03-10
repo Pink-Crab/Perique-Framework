@@ -84,8 +84,23 @@ $app->registration_middleware(new Example_Rest_Route_Registration_Middleware('my
 $app->boot();
 
 ```
+> Previously (pre 1.4.0) `with_wp_dice()` was used to create the App, this is now deprecated, but will remain for a while to account for any legacy code. The main different between `with_wp_dice()` and `default_setup()` is originally a bug existed where view paths by default where the same as the base path, now this is fixed and the default view path is set to the base path + `/views`. (Applies to all versions 1.4 and above)
 
-> By default the base path used for default `App_Config` and `View` template path root. Is set from wherever `App_Factory` instance is created. This can changed by passing the path to App_Factory `new App_Factory('some/path')`
+### Custom View Path
+If you wish to use a custom view path, you can can call `$app_factory->set_base_view_path('path/to/views')` before calling `default_setup()`.
+
+You can still set this afterwards by redefining the Renderable instance in the DI container.
+
+```php
+return [
+  '*' => [
+    'substitutions' => [
+      Renderable::class => new PHP_Engine( 'some/custom/path' )
+    ]
+  ],
+];
+```
+
 
 ## Config files ##
 
@@ -99,7 +114,6 @@ Used to define all of your custom rules for Dice, for more details on how to wor
 
 > Using the full class name is essential, so ensure you include all needed use statements.
 
-`
 
 ```php
 // @file config/dependencies.php
@@ -110,9 +124,9 @@ use Some\Namespace\Some_Controller;
 
 return array(
     // Your custom rules
-	Some_Interface::class => array(
-		'instanceOf' => Some_Implementation::class
-	)
+    Some_Interface::class => array(
+        'instanceOf' => Some_Implementation::class
+    )
 );
 ```
 
@@ -179,7 +193,9 @@ return array(
 		'subscriptions' => $wpdb->table_prefix . 'some_plugin_subscribers'
 	),
 	'additional' => array(
-		// Custom values go here (Config::additional('key'); = value)
+		// Custom values go here 
+		'key' => 'value'   // Config::additional('key'); = value
+		'other' => 'value' // $app_config->other = value
 	),
 );
 ```
@@ -304,7 +320,7 @@ The App object has a few helper methods which can be called statically (either f
 * @return object Object instance
 * @throws App_Initialization_Exception Code 4 If app isn't initialised.
 
-``` make() ``` can be used to access the DI Container to fully resolve the dependencies of an object. 
+ `make()` can be used to access the DI Container to fully resolve the dependencies of an object. 
 
 ```php 
 $emailer = App::make(Customer_Emailer::class); 
@@ -338,14 +354,14 @@ $version = App::config('version');
 * @return View
 * @throws App_Initialization_Exception Code 4
 
-If you need to render or return a template, you can use the ``` view() ``` helper. Returns an instance of the View class, populated with the current defined engine (use PHP by default).
+If you need to render or return a template, you can use the `view()` helper. Returns an instance of the View class, populated with the current defined engine (use PHP by default).
 
 ```php
 App::view()->render('signup/form', ['user' => wp_get_current_user(), 'nonce' => $nonce]);
 ```
 
 
-It is possible to use dot notation in all view file paths. This allows for a simple way of defining paths for use on either Win or Unix filesystems.
+It is possible to use dot notation in all view file paths. This allows for a simple way of defining paths for use on either Win or Unix file systems.
 
 ```php
 $view->render('path.to.file',['var' => 'foo']);
@@ -515,6 +531,15 @@ http://www.opensource.org/licenses/mit-license.html
 
 ## Change Log ##
 
+* 1.4.0 - 
+   * Added `set_base_view_path()` and `get_base_view_path()` to App_Factory
+   * Changed how the base view path is used during App_Factory, it will now default to base path (passed when creating the factory) + '/views'
+   * Added `get_base_path()` to App_Factory, this gets the base path for the plugin.
+   * Fixed bug where defaults App_Config paths were not being set correctly, now are based on the base path used when creating App_Factory. 
+   * Added `base_view_path()` to Renderable and PHP_Engine instances.
+   * Fixed bug in Component_Compiler where paths from classname added 2 dashes per underscore.
+   * Cleaned up various internal objects, replacing many protected properties with private and making final.
+   * Expanded testing to cover Infection (Mutation Testing), this has seen the tests become more robust.
 * 1.3.1 - Added more meaningful errors for App_Config, updated dependencies and removed unused function in PHP_Engine
 * 1.3.0 - Dropped testing for WP5.8 and introduced WP6.1 testing
 * 1.2.3 - Allow dot notation in view paths.
