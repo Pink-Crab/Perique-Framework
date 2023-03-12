@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * Interface for registration processes middleware
+ * Module interface
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -19,50 +19,53 @@ declare(strict_types=1);
  *
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- * @package PinkCrab\Perique\Registration
- * @since 0.4.0
+ * @package PinkCrab\Perique
+ * @since 1.0.6
  */
 
 namespace PinkCrab\Perique\Interfaces;
 
 use PinkCrab\Loader\Hook_Loader;
-use PinkCrab\Perique\Interfaces\DI_Container;
+use PinkCrab\Perique\Application\App_Config;
+use PinkCrab\Perique\Interfaces\{DI_Container, Registration_Middleware};
 
-interface Registration_Middleware {
+interface Module {
 
 	/**
-	 * Set the hook loader.
+	 * Get the middleware for the module.
 	 *
-	 * @param Hook_Loader $hook_loader
+	 * @return class-string<Registration_Middleware>
 	 */
-	public function set_hook_loader( Hook_Loader $hook_loader ): void;
+	public function get_middleware(): string;
 
 	/**
-	 * Set the DI Container
+	 * Callback fired before the Application is booted.
 	 *
-	 * @param DI_Container $container
-	 */
-	public function set_di_container( DI_Container $container ): void;
-
-	/**
-	 * Process the current class
-	 *
-	 * @param object $class
-	 * @return object
-	 */
-	public function process( $class );
-
-	/**
-	 * Used to for any middleware setup before process is called
-	 *
+	 * @pram App_Config $config
+	 * @pram Hook_Loader $loader
+	 * @pram DI_Container $di_container
 	 * @return void
 	 */
-	public function setup(): void;
+	public function pre_boot( App_Config $config, Hook_Loader $loader, DI_Container $di_container ): void;
+
 
 	/**
-	 * Used after all classes have been passed through process.
+	 * Callback fired before registration is started.
 	 *
+	 * @pram App_Config $config
+	 * @pram Hook_Loader $loader
+	 * @pram DI_Container $di_container
 	 * @return void
 	 */
-	public function tear_down(): void;
+	public function pre_register( App_Config $config, Hook_Loader $loader, DI_Container $di_container ): void;
+
+	/**
+	 * Callback fired after registration is completed.
+	 *
+	 * @pram App_Config $config
+	 * @pram Hook_Loader $loader
+	 * @pram DI_Container $di_container
+	 * @return void
+	 */
+	public function post_register( App_Config $config, Hook_Loader $loader, DI_Container $di_container ): void;
 }

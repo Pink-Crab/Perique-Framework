@@ -33,7 +33,7 @@ final class App_Validation {
 	private $required_properties = array(
 		'container'    => true,
 		'app_config'   => true,
-		'registration' => false,
+		'module_manager' => false,
 		'loader'       => false,
 	);
 

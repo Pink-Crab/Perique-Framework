@@ -24,8 +24,6 @@ declare(strict_types=1);
 
 namespace PinkCrab\Perique\Application;
 
-use Closure;
-use Dice\Dice;
 use PinkCrab\Loader\Hook_Loader;
 use PinkCrab\Perique\Application\Hooks;
 use PinkCrab\Perique\Services\View\View;
@@ -35,9 +33,8 @@ use PinkCrab\Perique\Application\App_Validation;
 use PinkCrab\Perique\Interfaces\Inject_App_Config;
 use PinkCrab\Perique\Interfaces\Inject_Hook_Loader;
 use PinkCrab\Perique\Interfaces\Inject_DI_Container;
-use PinkCrab\Perique\Interfaces\Registration_Middleware;
+use PinkCrab\Perique\Services\Registration\Module_Manager;
 use PinkCrab\Perique\Exceptions\App_Initialization_Exception;
-use PinkCrab\Perique\Services\Registration\Registration_Service;
 
 final class App {
 
@@ -64,11 +61,11 @@ final class App {
 	private static $app_config;
 
 	/**
-	 * Handles all registration of all Hookable and custom middlewares.
+	 * Handles all modules.
 	 *
-	 * @var Registration_Service
+	 * @var Module_Manager
 	 */
-	private $registration;
+	private $module_manager;
 
 	/**
 	 * Hook Loader
@@ -76,13 +73,6 @@ final class App {
 	 * @var Hook_Loader|null
 	 */
 	private $loader;
-
-	/**
-	 * All middleware that need constructing after finalise has been run.
-	 *
-	 * @var class-string<Registration_Middleware>[]
-	 */
-	private $middleware_class_names = array();
 
 	/**
 	 * Checks if the app has already been booted.
@@ -127,16 +117,18 @@ final class App {
 	}
 
 	/**
-	 * Sets the Registration service and loader.
+	 * Set the module manager.
 	 *
-	 * @param \PinkCrab\Perique\Services\Registration\Registration_Service $registration
+	 * @param \PinkCrab\Perique\Module\Module_Manager $module_manager
 	 * @return self
+	 * @throws App_Initialization_Exception Code 10
 	 */
-	public function set_registration_services( Registration_Service $registration ): self {
-		if ( $this->registration !== null ) {
-			throw App_Initialization_Exception::registration_exists();
+	public function set_module_manager( Module_Manager $module_manager ): self {
+		if ( $this->module_manager !== null ) {
+			throw App_Initialization_Exception::module_manager_exists();
 		}
-		$this->registration = $registration;
+
+		$this->module_manager = $module_manager;
 		return $this;
 	}
 
@@ -171,56 +163,6 @@ final class App {
 	}
 
 	/**
-	 * Add registration middleware
-	 *
-	 * @param Registration_Middleware $middleware
-	 * @return self
-	 * @throws App_Initialization_Exception Code 3
-	 */
-	public function registration_middleware( Registration_Middleware $middleware ): self {
-		if ( $this->registration === null ) {
-			throw App_Initialization_Exception::requires_registration_service();
-		}
-
-		// Set the loader to the registration service, if defined.
-		if ( ! is_null( $this->loader ) ) {
-			$this->registration->set_loader( $this->loader );
-		}
-
-		$this->registration->push_middleware( $middleware );
-
-		return $this;
-	}
-
-	/**
-	 * Adds registration middleware as a string and use container to construct
-	 *
-	 * @param class-string<Registration_Middleware> $class_name
-	 * @return self
-	 * @throws App_Initialization_Exception Code 1 If DI container not registered
-	 * @throws App_Initialization_Exception Code 9 If class doesn't create as middleware.
-	 */
-	public function construct_registration_middleware( string $class_name ): self {
-		if ( self::$container === null ) {
-			throw App_Initialization_Exception::requires_di_container();
-		}
-
-		// Add to stack if finalise has not been run.
-		if ( false === self::$booted ) {
-			$this->middleware_class_names[] = $class_name;
-			return $this;
-		}
-
-		$middleware = self::$container->create( $class_name );
-		if ( ! is_object( $middleware ) || ! is_a( $middleware, Registration_Middleware::class ) ) {
-			throw App_Initialization_Exception::invalid_registration_middleware_instance( $class_name );
-		}
-
-		return $this->registration_middleware( $middleware );
-
-	}
-
-	/**
 	 * Sets the class list.
 	 *
 	 * @param array<string> $class_list
@@ -228,10 +170,13 @@ final class App {
 	 * @throws App_Initialization_Exception Code 3
 	 */
 	public function registration_classes( array $class_list ): self {
-		if ( $this->registration === null ) {
-			throw App_Initialization_Exception::requires_registration_service();
+		if ( $this->module_manager === null ) {
+			throw App_Initialization_Exception::requires_module_manager();
 		}
-		$this->registration->set_classes( $class_list );
+
+		foreach ( $class_list as $class ) {
+			$this->module_manager->register_class( $class );
+		}
 		return $this;
 	}
 
@@ -244,14 +189,12 @@ final class App {
 
 		// Validate.
 		$validate = new App_Validation( $this );
-		if ( $validate->validate() === false || $this->registration === null ) {
+		if ( $validate->validate() === false || $this->module_manager === null ) {
 			throw App_Initialization_Exception::failed_boot_validation(
 				$validate->errors
 			);
 		}
 
-		// Process registration
-		$this->registration->set_container( self::$container );
 
 		// Run the final process, where all are loaded in via
 		$this->finalise();
@@ -318,16 +261,6 @@ final class App {
 			)
 		);
 
-		// Process middleware classnames.
-		foreach ( $this->middleware_class_names as $class_name ) {
-			$middleware = self::$container->create( $class_name );
-			if ( ! is_object( $middleware ) || ! is_a( $middleware, Registration_Middleware::class ) ) {
-				throw App_Initialization_Exception::invalid_registration_middleware_instance( $class_name );
-			}
-
-			$this->registration_middleware( $middleware );
-		}
-
 		/** @hook{string, App_Config, Loader, DI_Container} */
 		do_action( Hooks::APP_INIT_PRE_BOOT, self::$app_config, $this->loader, self::$container ); // phpcs:disable WordPress.NamingConventions.ValidHookName.*
 
@@ -336,7 +269,7 @@ final class App {
 			'init',
 			function () {
 				do_action( Hooks::APP_INIT_PRE_REGISTRATION, self::$app_config, $this->loader, self::$container );
-				$this->registration->process();
+				$this->module_manager->process_middleware();
 				do_action( Hooks::APP_INIT_POST_REGISTRATION, self::$app_config, $this->loader, self::$container );
 				$this->loader->register_hooks(); // @phpstan-ignore-line, if loader is not defined, exception will be thrown above
 			},

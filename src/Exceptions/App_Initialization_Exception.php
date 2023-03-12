@@ -54,7 +54,7 @@ class App_Initialization_Exception extends Exception {
 	 * @code 3
 	 * @return App_Initialization_Exception
 	 */
-	public static function requires_registration_service(): App_Initialization_Exception {
+	public static function requires_module_manager(): App_Initialization_Exception {
 		$message = 'App has not defined Registration Service, this must be set before use.';
 		return new App_Initialization_Exception( $message, 3 );
 	}
@@ -126,6 +126,16 @@ class App_Initialization_Exception extends Exception {
 			$class
 		);
 		return new App_Initialization_Exception( $message, 9 );
+	}
+
+	/**
+	 * Returns an exceptions for attempting to set the Module_Manager after its already been defined.
+	 * @cdde 10
+	 * @return App_Initialization_Exception
+	 */
+	public static function module_manager_exists(): App_Initialization_Exception {
+		$message = 'Can not redeclare Module_Manager as its already set to the application';
+		return new App_Initialization_Exception( $message, 10 );
 	}
 
 }

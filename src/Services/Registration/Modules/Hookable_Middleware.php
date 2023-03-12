@@ -24,26 +24,16 @@ declare(strict_types=1);
  * @since 0.4.0
  */
 
-namespace PinkCrab\Perique\Services\Registration\Middleware;
+namespace PinkCrab\Perique\Services\Registration\Modules;
 
-use PinkCrab\Loader\Hook_Loader;
 use PinkCrab\Perique\Interfaces\Hookable;
 use PinkCrab\Perique\Interfaces\Registration_Middleware;
+use PinkCrab\Perique\Services\Container_Aware_Traits\Inject_Hook_Loader_Aware;
+use PinkCrab\Perique\Services\Container_Aware_Traits\Inject_DI_Container_Aware;
 
 class Hookable_Middleware implements Registration_Middleware {
 
-	/** @var Hook_Loader */
-	protected $loader;
-
-	/**
-	 * Sets the hook loader to the middleware.
-	 *
-	 * @param Hook_Loader $loader
-	 * @return void
-	 */
-	public function set_hook_loader( Hook_Loader $loader ):void {
-		$this->loader = $loader;
-	}
+	use Inject_Hook_Loader_Aware, Inject_DI_Container_Aware;
 
 	/**
 	 * Process the passed class

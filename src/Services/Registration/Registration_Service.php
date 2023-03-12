@@ -52,12 +52,9 @@ class Registration_Service {
 	 */
 	protected $di_container;
 
-	/**
-	 * Access to the Hook Loader
-	 *
-	 * @var Hook_Loader|null
-	 */
-	protected $loader;
+	public function __construct( DI_Container $di_container ) {
+		$this->di_container = $di_container;
+	}
 
 	/**
 	 * Sets the DI Container.
@@ -67,17 +64,6 @@ class Registration_Service {
 	 */
 	public function set_container( DI_Container $di_container ): self {
 		$this->di_container = $di_container;
-		return $this;
-	}
-
-	/**
-	 * Sets the DI Container.
-	 *
-	 * @param Hook_Loader $loader
-	 * @return self
-	 */
-	public function set_loader( Hook_Loader $loader ): self {
-		$this->loader = $loader;
 		return $this;
 	}
 
@@ -97,19 +83,31 @@ class Registration_Service {
 	 *
 	 * @param array<string> $class_list
 	 * @return self
+	 * @deprecated 1.2.0 Classes should be added singularly.
 	 */
 	public function set_classes( array $class_list ): self {
-		$this->class_list = $class_list;
+		foreach ( $class_list as $class ) {
+			$this->push_class( $class );
+		}
 		return $this;
 	}
 
 	/**
-	 * Pushes a single class to the class list.
+	 * Adds a class to the list of classes to be registered.
 	 *
-	 * @param string $class
-	 * @return self
+	 * @param class-name $class_list
 	 */
 	public function push_class( string $class ): self {
+		// If the class is already in the list, skip.
+		if ( \in_array( $class, $this->class_list, true ) ) {
+			return $this;
+		}
+
+		// If $class is not a class, throw exception.
+		if ( ! \class_exists( $class ) ) {
+			throw new \InvalidArgumentException( 'Class ' . $class . ' does not exist.' );
+		}
+
 		$this->class_list[] = $class;
 		return $this;
 	}
@@ -123,17 +121,6 @@ class Registration_Service {
 		// Filter all classes, before processing.
 		$class_list = apply_filters( Hooks::APP_INIT_REGISTRATION_CLASS_LIST, $this->class_list );
 		foreach ( $this->middleware as $middleware ) {
-
-			// Set the container if requested.
-			if ( \method_exists( $middleware, 'set_di_container' ) && ! is_null( $this->di_container ) ) {
-				$middleware->set_di_container( $this->di_container );
-			}
-
-			// Set the hook loader if requested.
-			if ( \method_exists( $middleware, 'set_hook_loader' ) && ! is_null( $this->loader ) ) {
-				$middleware->set_hook_loader( $this->loader );
-			}
-
 			// Run middleware setup
 			$middleware->setup();
 
