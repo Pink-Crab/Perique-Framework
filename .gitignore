@@ -10,3 +10,5 @@ tests/.env
 .idea
 infection.html
 infection.log
+plugin.php
+data/
