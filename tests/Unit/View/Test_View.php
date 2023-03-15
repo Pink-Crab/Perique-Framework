@@ -11,7 +11,7 @@ declare(strict_types=1);
  * @package PinkCrab\Perique
  */
 
-namespace PinkCrab\Perique\Tests\View;
+namespace PinkCrab\Perique\Tests\Unit\View;
 
 use WP_UnitTestCase;
 use Gin0115\WPUnit_Helpers\Objects;
@@ -20,6 +20,10 @@ use PinkCrab\Perique\Services\View\PHP_Engine;
 use PinkCrab\Perique\Services\View\View_Model;
 use PinkCrab\Perique\Services\View\Component\Component_Compiler;
 
+/**
+ * @group view
+ * @group unit
+ */
 class Test_View extends WP_UnitTestCase {
 
 	/**
@@ -39,7 +43,7 @@ class Test_View extends WP_UnitTestCase {
 	public function setUp(): void {
 		parent::setUp();
 
-		$this->php_engine         = new PHP_Engine( \dirname( __DIR__, 1 ) . '/Fixtures/views/' );
+		$this->php_engine         = new PHP_Engine( FIXTURES_PATH . '/views/' );
 		$this->component_compiler = new Component_Compiler();
 	}
 
@@ -118,7 +122,7 @@ class Test_View extends WP_UnitTestCase {
 
 	/** @testdox It should be possible to access the base path used by the renderable instance */
 	public function test_get_base_path(): void {
-		$path       = \dirname( __DIR__, 1 ) . '/Fixtures/views/';
+		$path       = FIXTURES_PATH . '/views/';
 		$renderable = new PHP_Engine( $path );
 
 		$this->assertEquals(

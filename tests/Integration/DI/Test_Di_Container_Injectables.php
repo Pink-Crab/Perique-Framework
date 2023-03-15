@@ -10,16 +10,19 @@ declare(strict_types=1);
  * @package PinkCrab\Perique
  */
 
-namespace PinkCrab\Perique\Tests\Application;
+namespace PinkCrab\Perique\Tests\Application\DI;
 
 use WP_UnitTestCase;
 use Gin0115\WPUnit_Helpers\Objects;
-use PinkCrab\Perique\Application\App_Config;
 use PinkCrab\Perique\Tests\Application\App_Helper_Trait;
 use PinkCrab\Perique\Tests\Fixtures\DI\Inject_App_Config_Mock;
 use PinkCrab\Perique\Tests\Fixtures\DI\Inject_Hook_Loader_Mock;
 use PinkCrab\Perique\Tests\Fixtures\DI\Inject_DI_Container_Mock;
 
+/**
+ * @group integration
+ * @group di
+ */
 class Test_Di_Container_Injectables extends WP_UnitTestCase {
 
 	/**

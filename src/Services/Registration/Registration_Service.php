@@ -28,6 +28,7 @@ use PinkCrab\Loader\Hook_Loader;
 use PinkCrab\Perique\Application\Hooks;
 use PinkCrab\Perique\Interfaces\DI_Container;
 use PinkCrab\Perique\Interfaces\Registration_Middleware;
+use PinkCrab\Perique\Exceptions\Module_Manager_Exception;
 
 class Registration_Service {
 
@@ -57,17 +58,6 @@ class Registration_Service {
 	}
 
 	/**
-	 * Sets the DI Container.
-	 *
-	 * @param DI_Container $di_container
-	 * @return self
-	 */
-	public function set_container( DI_Container $di_container ): self {
-		$this->di_container = $di_container;
-		return $this;
-	}
-
-	/**
 	 * Pushes a piece of middleware to the collection.
 	 *
 	 * @param Registration_Middleware $middleware
@@ -75,20 +65,6 @@ class Registration_Service {
 	 */
 	public function push_middleware( Registration_Middleware $middleware ): self {
 		$this->middleware[ \get_class( $middleware ) ] = $middleware;
-		return $this;
-	}
-
-	/**
-	 * Used to set the list of classes used.
-	 *
-	 * @param array<string> $class_list
-	 * @return self
-	 * @deprecated 1.2.0 Classes should be added singularly.
-	 */
-	public function set_classes( array $class_list ): self {
-		foreach ( $class_list as $class ) {
-			$this->push_class( $class );
-		}
 		return $this;
 	}
 
@@ -105,7 +81,7 @@ class Registration_Service {
 
 		// If $class is not a class, throw exception.
 		if ( ! \class_exists( $class ) ) {
-			throw new \InvalidArgumentException( 'Class ' . $class . ' does not exist.' );
+			throw Module_Manager_Exception::none_class_string_passed_to_registration( $class );
 		}
 
 		$this->class_list[] = $class;

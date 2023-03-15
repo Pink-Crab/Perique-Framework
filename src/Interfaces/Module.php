@@ -34,9 +34,9 @@ interface Module {
 	/**
 	 * Get the middleware for the module.
 	 *
-	 * @return class-string<Registration_Middleware>
+	 * @return ?class-string<Registration_Middleware>
 	 */
-	public function get_middleware(): string;
+	public function get_middleware(): ?string;
 
 	/**
 	 * Callback fired before the Application is booted.

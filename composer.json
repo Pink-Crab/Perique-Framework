@@ -45,11 +45,13 @@
     },
     "scripts": {
         "test": "./vendor/bin/phpunit --coverage-clover clover.xml --testdox --colors=always",
-        "coverage": "./vendor/bin/phpunit --coverage-html coverage-report --testdox --colors=always",
+        "coverage": "./vendor/bin/phpunit --coverage-html coverage-report --testdox --colors=always --group integration,unit",
         "analyse": "./vendor/bin/phpstan analyse src -l8",
         "sniff": "./vendor/bin/phpcs src/ -v",
         "all": "composer test && composer analyse && composer sniff",
-        "mutation": "./vendor/bin/infection"
+        "mutation": "./vendor/bin/infection",
+        "coverage:unit": "./vendor/bin/phpunit --coverage-html coverage-report --testdox --colors=always --group unit",
+        "coverage:integration": "./vendor/bin/phpunit --coverage-html coverage-report --testdox --colors=always --group integration"
     },
     "config": {
         "allow-plugins": {

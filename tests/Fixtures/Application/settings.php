@@ -14,4 +14,7 @@ return array(
 		'user' => array( 'user_meta_1' => 'One User' ),
 		'term' => array( 'term_meta_1' => 'One Term' ),
 	),
+	'post_types' => ['cpt' => 'post_type'],
+	'taxonomies' => ['tax' => 'taxonomy'],
+	'db_tables'  => ['table' => 'db_table'],
 );

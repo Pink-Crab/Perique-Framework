@@ -1,45 +1,41 @@
 <?php
 
 declare(strict_types=1);
-
 /**
- * The Hookable Module.
+ * Stub Module for testing.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * Uses the Foo_Middleware
  *
+ * @since 2.0.0
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- * @package PinkCrab\Perique\Registration
- * @since 2.0.0
+ * @package PinkCrab\Perique
  */
 
-namespace PinkCrab\Perique\Services\Registration\Modules;
+namespace PinkCrab\Perique\Tests\Fixtures\Modules\With_Middleware;
 
 use PinkCrab\Loader\Hook_Loader;
 use PinkCrab\Perique\Interfaces\Module;
 use PinkCrab\Perique\Application\App_Config;
 use PinkCrab\Perique\Interfaces\DI_Container;
-use PinkCrab\Perique\Services\Registration\Modules\Hookable_Middleware;
 
-class Hookable_Module implements Module {
+class Module_With_Middleware__Module implements Module {
 
 	/**
-	 * Get the middleware for the module.
+	 * Sets a log which can be used to check hooks are fired.
 	 *
-	 * @return ?class-string<Registration_Middleware>
+	 * @var array<string,array<string, object>>
+	 */
+	public $log = array();
+
+
+	/**
+	 * Returns the middleware to be used for the module.
+	 *
+	 * @return string
 	 */
 	public function get_middleware(): ?string {
-		return Hookable_Middleware::class;
+		return Module_With_Middleware__Middleware::class;
 	}
 
 	/**
@@ -51,8 +47,13 @@ class Hookable_Module implements Module {
 	 * @return void
 	 */
 	public function pre_boot( App_Config $config, Hook_Loader $loader, DI_Container $di_container ): void {
+		$this->log[ __FUNCTION__ ] = array(
+			'config'       => $config,
+			'loader'       => $loader,
+			'di_container' => $di_container,
+		);
+		echo __FUNCTION__;
 	}
-
 
 	/**
 	 * Callback fired before registration is started.
@@ -63,6 +64,12 @@ class Hookable_Module implements Module {
 	 * @return void
 	 */
 	public function pre_register( App_Config $config, Hook_Loader $loader, DI_Container $di_container ): void {
+		$this->log[ __FUNCTION__ ] = array(
+			'config'       => $config,
+			'loader'       => $loader,
+			'di_container' => $di_container,
+		);
+		echo __FUNCTION__;
 	}
 
 	/**
@@ -74,5 +81,11 @@ class Hookable_Module implements Module {
 	 * @return void
 	 */
 	public function post_register( App_Config $config, Hook_Loader $loader, DI_Container $di_container ): void {
+		$this->log[ __FUNCTION__ ] = array(
+			'config'       => $config,
+			'loader'       => $loader,
+			'di_container' => $di_container,
+		);
+		echo __FUNCTION__;
 	}
 }

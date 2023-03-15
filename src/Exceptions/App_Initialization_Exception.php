@@ -99,7 +99,7 @@ class App_Initialization_Exception extends Exception {
 	public static function failed_boot_validation( array $errors ): App_Initialization_Exception {
 		$message = sprintf(
 			'App failed boot validation : %s',
-			join( ',', $errors )
+			join( ', ', $errors )
 		);
 		return new App_Initialization_Exception( $message, 6 );
 	}
@@ -112,20 +112,6 @@ class App_Initialization_Exception extends Exception {
 	public static function loader_exists(): App_Initialization_Exception {
 		$message = 'Can not redeclare Loader as its already set to the application';
 		return new App_Initialization_Exception( $message, 8 );
-	}
-
-	/**
-	 * Returns an exception for trying to create registration middleware that is not middleware.
-	 * @code 9
-	 * @param string $class
-	 * @return App_Initialization_Exception
-	 */
-	public static function invalid_registration_middleware_instance( string $class ): App_Initialization_Exception {
-		$message = sprintf(
-			'%s is not a valid instance of Registration_Middleware',
-			$class
-		);
-		return new App_Initialization_Exception( $message, 9 );
 	}
 
 	/**

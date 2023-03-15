@@ -10,7 +10,7 @@ declare(strict_types=1);
  * @package PinkCrab\Perique
  */
 
-namespace PinkCrab\Perique\Tests\Application;
+namespace PinkCrab\Perique\Tests\Integration\Application;
 
 use TypeError;
 use WP_UnitTestCase;
@@ -24,11 +24,17 @@ use PinkCrab\Perique\Tests\Fixtures\DI\Class_G;
 use PinkCrab\Perique\Tests\Fixtures\DI\Interface_A;
 use PinkCrab\Perique\Tests\Fixtures\DI\Dependency_E;
 use PinkCrab\Perique\Interfaces\Registration_Middleware;
+use \PinkCrab\Perique\Tests\Application\App_Helper_Trait;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Has_DI_Container;
+use PinkCrab\Perique\Services\Registration\Modules\Hookable_Module;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Hookable\Hookable_Mock;
-use PinkCrab\Perique\Services\Registration\Middleware\Hookable_Middleware;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Mock_Registration_Middleware;
 
+/**
+ * @group integration
+ * @group app
+ * @group app_factory
+ */
 class Test_App_Factory extends WP_UnitTestCase {
 
 
@@ -59,17 +65,17 @@ class Test_App_Factory extends WP_UnitTestCase {
 	}
 
 	/** @testdox A classes which need to be registered, should be passable at setup. Allowing plugins to register hooks with WordPress */
-	public function test_can_set_registration_classes(): void {
-		$app = ( new App_Factory( FIXTURES_PATH ) )
-			->default_setup( true )
-			->registration_classes( array( Hookable_Mock::class ) )->app();
+	// public function test_can_set_registration_classes(): void {
+	// 	$app = ( new App_Factory( FIXTURES_PATH ) )
+	// 		->default_setup( true )
+	// 		->registration_classes( array( Hookable_Mock::class ) )->app();
 
-		$registration_service = Objects::get_property( $app, 'registration' );
-		$this->assertContains(
-			Hookable_Mock::class,
-			Objects::get_property( $registration_service, 'class_list' )
-		);
-	}
+	// 	$registration_service = Objects::get_property( $app, 'registration' );
+	// 	$this->assertContains(
+	// 		Hookable_Mock::class,
+	// 		Objects::get_property( $registration_service, 'class_list' )
+	// 	);
+	// }
 
 	/** @testdox It should be possible to pass custom rules to the Dependency Injection container to handle classes whos depenedencies cant be inferred. */
 	public function test_can_set_di_rule() {
@@ -110,31 +116,29 @@ class Test_App_Factory extends WP_UnitTestCase {
 		$this->assertTrue( $has_di_container->di_set() );
 	}
 
-	/** @testdox It should be possible to define additional registration middleware during the factory chained called. */
-	public function test_pass_registration_middleware_during_factory_init(): void {
-		$mock_middleware = $this->createMock( Registration_Middleware::class );
-
+	/** @testdox It should be possible to pass a module to the App_Factory as a class name and have it created inside the module manager */
+	public function test_pass_module_manager_during_factory_init(): void {
 		$app = ( new App_Factory( FIXTURES_PATH ) )
 			->default_setup( true )
-			->registration_middleware( $mock_middleware )
+			->module( Hookable_Module::class )
 			->boot();
 
-		$registration    = Objects::get_property( $app, 'registration' );
-		$middleware_list = Objects::get_property( $registration, 'middleware' );
-		$this->assertContains( $mock_middleware, $middleware_list );
+		$module_manager    = Objects::get_property( $app, 'module_manager' );
+		$module_list = Objects::get_property( $module_manager, 'modules' );
+		$this->assertInstanceOf( Hookable_Module::class, $module_list[0] );
 	}
 
 	/** @testdox It should be possible to defined additional registration middleware during the factory chained called, but as a class name, not as an instance. */
-	public function test_pass_registration_middleware_as_string_during_factory_init(): void {
-		$app = ( new App_Factory( FIXTURES_PATH ) )
-			->default_setup( true )
-			->construct_registration_middleware( Mock_Registration_Middleware::class )
-			->boot();
+	// public function test_pass_registration_middleware_as_string_during_factory_init(): void {
+	// 	$app = ( new App_Factory( FIXTURES_PATH ) )
+	// 		->default_setup( true )
+	// 		->construct_registration_middleware( Mock_Registration_Middleware::class )
+	// 		->boot();
 
-		$registration    = Objects::get_property( $app, 'registration' );
-		$middleware_list = Objects::get_property( $registration, 'middleware' );
-		$this->assertArrayHasKey( Mock_Registration_Middleware::class, $middleware_list );
-	}
+	// 	$registration    = Objects::get_property( $app, 'registration' );
+	// 	$middleware_list = Objects::get_property( $registration, 'middleware' );
+	// 	$this->assertArrayHasKey( Mock_Registration_Middleware::class, $middleware_list );
+	// }
 
 	/** @testdox It should be possible to create and instance of the App Factory and have the file instance created as the plugin base path for the App. */
 	public function test_detect_base_path(): void {

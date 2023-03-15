@@ -11,7 +11,7 @@ declare(strict_types=1);
  * @package PinkCrab\Perique
  */
 
-namespace PinkCrab\Perique\Tests\View;
+namespace PinkCrab\Perique\Tests\Unit\View;
 
 use PinkCrab\Perique\Application\Hooks;
 use PinkCrab\Perique\Services\View\View;
@@ -28,6 +28,7 @@ use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\View_Components\Input_Template_
 /**
  * @group view
  * @group components
+ * @group unit
  */
 class Test_Components extends \WP_UnitTestCase {
 
@@ -35,8 +36,8 @@ class Test_Components extends \WP_UnitTestCase {
 	private static $php_engine;
 
 	public static function setUpBeforeClass(): void {
-		self::$component_path = \dirname( __DIR__, 1 ) . '/Fixtures/views/components/';
-		self::$php_engine     = new PHP_Engine( \dirname( __DIR__, 1 ) . '/Fixtures/views/' );
+		self::$component_path = FIXTURES_PATH . '/views/components/';
+		self::$php_engine     = new PHP_Engine( FIXTURES_PATH . '/views/' );
 	}
 
 	/** @testdox It should be possible to assume the path of a component based on its name in relationship to the base path when using the compiler.. */

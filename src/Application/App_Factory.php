@@ -22,6 +22,7 @@ use PinkCrab\Perique\Services\View\PHP_Engine;
 use PinkCrab\Perique\Services\Dice\PinkCrab_Dice;
 use PinkCrab\Perique\Interfaces\Registration_Middleware;
 use PinkCrab\Perique\Services\Registration\Module_Manager;
+use PinkCrab\Perique\Services\Registration\Registration_Service;
 use PinkCrab\Perique\Services\Registration\Modules\Hookable_Module;
 
 class App_Factory {
@@ -148,7 +149,7 @@ class App_Factory {
 		$this->app->set_loader( $loader );
 
 		// Set registration middleware
-		$module_manager = new Module_Manager( $container, $loader );
+		$module_manager = new Module_Manager( $container, $loader, new Registration_Service( $container ) );
 		$module_manager->push_module( Hookable_Module::class );
 
 		$this->app->set_module_manager( $module_manager );

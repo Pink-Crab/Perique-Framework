@@ -11,7 +11,7 @@ declare(strict_types=1);
  * @package PinkCrab\Perique
  */
 
-namespace PinkCrab\Perique\Tests\DI;
+namespace PinkCrab\Perique\Tests\Unit\DI;
 
 use DateTime;
 use stdClass;
@@ -32,6 +32,10 @@ use Gin0115\WPUnit_Helpers\Objects as WPUnit_HelpersObjects;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Sample_Class;
 use PinkCrab\Perique\Services\View\Component\Component_Compiler;
 
+/**
+ * @group unit
+ * @group di
+ */
 class Test_PinkCrab_Dice extends WP_UnitTestCase {
 
 	/**

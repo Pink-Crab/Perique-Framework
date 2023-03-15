@@ -30,6 +30,7 @@ use PinkCrab\Perique\Application\Hooks;
 use PinkCrab\Perique\Interfaces\Module;
 use PinkCrab\Perique\Interfaces\DI_Container;
 use PinkCrab\Perique\Interfaces\Registration_Middleware;
+use PinkCrab\Perique\Exceptions\Module_Manager_Exception;
 use PinkCrab\Perique\Services\Registration\Registration_Service;
 
 final class Module_Manager {
@@ -74,12 +75,12 @@ final class Module_Manager {
 	 *
 	 * @param DI_Container $di_container
 	 */
-	public function __construct( DI_Container $di_container, Hook_Loader $loader ) {
+	public function __construct( DI_Container $di_container, Hook_Loader $loader, Registration_Service $registration_service ) {
 		$this->di_container = $di_container;
 		$this->loader       = $loader;
 
 		// Create the registration service.
-		$this->registration_service = new Registration_Service( $di_container );
+		$this->registration_service = $registration_service;
 	}
 
 	/**
@@ -91,7 +92,7 @@ final class Module_Manager {
 	public function push_module( string $module_name, ?callable $config = null ): void {
 		// If its not an instance of the module interface, throw
 		if ( ! is_a( $module_name, Module::class, true ) ) {
-			throw new \InvalidArgumentException( $module_name . ' must be an instance of the Module interface' );
+			throw Module_Manager_Exception::invalid_module_class_name( $module_name );
 		}
 
 		// Create the instance.
@@ -109,8 +110,10 @@ final class Module_Manager {
 		$this->modules[] = $module;
 		$this->register_hooks( $module );
 
-		// Add to the middleware.
-		$this->registration_service->push_middleware( $middleware );
+		// Add to the middleware, if provided.
+		if ( ! is_null( $middleware ) ) {
+			$this->registration_service->push_middleware( $middleware );
+		}
 	}
 
 	/**
@@ -132,8 +135,10 @@ final class Module_Manager {
 		$instance = $this->di_container->create( $module );
 
 		// If not an object or not an instance of the module interface, throw.
-		if ( ! is_object( $instance ) || ! is_a( $instance, Module::class, true ) ) {
-			throw new \InvalidArgumentException( 'Module must be an instance of the Module interface' );
+		if ( ! is_object( $instance )
+		|| ! is_a( $instance, Module::class, true )
+		) {
+			throw Module_Manager_Exception::invalid_module_class_name( $module );
 		}
 
 		return $instance;
@@ -143,26 +148,33 @@ final class Module_Manager {
 	 * Create the middleware from a module.
 	 *
 	 * @param Module $module
-	 * @return Registration_Middleware
+	 * @return Registration_Middleware|null
 	 */
-	private function create_middleware( Module $module ): Registration_Middleware {
+	private function create_middleware( Module $module ): ?Registration_Middleware {
 		$middleware = $module->get_middleware();
+
+		// If no middleware is provided, return null.
+		if ( is_null( $middleware ) ) {
+			return null;
+		}
 
 		// Check that the middleware is a valid class.
 		if ( ! \class_exists( $middleware ) ) {
-			throw new \InvalidArgumentException( "Modules middleware {$middleware} must be a valid class" );
+			throw Module_Manager_Exception::invalid_registration_middleware( $middleware );
 		}
 		// If not an object or not an instance of the module interface, throw.
 		if ( ! is_a( $middleware, Registration_Middleware::class, true ) ) {
-			throw new \InvalidArgumentException( "Modules middleware {$middleware} must implement Registration_Middleware" );
+			throw Module_Manager_Exception::invalid_registration_middleware( $middleware );
 		}
 
 		// Create the middleware.
 		$middleware = $this->di_container->create( $middleware );
 
 		// If the middleware is not an object, throw.
-		if ( ! is_object( $middleware ) ) {
-			throw new \InvalidArgumentException( "Failed to create {$middleware} as an object" );
+		if ( ! is_object( $middleware )
+		|| ! is_a( $middleware, Registration_Middleware::class, true )
+		) {
+			throw Module_Manager_Exception::failed_to_create_registration_middleware( $middleware );
 		}
 
 		// Populate both DI and Hook Loader
