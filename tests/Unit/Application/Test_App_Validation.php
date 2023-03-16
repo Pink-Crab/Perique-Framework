@@ -25,67 +25,72 @@ use PinkCrab\Perique\Tests\Application\App_Helper_Trait;
  */
 class Test_App_Validation extends WP_UnitTestCase {
 
-    use App_Helper_Trait;
+	use App_Helper_Trait;
 
-    public function tear_down(): void {
-        parent::tear_down();
-        self::unset_app_instance();
-    }
+	public function tear_down(): void {
+		parent::tear_down();
+		self::unset_app_instance();
+	}
 
 
-    /** @testdox Binding the DI Container to the App is required to setup */
-    public function test_validation_failed_with_no_container() : void
-    {
-        $app = new App(FIXTURES_PATH);
-        $validator = new App_Validation($app);
-        $validator->validate();
-        $this->assertNotEmpty($validator->errors);
-        $this->assertContains(
-            sprintf(App_Validation::ERROR_MESSAGE_TEMPLATE, 'container'),
-            $validator->errors
-        );
-    }
+	/** @testdox Binding the DI Container to the App is required to setup */
+	public function test_validation_failed_with_no_container() : void {
+		// Clear any existing app instances as this randomly fails.
+		self::unset_app_instance();
 
-    /** @testdox Binding the Hook Loader to the App is required to setup */
-    public function test_validation_failed_with_no_loader() : void
-    {
-        $app = new App(FIXTURES_PATH);
-        $validator = new App_Validation($app);
-        $validator->validate();
-        $this->assertNotEmpty($validator->errors);
-        $this->assertContains(
-            sprintf(App_Validation::ERROR_MESSAGE_TEMPLATE, 'loader'),
-            $validator->errors
-        );
-    }
+		$app       = new App( FIXTURES_PATH );
+		$validator = new App_Validation( $app );
+		$validator->validate();
+		$this->assertNotEmpty( $validator->errors );
+		$this->assertContains(
+			sprintf( App_Validation::ERROR_MESSAGE_TEMPLATE, 'container' ),
+			$validator->errors
+		);
+	}
 
-     /** @testdox Binding the App_Config to the App is required to setup */
-     public function test_validation_failed_with_no_app_config() : void
-     {
-        // Clear any existing app instances as this randomly fails.
-        self::unset_app_instance();
-        
-        $app = new App(FIXTURES_PATH);
-        $validator = new App_Validation($app);
-        $validator->validate();
-        $this->assertNotEmpty($validator->errors);
-        $this->assertContains(
-            sprintf(App_Validation::ERROR_MESSAGE_TEMPLATE, 'app_config'),
-            $validator->errors
-        );
-     }
+	/** @testdox Binding the Hook Loader to the App is required to setup */
+	public function test_validation_failed_with_no_loader() : void {
+		// Clear any existing app instances as this randomly fails.
+		self::unset_app_instance();
 
-      /** @testdox Binding the Module_Manager to the App is required to setup */
-      public function test_validation_failed_with_no_module_manager() : void
-      {
-          $app = new App(FIXTURES_PATH);
-          $validator = new App_Validation($app);
-          $validator->validate();
-          $this->assertNotEmpty($validator->errors);
-          $this->assertContains(
-              sprintf(App_Validation::ERROR_MESSAGE_TEMPLATE, 'module_manager'),
-              $validator->errors
-          );
-      }
+		$app       = new App( FIXTURES_PATH );
+		$validator = new App_Validation( $app );
+		$validator->validate();
+		$this->assertNotEmpty( $validator->errors );
+		$this->assertContains(
+			sprintf( App_Validation::ERROR_MESSAGE_TEMPLATE, 'loader' ),
+			$validator->errors
+		);
+	}
+
+	 /** @testdox Binding the App_Config to the App is required to setup */
+	public function test_validation_failed_with_no_app_config() : void {
+		// Clear any existing app instances as this randomly fails.
+		self::unset_app_instance();
+
+		$app       = new App( FIXTURES_PATH );
+		$validator = new App_Validation( $app );
+		$validator->validate();
+		$this->assertNotEmpty( $validator->errors );
+		$this->assertContains(
+			sprintf( App_Validation::ERROR_MESSAGE_TEMPLATE, 'app_config' ),
+			$validator->errors
+		);
+	}
+
+	  /** @testdox Binding the Module_Manager to the App is required to setup */
+	public function test_validation_failed_with_no_module_manager() : void {
+		// Clear any existing app instances as this randomly fails.
+		self::unset_app_instance();
+
+		$app       = new App( FIXTURES_PATH );
+		$validator = new App_Validation( $app );
+		$validator->validate();
+		$this->assertNotEmpty( $validator->errors );
+		$this->assertContains(
+			sprintf( App_Validation::ERROR_MESSAGE_TEMPLATE, 'module_manager' ),
+			$validator->errors
+		);
+	}
 
 }
