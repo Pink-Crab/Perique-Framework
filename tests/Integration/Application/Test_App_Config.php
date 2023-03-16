@@ -24,6 +24,8 @@ use \PinkCrab\Perique\Tests\Application\App_Helper_Trait;
  */
 class Test_App_Config extends WP_UnitTestCase {
 
+	private static $app;
+
 	/**
 	 * @method self::unset_app_instance();
 	 */
@@ -34,7 +36,6 @@ class Test_App_Config extends WP_UnitTestCase {
 	 */
 	public function setUp(): void {
 		parent::setUp();
-		$this->pre_populated_app_provider()->boot();
 	}
 
 	public function tearDown(): void {
@@ -50,8 +51,8 @@ class Test_App_Config extends WP_UnitTestCase {
 	 * @return void
 	 */
 	public function test_can_call_with_config_proxy(): void {
+		self::$app = $this->pre_populated_app_provider()->boot();
 		$app_config = new App_Config( include FIXTURES_PATH . '/Application/settings.php' );
-
 		// Paths
 		$this->assertEquals( $app_config->path(), Config::path() );
 		$this->assertEquals( $app_config->path( 'plugin' ), Config::path( 'plugin' ) );

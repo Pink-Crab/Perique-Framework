@@ -114,31 +114,8 @@ class Test_App_Factory extends WP_UnitTestCase {
 			->boot();
 		$has_di_container = $app::make( Has_DI_Container::class );
 		$this->assertTrue( $has_di_container->di_set() );
+
 	}
-
-	/** @testdox It should be possible to pass a module to the App_Factory as a class name and have it created inside the module manager */
-	public function test_pass_module_manager_during_factory_init(): void {
-		$app = ( new App_Factory( FIXTURES_PATH ) )
-			->default_setup( true )
-			->module( Hookable_Module::class )
-			->boot();
-
-		$module_manager    = Objects::get_property( $app, 'module_manager' );
-		$module_list = Objects::get_property( $module_manager, 'modules' );
-		$this->assertInstanceOf( Hookable_Module::class, $module_list[0] );
-	}
-
-	/** @testdox It should be possible to defined additional registration middleware during the factory chained called, but as a class name, not as an instance. */
-	// public function test_pass_registration_middleware_as_string_during_factory_init(): void {
-	// 	$app = ( new App_Factory( FIXTURES_PATH ) )
-	// 		->default_setup( true )
-	// 		->construct_registration_middleware( Mock_Registration_Middleware::class )
-	// 		->boot();
-
-	// 	$registration    = Objects::get_property( $app, 'registration' );
-	// 	$middleware_list = Objects::get_property( $registration, 'middleware' );
-	// 	$this->assertArrayHasKey( Mock_Registration_Middleware::class, $middleware_list );
-	// }
 
 	/** @testdox It should be possible to create and instance of the App Factory and have the file instance created as the plugin base path for the App. */
 	public function test_detect_base_path(): void {
@@ -238,8 +215,6 @@ class Test_App_Factory extends WP_UnitTestCase {
 				'assets' => '/some/path/',
 			),
 			'url' => array(
-				'plugin' => 'https://some.url/',
-				'view'   => 'https://some.url/',
 				'assets' => 'https://some.url/',
 			),
 		) );
@@ -250,8 +225,6 @@ class Test_App_Factory extends WP_UnitTestCase {
 
 		// Has changed values.
 		$this->assertEquals( '/some/path/', $config->path( 'assets' ) );
-		$this->assertEquals( 'https://some.url/', $config->url( 'plugin' ) );
-		$this->assertEquals( 'https://some.url/', $config->url( 'view' ) );
 		$this->assertEquals( 'https://some.url/', $config->url( 'assets' ) );
 
 		// Uses defaults.
@@ -278,7 +251,7 @@ class Test_App_Factory extends WP_UnitTestCase {
 		
 		// Use reflection to get the default config.
 		$default_config = Objects::invoke_method($factory, 'default_config_paths', []);
-		
+
 		// Get base paths from WP.
 		$uploads = \wp_upload_dir();
 		$plugin_url = \get_option( 'siteurl' ) . '/wp-content/plugins/Fixtures';
@@ -316,6 +289,34 @@ class Test_App_Factory extends WP_UnitTestCase {
 		// Check instances.
 		$this->assertSame( $app, $base_substitution_rules[ App::class ] );
 		$this->assertSame( $container, $base_substitution_rules[ DI_Container::class ] );
+	}
+
+	/** @testdox It should not be possible to overwrite the plugin or view path or urls by setting in app_config array */
+	public function test_cant_overwrite_plugin_or_view_url_or_path(): void {
+		$factory = new App_Factory( FIXTURES_PATH );
+		$factory
+			->default_setup()
+			->app_config( array(
+			'path' => array(
+				'plugin' => '/some/path/',
+				'view' => '/some/path/',
+			),
+			'url' => array(
+				'plugin' => 'https://some.url/',
+				'view' => 'https://some.url/view',
+			),
+		) );
+
+		// Get the config from using using the debug info.
+		/** @var \PinkCrab\Perique\Application\App_Config $config */
+		$config = $factory->boot()->__debugInfo()['app_config'];
+
+		// Has changed values.
+		$this->assertEquals( FIXTURES_PATH .'/', $config->path( 'plugin' ) );
+		$this->assertEquals( FIXTURES_PATH . '/views/', $config->path( 'view' ) );
+
+		$this->assertEquals('http://example.org/wp-content/plugins/Fixtures/', $config->url( 'plugin' ) );
+		$this->assertEquals('http://example.org/wp-content/plugins/Fixtures/views/', $config->url( 'view' ) );
 	}
 
 }

@@ -30,7 +30,7 @@ class Test_App_Validation extends WP_UnitTestCase {
 	 */
 	use App_Helper_Trait;
 
-	public function tearDown(): void {
+	public function tear_down(): void {
 		self::unset_app_instance();
 	}
 

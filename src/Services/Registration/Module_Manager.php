@@ -36,20 +36,6 @@ use PinkCrab\Perique\Services\Registration\Registration_Service;
 final class Module_Manager {
 
 	/**
-	 * Holds all the defined registration middlewares
-	 *
-	 * @var array<Module>
-	 */
-	private array $modules = array();
-
-	/**
-	 * Holds all the defined registration middlewares
-	 *
-	 * @var array<Registration_Middleware>
-	 */
-	private array $middleware = array();
-
-	/**
 	 * Access to the DI Container
 	 *
 	 * @var DI_Container
@@ -86,8 +72,9 @@ final class Module_Manager {
 	/**
 	 * Adds a module to the manager.
 	 *
-	 * @param class-string<Module>
-	 * @param ?callable(Module, Registration_Middleware): Module $config
+	 * @template Module_Instance of Module
+	 * @param class-string<Module_Instance> $module_name
+	 * @param ?callable(Module, ?Registration_Middleware):Module $config
 	 */
 	public function push_module( string $module_name, ?callable $config = null ): void {
 		// If its not an instance of the module interface, throw
@@ -107,7 +94,6 @@ final class Module_Manager {
 		}
 
 		// Add to the modules and register all hooks.
-		$this->modules[] = $module;
 		$this->register_hooks( $module );
 
 		// Add to the middleware, if provided.

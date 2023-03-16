@@ -29,6 +29,7 @@ use PinkCrab\Loader\Hook_Loader;
 use PinkCrab\Perique\Interfaces\Module;
 use PinkCrab\Perique\Application\App_Config;
 use PinkCrab\Perique\Interfaces\DI_Container;
+use PinkCrab\Perique\Interfaces\Registration_Middleware;
 use PinkCrab\Perique\Services\Registration\Modules\Hookable_Middleware;
 
 class Hookable_Module implements Module {
@@ -36,7 +37,7 @@ class Hookable_Module implements Module {
 	/**
 	 * Get the middleware for the module.
 	 *
-	 * @return ?class-string<Registration_Middleware>
+	 * @return class-string<Registration_Middleware>|null
 	 */
 	public function get_middleware(): ?string {
 		return Hookable_Middleware::class;

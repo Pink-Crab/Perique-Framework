@@ -31,10 +31,10 @@ final class App_Validation {
 	 * @var array<string,bool>
 	 */
 	private $required_properties = array(
-		'container'    => true,
-		'app_config'   => true,
+		'container'      => true,
+		'app_config'     => true,
 		'module_manager' => false,
-		'loader'       => false,
+		'loader'         => false,
 	);
 
 	/** @var array<string> */
