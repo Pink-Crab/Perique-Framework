@@ -416,6 +416,25 @@ class Test_App_Factory extends WP_UnitTestCase {
 		$this->assertEquals( FIXTURES_PATH . '/views-temp/', $factory->get_base_view_path() );
 		$this->assertEquals( FIXTURES_PATH . '/views-temp/', $factory->app()->__debugInfo()['view_path'] );
 	}
-	
+
+	/** @testdox The default App_Config should assume the view path, base url and view url from the base path. This includes the  */
+	public function test_view_path_should_be_set_in_app(): void
+	{
+		$factory = new App_Factory( FIXTURES_PATH );
+
+		// Assumed path/urls
+		$config = Objects::invoke_method($factory, 'default_config_paths', []);
+		$this->assertEquals( FIXTURES_PATH . '/views', $config['path']['view'] );
+		$this->assertEquals( 'http://example.org/wp-content/plugins/Fixtures', $config['url']['plugin'] );
+		$this->assertEquals( 'http://example.org/wp-content/plugins/Fixtures/views', $config['url']['view'] );
+
+		// With defined view path
+		$factory->set_base_view_path( FIXTURES_PATH . '/views-temp' );
+		$config = Objects::invoke_method($factory, 'default_config_paths', []);
+		
+		$this->assertEquals( FIXTURES_PATH . '/views-temp/', $config['path']['view'] );
+		$this->assertEquals( 'http://example.org/wp-content/plugins/Fixtures', $config['url']['plugin'] );
+		$this->assertEquals( 'http://example.org/wp-content/plugins/Fixtures/views-temp', $config['url']['view'] );
+	}
 
 }

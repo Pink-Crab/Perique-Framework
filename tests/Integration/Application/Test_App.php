@@ -305,4 +305,21 @@ class Test_App extends WP_UnitTestCase {
 		$instance = $app::make( With_WPDB_As_Dependency::class );
 		$this->assertSame( $GLOBALS['wpdb'], $instance->wpdb );
 	}
+
+	/** @testdox When setting the App_Config the view path and view app, should not be assumed if a custom view path is defined. */
+	public function test_view_path_and_app_not_set_if_custom_view_path_defined(): void {
+		$app = new App( \FIXTURES_PATH );
+		$app->set_view_path( 'custom/path' );
+		$app->set_app_config([]);
+
+		$config = $app->__debugInfo()['app_config'];
+
+		// Paths
+		$this->assertEquals(\FIXTURES_PATH . '/', $config->path('plugin'));
+		$this->assertEquals('custom/path/', $config->path('view'));
+		
+		// URLs
+		$this->assertEquals('http://example.org/wp-content/plugins/Fixtures/', $config->url('plugin'));
+		$this->assertEquals('http://example.org/wp-content/plugins/Fixtures/custom/path/', $config->url('view'));
+	}
 }
