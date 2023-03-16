@@ -26,7 +26,7 @@ class Module_Without_Middleware__Module implements Module {
 	 *
 	 * @var array<string,array<string, object>>
 	 */
-	public $log = array();
+	public static $log = array();
 
 
 	/**
@@ -47,12 +47,11 @@ class Module_Without_Middleware__Module implements Module {
 	 * @return void
 	 */
 	public function pre_boot( App_Config $config, Hook_Loader $loader, DI_Container $di_container ): void {
-		$this->log[ __FUNCTION__ ] = array(
+		self::$log[ __FUNCTION__ ] = array(
 			'config'       => $config,
 			'loader'       => $loader,
 			'di_container' => $di_container,
 		);
-		echo __FUNCTION__;
 	}
 
 	/**
@@ -64,12 +63,11 @@ class Module_Without_Middleware__Module implements Module {
 	 * @return void
 	 */
 	public function pre_register( App_Config $config, Hook_Loader $loader, DI_Container $di_container ): void {
-		$this->log[ __FUNCTION__ ] = array(
+		self::$log[ __FUNCTION__ ] = array(
 			'config'       => $config,
 			'loader'       => $loader,
 			'di_container' => $di_container,
 		);
-		echo __FUNCTION__;
 	}
 
 	/**
@@ -81,11 +79,10 @@ class Module_Without_Middleware__Module implements Module {
 	 * @return void
 	 */
 	public function post_register( App_Config $config, Hook_Loader $loader, DI_Container $di_container ): void {
-		$this->log[ __FUNCTION__ ] = array(
+		self::$log[ __FUNCTION__ ] = array(
 			'config'       => $config,
 			'loader'       => $loader,
 			'di_container' => $di_container,
 		);
-		echo __FUNCTION__;
 	}
 }

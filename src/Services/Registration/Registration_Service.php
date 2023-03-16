@@ -70,8 +70,8 @@ class Registration_Service {
 
 	/**
 	 * Adds a class to the list of classes to be registered.
-	 *
-	 * @param class-name $class_list
+	 * @template Class_Name of object
+	 * @param class-string<Class_Name> $class
 	 */
 	public function push_class( string $class ): self {
 		// If the class is already in the list, skip.

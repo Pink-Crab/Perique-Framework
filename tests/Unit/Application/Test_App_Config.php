@@ -414,11 +414,4 @@ class Test_App_Config extends WP_UnitTestCase {
 			array( 'taxonomies', array( 'test2' ) ),
 		);
 	}
-
-	/** @testdox It should be possible to use the Config proxy class, to access all App_Config values using static methods */
-	public function test_config_proxy(): void {
-		$app_config = new App_Config( self::SAMPLE_SETTINGS );
-		
-	}
-
 }

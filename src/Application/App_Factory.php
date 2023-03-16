@@ -20,6 +20,7 @@ use PinkCrab\Perique\Interfaces\Renderable;
 use PinkCrab\Perique\Interfaces\DI_Container;
 use PinkCrab\Perique\Services\View\PHP_Engine;
 use PinkCrab\Perique\Services\Dice\PinkCrab_Dice;
+use PinkCrab\Perique\Utils\App_Config_Path_Helper;
 use PinkCrab\Perique\Interfaces\Registration_Middleware;
 use PinkCrab\Perique\Services\Registration\Module_Manager;
 use PinkCrab\Perique\Services\Registration\Registration_Service;
@@ -37,9 +38,9 @@ class App_Factory {
 	/**
 	 * The base path of the app.
 	 *
-	 * @var string|null
+	 * @var string
 	 */
-	protected ?string $base_path = null;
+	protected string $base_path;
 
 	/**
 	 * The base view path
@@ -55,13 +56,12 @@ class App_Factory {
 	 * @since 2.0.0
 	 * @var array{
 	 *  0:class-string<Module>,
-	 *  1:?callable(Module, Registration_Middleware):Module
+	 *  1:?callable(Module, ?Registration_Middleware):Module
 	 * }[]
 	 */
 	protected array $modules = array();
 
 	public function __construct( ?string $base_path = null ) {
-		$this->app = new App();
 
 		if ( null === $base_path ) {
 			$file_index      = 0;
@@ -70,6 +70,9 @@ class App_Factory {
 		} else {
 			$this->base_path = \trailingslashit( $base_path );
 		}
+
+		$this->app = new App( $this->base_path );
+
 	}
 
 		/**
@@ -91,6 +94,10 @@ class App_Factory {
 	 */
 	public function set_base_view_path( string $base_view_path ): self {
 		$this->base_view_path = \trailingslashit( $base_view_path );
+
+		// Set the view base path on the app.
+		$this->app->set_view_path( $this->base_view_path );
+
 		return $this;
 	}
 
@@ -160,8 +167,9 @@ class App_Factory {
 	/**
 	 * Add a module to the application.
 	 *
-	 * @param class-name<Module> $module
-	 * @param ?callable(Module, Registration_Middleware):Module $callback
+	 * @template Module_Instance of Module
+	 * @param class-string<Module_Instance> $module
+	 * @param ?callable(Module, ?Registration_Middleware):Module $callback
 	 * @return self
 	 */
 	public function module( string $module, ?callable $callback = null ): self {
@@ -203,7 +211,7 @@ class App_Factory {
 	/**
 	 * Sets the registration class list.
 	 *
-	 * @param array<int, string> $class_list Array of fully namespaced class names.
+	 * @param array<class-string> $class_list Array of fully namespaced class names.
 	 * @return self
 	 */
 	public function registration_classes( array $class_list ): self {
@@ -267,18 +275,22 @@ class App_Factory {
 	 */
 	private function default_config_paths(): array {
 		$wp_uploads = \wp_upload_dir();
+
+		$base_path = App_Config_Path_Helper::normalise_path( $this->base_path );
+		$view_path = $this->base_view_path ?? App_Config_Path_Helper::assume_view_path( $base_path );
+
 		return array(
 			'path' => array(
-				'plugin'         => rtrim( $this->base_path, \DIRECTORY_SEPARATOR ),
-				'view'           => rtrim( $this->base_path, \DIRECTORY_SEPARATOR ) . '/views',
-				'assets'         => rtrim( $this->base_path, \DIRECTORY_SEPARATOR ) . '/assets',
+				'plugin'         => $base_path,
+				'view'           => $view_path,
+				'assets'         => $base_path . \DIRECTORY_SEPARATOR . 'assets',
 				'upload_root'    => $wp_uploads['basedir'],
 				'upload_current' => $wp_uploads['path'],
 			),
 			'url'  => array(
-				'plugin'         => plugins_url( basename( $this->base_path ) ),
-				'view'           => plugins_url( basename( $this->base_path ) ) . '/views',
-				'assets'         => plugins_url( basename( $this->base_path ) ) . '/assets',
+				'plugin'         => App_Config_Path_Helper::assume_base_url( $base_path ),
+				'view'           => App_Config_Path_Helper::assume_view_url( $base_path, $view_path ),
+				'assets'         => App_Config_Path_Helper::assume_base_url( $base_path ) . '/assets',
 				'upload_root'    => $wp_uploads['baseurl'],
 				'upload_current' => $wp_uploads['url'],
 			),

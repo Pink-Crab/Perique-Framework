@@ -10,13 +10,12 @@ declare(strict_types=1);
  * @package PinkCrab\Perique
  */
 
-namespace PinkCrab\Perique\Tests\Application;
+namespace PinkCrab\Perique\Tests\Integration\Application;
 
 use Dice\Dice;
 use Exception;
 use WP_UnitTestCase;
 use PinkCrab\Loader\Hook_Loader;
-use Gin0115\WPUnit_Helpers\Objects;
 use PinkCrab\Perique\Application\App;
 use PinkCrab\Perique\Application\Hooks;
 use PinkCrab\Perique\Interfaces\Renderable;
@@ -24,16 +23,19 @@ use PinkCrab\Perique\Application\App_Config;
 use PinkCrab\Perique\Application\App_Factory;
 use PinkCrab\Perique\Interfaces\DI_Container;
 use PinkCrab\Perique\Services\View\PHP_Engine;
-use PinkCrab\Perique\Services\Dice\PinkCrab_Dice;
-use PinkCrab\Perique\Interfaces\Registration_Middleware;
 use PinkCrab\Perique\Tests\Application\App_Helper_Trait;
+use PinkCrab\Perique\Exceptions\Module_Manager_Exception;
 use PinkCrab\Perique\Exceptions\App_Initialization_Exception;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Sample_Class;
-use PinkCrab\Perique\Services\Registration\Registration_Service;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Parent_Dependency;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Hookable\Hookable_Mock;
-use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Mock_Registration_Middleware;
 
+/**
+ * @group integration
+ * @group app
+ * @group app_factory
+ *
+ */
 class Test_App_Functional extends WP_UnitTestCase {
 
 
@@ -165,22 +167,14 @@ class Test_App_Functional extends WP_UnitTestCase {
 		$this->assertTrue( $debug['booted'] );
 	}
 
-	/** @testdox Additional functionality should be added at boot up through the means of middleware */
-	public function test_registration_middleware_as_string(): void {
-		$app = $this->pre_populated_app_provider()->boot();
-		$app->construct_registration_middleware( Mock_Registration_Middleware::class );
-		$registration = Objects::get_property( $app, 'registration' );
-		$this->assertArrayHasKey( Mock_Registration_Middleware::class, Objects::get_property( $registration, 'middleware' ) );
-	}
-
 	/** @testdox When attempting to pass a non registration middleware class name to be constructed an exception should be thrown if invalid type. */
 	public function test_registration_middleware_as_string_throws_invalid_middleware_exception(): void {
 
-		$this->expectException( App_Initialization_Exception::class );
-		$this->expectExceptionCode( 9 );
+		$this->expectException( Module_Manager_Exception::class );
+		$this->expectExceptionCode( 20 );
 		$app = $this->pre_populated_app_provider()
 			->boot()
-			->construct_registration_middleware( Sample_Class::class );
+			->module( Sample_Class::class );
 	}
 
 	/** @testdox When creating a new App instance using the App Factory, the base path should be reflected in App Configs default values. */

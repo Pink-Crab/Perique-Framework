@@ -40,7 +40,6 @@ class Config {
 			self::$config_cache = App::make( App_Config::class );
 		}
 
-
 		return self::$config_cache->{$method}( ...$params );
 	}
 }

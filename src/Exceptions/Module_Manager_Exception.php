@@ -41,7 +41,7 @@ class Module_Manager_Exception extends Exception {
 		}
 
 		if ( is_array( $value ) ) {
-			return \json_encode( $value ); //phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
+			return \wp_json_encode( $value ) ?: 'FAILED_TO_CAST ARRAY';
 		}
 
 		if ( is_null( $value ) ) {
@@ -59,7 +59,7 @@ class Module_Manager_Exception extends Exception {
 	 * Returns an exception if a module being added is not a valid module.
 	 * @code 20
 	 * @param string $module
-	 * @return App_Initialization_Exception
+	 * @return Module_Manager_Exception
 	 */
 	public static function invalid_module_class_name( string $module ): Module_Manager_Exception {
 		$message = "{$module} must be an instance of the Module interface";

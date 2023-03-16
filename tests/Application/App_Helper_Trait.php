@@ -31,7 +31,7 @@ trait App_Helper_Trait {
 	 * @return void
 	 */
 	protected static function unset_app_instance(): void {
-		$app = new App();
+		$app = new App( \FIXTURES_PATH );
 		Objects::set_property( $app, 'app_config', null );
 		Objects::set_property( $app, 'container', null );
 		Objects::set_property( $app, 'module_manager', null );
@@ -45,7 +45,7 @@ trait App_Helper_Trait {
 	 * service objects.
 	 *
 	 * No registration classes are added, di has no rules, loader is empty
-	 * but there is the settings from the Fixtures/Application added so we can 
+	 * but there is the settings from the Fixtures/Application added so we can
 	 * use template paths in the App:view() tests.
 	 *
 	 * Is a plain and basic instance.
@@ -53,14 +53,17 @@ trait App_Helper_Trait {
 	 * @return App
 	 */
 	protected function pre_populated_app_provider(): App {
+		// For clear.
+		self::unset_app_instance();
+		
 		// Build and populate the app.
 		$container    = new PinkCrab_Dice( new Dice() );
-		$app          = new App();
-		$registration = new Registration_Service($container);
+		$app          = new App( FIXTURES_PATH );
+		$registration = new Registration_Service( $container );
 		$loader       = new Hook_Loader();
 
 		$app->set_container( $container );
-		$app->set_module_manager( new Module_Manager($container, $loader, $registration) );
+		$app->set_module_manager( new Module_Manager( $container, $loader, $registration ) );
 		$app->set_loader( $loader );
 		$app->set_app_config( include FIXTURES_PATH . '/Application/settings.php' );
 

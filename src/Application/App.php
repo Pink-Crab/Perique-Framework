@@ -26,13 +26,16 @@ namespace PinkCrab\Perique\Application;
 
 use PinkCrab\Loader\Hook_Loader;
 use PinkCrab\Perique\Application\Hooks;
+use PinkCrab\Perique\Interfaces\Module;
 use PinkCrab\Perique\Services\View\View;
 use PinkCrab\Perique\Application\App_Config;
 use PinkCrab\Perique\Interfaces\DI_Container;
 use PinkCrab\Perique\Application\App_Validation;
 use PinkCrab\Perique\Interfaces\Inject_App_Config;
+use PinkCrab\Perique\Utils\App_Config_Path_Helper;
 use PinkCrab\Perique\Interfaces\Inject_Hook_Loader;
 use PinkCrab\Perique\Interfaces\Inject_DI_Container;
+use PinkCrab\Perique\Interfaces\Registration_Middleware;
 use PinkCrab\Perique\Services\Registration\Module_Manager;
 use PinkCrab\Perique\Exceptions\App_Initialization_Exception;
 
@@ -75,6 +78,20 @@ final class App {
 	private $loader;
 
 	/**
+	 * App Base path.
+	 *
+	 * @var string
+	 */
+	private string $base_path;
+
+	/**
+	 * Apps view path.
+	 *
+	 * @var ?string
+	 */
+	private ?string $view_path;
+
+	/**
 	 * Checks if the app has already been booted.
 	 *
 	 * @return bool
@@ -83,6 +100,28 @@ final class App {
 		return self::$booted;
 	}
 
+	/**
+	 * Creates an instance of the app.
+	 *
+	 * @param string $base_path
+	 */
+	public function __construct( string $base_path ) {
+		$this->base_path = $base_path;
+
+		// Assume the view path.
+		$this->view_path = rtrim( $this->base_path, '/\\' ) . \DIRECTORY_SEPARATOR . 'views';
+	}
+
+	/**
+	 * Set the view path.
+	 *
+	 * @param string $view_path
+	 * @return self
+	 */
+	public function set_view_path( string $view_path ): self {
+		$this->view_path = $view_path;
+		return $this;
+	}
 
 	/**
 	 * Sets the DI Container.
@@ -112,14 +151,30 @@ final class App {
 			throw App_Initialization_Exception::app_config_exists();
 		}
 
-		self::$app_config = new App_Config( apply_filters( Hooks::APP_INIT_CONFIG_VALUES, $settings ) );
+		// Run through the filter to allow for config changes.
+		$settings = apply_filters( Hooks::APP_INIT_CONFIG_VALUES, $settings );
+
+		// Ensure the base path and url are defined from app.
+		$settings['path']           = $settings['path'] ?? array();
+		$settings['path']['plugin'] = $this->base_path;
+		$settings['path']['view']   = $this->view_path ?? App_Config_Path_Helper::assume_view_path( $this->base_path );
+
+		// Get the url from the base path.
+		$settings['url']           = $settings['url'] ?? array();
+		$settings['url']['plugin'] = App_Config_Path_Helper::assume_base_url( $this->base_path );
+		$settings['url']['view']   = App_Config_Path_Helper::assume_view_url(
+			$this->base_path,
+			$this->view_path ?? App_Config_Path_Helper::assume_view_path( $this->base_path )
+		);
+
+		self::$app_config = new App_Config( $settings );
 		return $this;
 	}
 
 	/**
 	 * Set the module manager.
 	 *
-	 * @param \PinkCrab\Perique\Module\Module_Manager $module_manager
+	 * @param Module_Manager $module_manager
 	 * @return self
 	 * @throws App_Initialization_Exception Code 10
 	 */
@@ -165,7 +220,7 @@ final class App {
 	/**
 	 * Sets the class list.
 	 *
-	 * @param array<string> $class_list
+	 * @param array<class-string> $class_list
 	 * @return self
 	 * @throws App_Initialization_Exception Code 3
 	 */
@@ -181,6 +236,32 @@ final class App {
 	}
 
 	/**
+	 * Adds a module to the app.
+	 *
+	 * @template Module_Instance of Module
+	 * @param class-string<Module_Instance> $module
+	 * @param ?callable(Module, ?Registration_Middleware):Module $callback
+	 * @return self
+	 * @throws App_Initialization_Exception Code 1 If DI container not registered
+	 * @throws App_Initialization_Exception Code 3 If module manager not defined.
+	 */
+	public function module( string $module, ?callable $callback = null ): self {
+		// Check if module manager exists.
+		if ( $this->module_manager === null ) {
+			throw App_Initialization_Exception::requires_module_manager();
+		}
+
+		if ( self::$container === null ) {
+			throw App_Initialization_Exception::requires_di_container();
+		}
+
+		$this->module_manager->push_module( $module, $callback );
+
+		return $this;
+	}
+
+
+	/**
 	 * Boots the populated app.
 	 *
 	 * @return self
@@ -194,7 +275,6 @@ final class App {
 				$validate->errors
 			);
 		}
-
 
 		// Run the final process, where all are loaded in via
 		$this->finalise();

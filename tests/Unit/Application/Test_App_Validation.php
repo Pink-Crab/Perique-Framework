@@ -16,6 +16,7 @@ namespace PinkCrab\Perique\Tests\Unit\Application;
 use WP_UnitTestCase;
 use PinkCrab\Perique\Application\App;
 use PinkCrab\Perique\Application\App_Validation;
+use PinkCrab\Perique\Tests\Application\App_Helper_Trait;
 
 /**
  * @group unit
@@ -24,11 +25,18 @@ use PinkCrab\Perique\Application\App_Validation;
  */
 class Test_App_Validation extends WP_UnitTestCase {
 
+    use App_Helper_Trait;
+
+    public function tear_down(): void {
+        parent::tear_down();
+        self::unset_app_instance();
+    }
+
 
     /** @testdox Binding the DI Container to the App is required to setup */
     public function test_validation_failed_with_no_container() : void
     {
-        $app = new App();
+        $app = new App(FIXTURES_PATH);
         $validator = new App_Validation($app);
         $validator->validate();
         $this->assertNotEmpty($validator->errors);
@@ -41,7 +49,7 @@ class Test_App_Validation extends WP_UnitTestCase {
     /** @testdox Binding the Hook Loader to the App is required to setup */
     public function test_validation_failed_with_no_loader() : void
     {
-        $app = new App();
+        $app = new App(FIXTURES_PATH);
         $validator = new App_Validation($app);
         $validator->validate();
         $this->assertNotEmpty($validator->errors);
@@ -54,7 +62,7 @@ class Test_App_Validation extends WP_UnitTestCase {
      /** @testdox Binding the App_Config to the App is required to setup */
      public function test_validation_failed_with_no_app_config() : void
      {
-         $app = new App();
+         $app = new App(FIXTURES_PATH);
          $validator = new App_Validation($app);
          $validator->validate();
          $this->assertNotEmpty($validator->errors);
@@ -67,7 +75,7 @@ class Test_App_Validation extends WP_UnitTestCase {
       /** @testdox Binding the Module_Manager to the App is required to setup */
       public function test_validation_failed_with_no_module_manager() : void
       {
-          $app = new App();
+          $app = new App(FIXTURES_PATH);
           $validator = new App_Validation($app);
           $validator->validate();
           $this->assertNotEmpty($validator->errors);
