@@ -25,6 +25,7 @@ use PinkCrab\Perique\Interfaces\DI_Container;
 use PinkCrab\Perique\Services\View\PHP_Engine;
 use PinkCrab\Perique\Tests\Application\App_Helper_Trait;
 use PinkCrab\Perique\Exceptions\Module_Manager_Exception;
+use PinkCrab\Perique\Services\Registration\Module_Manager;
 use PinkCrab\Perique\Exceptions\App_Initialization_Exception;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Sample_Class;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Parent_Dependency;
@@ -165,6 +166,15 @@ class Test_App_Functional extends WP_UnitTestCase {
 
 		$this->assertArrayHasKey( 'booted', $debug );
 		$this->assertTrue( $debug['booted'] );
+
+		$this->assertArrayHasKey( 'module_manager', $debug );
+		$this->assertInstanceOf( Module_Manager::class, $debug['module_manager'] );
+
+		$this->assertArrayHasKey( 'base_path', $debug );
+		$this->assertEquals( FIXTURES_PATH, $debug['base_path'] );
+
+		$this->assertArrayHasKey( 'view_path', $debug );
+		$this->assertEquals( FIXTURES_PATH . '/views', $debug['view_path'] );
 	}
 
 	/** @testdox When attempting to pass a non registration middleware class name to be constructed an exception should be thrown if invalid type. */

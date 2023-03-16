@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace PinkCrab\Perique\Application;
 
 use OutOfBoundsException;
+use PinkCrab\Perique\Utils\App_Config_Path_Helper;
 
 final class App_Config {
 
@@ -343,24 +344,26 @@ final class App_Config {
 	 */
 	private function settings_defaults(): array {
 		$base_path  = \dirname( __DIR__, 2 );
-		$plugin_dir = \basename( $base_path );
 		$wp_uploads = \wp_upload_dir();
+
+		$base_path = App_Config_Path_Helper::normalise_path( $base_path );
+		$view_path = $this->base_view_path ?? App_Config_Path_Helper::assume_view_path( $base_path );
 
 		return array(
 			'plugin'     => array(
 				'version' => '0.1.0',
 			),
-			'path'       => array(
+			'path' => array(
 				'plugin'         => $base_path,
-				'view'           => $base_path . '/views',
-				'assets'         => $base_path . '/assets',
+				'view'           => $view_path,
+				'assets'         => $base_path . \DIRECTORY_SEPARATOR . 'assets',
 				'upload_root'    => $wp_uploads['basedir'],
 				'upload_current' => $wp_uploads['path'],
 			),
-			'url'        => array(
-				'plugin'         => plugins_url( $plugin_dir ),
-				'view'           => plugins_url( $plugin_dir ) . '/views',
-				'assets'         => plugins_url( $plugin_dir ) . '/assets',
+			'url'  => array(
+				'plugin'         => App_Config_Path_Helper::assume_base_url( $base_path ),
+				'view'           => App_Config_Path_Helper::assume_view_url( $base_path, $view_path ),
+				'assets'         => App_Config_Path_Helper::assume_base_url( $base_path ) . '/assets',
 				'upload_root'    => $wp_uploads['baseurl'],
 				'upload_current' => $wp_uploads['url'],
 			),
