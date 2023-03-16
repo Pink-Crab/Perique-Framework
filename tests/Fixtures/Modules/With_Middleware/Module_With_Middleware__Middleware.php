@@ -14,9 +14,12 @@ declare(strict_types=1);
 
 namespace PinkCrab\Perique\Tests\Fixtures\Modules\With_Middleware;
 
+use PinkCrab\Loader\Hook_Loader;
+use PinkCrab\Perique\Interfaces\DI_Container;
 use PinkCrab\Perique\Interfaces\Registration_Middleware;
 use PinkCrab\Perique\Services\Container_Aware_Traits\Inject_Hook_Loader_Aware;
 use PinkCrab\Perique\Services\Container_Aware_Traits\Inject_DI_Container_Aware;
+
 
 class Module_With_Middleware__Middleware implements Registration_Middleware {
 	use Inject_Hook_Loader_Aware, Inject_DI_Container_Aware;
@@ -27,21 +30,47 @@ class Module_With_Middleware__Middleware implements Registration_Middleware {
 	 * @var array<string,array<string, object>>
 	 */
 	public static $log = array();
-	
+
 	/** @inheritDoc */
 	public function setup(): void {
-		self::$log[ __FUNCTION__ ] = array(__FUNCTION__ . ' called');
+		self::$log[ __FUNCTION__ ] = array( __FUNCTION__ . ' called' );
 	}
 
 	/** @inheritDoc */
 	public function tear_down(): void {
-		self::$log[ __FUNCTION__ ] = array(__FUNCTION__ . ' called');
+		self::$log[ __FUNCTION__ ] = array( __FUNCTION__ . ' called' );
 	}
 
 	/** @inheritDoc */
 	public function process( $class ) {
-		self::$log[ __FUNCTION__ ] = array(__FUNCTION__ . ' called with ' . get_class($class) . ' passed to process.');
-		
+		self::$log[ __FUNCTION__ ] = array( __FUNCTION__ . ' called with ' . get_class( $class ) . ' passed to process.' );
+
 		return $class;
+	}
+
+		/**
+	 * Override the set_di_container method to allow for checking it was set.
+	 *
+	 * @param DI_Container $di_container
+	 * @return void
+	 */
+	public function set_di_container( DI_Container $di_container ): void {
+		self::$log[ __FUNCTION__ ] = array(
+			'di_container' => $di_container,
+		);
+		$this->di_container = $di_container;
+	}
+
+	/**
+	 * Override the set_loader method to allow for checking it was set.
+	 *
+	 * @param Hook_Loader $loader
+	 * @return void
+	 */
+	public function set_hook_loader( Hook_Loader $loader ): void {
+		self::$log[ __FUNCTION__ ] = array(
+			'loader' => $loader,
+		);
+		$this->loader = $loader;
 	}
 }
