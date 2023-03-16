@@ -353,14 +353,14 @@ final class App_Config {
 			'plugin'     => array(
 				'version' => '0.1.0',
 			),
-			'path' => array(
+			'path'       => array(
 				'plugin'         => $base_path,
 				'view'           => $view_path,
 				'assets'         => $base_path . \DIRECTORY_SEPARATOR . 'assets',
 				'upload_root'    => $wp_uploads['basedir'],
 				'upload_current' => $wp_uploads['path'],
 			),
-			'url'  => array(
+			'url'        => array(
 				'plugin'         => App_Config_Path_Helper::assume_base_url( $base_path ),
 				'view'           => App_Config_Path_Helper::assume_view_url( $base_path, $view_path ),
 				'assets'         => App_Config_Path_Helper::assume_base_url( $base_path ) . '/assets',

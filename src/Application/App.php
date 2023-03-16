@@ -415,7 +415,14 @@ final class App {
 		return self::$container->create( View::class );
 	}
 
-	/** @return array{container:DI_Container,app_config:App_Config,booted:bool,module_manager:Module_Manager} */
+	/** @return array{
+	 *  container:DI_Container,
+	 *  app_config:App_Config,
+	 *  booted:bool,
+	 *  module_manager:Module_Manager,
+	 *  base_path:string,
+	 *  view_path:?string
+	 * } */
 	public function __debugInfo() {
 		return array(
 			'container'      => self::$container,
