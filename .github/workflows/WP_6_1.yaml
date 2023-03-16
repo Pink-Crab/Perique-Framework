@@ -1,10 +1,10 @@
-name: WordPress 6.1 Test Suite [PHP7.2-8.1]
+name: WordPress 6.1 Test Suite [PHP7.4-8.1]
 
 on:
   push:
     branches: [ master ]
   pull_request:
-    branches: [ master, develop ]
+    branches: [ master, develop, feature/v2-sandbox ]
 
 jobs:
   build:
