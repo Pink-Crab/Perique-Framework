@@ -211,6 +211,15 @@ final class App_Config {
 	}
 
 	/**
+	 * Returns the wpdb prefix
+	 *
+	 * @return string
+	 */
+	public function wpdb_prefix(): string {
+		return $this->plugin['wpdb_prefix'];
+	}
+
+	/**
 	 * Returns the key for a post type.
 	 *
 	 * @param string $key
@@ -349,9 +358,12 @@ final class App_Config {
 		$base_path = App_Config_Path_Helper::normalise_path( $base_path );
 		$view_path = $this->base_view_path ?? App_Config_Path_Helper::assume_view_path( $base_path );
 
+		global $wpdb;
+
 		return array(
 			'plugin'     => array(
-				'version' => '0.1.0',
+				'version'     => '0.1.0',
+				'wpdb_prefix' => $wpdb->prefix,
 			),
 			'path'       => array(
 				'plugin'         => $base_path,

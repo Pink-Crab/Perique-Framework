@@ -414,4 +414,15 @@ class Test_App_Config extends WP_UnitTestCase {
 			array( 'taxonomies', array( 'test2' ) ),
 		);
 	}
+
+	/** @testdox It should be possible to access the wpdb prefix */
+	public function test_app_config_wpdb_prefix(): void {
+		global $wpdb;
+		$app_config = new App_Config();
+		$this->assertEquals( $wpdb->prefix, $app_config->wpdb_prefix() );
+
+		// With defined prefix.
+		$app_config = new App_Config( array( 'plugin' => array( 'wpdb_prefix' => 'test_' ) ) );
+		$this->assertEquals( 'test_', $app_config->wpdb_prefix() );
+	}
 }
