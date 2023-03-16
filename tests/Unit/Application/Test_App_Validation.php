@@ -62,14 +62,17 @@ class Test_App_Validation extends WP_UnitTestCase {
      /** @testdox Binding the App_Config to the App is required to setup */
      public function test_validation_failed_with_no_app_config() : void
      {
-         $app = new App(FIXTURES_PATH);
-         $validator = new App_Validation($app);
-         $validator->validate();
-         $this->assertNotEmpty($validator->errors);
-         $this->assertContains(
-             sprintf(App_Validation::ERROR_MESSAGE_TEMPLATE, 'app_config'),
-             $validator->errors
-         );
+        // Clear any existing app instances as this randomly fails.
+        self::unset_app_instance();
+        
+        $app = new App(FIXTURES_PATH);
+        $validator = new App_Validation($app);
+        $validator->validate();
+        $this->assertNotEmpty($validator->errors);
+        $this->assertContains(
+            sprintf(App_Validation::ERROR_MESSAGE_TEMPLATE, 'app_config'),
+            $validator->errors
+        );
      }
 
       /** @testdox Binding the Module_Manager to the App is required to setup */
