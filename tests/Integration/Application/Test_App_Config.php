@@ -92,6 +92,9 @@ class Test_App_Config extends WP_UnitTestCase {
 
 		// DB Table
 		$this->assertEquals( $app_config->db_tables( 'table' ), Config::db_tables( 'table' ) );
+
+		// wpdb_prefix
+		$this->assertEquals( $app_config->wpdb_prefix(), Config::wpdb_prefix() );
 	}
 
 }
