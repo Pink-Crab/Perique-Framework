@@ -402,4 +402,20 @@ class Test_App_Factory extends WP_UnitTestCase {
 		$GLOBALS['wp_filter'][ Hooks::APP_INIT_POST_REGISTRATION ][10] = array();
 	}
 
+	/** @testdox When setting the view path in factory, this should be also set in the app. */
+	public function test_setting_view_path_should_be_set_in_app_too(): void
+	{
+		$factory = new App_Factory( FIXTURES_PATH );
+		
+		// assumed as /views.
+		$this->assertEquals( FIXTURES_PATH . '/views/', $factory->get_base_view_path() );
+		$this->assertEquals( FIXTURES_PATH . '/views', $factory->app()->__debugInfo()['view_path'] );
+		
+		// Custom
+		$factory->set_base_view_path( FIXTURES_PATH . '/views-temp' );
+		$this->assertEquals( FIXTURES_PATH . '/views-temp/', $factory->get_base_view_path() );
+		$this->assertEquals( FIXTURES_PATH . '/views-temp/', $factory->app()->__debugInfo()['view_path'] );
+	}
+	
+
 }

@@ -46,8 +46,22 @@ class Test_App extends WP_UnitTestCase {
 		$this->assertEquals( FIXTURES_PATH . \DIRECTORY_SEPARATOR, $config->path( 'plugin' ) );
 		$this->assertEquals( FIXTURES_PATH . \DIRECTORY_SEPARATOR . 'views' . \DIRECTORY_SEPARATOR, $config->path( 'view' ) );
 
-        // Check the base url and view
-        $this->assertEquals('http://example.org/wp-content/plugins/Fixtures/', $config->url( 'plugin' ) );
-        $this->assertEquals('http://example.org/wp-content/plugins/Fixtures/views/', $config->url( 'view' ) );
+		// Check the base url and view
+		$this->assertEquals( 'http://example.org/wp-content/plugins/Fixtures/', $config->url( 'plugin' ) );
+		$this->assertEquals( 'http://example.org/wp-content/plugins/Fixtures/views/', $config->url( 'view' ) );
 	}
+
+	/** @testdox It should be possible to access the base_path and view_path in the App from the debugInfo magic method */
+	public function test_can_access_base_and_view_paths_from_debug_info() : void {
+		$app = new App( FIXTURES_PATH );
+
+		// Get app config
+		$debug = $app->__debugInfo();
+
+		// Check the base path and view
+		$this->assertEquals( FIXTURES_PATH, $debug['base_path'] );
+		$this->assertEquals( FIXTURES_PATH . \DIRECTORY_SEPARATOR . 'views', $debug['view_path'] );
+	}
+
+
 }

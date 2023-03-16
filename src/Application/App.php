@@ -422,6 +422,8 @@ final class App {
 			'app_config'     => self::$app_config,
 			'booted'         => self::$booted,
 			'module_manager' => $this->module_manager,
+			'base_path'      => $this->base_path,
+			'view_path'      => $this->view_path,
 		);
 	}
 
