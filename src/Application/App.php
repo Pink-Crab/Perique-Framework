@@ -140,6 +140,16 @@ final class App {
 	}
 
 	/**
+	 * Checks if the Module_Manager has been set.
+	 *
+	 * @return bool
+	 */
+	public function has_module_manager(): bool {
+		return $this->module_manager instanceof Module_Manager;
+	}
+
+
+	/**
 	 * Define the app config.
 	 *
 	 * @param array<string, mixed> $settings
@@ -405,12 +415,13 @@ final class App {
 		return self::$container->create( View::class );
 	}
 
-	/** @return array{container:DI_Container,app_config:App_Config,booted:bool} */
+	/** @return array{container:DI_Container,app_config:App_Config,booted:bool,module_manager:Module_Manager} */
 	public function __debugInfo() {
 		return array(
-			'container'  => self::$container,
-			'app_config' => self::$app_config,
-			'booted'     => self::$booted,
+			'container'      => self::$container,
+			'app_config'     => self::$app_config,
+			'booted'         => self::$booted,
+			'module_manager' => $this->module_manager,
 		);
 	}
 

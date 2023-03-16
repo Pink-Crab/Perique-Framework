@@ -84,5 +84,5 @@ class Module_With_Middleware__Module implements Module {
 			'loader'       => $loader,
 			'di_container' => $di_container,
 		);
-	}
+	}	
 }

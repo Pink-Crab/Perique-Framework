@@ -13,8 +13,14 @@ declare(strict_types=1);
 namespace PinkCrab\Perique\Tests\Registration;
 
 use WP_UnitTestCase;
+use PinkCrab\Loader\Hook_Loader;
+use PinkCrab\Perique\Services\Dice\PinkCrab_Dice;
 use PinkCrab\Perique\Tests\Application\App_Helper_Trait;
+use PinkCrab\Perique\Exceptions\Module_Manager_Exception;
+use PinkCrab\Perique\Services\Registration\Module_Manager;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Sample_Class;
+use PinkCrab\Perique\Services\Registration\Registration_Service;
+use PinkCrab\Perique\Tests\Fixtures\Modules\Invalid\With_Invalid_Class_Middleware;
 use PinkCrab\Perique\Tests\Fixtures\Modules\With_Middleware\Module_With_Middleware__Module;
 use PinkCrab\Perique\Tests\Fixtures\Modules\With_Middleware\Module_With_Middleware__Middleware;
 use PinkCrab\Perique\Tests\Fixtures\Modules\Without_Middleware\Module_Without_Middleware__Module;
@@ -79,16 +85,20 @@ class Test_Use_Modules extends WP_UnitTestCase {
 		// Trigger init to load the app.
 		do_action( 'init' );
 
-		// "pre_register" and "post_register" events should now have fired.
+
+
+		// 'set_di_container!, "set_hook_loader", "pre_register" and "post_register" events should now have fired.
 		$this->assertArrayHasKey( 'pre_register', Module_With_Middleware__Module::$log );
 		$this->assertArrayHasKey( 'post_register', Module_With_Middleware__Module::$log );
 		$this->assertCount( 3, Module_With_Middleware__Module::$log );
 
 		// Check the registration classes have been registered.
 		$event_order = array_keys( Module_With_Middleware__Middleware::$log );
-		$this->assertEquals( 'setup', $event_order[0] );
-		$this->assertEquals( 'process', $event_order[1] );
-		$this->assertEquals( 'tear_down', $event_order[2] );
+		$this->assertEquals( 'set_di_container', $event_order[0] );
+		$this->assertEquals( 'set_hook_loader', $event_order[1] );
+		$this->assertEquals( 'setup', $event_order[2] );
+		$this->assertEquals( 'process', $event_order[3] );
+		$this->assertEquals( 'tear_down', $event_order[4] );
 
 		$this->assertEquals( 'setup called', Module_With_Middleware__Middleware::$log['setup'][0] );
 		$this->assertEquals(
@@ -96,6 +106,7 @@ class Test_Use_Modules extends WP_UnitTestCase {
 			Module_With_Middleware__Middleware::$log['process'][0]
 		);
 		$this->assertEquals( 'tear_down called', Module_With_Middleware__Middleware::$log['tear_down'][0] );
+
 	}
 
 	/** @testdox It should be possible to add modules to the app and have the event hooks fired during the boot of the application (module without middleware) */
@@ -132,5 +143,32 @@ class Test_Use_Modules extends WP_UnitTestCase {
 		$this->assertCount( 3, Module_Without_Middleware__Module::$log );
 	}
 
+	/** @testdox Attempting to push a module which is does not implement the module interface, should result in a Module_Manager_Exception being thrown with code 20 */
+	public function test_throw_exception_if_not_valid_module_class_pushed(): void {
+		$container      = PinkCrab_Dice::withDice( new \Dice\Dice() );
+		$module_manager = new Module_Manager(
+			$container,
+			new Hook_Loader(),
+			new Registration_Service( $container )
+		);
 
+		$this->expectException( Module_Manager_Exception::class );
+		$this->expectExceptionCode( 20 );
+		$module_manager->push_module( Sample_Class::class );
+	}
+
+	/** @testdox Attempting to use a module which has an invalid Registration_Middleware class, should result in a Module_Manager_Exception being thrown with code 22 */
+	public function test_throw_exception_if_invalid_middleware_class_pushed(): void {
+		$container      = PinkCrab_Dice::withDice( new \Dice\Dice() );
+		$module_manager = new Module_Manager(
+			$container,
+			new Hook_Loader(),
+			new Registration_Service( $container )
+		);
+
+		$this->expectException( Module_Manager_Exception::class );
+		$this->expectExceptionCode( 22 );
+		
+		$module_manager->push_module( With_Invalid_Class_Middleware::class );
+	}
 }

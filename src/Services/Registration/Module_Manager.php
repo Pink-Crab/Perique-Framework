@@ -25,6 +25,7 @@ declare(strict_types=1);
 
 namespace PinkCrab\Perique\Services\Registration;
 
+use Exception;
 use PinkCrab\Loader\Hook_Loader;
 use PinkCrab\Perique\Application\Hooks;
 use PinkCrab\Perique\Interfaces\Module;
@@ -75,13 +76,11 @@ final class Module_Manager {
 	 * @template Module_Instance of Module
 	 * @param class-string<Module_Instance> $module_name
 	 * @param ?callable(Module, ?Registration_Middleware):Module $config
+	 * @throws Module_Manager_Exception If invalid module class name provided (Code 20)
+	 * @throws Module_Manager_Exception If module does not implement Module (Code 21)
+	 * @throws Module_Manager_Exception If module does not implement Registration_Middleware (Code 22)
 	 */
 	public function push_module( string $module_name, ?callable $config = null ): void {
-		// If its not an instance of the module interface, throw
-		if ( ! is_a( $module_name, Module::class, true ) ) {
-			throw Module_Manager_Exception::invalid_module_class_name( $module_name );
-		}
-
 		// Create the instance.
 		$module = $this->create_module( $module_name );
 
@@ -144,10 +143,6 @@ final class Module_Manager {
 			return null;
 		}
 
-		// Check that the middleware is a valid class.
-		if ( ! \class_exists( $middleware ) ) {
-			throw Module_Manager_Exception::invalid_registration_middleware( $middleware );
-		}
 		// If not an object or not an instance of the module interface, throw.
 		if ( ! is_a( $middleware, Registration_Middleware::class, true ) ) {
 			throw Module_Manager_Exception::invalid_registration_middleware( $middleware );

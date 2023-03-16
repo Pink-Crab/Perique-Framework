@@ -159,6 +159,11 @@ class App_Factory {
 		$module_manager = new Module_Manager( $container, $loader, new Registration_Service( $container ) );
 		$module_manager->push_module( Hookable_Module::class );
 
+		// Push any modules that have been added before the module manager was set.
+		foreach ( $this->modules as $module ) {
+			$module_manager->push_module( $module[0], $module[1] );
+		}
+
 		$this->app->set_module_manager( $module_manager );
 
 		return $this;
@@ -173,6 +178,13 @@ class App_Factory {
 	 * @return self
 	 */
 	public function module( string $module, ?callable $callback = null ): self {
+
+		// If the Module_Manager has been set in app, add the module to app.
+		if ( $this->app->has_module_manager() ) {
+			$this->app->module( $module, $callback );
+			return $this;
+		}
+
 		$this->modules[] = array( $module, $callback );
 		return $this;
 	}

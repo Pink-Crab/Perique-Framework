@@ -17,6 +17,7 @@ use WP_UnitTestCase;
 use PinkCrab\Loader\Hook_Loader;
 use Gin0115\WPUnit_Helpers\Objects;
 use PinkCrab\Perique\Application\App;
+use PinkCrab\Perique\Application\Hooks;
 use PinkCrab\Perique\Application\App_Factory;
 use PinkCrab\Perique\Interfaces\DI_Container;
 use PinkCrab\Perique\Services\View\PHP_Engine;
@@ -29,6 +30,8 @@ use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Has_DI_Container;
 use PinkCrab\Perique\Services\Registration\Modules\Hookable_Module;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Hookable\Hookable_Mock;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Mock_Registration_Middleware;
+use PinkCrab\Perique\Tests\Fixtures\Modules\With_Middleware\Module_With_Middleware__Module;
+use PinkCrab\Perique\Tests\Fixtures\Modules\Without_Middleware\Module_Without_Middleware__Module;
 
 /**
  * @group integration
@@ -180,14 +183,14 @@ class Test_App_Factory extends WP_UnitTestCase {
 	public function test_default_config_without_default_di_rules_throws_error(): void {
 		$this->expectException( \TypeError::class );
 		$factory = new App_Factory( \FIXTURES_PATH );
-		$factory->default_setup(false)->boot();
+		$factory->default_setup( false )->boot();
 		$factory->app()->view();
 	}
 
 	/** @testdox It should be possible to extend the factory and define a set of custom DI rules. */
 	public function test_extend_app_factory(): void {
 		$factory = new class() extends App_Factory {
-			public function __construct(){
+			public function __construct() {
 				parent::__construct( FIXTURES_PATH );
 			}
 			protected function default_di_rules(): array {
@@ -210,14 +213,16 @@ class Test_App_Factory extends WP_UnitTestCase {
 		$factory = new App_Factory( FIXTURES_PATH );
 		$factory
 			->default_setup()
-			->app_config( array(
-			'path' => array(
-				'assets' => '/some/path/',
-			),
-			'url' => array(
-				'assets' => 'https://some.url/',
-			),
-		) );
+			->app_config(
+				array(
+					'path' => array(
+						'assets' => '/some/path/',
+					),
+					'url'  => array(
+						'assets' => 'https://some.url/',
+					),
+				)
+			);
 
 		// Get the config from using using the debug info.
 		/** @var \PinkCrab\Perique\Application\App_Config $config */
@@ -228,15 +233,15 @@ class Test_App_Factory extends WP_UnitTestCase {
 		$this->assertEquals( 'https://some.url/', $config->url( 'assets' ) );
 
 		// Uses defaults.
-		$this->assertEquals( FIXTURES_PATH .'/', $config->path( 'plugin' ) );
+		$this->assertEquals( FIXTURES_PATH . '/', $config->path( 'plugin' ) );
 		$this->assertEquals( FIXTURES_PATH . '/views/', $config->path( 'view' ) );
 
 		// WP Uploads
-		$this->assertEquals( \trailingslashit(\wp_upload_dir()['basedir']) , $config->path( 'upload_root' ) );
-		$this->assertEquals( \trailingslashit(\wp_upload_dir()['path']) , $config->path( 'upload_current' ) );
-		$this->assertEquals( \trailingslashit(\wp_upload_dir()['baseurl']) , $config->url( 'upload_root' ) );
-		$this->assertEquals( \trailingslashit(\wp_upload_dir()['url']) , $config->url( 'upload_current' ) );
-		
+		$this->assertEquals( \trailingslashit( \wp_upload_dir()['basedir'] ), $config->path( 'upload_root' ) );
+		$this->assertEquals( \trailingslashit( \wp_upload_dir()['path'] ), $config->path( 'upload_current' ) );
+		$this->assertEquals( \trailingslashit( \wp_upload_dir()['baseurl'] ), $config->url( 'upload_root' ) );
+		$this->assertEquals( \trailingslashit( \wp_upload_dir()['url'] ), $config->url( 'upload_current' ) );
+
 		// Namespaces
 		$this->assertEquals( 'pinkcrab', $config->rest() );
 		$this->assertEquals( 'pc_cache', $config->cache() );
@@ -248,14 +253,14 @@ class Test_App_Factory extends WP_UnitTestCase {
 	/** @testdox When no App_Config is defined, a set of defaults should be used, based on the base path defined in the App_Factory */
 	public function test_default_app_config(): void {
 		$factory = new App_Factory( FIXTURES_PATH );
-		
+
 		// Use reflection to get the default config.
-		$default_config = Objects::invoke_method($factory, 'default_config_paths', []);
+		$default_config = Objects::invoke_method( $factory, 'default_config_paths', array() );
 
 		// Get base paths from WP.
-		$uploads = \wp_upload_dir();
+		$uploads    = \wp_upload_dir();
 		$plugin_url = \get_option( 'siteurl' ) . '/wp-content/plugins/Fixtures';
-		$base_path = FIXTURES_PATH;
+		$base_path  = FIXTURES_PATH;
 
 		// Check the paths.
 		$this->assertEquals( $base_path, $default_config['path']['plugin'] );
@@ -274,17 +279,17 @@ class Test_App_Factory extends WP_UnitTestCase {
 
 	/** @testdox Once the app has been booted and finalise has been run, the default object instances should be added as rules to the DI Container */
 	public function test_default_object_instances_are_added_to_di_container(): void {
-		$factory = new App_Factory( FIXTURES_PATH );
-		$app = $factory->default_setup()->boot();
+		$factory   = new App_Factory( FIXTURES_PATH );
+		$app       = $factory->default_setup()->boot();
 		$container = $app->__debugInfo()['container'];
-		$dice = Objects::get_property($container, 'dice');
-		$rules = Objects::get_property($dice, 'rules');
+		$dice      = Objects::get_property( $container, 'dice' );
+		$rules     = Objects::get_property( $dice, 'rules' );
 
 		$base_substitution_rules = $rules['*']['substitutions'];
 
-		$this->assertArrayHasKey(  App::class, $base_substitution_rules  );
-		$this->assertArrayHasKey(  \wpdb::class, $base_substitution_rules  );
-		$this->assertArrayHasKey(  DI_Container::class, $base_substitution_rules  );
+		$this->assertArrayHasKey( App::class, $base_substitution_rules );
+		$this->assertArrayHasKey( \wpdb::class, $base_substitution_rules );
+		$this->assertArrayHasKey( DI_Container::class, $base_substitution_rules );
 
 		// Check instances.
 		$this->assertSame( $app, $base_substitution_rules[ App::class ] );
@@ -296,27 +301,105 @@ class Test_App_Factory extends WP_UnitTestCase {
 		$factory = new App_Factory( FIXTURES_PATH );
 		$factory
 			->default_setup()
-			->app_config( array(
-			'path' => array(
-				'plugin' => '/some/path/',
-				'view' => '/some/path/',
-			),
-			'url' => array(
-				'plugin' => 'https://some.url/',
-				'view' => 'https://some.url/view',
-			),
-		) );
+			->app_config(
+				array(
+					'path' => array(
+						'plugin' => '/some/path/',
+						'view'   => '/some/path/',
+					),
+					'url'  => array(
+						'plugin' => 'https://some.url/',
+						'view'   => 'https://some.url/view',
+					),
+				)
+			);
 
 		// Get the config from using using the debug info.
 		/** @var \PinkCrab\Perique\Application\App_Config $config */
 		$config = $factory->boot()->__debugInfo()['app_config'];
 
 		// Has changed values.
-		$this->assertEquals( FIXTURES_PATH .'/', $config->path( 'plugin' ) );
+		$this->assertEquals( FIXTURES_PATH . '/', $config->path( 'plugin' ) );
 		$this->assertEquals( FIXTURES_PATH . '/views/', $config->path( 'view' ) );
 
-		$this->assertEquals('http://example.org/wp-content/plugins/Fixtures/', $config->url( 'plugin' ) );
-		$this->assertEquals('http://example.org/wp-content/plugins/Fixtures/views/', $config->url( 'view' ) );
+		$this->assertEquals( 'http://example.org/wp-content/plugins/Fixtures/', $config->url( 'plugin' ) );
+		$this->assertEquals( 'http://example.org/wp-content/plugins/Fixtures/views/', $config->url( 'view' ) );
+	}
+
+	/** @testdox It should be possible to define modules both before and after the Module_Manager is defined in the App instance */
+	public function test_can_define_modules_before_and_after_module_manager_is_set(): void {
+		// Clear any existing hooks.
+		if ( array_key_exists( Hooks::APP_INIT_PRE_BOOT, $GLOBALS['wp_filter'] ) ) {
+			$GLOBALS['wp_filter'][ Hooks::APP_INIT_PRE_BOOT ][10] = array();
+		}
+		if ( array_key_exists( Hooks::APP_INIT_PRE_REGISTRATION, $GLOBALS['wp_filter'] ) ) {
+			$GLOBALS['wp_filter'][ Hooks::APP_INIT_PRE_REGISTRATION ][10] = array();
+		}
+		if ( array_key_exists( Hooks::APP_INIT_POST_REGISTRATION, $GLOBALS['wp_filter'] ) ) {
+			$GLOBALS['wp_filter'][ Hooks::APP_INIT_POST_REGISTRATION ][10] = array();
+		}
+
+		( new App_Factory( FIXTURES_PATH ) )
+			->module( Module_With_Middleware__Module::class )// Before set.
+			->default_setup()
+			->module( Module_Without_Middleware__Module::class )// After set.
+			->boot();
+
+		\do_action( 'init' );
+		\do_action( 'plugins_loaded' );
+
+		// Look for hook and class name.
+		$find_hook = function( $hook, $classname ) {
+			foreach ( $GLOBALS['wp_filter'][ $hook ][10] as $callback ) {
+				if ( \array_key_exists( 'function', $callback ) ) {
+					if ( $callback['function'][0] instanceof $classname ) {
+						return $callback;
+					}
+				}
+			}
+			return null;
+		};
+
+		// Pre boot with Module with Middleware.
+		$pre_boot_with_mware = $find_hook( Hooks::APP_INIT_PRE_BOOT, Module_With_Middleware__Module::class );
+		$this->assertNotNull( $pre_boot_with_mware );
+		$this->assertInstanceOf( Module_With_Middleware__Module::class, $pre_boot_with_mware['function'][0] );
+		$this->assertEquals( 3, $pre_boot_with_mware['accepted_args'] );
+
+		// Pre register with Module with Middleware.
+		$pre_reg_with_mware = $find_hook( Hooks::APP_INIT_PRE_REGISTRATION, Module_With_Middleware__Module::class );
+		$this->assertNotNull( $pre_reg_with_mware );
+		$this->assertInstanceOf( Module_With_Middleware__Module::class, $pre_reg_with_mware['function'][0] );
+		$this->assertEquals( 3, $pre_reg_with_mware['accepted_args'] );
+
+		// Post register with Module with Middleware.
+		$post_reg_with_mware = $find_hook( Hooks::APP_INIT_POST_REGISTRATION, Module_With_Middleware__Module::class );
+		$this->assertNotNull( $post_reg_with_mware );
+		$this->assertInstanceOf( Module_With_Middleware__Module::class, $post_reg_with_mware['function'][0] );
+		$this->assertEquals( 3, $post_reg_with_mware['accepted_args'] );
+
+		// Pre boot with Module without Middleware.
+		$pre_boot_without_mware = $find_hook( Hooks::APP_INIT_PRE_BOOT, Module_Without_Middleware__Module::class );
+		$this->assertNotNull( $pre_boot_without_mware );
+		$this->assertInstanceOf( Module_Without_Middleware__Module::class, $pre_boot_without_mware['function'][0] );
+		$this->assertEquals( 3, $pre_boot_without_mware['accepted_args'] );
+
+		// Pre register with Module without Middleware.
+		$pre_reg_without_mware = $find_hook( Hooks::APP_INIT_PRE_REGISTRATION, Module_Without_Middleware__Module::class );
+		$this->assertNotNull( $pre_reg_without_mware );
+		$this->assertInstanceOf( Module_Without_Middleware__Module::class, $pre_reg_without_mware['function'][0] );
+		$this->assertEquals( 3, $pre_reg_without_mware['accepted_args'] );
+
+		// Post register with Module without Middleware.
+		$post_reg_without_mware = $find_hook( Hooks::APP_INIT_POST_REGISTRATION, Module_Without_Middleware__Module::class );
+		$this->assertNotNull( $post_reg_without_mware );
+		$this->assertInstanceOf( Module_Without_Middleware__Module::class, $post_reg_without_mware['function'][0] );
+		$this->assertEquals( 3, $post_reg_without_mware['accepted_args'] );
+
+		// Clear the hooks.
+		$GLOBALS['wp_filter'][ Hooks::APP_INIT_PRE_BOOT ][10]          = array();
+		$GLOBALS['wp_filter'][ Hooks::APP_INIT_PRE_REGISTRATION ][10]  = array();
+		$GLOBALS['wp_filter'][ Hooks::APP_INIT_POST_REGISTRATION ][10] = array();
 	}
 
 }
