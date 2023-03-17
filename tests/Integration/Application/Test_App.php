@@ -45,6 +45,13 @@ class Test_App extends WP_UnitTestCase {
 	use App_Helper_Trait;
 
 	public function tear_down(): void {
+		parent::tear_down();
+		self::unset_app_instance();
+	}
+
+	public function set_up()
+	{
+		parent::set_up();
 		self::unset_app_instance();
 	}
 
