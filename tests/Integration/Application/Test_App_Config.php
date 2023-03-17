@@ -31,14 +31,13 @@ class Test_App_Config extends WP_UnitTestCase {
 	 */
 	use App_Helper_Trait;
 
-	/**
-	 * @return void
-	 */
-	public function setUp(): void {
-		parent::setUp();
+	public function tear_down(): void {
+		parent::tear_down();
+		self::unset_app_instance();
 	}
 
-	public function tearDown(): void {
+	public function set_up() {
+		parent::set_up();
 		self::unset_app_instance();
 	}
 
