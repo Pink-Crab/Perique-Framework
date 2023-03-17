@@ -67,18 +67,6 @@ class Test_App_Factory extends WP_UnitTestCase {
 		);
 	}
 
-	/** @testdox A classes which need to be registered, should be passable at setup. Allowing plugins to register hooks with WordPress */
-	// public function test_can_set_registration_classes(): void {
-	// 	$app = ( new App_Factory( FIXTURES_PATH ) )
-	// 		->default_setup( true )
-	// 		->registration_classes( array( Hookable_Mock::class ) )->app();
-
-	// 	$registration_service = Objects::get_property( $app, 'registration' );
-	// 	$this->assertContains(
-	// 		Hookable_Mock::class,
-	// 		Objects::get_property( $registration_service, 'class_list' )
-	// 	);
-	// }
 
 	/** @testdox It should be possible to pass custom rules to the Dependency Injection container to handle classes whos depenedencies cant be inferred. */
 	public function test_can_set_di_rule() {
@@ -93,6 +81,7 @@ class Test_App_Factory extends WP_UnitTestCase {
 
 	/** @testdox It should be possible to set custom settings to the apps config. */
 	public function test_can_set_config(): void {
+		self::unset_app_instance();
 		$app = ( new App_Factory( FIXTURES_PATH ) )
 			->default_setup( true )
 			->app_config( include FIXTURES_PATH . '/Application/settings.php' )
