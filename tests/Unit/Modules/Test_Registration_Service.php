@@ -50,13 +50,30 @@ class Test_Registration_Service extends WP_UnitTestCase {
 
 		// Run the service.
 		$registration_service = new Registration_Service( $this->createMock( DI_Container::class ) );
-		$registration_service->push_middleware( $middleware )->process();
+		$registration_service->push_middleware( $middleware )
+			->push_class(Sample_Class::class)
+			->process();
 
 		$log = $middleware->message_log;
 		$this->assertCount( 2, $log );
 		$this->assertContains( 'setup', $log );
 		$this->assertContains( 'tear_down', $log );
 
+	}
+
+	/** @testdox If not classes are pushed to the registration service, then the process will be skipped. */
+	public function test_process_skipped_if_no_classes(): void {
+
+		// Set middleware to log if actions are called.
+		$middleware = new Mock_Registration_Middleware( 'log actions' );
+
+		// Run the service.
+		$registration_service = new Registration_Service( $this->createMock( DI_Container::class ) );
+		$registration_service->push_middleware( $middleware )
+			->process();
+
+		$log = $middleware->message_log;
+		$this->assertCount( 0, $log );
 	}
 
 	/** @testdox It should be possible to add a single class to be processed by middleware */

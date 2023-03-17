@@ -96,6 +96,12 @@ class Registration_Service {
 	public function process(): void {
 		// Filter all classes, before processing.
 		$class_list = apply_filters( Hooks::APP_INIT_REGISTRATION_CLASS_LIST, $this->class_list );
+
+		// If class list is empty, skip.
+		if ( empty( $class_list ) ) {
+			return;
+		}
+
 		foreach ( $this->middleware as $middleware ) {
 			// Run middleware setup
 			$middleware->setup();

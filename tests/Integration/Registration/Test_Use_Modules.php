@@ -14,6 +14,7 @@ namespace PinkCrab\Perique\Tests\Registration;
 
 use WP_UnitTestCase;
 use PinkCrab\Loader\Hook_Loader;
+use PinkCrab\Perique\Interfaces\DI_Container;
 use PinkCrab\Perique\Services\Dice\PinkCrab_Dice;
 use PinkCrab\Perique\Tests\Application\App_Helper_Trait;
 use PinkCrab\Perique\Exceptions\Module_Manager_Exception;
@@ -53,6 +54,7 @@ class Test_Use_Modules extends WP_UnitTestCase {
 		Module_With_Middleware__Module::$log     = array();
 		Module_With_Middleware__Middleware::$log = array();
 		Module_Without_Middleware__Module::$log  = array();
+
 	}
 
 	/** @testdox It should be possible to add modules to the app and have the event hooks fired during the boot of the application (module with middleware)*/
@@ -86,26 +88,22 @@ class Test_Use_Modules extends WP_UnitTestCase {
 		do_action( 'init' );
 
 
-
 		// 'set_di_container!, "set_hook_loader", "pre_register" and "post_register" events should now have fired.
 		$this->assertArrayHasKey( 'pre_register', Module_With_Middleware__Module::$log );
 		$this->assertArrayHasKey( 'post_register', Module_With_Middleware__Module::$log );
 		$this->assertCount( 3, Module_With_Middleware__Module::$log );
 
 		// Check the registration classes have been registered.
-		$event_order = array_keys( Module_With_Middleware__Middleware::$log );
+		$event_order =  Module_With_Middleware__Middleware::$log;
 		$this->assertEquals( 'set_di_container', $event_order[0] );
 		$this->assertEquals( 'set_hook_loader', $event_order[1] );
 		$this->assertEquals( 'setup', $event_order[2] );
 		$this->assertEquals( 'process', $event_order[3] );
 		$this->assertEquals( 'tear_down', $event_order[4] );
 
-		$this->assertEquals( 'setup called', Module_With_Middleware__Middleware::$log['setup'][0] );
-		$this->assertEquals(
-			'process called with ' . Sample_Class::class . ' passed to process.',
-			Module_With_Middleware__Middleware::$log['process'][0]
-		);
-		$this->assertEquals( 'tear_down called', Module_With_Middleware__Middleware::$log['tear_down'][0] );
+		// Check all actions have been run.
+		$this->assertInstanceOf(DI_Container::class, Module_With_Middleware__Middleware::$actions['set_di_container'] );
+		$this->assertInstanceOf(Hook_Loader::class, Module_With_Middleware__Middleware::$actions['set_hook_loader'] );
 
 	}
 
