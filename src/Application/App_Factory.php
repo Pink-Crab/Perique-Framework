@@ -197,10 +197,14 @@ class App_Factory {
 	 */
 	protected function default_di_rules(): array {
 		return array(
-			'*' => array(
-				'substitutions' => array(
-					Renderable::class => new PHP_Engine( $this->get_base_view_path() ),
+			PHP_Engine::class => array(
+				'constructParams' => array(
+					$this->get_base_view_path(),
 				),
+			),
+			Renderable::class => array(
+				'instanceOf' => PHP_Engine::class,
+				'shared'     => true,
 			),
 		);
 	}
