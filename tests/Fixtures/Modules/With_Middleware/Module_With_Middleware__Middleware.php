@@ -31,19 +31,26 @@ class Module_With_Middleware__Middleware implements Registration_Middleware {
 	 */
 	public static $log = array();
 
+	/**
+	 * Holds a log of all actions carried out.
+	 *
+	 * @var array<string>
+	 */
+	public static $actions = array();
+
 	/** @inheritDoc */
 	public function setup(): void {
-		self::$log[ __FUNCTION__ ] = array( __FUNCTION__ . ' called' );
+		self::$log[] = __FUNCTION__;
 	}
 
 	/** @inheritDoc */
 	public function tear_down(): void {
-		self::$log[ __FUNCTION__ ] = array( __FUNCTION__ . ' called' );
+		self::$log[] = __FUNCTION__;
 	}
 
 	/** @inheritDoc */
 	public function process( $class ) {
-		self::$log[ __FUNCTION__ ] = array( __FUNCTION__ . ' called with ' . get_class( $class ) . ' passed to process.' );
+		self::$log[] = __FUNCTION__;
 
 		return $class;
 	}
@@ -55,10 +62,9 @@ class Module_With_Middleware__Middleware implements Registration_Middleware {
 	 * @return void
 	 */
 	public function set_di_container( DI_Container $di_container ): void {
-		self::$log[ __FUNCTION__ ] = array(
-			'di_container' => $di_container,
-		);
-		$this->di_container = $di_container;
+		self::$log[]                   = __FUNCTION__;
+		self::$actions[__FUNCTION__] = $di_container;
+		$this->di_container            = $di_container;
 	}
 
 	/**
@@ -68,9 +74,8 @@ class Module_With_Middleware__Middleware implements Registration_Middleware {
 	 * @return void
 	 */
 	public function set_hook_loader( Hook_Loader $loader ): void {
-		self::$log[ __FUNCTION__ ] = array(
-			'loader' => $loader,
-		);
-		$this->loader = $loader;
+		self::$log[]             = __FUNCTION__;
+		self::$actions[__FUNCTION__] = $loader;
+		$this->loader            = $loader;
 	}
 }

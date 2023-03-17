@@ -189,7 +189,7 @@ class Test_App_Functional extends WP_UnitTestCase {
 
 	/** @testdox When creating a new App instance using the App Factory, the base path should be reflected in App Configs default values. */
 	public function test_app_config_paths_based_on_app_factory_base_path() {
-		$path = \dirname( \dirname( __DIR__, 1 ) . '/Fixtures/' );
+		$path = \FIXTURES_PATH;
 		$app  = ( new App_Factory( $path ) )
 			->set_base_view_path( $path )
 			->default_setup( true )->boot();
