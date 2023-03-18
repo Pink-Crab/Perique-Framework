@@ -36,7 +36,7 @@ class Test_Components extends \WP_UnitTestCase {
 	private static $php_engine;
 
 	public static function setUpBeforeClass(): void {
-		self::$component_path = FIXTURES_PATH . '/views/components/';
+		self::$component_path = 'components/';
 		self::$php_engine     = new PHP_Engine( FIXTURES_PATH . '/views/' );
 	}
 
@@ -179,4 +179,6 @@ class Test_Components extends \WP_UnitTestCase {
 		$this->expectOutputString( 'dot--not--ation--aa');
 		$view->component( new Input( 'dot', 'not', 'ation', 'aa' ), true );
 	}
+
+	
 }

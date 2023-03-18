@@ -49,8 +49,7 @@ class Test_App extends WP_UnitTestCase {
 		self::unset_app_instance();
 	}
 
-	public function set_up()
-	{
+	public function set_up() {
 		parent::set_up();
 		self::unset_app_instance();
 	}
@@ -181,7 +180,7 @@ class Test_App extends WP_UnitTestCase {
 		$app->module( Module_With_Middleware__Module::class );
 
 		// Module should be constructed and added to the module manager.
-		$manager_from_app = Objects::get_property( $app, 'module_manager' );
+		$manager_from_app      = Objects::get_property( $app, 'module_manager' );
 		$registration_from_app = Objects::get_property( $manager_from_app, 'registration_service' );
 		$middleware            = Objects::get_property( $registration_from_app, 'middleware' );
 		$this->assertCount( 1, $middleware );
@@ -213,10 +212,9 @@ class Test_App extends WP_UnitTestCase {
 		$app->module( Module_With_Middleware__Module::class );
 		$app->registration_classes( array( Sample_Class::class ) );
 
-		$mm = Objects::get_property( $app, 'module_manager' );
+		$mm           = Objects::get_property( $app, 'module_manager' );
 		$registration = Objects::get_property( $mm, 'registration_service' );
-		
-		
+
 		$this->assertContains( Sample_Class::class, Objects::get_property( $registration, 'class_list' ) );
 	}
 
@@ -317,16 +315,16 @@ class Test_App extends WP_UnitTestCase {
 	public function test_view_path_and_app_not_set_if_custom_view_path_defined(): void {
 		$app = new App( \FIXTURES_PATH );
 		$app->set_view_path( 'custom/path' );
-		$app->set_app_config([]);
+		$app->set_app_config( array() );
 
 		$config = $app->__debugInfo()['app_config'];
 
 		// Paths
-		$this->assertEquals(\FIXTURES_PATH . '/', $config->path('plugin'));
-		$this->assertEquals('custom/path/', $config->path('view'));
-		
+		$this->assertEquals( \FIXTURES_PATH . '/', $config->path( 'plugin' ) );
+		$this->assertEquals( 'custom/path/', $config->path( 'view' ) );
+
 		// URLs
-		$this->assertEquals('http://example.org/wp-content/plugins/Fixtures/', $config->url('plugin'));
-		$this->assertEquals('http://example.org/wp-content/plugins/Fixtures/custom/path/', $config->url('view'));
+		$this->assertEquals( 'http://example.org/wp-content/plugins/Fixtures/', $config->url( 'plugin' ) );
+		$this->assertEquals( 'http://example.org/wp-content/plugins/Fixtures/custom/path/', $config->url( 'view' ) );
 	}
 }
