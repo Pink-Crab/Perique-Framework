@@ -99,7 +99,7 @@ final class PHP_Engine implements Renderable {
 		// Compile the component.
 		$compiled = $this->component_compiler->compile( $component );
 		$template = $this->maybe_resolve_dot_notation( $compiled->template() );
-		$view     = sprintf( '%s%s.php', \DIRECTORY_SEPARATOR, trim( $template ) );
+		$view     = sprintf( '%s%s%s.php', $this->base_view_path, \DIRECTORY_SEPARATOR, trim( $template ) );
 		if ( $print ) {
 			print( $this->render_buffer( $view, $compiled->data() ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		} else {

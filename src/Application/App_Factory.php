@@ -24,6 +24,7 @@ use PinkCrab\Perique\Utils\App_Config_Path_Helper;
 use PinkCrab\Perique\Interfaces\Registration_Middleware;
 use PinkCrab\Perique\Services\Registration\Module_Manager;
 use PinkCrab\Perique\Services\Registration\Registration_Service;
+use PinkCrab\Perique\Services\View\Component\Component_Compiler;
 use PinkCrab\Perique\Services\Registration\Modules\Hookable_Module;
 
 class App_Factory {
@@ -197,14 +198,17 @@ class App_Factory {
 	 */
 	protected function default_di_rules(): array {
 		return array(
-			PHP_Engine::class => array(
+			PHP_Engine::class         => array(
 				'constructParams' => array(
 					$this->get_base_view_path(),
 				),
 			),
-			Renderable::class => array(
+			Renderable::class         => array(
 				'instanceOf' => PHP_Engine::class,
 				'shared'     => true,
+			),
+			Component_Compiler::class => array(
+				'constructParams' => array( 'components' ),
 			),
 		);
 	}
