@@ -157,10 +157,8 @@ class Test_PinkCrab_Dice extends WP_UnitTestCase {
 	public function test_set_class_constructor_prop_using_rules(): void {
 		$pc_dice = PinkCrab_Dice::withDice( new Dice() );
 
-		$without_custom = $pc_dice->get( Component_Compiler::class );
-
-		$this->assertEquals( '', WPUnit_HelpersObjects::get_property( $without_custom, 'component_base_path' ) );
-		$this->assertEmpty( WPUnit_HelpersObjects::get_property( $without_custom, 'component_aliases' ) );
+		$rule = $pc_dice->getRule( Component_Compiler::class );
+		$this->assertEmpty( $rule );
 
 		$pc_dice->addRule(
 			Component_Compiler::class,
@@ -172,10 +170,67 @@ class Test_PinkCrab_Dice extends WP_UnitTestCase {
 			)
 		);
 
-		$with_custom = $pc_dice->get( Component_Compiler::class );
-		$this->assertEquals( 'some/new/path', WPUnit_HelpersObjects::get_property( $with_custom, 'component_base_path' ) );
-		$this->assertArrayHasKey( 'Class', WPUnit_HelpersObjects::get_property( $with_custom, 'component_aliases' ) );
-		$this->assertEquals( 'custom/path/for/component', WPUnit_HelpersObjects::get_property( $with_custom, 'component_aliases' )['Class'] );
+		$rule = $pc_dice->getRule( Component_Compiler::class );
+		$this->assertEquals( 'some/new/path', $rule['constructParams'][0] );
+		$this->assertArrayHasKey( 'Class', $rule['constructParams'][1] );
+		$this->assertEquals( 'custom/path/for/component', $rule['constructParams'][1]['Class'] );
+	}
+
+		/** @testdox It should be possible to access any defined rules using the getRule() method */
+	public function test_get_rule(): void {
+		$pc_dice = PinkCrab_Dice::withDice( new Dice() );
+		$pc_dice->addRule(
+			Component_Compiler::class,
+			array(
+				'constructParams' => array(
+					'some/new/path',
+					array( 'Class' => 'custom/path/for/component' ),
+				),
+			)
+		);
+
+		// Add a base substitution rule.
+		$pc_dice->addRule(
+			'*',
+			array(
+				'substitutions' => array(
+					Interface_A::class => Dependency_E::class,
+				),
+			)
+		);
+
+		$this->assertArrayHasKey( 'constructParams', $pc_dice->getRule( Component_Compiler::class ) );
+		$this->assertArrayHasKey( 0, $pc_dice->getRule( Component_Compiler::class )['constructParams'] );
+		$this->assertArrayHasKey( 1, $pc_dice->getRule( Component_Compiler::class )['constructParams'] );
+		$this->assertEquals( 'some/new/path', $pc_dice->getRule( Component_Compiler::class )['constructParams'][0] );
+		$this->assertEquals( array( 'Class' => 'custom/path/for/component' ), $pc_dice->getRule( Component_Compiler::class )['constructParams'][1] );
+
+	}
+
+	/** @testdox Attempting to get a rule which has not been defined should results in either the global substitutions or an empty array if no subs defined. */
+	public function test_get_rules_fallbacks(): void {
+		$pc_dice = PinkCrab_Dice::withDice( new Dice() );
+
+		// Should be an empty array.
+		$this->assertEmpty( $pc_dice->getRule( Interface_A::class ) );
+
+		// Adding a global rule, should see the rules returned.
+		$pc_dice->addRule(
+			'*',
+			array(
+				'substitutions' => array(
+					Interface_A::class => Dependency_E::class,
+				),
+			)
+		);
+		$rule = $pc_dice->getRule( Component_Compiler::class );
+
+		// Should have substitutions.
+		$this->assertArrayHasKey( 'substitutions', $rule );
+
+		// Should have the Interface_A substitution.
+		$this->assertArrayHasKey( Interface_A::class, $rule['substitutions'] );
+		$this->assertEquals( Dependency_E::class, $rule['substitutions'][ Interface_A::class ] );
 	}
 
 }
