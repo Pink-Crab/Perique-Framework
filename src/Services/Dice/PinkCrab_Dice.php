@@ -128,4 +128,14 @@ class PinkCrab_Dice implements DI_Container {
 	public function create( string $name, array $args = array() ) {
 		return $this->dice->create( $name, $args );
 	}
+
+	/**
+	 * Gets a defined rule from the container.
+	 *
+	 * @param string $name
+	 * @return array<mixed>
+	 */
+	public function getRule( string $name ): ?array {
+		return $this->dice->getRule( $name );
+	}
 }
