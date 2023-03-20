@@ -65,7 +65,7 @@ class Test_App_Factory extends WP_UnitTestCase {
 		$this->assertInstanceOf( App::class, $app );
 		$this->assertInstanceOf(
 			DI_Container::class,
-			Objects::get_property( $app, 'container' )
+			$app->get_container()
 		);
 		$this->assertInstanceOf(
 			Hook_Loader::class,
@@ -81,8 +81,7 @@ class Test_App_Factory extends WP_UnitTestCase {
 			->di_rules( include FIXTURES_PATH . '/Application/dependencies.php' )
 			->app();
 
-		$container = Objects::get_property( $app, 'container' );
-		$this->assertTrue( $container->has( Interface_A::class ) );
+		$this->assertTrue( $app->get_container()->has(Interface_A::class) );
 	}
 
 	/** @testdox It should be possible to set custom settings to the apps config. */
@@ -276,11 +275,9 @@ class Test_App_Factory extends WP_UnitTestCase {
 	public function test_default_object_instances_are_added_to_di_container(): void {
 		$factory   = new App_Factory( FIXTURES_PATH );
 		$app       = $factory->default_setup()->boot();
-		$container = $app->__debugInfo()['container'];
-		$dice      = Objects::get_property( $container, 'dice' );
-		$rules     = Objects::get_property( $dice, 'rules' );
+		$container = $app->get_container();
 
-		$base_substitution_rules = $rules['*']['substitutions'];
+		$base_substitution_rules = $container->getRule('*')['substitutions'];
 
 		$this->assertArrayHasKey( App::class, $base_substitution_rules );
 		$this->assertArrayHasKey( \wpdb::class, $base_substitution_rules );

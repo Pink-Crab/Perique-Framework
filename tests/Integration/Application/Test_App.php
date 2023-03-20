@@ -59,7 +59,7 @@ class Test_App extends WP_UnitTestCase {
 		$app       = new App( \FIXTURES_PATH );
 		$container = $this->createMock( DI_Container::class );
 		$app->set_container( $container );
-		$this->assertSame( $container, Objects::get_property( $app, 'container' ) );
+		$this->assertSame( $container, $app->get_container() );
 	}
 
 	/** @testdox The app should only allow one container to set, attempting to set another should cause the process to fail. */
