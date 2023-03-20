@@ -30,6 +30,8 @@ use PinkCrab\Perique\Exceptions\App_Initialization_Exception;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Sample_Class;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Parent_Dependency;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Hookable\Hookable_Mock;
+use PinkCrab\Perique\Tests\Fixtures\Modules\With_Middleware\Module_With_Middleware__Module;
+use PinkCrab\Perique\Tests\Fixtures\Modules\With_Middleware\Module_With_Middleware__Middleware;
 
 /**
  * @group integration
@@ -317,6 +319,34 @@ class Test_App_Functional extends WP_UnitTestCase {
 
 		// Restore the backup.
 		$GLOBALS['wp_filter']['init'][1] = $backup;
+	}
+
+		/** @testdox It should be possible to hook in and add both classes and modules using hooks. */
+	public function test_can_hook_in_and_add_classes_and_modules(): void {
+		
+		add_action(Hooks::MODULE_MANAGER, function( Module_Manager $manager ) {
+			$manager->push_module( Module_With_Middleware__Module::class );
+		});
+
+		\add_action(Hooks::APP_INIT_REGISTRATION_CLASS_LIST, function( array $classes ) {
+			$classes[] = Sample_Class::class;
+			return $classes;
+		});
+		
+		$app = $this->pre_populated_app_provider();
+		$app->registration_classes( array( Parent_Dependency::class ) );
+		$app->boot();
+
+		\do_action( 'init' );
+		\do_action( 'plugins_loaded' );
+
+		$this->assertNotEmpty(Module_With_Middleware__Middleware::$processed);
+		$this->assertContains(Sample_Class::class, Module_With_Middleware__Middleware::$processed);
+		$this->assertContains(Parent_Dependency::class, Module_With_Middleware__Middleware::$processed);
+
+		// Clear the hooks.
+		\remove_all_actions( Hooks::APP_INIT_REGISTRATION_CLASS_LIST );
+		\remove_all_actions( Hooks::MODULE_MANAGER );
 	}
 
 }

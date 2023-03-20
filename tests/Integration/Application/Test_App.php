@@ -17,6 +17,7 @@ use WP_UnitTestCase;
 use PinkCrab\Loader\Hook_Loader;
 use Gin0115\WPUnit_Helpers\Objects;
 use PinkCrab\Perique\Application\App;
+use PinkCrab\Perique\Application\Hooks;
 use PinkCrab\Perique\Application\Config;
 use PinkCrab\Perique\Application\App_Config;
 use PinkCrab\Perique\Interfaces\DI_Container;
@@ -327,4 +328,6 @@ class Test_App extends WP_UnitTestCase {
 		$this->assertEquals( 'http://example.org/wp-content/plugins/Fixtures/', $config->url( 'plugin' ) );
 		$this->assertEquals( 'http://example.org/wp-content/plugins/Fixtures/custom/path/', $config->url( 'view' ) );
 	}
+
+
 }

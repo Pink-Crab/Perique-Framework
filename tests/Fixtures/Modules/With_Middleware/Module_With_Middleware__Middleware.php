@@ -38,6 +38,13 @@ class Module_With_Middleware__Middleware implements Registration_Middleware {
 	 */
 	public static $actions = array();
 
+	/**
+	 * Holds an array of classes processed.
+	 * 
+	 * @var array<string>
+	 */
+	public static $processed = array();
+
 	/** @inheritDoc */
 	public function setup(): void {
 		self::$log[] = __FUNCTION__;
@@ -51,6 +58,8 @@ class Module_With_Middleware__Middleware implements Registration_Middleware {
 	/** @inheritDoc */
 	public function process( $class ) {
 		self::$log[] = __FUNCTION__;
+
+		self::$processed[] = get_class( $class );
 
 		return $class;
 	}
