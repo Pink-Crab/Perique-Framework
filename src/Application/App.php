@@ -280,7 +280,7 @@ final class App {
 
 		// Validate.
 		$validate = new App_Validation( $this );
-		if ( $validate->validate() === false || $this->module_manager === null ) {
+		if ( $validate->validate() === false ) {
 			throw App_Initialization_Exception::failed_boot_validation(
 				$validate->errors
 			);

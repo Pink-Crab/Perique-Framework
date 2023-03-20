@@ -183,6 +183,10 @@ final class Module_Manager {
 	 * @return void
 	 */
 	public function process_middleware(): void {
+
+		// Allow for additional apps to hook into the Module Manager.
+		do_action( Hooks::MODULE_MANAGER, $this );
+
 		$this->registration_service->process();
 	}
 
