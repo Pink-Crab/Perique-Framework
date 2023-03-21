@@ -97,7 +97,6 @@ class Test_App extends WP_UnitTestCase {
 
 		$module_manager = new Module_Manager(
 			$this->createMock( DI_Container::class ),
-			$this->createMock( Hook_Loader::class ),
 			$this->createMock( Registration_Service::class ),
 		);
 
@@ -113,7 +112,6 @@ class Test_App extends WP_UnitTestCase {
 		$app            = new App( \FIXTURES_PATH );
 		$module_manager = new Module_Manager(
 			$this->createMock( DI_Container::class ),
-			$this->createMock( Hook_Loader::class ),
 			$this->createMock( Registration_Service::class ),
 		);
 
@@ -172,16 +170,18 @@ class Test_App extends WP_UnitTestCase {
 		$di_container   = PinkCrab_Dice::withDice( new Dice() );
 		$loader         = new Hook_Loader();
 		$registration   = new Registration_Service( $di_container, $loader );
-		$module_manager = new Module_Manager( $di_container, $loader, $registration );
+		$module_manager = new Module_Manager( $di_container, $registration );
 
 		$app->set_container( $di_container )
 			->set_loader( $loader )
 			->set_module_manager( $module_manager );
 
 		$app->module( Module_With_Middleware__Module::class );
+		
 
 		// Module should be constructed and added to the module manager.
 		$manager_from_app      = Objects::get_property( $app, 'module_manager' );
+		$manager_from_app->register_modules();
 		$registration_from_app = Objects::get_property( $manager_from_app, 'registration_service' );
 		$middleware            = Objects::get_property( $registration_from_app, 'middleware' );
 		$this->assertCount( 1, $middleware );
@@ -204,7 +204,7 @@ class Test_App extends WP_UnitTestCase {
 		$di_container   = PinkCrab_Dice::withDice( new Dice() );
 		$loader         = new Hook_Loader();
 		$registration   = new Registration_Service( $di_container, $loader );
-		$module_manager = new Module_Manager( $di_container, $loader, $registration );
+		$module_manager = new Module_Manager( $di_container, $registration );
 
 		$app->set_container( $di_container )
 			->set_loader( $loader )
@@ -292,7 +292,7 @@ class Test_App extends WP_UnitTestCase {
 		$loader       = new Hook_Loader();
 		$registration = new Registration_Service( $di_container, $loader );
 
-		$app->set_module_manager( new Module_Manager( $di_container, $loader, $registration ) );
+		$app->set_module_manager( new Module_Manager( $di_container, $registration ) );
 		$app->module( Module_With_Middleware__Module::class );
 	}
 

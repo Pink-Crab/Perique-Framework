@@ -95,15 +95,9 @@ class Test_Use_Modules extends WP_UnitTestCase {
 
 		// Check the registration classes have been registered.
 		$event_order =  Module_With_Middleware__Middleware::$log;
-		$this->assertEquals( 'set_di_container', $event_order[0] );
-		$this->assertEquals( 'set_hook_loader', $event_order[1] );
-		$this->assertEquals( 'setup', $event_order[2] );
-		$this->assertEquals( 'process', $event_order[3] );
-		$this->assertEquals( 'tear_down', $event_order[4] );
-
-		// Check all actions have been run.
-		$this->assertInstanceOf(DI_Container::class, Module_With_Middleware__Middleware::$actions['set_di_container'] );
-		$this->assertInstanceOf(Hook_Loader::class, Module_With_Middleware__Middleware::$actions['set_hook_loader'] );
+		$this->assertEquals( 'setup', $event_order[0] );
+		$this->assertEquals( 'process', $event_order[1] );
+		$this->assertEquals( 'tear_down', $event_order[2] );
 
 	}
 
@@ -146,13 +140,13 @@ class Test_Use_Modules extends WP_UnitTestCase {
 		$container      = PinkCrab_Dice::withDice( new \Dice\Dice() );
 		$module_manager = new Module_Manager(
 			$container,
-			new Hook_Loader(),
 			new Registration_Service( $container )
 		);
 
 		$this->expectException( Module_Manager_Exception::class );
 		$this->expectExceptionCode( 20 );
 		$module_manager->push_module( Sample_Class::class );
+		$module_manager->register_modules();
 	}
 
 	/** @testdox Attempting to use a module which has an invalid Registration_Middleware class, should result in a Module_Manager_Exception being thrown with code 22 */
@@ -160,7 +154,6 @@ class Test_Use_Modules extends WP_UnitTestCase {
 		$container      = PinkCrab_Dice::withDice( new \Dice\Dice() );
 		$module_manager = new Module_Manager(
 			$container,
-			new Hook_Loader(),
 			new Registration_Service( $container )
 		);
 
@@ -168,5 +161,6 @@ class Test_Use_Modules extends WP_UnitTestCase {
 		$this->expectExceptionCode( 22 );
 		
 		$module_manager->push_module( With_Invalid_Class_Middleware::class );
+		$module_manager->register_modules();
 	}
 }

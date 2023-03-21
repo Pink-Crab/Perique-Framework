@@ -27,13 +27,13 @@ declare(strict_types=1);
 namespace PinkCrab\Perique\Services\Registration\Modules;
 
 use PinkCrab\Perique\Interfaces\Hookable;
+use PinkCrab\Perique\Interfaces\Inject_Hook_Loader;
 use PinkCrab\Perique\Interfaces\Registration_Middleware;
 use PinkCrab\Perique\Services\Container_Aware_Traits\Inject_Hook_Loader_Aware;
-use PinkCrab\Perique\Services\Container_Aware_Traits\Inject_DI_Container_Aware;
 
-class Hookable_Middleware implements Registration_Middleware {
+class Hookable_Middleware implements Inject_Hook_Loader, Registration_Middleware {
 
-	use Inject_Hook_Loader_Aware, Inject_DI_Container_Aware;
+	use Inject_Hook_Loader_Aware;
 
 	/**
 	 * Process the passed class

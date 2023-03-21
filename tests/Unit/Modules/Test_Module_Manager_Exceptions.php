@@ -43,11 +43,11 @@ class Test_Module_Manager_Exceptions extends WP_UnitTestCase {
 
 		$module_manager = new Module_Manager(
 			$this->createMock( PinkCrab_Dice::class ),
-			$this->createMock( Hook_Loader::class ),
 			$this->createMock( Registration_Service::class )
 		);
 
 		$module_manager->push_module( 'stdClass' );
+		$module_manager->register_modules();
 	}
 
 	/** @testdox When a module is create by the container, if it doesn't create an object an Module_Manager_Exception should be thrown */
@@ -65,10 +65,10 @@ class Test_Module_Manager_Exceptions extends WP_UnitTestCase {
 
 		$module_manager = new Module_Manager(
 			$container,
-			$this->createMock( Hook_Loader::class ),
 			$this->createMock( Registration_Service::class )
 		);
 		$module_manager->push_module( Module_Without_Middleware__Module::class );
+		$module_manager->register_modules();
 	}
 
 	/** @testdox When a module is create by the container, if it create an object that is not an isntance of Module a Module_Manager_Exception should be thrown */
@@ -86,10 +86,10 @@ class Test_Module_Manager_Exceptions extends WP_UnitTestCase {
 
 		$module_manager = new Module_Manager(
 			$container,
-			$this->createMock( Hook_Loader::class ),
 			$this->createMock( Registration_Service::class )
 		);
 		$module_manager->push_module( Module_Without_Middleware__Module::class );
+		$module_manager->register_modules();
 	}
 
 	/** @testdox It the created middleware, results in a class which is not a class which implements Registration_Middleware and exception will be thrown. */
@@ -121,10 +121,10 @@ class Test_Module_Manager_Exceptions extends WP_UnitTestCase {
 
 		$module_manager = new Module_Manager(
 			$container,
-			$this->createMock( Hook_Loader::class ),
 			$this->createMock( Registration_Service::class )
 		);
 		$module_manager->push_module( Module_With_Middleware__Module::class );
+		$module_manager->register_modules();
 	}
 
 	/** @testdox If a module returns a string which is not a valid class string, will result in an exception being thrown. */
@@ -137,10 +137,10 @@ class Test_Module_Manager_Exceptions extends WP_UnitTestCase {
 		// Create a mock of the container, and force it to return a stdClass.
 		$module_manager = new Module_Manager(
 			new PinkCrab_Dice( new Dice() ),
-			$this->createMock( Hook_Loader::class ),
 			$this->createMock( Registration_Service::class )
 		);
 		$module_manager->push_module( With_None_Class_Middleware::class );
+		$module_manager->register_modules();
 	}
 
 	/** @testdox If a module returns a string which is not a valid class instance, will result in an exception being thrown. */
@@ -153,9 +153,9 @@ class Test_Module_Manager_Exceptions extends WP_UnitTestCase {
 		// Create a mock of the container, and force it to return a stdClass.
 		$module_manager = new Module_Manager(
 			new PinkCrab_Dice( new Dice() ),
-			$this->createMock( Hook_Loader::class ),
 			$this->createMock( Registration_Service::class )
 		);
 		$module_manager->push_module( With_Invalid_Class_Middleware::class );
+		$module_manager->register_modules();
 	}
 }

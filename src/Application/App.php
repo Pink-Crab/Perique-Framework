@@ -321,16 +321,6 @@ final class App {
 			)
 		);
 
-		// Allow the passing of DI Container via interface and method injection.
-		self::$container->addRule(
-			Inject_DI_Container::class,
-			array(
-				'call' => array(
-					array( 'set_di_container', array( self::$container ) ),
-				),
-			)
-		);
-
 		// Allow the passing of Hook Loader via interface and method injection.
 		self::$container->addRule(
 			Inject_Hook_Loader::class,
@@ -350,6 +340,19 @@ final class App {
 				),
 			)
 		);
+
+		// Allow the passing of DI Container via interface and method injection.
+		self::$container->addRule(
+			Inject_DI_Container::class,
+			array(
+				'call' => array(
+					array( 'set_di_container', array( self::$container ) ),
+				),
+			)
+		);
+
+		// Build all modules and middleware.
+		$this->module_manager->register_modules();
 
 		/** @hook{string, App_Config, Loader, DI_Container} */
 		do_action( Hooks::APP_INIT_PRE_BOOT, self::$app_config, $this->loader, self::$container ); // phpcs:disable WordPress.NamingConventions.ValidHookName.*

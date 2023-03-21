@@ -41,7 +41,6 @@ class Test_Module_Manager extends WP_UnitTestCase {
 
 		$module_manager = new Module_Manager(
 			$container,
-			$loader,
 			$this->createMock( Registration_Service::class )
 		);
 
@@ -56,6 +55,7 @@ class Test_Module_Manager extends WP_UnitTestCase {
 				return $module;
 			}
 		);
+		$module_manager->register_modules();
 
 		$this->assertInstanceOf( Module_With_Middleware__Module::class, $module_instance );
 		$this->assertInstanceOf( Module_With_Middleware__Middleware::class, $middleware_instance );
@@ -68,7 +68,6 @@ class Test_Module_Manager extends WP_UnitTestCase {
 
 		$module_manager = new Module_Manager(
 			$container,
-			$loader,
 			$this->createMock( Registration_Service::class )
 		);
 
@@ -83,6 +82,7 @@ class Test_Module_Manager extends WP_UnitTestCase {
 				return $module;
 			}
 		);
+		$module_manager->register_modules();
 
 		$this->assertNull( $middleware_instance );
 		$this->assertInstanceOf( Module_Without_Middleware__Module::class, $module_instance );
@@ -108,11 +108,12 @@ class Test_Module_Manager extends WP_UnitTestCase {
 
 		$module_manager = new Module_Manager( 
             $container, 
-            $loader,
 			$registration_service );
 
 		$module_manager->register_class( 'test' );
         $module_manager->register_class( 'test2' );
+
+		$module_manager->process_middleware();
 
         $this->assertCount( 2, $classes_passed );
         $this->assertContains( 'test', $classes_passed );
@@ -129,7 +130,6 @@ class Test_Module_Manager extends WP_UnitTestCase {
 
         $module_manager = new Module_Manager( 
             $container, 
-            $loader,
             $registration_service );
 
         $module_manager->register_class( 'test' );
