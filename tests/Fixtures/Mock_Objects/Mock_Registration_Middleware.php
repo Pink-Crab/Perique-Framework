@@ -32,9 +32,10 @@ class Mock_Registration_Middleware implements Registration_Middleware {
 		$this->message = $message;
 	}
 
-	public function process( $class ) {
+	public function process( object $class ): object {
 		$this->message_log[] = $this->message ?? \get_class( $class );
 		echo $this->message ?? \get_class( $class );
+		return $class;
 
 	}
 

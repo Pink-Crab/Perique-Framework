@@ -382,7 +382,7 @@ final class App {
 	 * @return object|null
 	 * @throws App_Initialization_Exception Code 4
 	 */
-	public static function make( string $class, array $args = array() ) {
+	public static function make( string $class, array $args = array() ): ?object {
 		if ( self::$booted === false ) {
 			throw App_Initialization_Exception::app_not_initialized( DI_Container::class );
 		}
