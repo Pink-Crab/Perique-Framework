@@ -63,7 +63,7 @@ trait App_Helper_Trait {
 		$loader       = new Hook_Loader();
 
 		$app->set_container( $container );
-		$app->set_module_manager( new Module_Manager( $container, $loader, $registration ) );
+		$app->set_module_manager( new Module_Manager( $container, $registration ) );
 		$app->set_loader( $loader );
 		$app->set_app_config( include FIXTURES_PATH . '/Application/settings.php' );
 

@@ -30,6 +30,7 @@ use PinkCrab\Loader\Hook_Loader;
 use PinkCrab\Perique\Application\Hooks;
 use PinkCrab\Perique\Interfaces\Module;
 use PinkCrab\Perique\Interfaces\DI_Container;
+use PinkCrab\Perique\Interfaces\Inject_Hook_Loader;
 use PinkCrab\Perique\Interfaces\Registration_Middleware;
 use PinkCrab\Perique\Exceptions\Module_Manager_Exception;
 use PinkCrab\Perique\Services\Registration\Registration_Service;
@@ -37,18 +38,22 @@ use PinkCrab\Perique\Services\Registration\Registration_Service;
 final class Module_Manager {
 
 	/**
+	 * Modules
+	 *
+	 * @since 2.0.0
+	 * @var array{
+	 *  0:class-string<Module>,
+	 *  1:?callable(Module, ?Registration_Middleware):Module
+	 * }[]
+	 */
+	protected array $modules = array();
+
+	/**
 	 * Access to the DI Container
 	 *
 	 * @var DI_Container
 	 */
 	private DI_Container $di_container;
-
-	/**
-	 * Access to the hook loader
-	 *
-	 * @var Hook_Loader
-	 */
-	private Hook_Loader $loader;
 
 	/**
 	 * Manages all the Registration Middleware.
@@ -62,9 +67,8 @@ final class Module_Manager {
 	 *
 	 * @param DI_Container $di_container
 	 */
-	public function __construct( DI_Container $di_container, Hook_Loader $loader, Registration_Service $registration_service ) {
+	public function __construct( DI_Container $di_container, Registration_Service $registration_service ) {
 		$this->di_container = $di_container;
-		$this->loader       = $loader;
 
 		// Create the registration service.
 		$this->registration_service = $registration_service;
@@ -76,29 +80,10 @@ final class Module_Manager {
 	 * @template Module_Instance of Module
 	 * @param class-string<Module_Instance> $module_name
 	 * @param ?callable(Module, ?Registration_Middleware):Module $config
-	 * @throws Module_Manager_Exception If invalid module class name provided (Code 20)
-	 * @throws Module_Manager_Exception If module does not implement Module (Code 21)
-	 * @throws Module_Manager_Exception If module does not implement Registration_Middleware (Code 22)
+	 * @return void
 	 */
 	public function push_module( string $module_name, ?callable $config = null ): void {
-		// Create the instance.
-		$module = $this->create_module( $module_name );
-
-		// Create the middleware.
-		$middleware = $this->create_middleware( $module );
-
-		// If a config is provided, call it.
-		if ( ! is_null( $config ) ) {
-			$module = $config( $module, $middleware );
-		}
-
-		// Add to the modules and register all hooks.
-		$this->register_hooks( $module );
-
-		// Add to the middleware, if provided.
-		if ( ! is_null( $middleware ) ) {
-			$this->registration_service->push_middleware( $middleware );
-		}
+		$this->modules[] = array( $module_name, $config );
 	}
 
 	/**
@@ -108,6 +93,39 @@ final class Module_Manager {
 	 */
 	public function register_class( string $class ): void {
 		$this->registration_service->push_class( $class );
+	}
+
+	/**
+	 * Creates and registers all modules.
+	 *
+	 * @throws Module_Manager_Exception If invalid module class name provided (Code 20)
+	 * @throws Module_Manager_Exception If module does not implement Module (Code 21)
+	 * @throws Module_Manager_Exception If module does not implement Registration_Middleware (Code 22)
+	 */
+	public function register_modules(): void {
+		// Allow for additional apps to hook into the Module Manager.
+		do_action( Hooks::MODULE_MANAGER, $this );
+
+		foreach ( $this->modules as list($module_name, $config) ) {
+			// Create the instance.
+			$module = $this->create_module( $module_name );
+
+			// Create the middleware.
+			$middleware = $this->create_middleware( $module );
+
+			// If a config is provided, call it.
+			if ( ! is_null( $config ) ) {
+				$module = $config( $module, $middleware );
+			}
+
+			// Add to the modules and register all hooks.
+			$this->register_hooks( $module );
+
+			// Add to the middleware, if provided.
+			if ( ! is_null( $middleware ) ) {
+				$this->registration_service->push_middleware( $middleware );
+			}
+		}
 	}
 
 	/**
@@ -158,10 +176,6 @@ final class Module_Manager {
 			throw Module_Manager_Exception::failed_to_create_registration_middleware( $middleware );
 		}
 
-		// Populate both DI and Hook Loader
-		$middleware->set_di_container( $this->di_container );
-		$middleware->set_hook_loader( $this->loader );
-
 		return $middleware;
 	}
 
@@ -184,9 +198,10 @@ final class Module_Manager {
 	 */
 	public function process_middleware(): void {
 
-		// Allow for additional apps to hook into the Module Manager.
-		do_action( Hooks::MODULE_MANAGER, $this );
+		// Register all modules.
+		// $this->register_modules();
 
+		// Process all middleware.
 		$this->registration_service->process();
 	}
 

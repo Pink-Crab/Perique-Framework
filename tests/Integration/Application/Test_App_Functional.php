@@ -190,8 +190,8 @@ class Test_App_Functional extends WP_UnitTestCase {
 		$this->expectException( Module_Manager_Exception::class );
 		$this->expectExceptionCode( 20 );
 		$app = $this->pre_populated_app_provider()
-			->boot()
-			->module( Sample_Class::class );
+			->module( Sample_Class::class )->boot();
+		do_action('init');
 	}
 
 	/** @testdox When creating a new App instance using the App Factory, the base path should be reflected in App Configs default values. */

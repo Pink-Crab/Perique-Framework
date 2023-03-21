@@ -157,7 +157,7 @@ class App_Factory {
 		$this->app->set_loader( $loader );
 
 		// Set registration middleware
-		$module_manager = new Module_Manager( $container, $loader, new Registration_Service( $container ) );
+		$module_manager = new Module_Manager( $container, new Registration_Service( $container ) );
 		$module_manager->push_module( Hookable_Module::class );
 
 		// Push any modules that have been added before the module manager was set.

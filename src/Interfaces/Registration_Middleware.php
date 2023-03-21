@@ -31,20 +31,6 @@ use PinkCrab\Perique\Interfaces\DI_Container;
 interface Registration_Middleware {
 
 	/**
-	 * Set the hook loader.
-	 *
-	 * @param Hook_Loader $hook_loader
-	 */
-	public function set_hook_loader( Hook_Loader $hook_loader ): void;
-
-	/**
-	 * Set the DI Container
-	 *
-	 * @param DI_Container $container
-	 */
-	public function set_di_container( DI_Container $container ): void;
-
-	/**
 	 * Process the current class
 	 *
 	 * @param object $class
