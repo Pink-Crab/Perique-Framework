@@ -56,7 +56,7 @@ class Module_With_Middleware__Middleware implements Registration_Middleware {
 	}
 
 	/** @inheritDoc */
-	public function process( $class ) {
+	public function process( object $class ): object {
 		self::$log[] = __FUNCTION__;
 
 		self::$processed[] = get_class( $class );

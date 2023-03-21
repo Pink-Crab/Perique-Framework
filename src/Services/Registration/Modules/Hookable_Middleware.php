@@ -41,7 +41,7 @@ class Hookable_Middleware implements Inject_Hook_Loader, Registration_Middleware
 	 * @param object $class
 	 * @return object
 	 */
-	public function process( $class ) {
+	public function process( object $class ): object {
 		if ( in_array( Hookable::class, class_implements( $class ) ?: array(), true ) ) {
 			/** @phpstan-ignore-next-line class must implement register for interface*/
 			$class->register( $this->loader );

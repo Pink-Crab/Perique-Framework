@@ -53,5 +53,5 @@ interface DI_Container extends ContainerInterface {
 	 * @param array<mixed> $args
 	 * @return object|null
 	 */
-	public function create( string $name, array $args = array() );
+	public function create( string $name, array $args = array() ): ?object;
 }
