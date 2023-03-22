@@ -40,14 +40,14 @@ class Component_Compiler {
 	 *
 	 * @var string
 	 */
-	private $component_base_path;
+	private string $component_base_path;
 
 	/**
 	 * All component aliases..
 	 *
 	 * @var array<string, string>
 	 */
-	private $component_aliases = array();
+	private array $component_aliases = array();
 
 	/** @param array<string, string> $component_aliases */
 	public function __construct( string $component_base_path = '', array $component_aliases = array() ) {

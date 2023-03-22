@@ -38,14 +38,14 @@ final class PHP_Engine implements Renderable {
 	 *
 	 * @var string
 	 */
-	private $base_view_path;
+	private string $base_view_path;
 
 	/**
 	 * Access to the component compiler.
 	 *
 	 * @var Component_Compiler
 	 */
-	private $component_compiler;
+	private ?Component_Compiler $component_compiler = null;
 
 	/**
 	 * Creates an instance of the PHP_Engine
@@ -92,7 +92,7 @@ final class PHP_Engine implements Renderable {
 	public function component( Component $component, bool $print = true ) {
 
 		// Throw exception of no compiler passed.
-		if ( ! is_a( $this->component_compiler, Component_Compiler::class ) ) {
+		if ( ! is_object( $this->component_compiler ) || ! is_a( $this->component_compiler, Component_Compiler::class ) ) {
 			throw new Exception( 'No component compiler passed to PHP_Engine' );
 		}
 

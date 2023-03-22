@@ -33,7 +33,7 @@ trait Inject_Hook_Loader_Aware {
 	 *
 	 * @var Hook_Loader
 	 */
-	protected $loader;
+	protected Hook_Loader $loader;
 
 	/**
 	 * Accepts the DI Container as a method injectable dependency.

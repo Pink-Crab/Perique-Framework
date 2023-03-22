@@ -33,7 +33,7 @@ trait Inject_App_Config_Aware {
 	 *
 	 * @var App_Config
 	 */
-	protected $app_config;
+	protected App_Config $app_config;
 
 	/**
 	 * Accepts the App Config as a method injectable dependency.
