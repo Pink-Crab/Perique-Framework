@@ -18,6 +18,7 @@ use PinkCrab\Perique\Tests\Application\App_Helper_Trait;
 use PinkCrab\Perique\Tests\Fixtures\DI\Inject_App_Config_Mock;
 use PinkCrab\Perique\Tests\Fixtures\DI\Inject_Hook_Loader_Mock;
 use PinkCrab\Perique\Tests\Fixtures\DI\Inject_DI_Container_Mock;
+use PinkCrab\Perique\Tests\Fixtures\DI\Inject_Loader_And_Config_And_Container_Mock;
 
 /**
  * @group integration
@@ -45,7 +46,7 @@ class Test_Di_Container_Injectables extends WP_UnitTestCase {
 		$this->assertTrue( $mock->has_container() );
 
 		// Check the container is the same as the app.
-		$this->assertSame( $app->__debugInfo()[ 'container' ], $mock->get_container() );
+		$this->assertSame( $app->__debugInfo()['container'], $mock->get_container() );
 	}
 
 	/** @testdox It should be possible to pass the Hook Loader to a dependency using an interface. */
@@ -71,6 +72,28 @@ class Test_Di_Container_Injectables extends WP_UnitTestCase {
 		$this->assertTrue( $mock->has_app_config() );
 
 		// Check the config is the same as the app.
-		$this->assertSame( $app->__debugInfo()[ 'app_config' ], $mock->get_app_config() );
+		$this->assertSame( $app->__debugInfo()['app_config'], $mock->get_app_config() );
+	}
+
+	/** @testdox It should be possible to inject both Hook_Loader and DI_Container via the container */
+	public function test_inject_hook_loader_and_di_container(): void {
+		// Populate the APP
+		$app = $this->pre_populated_app_provider()->boot();
+		do_action( 'init' );
+
+		$mock = $app::make( Inject_Loader_And_Config_And_Container_Mock::class );
+
+		// Check hook loader was added
+		$this->assertTrue( $mock->has_loader() );
+		$loader = Objects::get_property( $app, 'loader' );
+		$this->assertSame( $loader, $mock->get_loader() );
+
+		// Check DI was added
+		$this->assertTrue( $mock->has_container() );
+		$this->assertSame( $app->__debugInfo()['container'], $mock->get_container() );
+
+		// Check config was added
+		$this->assertTrue( $mock->has_app_config() );
+		$this->assertSame( $app->__debugInfo()['app_config'], $mock->get_app_config() );
 	}
 }

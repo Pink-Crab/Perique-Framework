@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace PinkCrab\Perique\Tests\Unit\DI;
 
-use DateTime;
 use stdClass;
 use Dice\Dice;
 use WP_UnitTestCase;
@@ -41,7 +40,7 @@ class Test_PinkCrab_Dice extends WP_UnitTestCase {
 	/**
 	 * Rules
 	 *
-	 * Any class which implements Interface_A will use Depenedcy_D
+	 * Any class which implements Interface_A will use Dependency_D
 	 * Any class which extends Abstract_B will use Dependency_C
 	 * Class_H will use Dependency_E to implement Interface_A
 	 *
@@ -62,7 +61,7 @@ class Test_PinkCrab_Dice extends WP_UnitTestCase {
 	);
 
 	/** @testdox It should be possible to use the container in a purely fluent without using NEW */
-	public function test_constuctwith_factory(): void {
+	public function test_construct_with_factory(): void {
 		$pc_dice = PinkCrab_Dice::withDice( new Dice() );
 		$this->assertInstanceOf( PinkCrab_Dice::class, $pc_dice );
 
@@ -97,7 +96,7 @@ class Test_PinkCrab_Dice extends WP_UnitTestCase {
 
 	}
 
-	/** @testdox If attemepting to create a class that doesnt exist and error should be generated and the system abort. */
+	/** @testdox If attempting to create a class that doesn't exist and error should be generated and the system abort. */
 	public function test_exception_thrown_if_none_existing_class(): void {
 		$this->expectException( ReflectionException::class );
 		$pc_dice = PinkCrab_Dice::withDice( new Dice() );
@@ -107,8 +106,8 @@ class Test_PinkCrab_Dice extends WP_UnitTestCase {
 	/** @testdox It should be possible to add single DI rule to the container */
 	public function test_test_can_add_rule(): void {
 		$pc_dice = PinkCrab_Dice::withDice( new Dice() );
-		$result  = $pc_dice->addRule( stdClass::class, array( 'instanceOf' => DateTime::class ) );
-		$this->assertInstanceOf( DateTime::class, $result->create( stdClass::class ) );
+		$result  = $pc_dice->addRule( stdClass::class, array( 'instanceOf' => Sample_Class::class ) );
+		$this->assertInstanceOf( Sample_Class::class, $result->create( stdClass::class ) );
 	}
 
 	/** @testdox It should be possible to check if a class either has a rule defined or exists as a valid class*/
@@ -140,7 +139,7 @@ class Test_PinkCrab_Dice extends WP_UnitTestCase {
 	}
 
 	/** @testdox It should be possible to create objects using only the rules defined and without the option of passing params. It should also be PSR complient. */
-	public function test_can_create_purely_using_autowiring(): void {
+	public function test_can_create_purely_using_auto_wiring(): void {
 		$pc_dice = PinkCrab_Dice::withDice( new Dice() );
 		$this->assertInstanceOf( Sample_Class::class, $pc_dice->get( Sample_Class::class ) );
 	}
@@ -176,7 +175,7 @@ class Test_PinkCrab_Dice extends WP_UnitTestCase {
 		$this->assertEquals( 'custom/path/for/component', $rule['constructParams'][1]['Class'] );
 	}
 
-		/** @testdox It should be possible to access any defined rules using the getRule() method */
+	/** @testdox It should be possible to access any defined rules using the getRule() method */
 	public function test_get_rule(): void {
 		$pc_dice = PinkCrab_Dice::withDice( new Dice() );
 		$pc_dice->addRule(
