@@ -1,9 +1,8 @@
 <?php
 
 declare(strict_types=1);
-
 /**
- * Trait to give access to DI Container for injectable dependencies.
+ * Helper class for working with objects
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -19,30 +18,22 @@ declare(strict_types=1);
  *
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
- * @package PinkCrab\Perique\Container_Aware_Traits
+ * @package PinkCrab\Perique
+ * @since 0.4.0
  */
 
-namespace PinkCrab\Perique\Services\Container_Aware_Traits;
+namespace PinkCrab\Perique\Utils;
 
-use PinkCrab\Perique\Interfaces\DI_Container;
-
-trait Inject_DI_Container_Aware {
+class Object_Helper {
 
 	/**
-	 * Access to the DI Container
+	 * Checks if a value is an object and is_a of the given class.
 	 *
-	 * @var DI_Container
+	 * @param mixed $value
+	 * @param string $class
+	 * @return bool
 	 */
-	protected DI_Container $di_container;
-
-	/**
-	 * Accepts the DI Container as a method injectable dependency.
-	 *
-	 * @param DI_Container $container
-	 * @return void
-	 */
-	public function set_di_container( DI_Container $container ): void {
-		$this->di_container = $container;
+	public static function is_a( $value, string $class ): bool {
+		return is_object( $value ) && is_a( $value, $class );
 	}
 }
-

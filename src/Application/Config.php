@@ -24,7 +24,7 @@ class Config {
 	 *
 	 * @var App_Config|null
 	 */
-	protected static $config_cache;
+	protected static ?App_Config $config_cache = null;
 
 	/**
 	 * Calls the static method from the config.

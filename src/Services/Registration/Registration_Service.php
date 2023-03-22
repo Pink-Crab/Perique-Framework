@@ -37,21 +37,21 @@ class Registration_Service {
 	 *
 	 * @var array<Registration_Middleware>
 	 */
-	protected $middleware = array();
+	protected array $middleware = array();
 
 	/**
 	 * Holds all classes that are to be registered.
 	 *
 	 * @var array<string>
 	 */
-	protected $class_list = array();
+	protected array $class_list = array();
 
 	/**
 	 * Access to the DI Container
 	 *
 	 * @var DI_Container
 	 */
-	protected $di_container;
+	protected DI_Container $di_container;
 
 	public function __construct( DI_Container $di_container ) {
 		$this->di_container = $di_container;

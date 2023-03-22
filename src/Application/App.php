@@ -28,6 +28,7 @@ use PinkCrab\Loader\Hook_Loader;
 use PinkCrab\Perique\Application\Hooks;
 use PinkCrab\Perique\Interfaces\Module;
 use PinkCrab\Perique\Services\View\View;
+use PinkCrab\Perique\Utils\Object_Helper;
 use PinkCrab\Perique\Application\App_Config;
 use PinkCrab\Perique\Interfaces\DI_Container;
 use PinkCrab\Perique\Application\App_Validation;
@@ -47,35 +48,35 @@ final class App {
 	 *
 	 * @var bool
 	 */
-	private static $booted = false;
+	private static bool $booted = false;
 
 	/**
 	 * Dependency Injection Container
 	 *
-	 * @var DI_Container
+	 * @var DI_Container|null
 	 */
-	private static $container;
+	private static ?DI_Container $container = null;
 
 	/**
 	 * The Apps Config
 	 *
-	 * @var App_Config
+	 * @var App_Config|null
 	 */
-	private static $app_config;
+	private static ?App_Config $app_config = null;
 
 	/**
 	 * Handles all modules.
 	 *
-	 * @var Module_Manager
+	 * @var Module_Manager|null
 	 */
-	private $module_manager;
+	private ?Module_Manager $module_manager = null;
 
 	/**
 	 * Hook Loader
 	 *
 	 * @var Hook_Loader|null
 	 */
-	private $loader;
+	private ?Hook_Loader $loader = null;
 
 	/**
 	 * App Base path.
@@ -300,8 +301,13 @@ final class App {
 	 */
 	private function finalise(): self {
 
+		// As we have passed validation
+		/**
+		 * @var DI_Container self::$container
+		 */
+
 		// Bind self to container.
-		self::$container->addRule(
+		self::$container->addRule( // @phpstan-ignore-line, already verified if not null
 			'*',
 			array(
 				'substitutions' => array(
@@ -312,17 +318,18 @@ final class App {
 			)
 		);
 
-		self::$container->addRule(
+		self::$container->addRule( // @phpstan-ignore-line, already verified if not null
 			App_Config::class,
 			array(
 				'constructParams' => array(
+					// @phpstan-ignore-next-line, already verified if not null
 					self::$app_config->export_settings(),
 				),
 			)
 		);
 
 		// Allow the passing of Hook Loader via interface and method injection.
-		self::$container->addRule(
+		self::$container->addRule( // @phpstan-ignore-line, already verified if not null
 			Inject_Hook_Loader::class,
 			array(
 				'call' => array(
@@ -332,7 +339,7 @@ final class App {
 		);
 
 		//Allow the passing of App Config via interface and method injection.
-		self::$container->addRule(
+		self::$container->addRule( // @phpstan-ignore-line, already verified if not null
 			Inject_App_Config::class,
 			array(
 				'call' => array(
@@ -342,7 +349,7 @@ final class App {
 		);
 
 		// Allow the passing of DI Container via interface and method injection.
-		self::$container->addRule(
+		self::$container->addRule( // @phpstan-ignore-line, already verified if not null
 			Inject_DI_Container::class,
 			array(
 				'call' => array(
@@ -352,7 +359,8 @@ final class App {
 		);
 
 		// Build all modules and middleware.
-		$this->module_manager->register_modules();
+
+		$this->module_manager->register_modules(); // @phpstan-ignore-line, already verified if not null
 
 		/** @hook{string, App_Config, Loader, DI_Container} */
 		do_action( Hooks::APP_INIT_PRE_BOOT, self::$app_config, $this->loader, self::$container ); // phpcs:disable WordPress.NamingConventions.ValidHookName.*
@@ -362,7 +370,7 @@ final class App {
 			'init',
 			function () {
 				do_action( Hooks::APP_INIT_PRE_REGISTRATION, self::$app_config, $this->loader, self::$container );
-				$this->module_manager->process_middleware();
+				$this->module_manager->process_middleware(); // @phpstan-ignore-line, already verified if not null
 				do_action( Hooks::APP_INIT_POST_REGISTRATION, self::$app_config, $this->loader, self::$container );
 				$this->loader->register_hooks(); // @phpstan-ignore-line, if loader is not defined, exception will be thrown above
 			},
@@ -386,7 +394,7 @@ final class App {
 		if ( self::$booted === false ) {
 			throw App_Initialization_Exception::app_not_initialized( DI_Container::class );
 		}
-		return self::$container->create( $class, $args );
+		return self::$container->create( $class, $args ); // @phpstan-ignore-line, already verified if not null
 	}
 
 	/**
@@ -415,14 +423,14 @@ final class App {
 			throw App_Initialization_Exception::app_not_initialized( View::class );
 		}
 		/** @var ?View */
-		return self::$container->create( View::class );
+		return self::$container->create( View::class ); // @phpstan-ignore-line, already verified if not null
 	}
 
 	/** @return array{
-	 *  container:DI_Container,
-	 *  app_config:App_Config,
+	 *  container:?DI_Container,
+	 *  app_config:?App_Config,
 	 *  booted:bool,
-	 *  module_manager:Module_Manager,
+	 *  module_manager:?Module_Manager,
 	 *  base_path:string,
 	 *  view_path:?string
 	 * } */
@@ -443,7 +451,7 @@ final class App {
 	 * @return bool
 	 */
 	public function has_app_config(): bool {
-		return is_a( self::$app_config, App_Config::class );
+		return Object_Helper::is_a( self::$app_config, App_Config::class );
 	}
 
 	/**
