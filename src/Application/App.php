@@ -359,7 +359,6 @@ final class App {
 		);
 
 		// Build all modules and middleware.
-
 		$this->module_manager->register_modules(); // @phpstan-ignore-line, already verified if not null
 
 		/** @hook{string, App_Config, Loader, DI_Container} */
