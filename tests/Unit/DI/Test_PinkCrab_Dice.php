@@ -107,8 +107,8 @@ class Test_PinkCrab_Dice extends WP_UnitTestCase {
 	/** @testdox It should be possible to add single DI rule to the container */
 	public function test_test_can_add_rule(): void {
 		$pc_dice = PinkCrab_Dice::withDice( new Dice() );
-		$result  = $pc_dice->addRule( stdClass::class, array( 'instanceOf' => DateTime::class ) );
-		$this->assertInstanceOf( DateTime::class, $result->create( stdClass::class ) );
+		$result  = $pc_dice->addRule( stdClass::class, array( 'instanceOf' => Sample_Class::class ) );
+		$this->assertInstanceOf( Sample_Class::class, $result->create( stdClass::class ) );
 	}
 
 	/** @testdox It should be possible to check if a class either has a rule defined or exists as a valid class*/
