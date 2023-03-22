@@ -28,6 +28,7 @@ use PinkCrab\Loader\Hook_Loader;
 use PinkCrab\Perique\Application\Hooks;
 use PinkCrab\Perique\Interfaces\Module;
 use PinkCrab\Perique\Services\View\View;
+use PinkCrab\Perique\Utils\Object_Helper;
 use PinkCrab\Perique\Application\App_Config;
 use PinkCrab\Perique\Interfaces\DI_Container;
 use PinkCrab\Perique\Application\App_Validation;
@@ -450,7 +451,7 @@ final class App {
 	 * @return bool
 	 */
 	public function has_app_config(): bool {
-		return is_object( self::$app_config ) && is_a( self::$app_config, App_Config::class );
+		return Object_Helper::is_a( self::$app_config, App_Config::class );
 	}
 
 	/**

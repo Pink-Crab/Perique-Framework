@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 /**
- * Tests the default PHP Engine for the view/renderable interface.
+ * Unit tests for the App_Config_Path_Helper class.
  *
- * @since 1.2.0
+ * @since 2.0.0
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
  * @package PinkCrab\Perique
@@ -13,18 +13,7 @@ declare(strict_types=1);
 
 namespace PinkCrab\Perique\Tests\Unit\Utils;
 
-use PinkCrab\Perique\Application\Hooks;
-use PinkCrab\Perique\Services\View\View;
-use PinkCrab\Perique\Services\View\PHP_Engine;
 use PinkCrab\Perique\Utils\App_Config_Path_Helper;
-use PinkCrab\Perique\Services\View\Component\Component_Compiler;
-use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\View_Components\P;
-use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\View_Components\Span;
-use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\View_Components\Input;
-use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\View_Components\Dot_Notation;
-use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\View_Components\P_Tag_Component;
-use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\View_Components\Input_Attribute_Path;
-use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\View_Components\Input_Template_Method;
 
 /**
  * @group utils

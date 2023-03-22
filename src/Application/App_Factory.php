@@ -120,7 +120,7 @@ class App_Factory {
 	 * THIS WAS REPLACED IN 1.4.0
 	 * ASSUMES THE VIEW BASE PATH IS THE SAME AS THE BASE PATH
 	 * THIS IS KEPT FOR BACKWARDS COMPATIBILITY
-	 *
+	 * @infection-ignore-all
 	 * @return self
 	 */
 	public function with_wp_dice( bool $include_default_rules = false ): self {

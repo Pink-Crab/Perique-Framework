@@ -25,6 +25,7 @@ declare(strict_types=1);
 namespace PinkCrab\Perique\Services\View;
 
 use Exception;
+use PinkCrab\Perique\Utils\Object_Helper;
 use PinkCrab\Perique\Interfaces\Renderable;
 use PinkCrab\Perique\Services\View\View_Model;
 use PinkCrab\Perique\Services\View\Component\Component;
@@ -92,12 +93,12 @@ final class PHP_Engine implements Renderable {
 	public function component( Component $component, bool $print = true ) {
 
 		// Throw exception of no compiler passed.
-		if ( ! is_object( $this->component_compiler ) || ! is_a( $this->component_compiler, Component_Compiler::class ) ) {
+		if ( ! Object_Helper::is_a( $this->component_compiler, Component_Compiler::class ) ) {
 			throw new Exception( 'No component compiler passed to PHP_Engine' );
 		}
 
 		// Compile the component.
-		$compiled = $this->component_compiler->compile( $component );
+		$compiled = $this->component_compiler->compile( $component ); // @phpstan-ignore-line, checked above.
 		$template = $this->maybe_resolve_dot_notation( $compiled->template() );
 		$view     = sprintf( '%s%s%s.php', $this->base_view_path, \DIRECTORY_SEPARATOR, trim( $template ) );
 		if ( $print ) {
