@@ -30,42 +30,42 @@ final class App_Config {
 	 *
 	 * @var array<string, mixed>
 	 */
-	private $paths = array();
+	private array $paths = array();
 
 	/**
 	 * Holds all the namespaces (rest, cache etc).
 	 *
 	 * @var array<string, mixed>
 	 */
-	private $namespaces = array();
+	private array $namespaces = array();
 
 	/**
 	 * Holds all plugin details.
 	 *
 	 * @var array<string, mixed>
 	 */
-	private $plugin = array();
+	private array $plugin = array();
 
 	/**
 	 * Holds all taxonomy terms.
 	 *
 	 * @var array<string, mixed>
 	 */
-	private $taxonomies = array();
+	private array $taxonomies = array();
 
 	/**
 	 * Holds the CPT slugs and meta keys.
 	 *
 	 * @var array<string, mixed>
 	 */
-	private $post_types = array();
+	private array $post_types = array();
 
 	/**
 	 * Holds an array of table names.
 	 *
 	 * @var array<string, mixed>
 	 */
-	private $db_tables = array();
+	private array $db_tables = array();
 
 	/**
 	 * Holds all custom settings keys.
@@ -73,14 +73,14 @@ final class App_Config {
 	 *
 	 * @var array<string, mixed>
 	 */
-	private $additional = array();
+	private array $additional = array();
 
 	/**
 	 * Holds all the meta keys
 	 *
 	 * @var array{post:array<string,string>,user:array<string,string>,term:array<string,string>}
 	 */
-	private $meta = array(
+	private array $meta = array(
 		self::POST_META => array(),
 		self::USER_META => array(),
 		self::TERM_META => array(),
