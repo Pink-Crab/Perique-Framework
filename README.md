@@ -161,27 +161,27 @@ $base_path  = \dirname( __DIR__, 1 );
 $plugin_dir = \basename( $base_path );
 
 return array(
-	'plugin'     => array(
-		'version' => '1.2.5',
-	),
-	'path'       => array(
-		'assets'         => $base_path . '/custom/assets',
-	),
-	'url'        => array(
-		'assets'         => plugins_url( $plugin_dir ) . '/custom/assets,
-	),
-	'db_table' => array(
-		'subscriptions' => $wpdb->table_prefix . 'some_plugin_subscribers'
-	),
-	'additional' => array(
-		// Custom values go here 
-		'key' => 'value'   // Config::additional('key'); = value
-		'other' => 'value' // $app_config->other = value
-	),
+   'plugin'     => array(
+      'version' => '1.2.5',
+   ),
+   'path'       => array(
+      'assets'         => $base_path . '/custom/assets',
+   ),
+   'url'        => array(
+      'assets'         => plugins_url( $plugin_dir ) . '/custom/assets',
+   ),
+   'db_table' => array(
+      'subscriptions' => 'some_plugin_subscribers'
+   ),
+   'additional' => array(
+      // Custom values go here 
+      'key' => 'value'   // Config::additional('key'); = value
+      'other' => 'value' // $app_config->other = value
+   ),
 );
 ```
 
-> The full set of options can be found in the [docs](https://app.gitbook.com/@glynn-quelch/s/pinkcrab/application/app_config).
+> The full set of options can be found in the [Perique Docs::App_Config](https://perique.info/core/App/app_config).
 
 ## Registration Service ##
 
