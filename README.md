@@ -206,9 +206,9 @@ Included with Perique is a single piece of Registration_Middleware. The `Hookabl
 ```php
 class Some_Controller implements Hookable {
    public function register(Hook_Loader $loader): void{
-      $loader->admin_action('some_action', [$this, 'some_action']);
+      $loader->admin_action('some_action', [$this, 'some_callback']);
    }
-   public function some_action($some_arg): void {...}
+   public function some_callback($some_arg): void {...}
 }
 ```
 
