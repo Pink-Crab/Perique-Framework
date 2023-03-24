@@ -26,9 +26,9 @@ https://perique.info
 
 WordPress is a powerful tool for building a wide range of websites, but due to its age and commitment to backwards compatibility it's often frustration to work with using more modern tools.
 
-Perique allows the creation of plugins, themes and MU libraries for use on more complex websites.
+Perique allows the creation of plugins, MU libraries for use on more complex websites.
 
-The Core only provides access to the Hook_Loader, Registration, DI (DICE Dependency Injection Container), App_Config and basic (native) PHP render engine for view.
+The Core only provides access to the `Hook_Loader`, `Registration`, DI (DICE IOC Container), `App_Config` and basic (native) `PHP_Engine` rendering views.
 
 ## What is Perique? ##
 
@@ -51,37 +51,39 @@ First you will need to create your composer.json and plugin.php file.
      
 /**
  * @wordpress-plugin
- * Plugin Name:     ##PLUGIN NAME##
- * Plugin URI:      ##YOUR URL##
- * Description:     ##YOUR PLUGIN DESC##
- * Version:         ##VERSION##
- * Author:          ##AUTHOR##
- * Author URI:      ##YOUR URL##
+ * Plugin Name:     My Custom Plugin
+ * Plugin URI:      https://my-custom-plugin.com
+ * Description:     This is an example plugin for the PinkCrab Perique Framework
+ * Version:         1.2.0
+ * Author:          Me<me@me.com>
+ * Author URI:      https://my-custom-plugin.com
  * License:         GPL-2.0+
  * License URI:     http://www.gnu.org/licenses/gpl-2.0.txt
- * Text Domain:     ##TEXT DOMAIN##
+ * Text Domain:     custom-plugin
  */
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-// Creates an App loaded with the WP_Dice DI container and basic DI rules
-// Allows for the passing of wpdb and the App's own instance.
-$app = ( new PinkCrab\Perique\Application\App_Factory() )->default_setup( true );
+// Creates an instance of the App_Factory with the current directory as the base path.
+$factory = new PinkCrab\Perique\Application\App_Factory(__DIR__);
+
+// Define the default rules. 
+$factory->default_setup();
 
 // Set rules and configure DI Container
-$app->di_rules(include __DIR__ . '/config/dependencies.php');
+$factory->di_rules(include __DIR__ . '/config/dependencies.php');
 
 // Pass settings for App_Config
-$app->app_config( include __DIR__ . '/config/settings.php' )
+$factory->app_config( include __DIR__ . '/config/settings.php' )
 
 // Pass all class names which should be used during registration
-$app->registration_classes(include __DIR__ . '/config/registration.php' );
+$factory->registration_classes(include __DIR__ . '/config/registration.php' );
 
-// Add custom Registration Middleware (Not usually used!!! OPTIONAL!)
-$app->registration_middleware(new Example_Rest_Route_Registration_Middleware('my_base/route'));
+// Add optional modules.
+$factory->module(Some_Module::class);
 
 // Then just boot the application.
-$app->boot();
+$factory->boot();
 
 ```
 > Previously (pre 1.4.0) `with_wp_dice()` was used to create the App, this is now deprecated, but will remain for a while to account for any legacy code. The main different between `with_wp_dice()` and `default_setup()` is originally a bug existed where view paths by default where the same as the base path, now this is fixed and the default view path is set to the base path + `/views`. (Applies to all versions 1.4 and above)
@@ -89,18 +91,17 @@ $app->boot();
 ### Custom View Path
 If you wish to use a custom view path, you can can call `$app_factory->set_base_view_path('path/to/views')` before calling `default_setup()`.
 
-You can still set this afterwards by redefining the Renderable instance in the DI container.
+You can also define a DI rule which will allow you to set the base path directly to the `PHP_Engine` class.
+
+> Please note by doing this, it will the use `APP_Config::path('views')` or `APP_Config::url('views')` will not match the path you have set.
 
 ```php
 return [
-  '*' => [
-    'substitutions' => [
-      Renderable::class => new PHP_Engine( 'some/custom/path' )
-    ]
-  ],
+   PHP_Engine::class => [
+      'constructParams' => ['custom/view/path'],
+   ],
 ];
 ```
-
 
 ## Config files ##
 
@@ -110,16 +111,13 @@ While you can pass arrays to the container_config(), app_config() and registrati
 
 ### dependencies.php ###
 
-Used to define all of your custom rules for Dice, for more details on how to work with Interfaces and other classes which cant be autowired, see the [full docs ](https://app.gitbook.com/@glynn-quelch/s/pinkcrab/application/dependency-injection)
+Used to define all of your custom rules for Dice, for more details on how to work with Interfaces and other classes which cant be autowired, see the [Perique Docs::Setup](https://perique.info/core/App/setup)
 
 > Using the full class name is essential, so ensure you include all needed use statements.
 
 
 ```php
 // @file config/dependencies.php
-
-<?php
-
 use Some\Namespace\Some_Controller;
 
 return array(
@@ -138,13 +136,8 @@ By default the Hookable middleware is passed, so all classes which implement the
 
 > Using the full class name is essential, so ensure you include all needed use statements.
 
-`
-
 ```php
 // @file config/registration.php
-
-<?php
-
 use Some\Namespace\{Some_Interface, Some_Implementation};
 
 return array(
@@ -167,27 +160,15 @@ Alongside the usual path and url values that are needed frequently. You can also
 $base_path  = \dirname( __DIR__, 1 );
 $plugin_dir = \basename( $base_path );
 
-// Useful WP helpers
-$wp_uploads = \wp_upload_dir();
-global $wpdb;
-
 return array(
 	'plugin'     => array(
 		'version' => '1.2.5',
 	),
 	'path'       => array(
-		'plugin'         => $base_path,
-		'view'           => $base_path . '/views',
-		'assets'         => $base_path . '/assets',
-		'upload_root'    => $wp_uploads['basedir'],
-		'upload_current' => $wp_uploads['path'],
+		'assets'         => $base_path . '/custom/assets',
 	),
 	'url'        => array(
-		'plugin'         => plugins_url( $plugin_dir ),
-		'view'           => plugins_url( $plugin_dir ) . '/views',
-		'assets'         => plugins_url( $plugin_dir ) . '/assets',
-		'upload_root'    => $wp_uploads['baseurl'],
-		'upload_current' => $wp_uploads['url'],
+		'assets'         => plugins_url( $plugin_dir ) . '/custom/assets,
 	),
 	'db_table' => array(
 		'subscriptions' => $wpdb->table_prefix . 'some_plugin_subscribers'
