@@ -205,10 +205,10 @@ Included with Perique is a single piece of Registration_Middleware. The `Hookabl
 
 ```php
 class Some_Controller implements Hookable {
-	public function register(Hook_Loader $loader): void{
-		$loader->admin_action('some_action', [$this, 'some_action']);
-	}
-	public function some_action($some_arg): void {...}
+   public function register(Hook_Loader $loader): void{
+      $loader->admin_action('some_action', [$this, 'some_action']);
+   }
+   public function some_action($some_arg): void {...}
 }
 ```
 
@@ -227,9 +227,9 @@ class With_Dependencies{
    private View $view;
 
    public function __construct(Some_Repository $repo, Some_Service $service, View $view){
-	  $this->repo = $repo;
-	  $this->service = $service;
-	  $this->view = $view;
+      $this->repo = $repo;
+      $this->service = $service;
+      $this->view = $view;
    }
 }
 ```
@@ -248,18 +248,18 @@ class Something{
    protected View $view;
 
    public function __construct(View $view){
-	  $this->view = $view;
+      $this->view = $view;
    }
 
    public function render(): void{
-	  $this->view->render('some/template', ['some' => 'data']);
+      $this->view->render('some/template', ['some' => 'data']);
    }
 }
 
 // As a static call
 class Something{
    public function render(): void{
-	  App::view()->render('some/template', ['some' => 'data']);
+      App::view()->render('some/template', ['some' => 'data']);
    }
 }
 ```
