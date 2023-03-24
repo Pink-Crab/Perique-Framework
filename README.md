@@ -214,6 +214,27 @@ Now when the init hook is called (priority 1), the some_action hook will be adde
 
 Please see the [Perique Docs::Hookable](https://perique.info/core/Registration/Hookable) for more details.
 
+## DI Container
+
+At its heart, most of Perique makes use a custom version of the [Dice](https://r.je/dice.html) DI container. This allows for the easy creation of classes and the injection of dependencies.
+
+```php 
+class With_Dependencies{
+   private Some_Repository $repo;
+   private Some_Service $service;
+   private View $view;
+
+   public function __construct(Some_Repository $repo, Some_Service $service, View $view){
+	  $this->repo = $repo;
+	  $this->service = $service;
+	  $this->view = $view;
+   }
+}
+```
+`Some_Repository` and `Some_Service` can be either concrete classes, interfaces or abstract classes. The container will resolve the correct implementation and inject it into the class. For interfaces and abstract classes, you will need to define a rule in the `dependencies.php` config file.
+
+Please see the [Perique Docs::Dependency Injection](https://perique.info/core/DI) for more details.
+
 ## View
 
 Out of the box Perique comes with a basic PHP view engine. This allows for the rendering of templates, partials, Components and other view related tasks.
@@ -249,6 +270,8 @@ All template paths are relative to the `view_path` defined when creating the app
 | `some/template.php` | `/path/to/views/` | `/path/to/views/some/template.php` |
 | `some.template` | `/path/to/views` | `/path/to/views/some/template.php` |
 | `some.template.php` | `/path/to/views/` | `/path/to/views/some/template.php` |
+
+Please visit the [Perique Docs::View](https://perique.info/core/App/view) for more details.
 
 ## Static Helpers ##
 
@@ -312,158 +335,21 @@ Would equate to
 $view->render('path/to/file',['var' => 'foo']);
 ```
 
-> As with regular paths, the .php can be omitted. However having a file called `php.php` could cause problems if the final .php is not included.
-
-Components and View Models where added in 1.2.* and can be used to render templates in a more modular way. 
-
-```php
-class Input extends Component{
-   public $name;
-   public function __construct( string $name ) {
-      $this->name = $name;
-   }
-
-   /** Template method for the component.*/
-   public function template(): string {
-      return 'custom-components/input-text';
-   }
-}
-```
-
-
-> The path should be relative to the base component path.
-
-```php
-App::view()->component( new Input('name') );
-
-//this is similar to, but you can so more logic with a component internally.
-App::view()->render('path/to/views/custom-components/input-text', ['name' => 'name']);
-```
-
-> While the View and Config helpers are useful at times, its always better to inject them (App_Config::class or View::class).
-
-### Setup Component Compiler Path
-Out of the box, Perique expects components to found in a `components` directory, inside your defined view path. 
-
-You can change this by setting the path in the dependency rules.
-```php
-// @file config/dependencies.php
-return array(
-   ....,
-   Component_Compiler::class => array(
-      'constructParams' => array(
-         'some/new/path', // Path to components
-         array( Input::class => 'custom/path/for/component' ),
-      ),
-   )
-)
-```
-
 ## Hooks ##
 
-We have a number of hooks you can use to extend or modify how the app works. All of our internal hooks have pinkcrab/pf/app/ prefix, but we have a class of constants you can use ```PinkCrab\Perique\Application\Hooks:: APP_INIT_*```
+We have a number of hooks you can use to extend or modify how the app works. All of our internal hooks have pinkcrab/pf/app/ prefix, but we have a class of constants you can use `PinkCrab\Perique\Application\Hooks:: APP_INIT_*`
 
-### Hooks:: APP_INIT_PRE_BOOT
+* `Hooks:: APP_INIT_PRE_BOOT`
+* `Hooks:: APP_INIT_PRE_REGISTRATION`
+* `Hooks:: APP_INIT_POST_REGISTRATION`
+* `Hooks:: APP_INIT_CONFIG_VALUES`
+* `Hooks:: APP_INIT_REGISTRATION_CLASS_LIST`
+* `Hooks:: APP_INIT_SET_DI_RULES`
+* `Hooks::COMPONENT_ALIASES`
+* `Hooks::MODULE_MANAGER`
 
-This is primarily used internally to make last minute changes to how the boot process works. Due to the way this hook is used (called when plugin.php is loaded) it should not be used from outside of your own code, as you can be 100% external code will load first.
+Please see the [Perique Docs::Hooks](https://perique.info/core/App/hooks) for more details.
 
-```php
-<?php
-add_action( 
-   Hooks::APP_INIT_PRE_BOOT, 
-   function( App_Config $app_config, Hook_Loader $loader, DI_Container $container ): void {
-      // do something cool
-   }
-);
-```
-
-### Hooks:: APP_INIT_PRE_REGISTRATION
-
-During the boot processes, all classes passed for registration are processed on init hook, priority 1. The APP_INIT_PRE_REGISTRATION hook fires right before these are added. This allow you to hook in extra functionality to the application. This allows for extending your plugin with other plugins.
-
-```php
-<?php
-add_action( 
-	Hooks::APP_INIT_PRE_REGISTRATION, 
-	function( App_Config $app_config, Hook_Loader $loader, DI_Container $container ): void {
-		$some_controller = $container->create(Some_Other\Namespace\Some_Controller::class);
-		$some_controller->load_hooks($loader);
-	}
-);
-```
-
-### Hooks:: APP_INIT_POST_REGISTRATION
-
-After all the registration process has completed, this hook is fired. This allows you to check all has loaded correctly or if anything is missing. You can then fire notifications or disable functionality based on its results. *The internal loader is fired after this, so you can still use later hooks before initialisation.*
-
-```php
-<?php
-add_action( 
-	Hooks::APP_INIT_POST_REGISTRATION, 
-	function( App_Config $app_config, Hook_Loader $loader, DI_Container $container ): void {
-		if( ! has_action('some_action') ){
-			// Do something due to action not being added.
-		}
-	}
-);
-```
-
-### Hooks:: APP_INIT_CONFIG_VALUES
-
-When the App_Config class is constructed with all values passed from ``config/settings.php ` `` this filter is fired during the initial boot process and should only really be used for internal purposes. Sadly due to the timing in which we use this filter, its not really suited for extending the plugin.
-
-```php
-<?php
-add_filter(Hooks::APP_INIT_CONFIG_VALUES, 
-	function( array $config ): array {
-		$config['additional']['some_key'] = 'some value';
-		return $config;
-	}
-);
-```
-
-### Hooks:: APP_INIT_REGISTRATION_CLASS_LIST
-
-Filters all classes passed to the Registration Service before they are processed. This allows for hooking in from other plugins.
-
-```php
-<?php
-add_filter(Hooks::APP_INIT_REGISTRATION_CLASS_LIST, 
-	function( array $class_list ): array {
-		$class_list[] = 'My\Other\Plugin\Service';
-		$class_list[] = Another_Service::class;
-		return $class_list;
-	}
-);
-```
-
-### Hooks:: APP_INIT_SET_DI_RULES
-
-When the DI rules are set to the container, this filter is applied to all definitions. This allows for hooking in from external plugins and code to make use of the DI_Container. This combined with the other hooks allows for full expansion of your plugin.
-
-```php
-<?php
-add_filter(Hooks::APP_INIT_SET_DI_RULES, 
-	function( array $di_rules ): array {
-		$di_rules['*'][Some_Interface::class] = Some_Class_Implementation::class;
-		return $di_rules;
-	}
-);
-```
-
-### Hooks::COMPONENT_ALIASES
-
-This can be used to add custom Component Path Aliases after the app has been booted. These aliases are recompiled (via this filter) every time a components path is determined. This should be used by modules or plugins to add their own component paths.
-
-```php
-add_filter(
-	Hooks::COMPONENT_ALIASES,
-	function( array $aliases ): array {
-		$aliases[ MyComponent::class ] = 'some/custom/other/path';
-		return $aliases;
-	}
-);
-```
 ## License ##
 
 ### MIT License
