@@ -1,6 +1,6 @@
-![logo](assets/Perique_Card.jpg "Pink Crab")
-
 # PinkCrab **Perique** Plugin Framework #
+
+![logo](assets/Perique_Card.jpg "Pink Crab")
 
 Welcome to the core package of the PinkCrab **Perique** plugin framework, formally known as just the PinkCrab Plugin Framework. 
 
