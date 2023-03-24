@@ -358,6 +358,15 @@ http://www.opensource.org/licenses/mit-license.html
 
 ## Change Log ##
 
+* 2.0.0 -
+   * Dropping of support for PHP 7.2 & 7.3 
+   * Creation of Modules and the removal of adding `Registration_Middleware` to the App at setup.
+   * Custom DICE instance to allow the use of `call` rules with multiple Interfaces
+   * Restriction of setting base and view paths in App_Config
+   * Addition of `wbdb_prefix` to App_Config 
+   * Lots of internal bug fixes and improvements.
+   * More strict typing and return types.
+   * More strict testing thanks to infection (Mutation Testing)
 * 1.4.0 - 
    * Added `set_base_view_path()` and `get_base_view_path()` to App_Factory
    * Changed how the base view path is used during App_Factory, it will now default to base path (passed when creating the factory) + '/views'
