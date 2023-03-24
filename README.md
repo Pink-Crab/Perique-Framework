@@ -1,4 +1,4 @@
-![logo](assets/cards/Perique_Card.jpg "Pink Crab")
+![logo](assets/Perique_Card.jpg "Pink Crab")
 
 # PinkCrab **Perique** Plugin Framework #
 
