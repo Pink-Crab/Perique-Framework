@@ -96,11 +96,11 @@ You can also define a DI rule which will allow you to set the base path directly
 > Please note by doing this, it will the use `APP_Config::path('views')` or `APP_Config::url('views')` will not match the path you have set.
 
 ```php
-return [
-   PHP_Engine::class => [
-      'constructParams' => ['custom/view/path'],
-   ],
-];
+return array(
+   PHP_Engine::class => array(
+      'constructParams' => array( 'custom/view/path' ),
+   ),
+);
 ```
 
 ## Config files ##
@@ -121,10 +121,10 @@ Used to define all of your custom rules for Dice, for more details on how to wor
 use Some\Namespace\Some_Controller;
 
 return array(
-    // Your custom rules
-    Some_Interface::class => array(
-        'instanceOf' => Some_Implementation::class
-    )
+   // Your custom rules
+   Some_Interface::class => array(
+      'instanceOf' => Some_Implementation::class
+   )
 );
 ```
 
@@ -141,9 +141,10 @@ By default the Hookable middleware is passed, so all classes which implement the
 use Some\Namespace\{Some_Interface, Some_Implementation};
 
 return array(
-    Some_Controller::class
+   Some_Controller::class
 );
 ```
+See the [Perique Docs::Registration](https://perique.info/core/Registration/) for more details.
 
 ### settings.php ###
 
@@ -154,7 +155,6 @@ Alongside the usual path and url values that are needed frequently. You can also
 
 ```php
 // @file config/settings.php
-<?php
     
 // Assumes the base directory of the plugin, is 1 level up.
 $base_path  = \dirname( __DIR__, 1 );
@@ -183,7 +183,7 @@ return array(
 
 > The full set of options can be found in the [Perique Docs::App_Config](https://perique.info/core/App/app_config).
 
-## Registration Service ##
+## Modules and the Registration Service ##
 
 At the heart of the application is the registration process. Classes can be stacked up and executed at initialisation. This allows for registering into core WP APIs, triggering remote API calls and anything else which needs to be set up when all of WP core is loaded.
 
@@ -191,7 +191,7 @@ At the heart of the application is the registration process. Classes can be stac
 
 > The `Loader::class` loader has been deprecated and replaced with the new `Hook_Loader::class`
 
-Included with Perique is a single piece of Registration_Middleware. The Renderable interface and Renderable_Middleware pair make it easy to register any hooks, shortcodes, post types, taxonomies, admin pages, and rest endpoints. Any class which needs to be processed, implements the Renderable interface and creates the ```function register(Hook_Hook_Loader $loader): void {...}
+Included with Perique is a single piece of Registration_Middleware. The `Hookable` interface and `Hookable_Middleware` pair make it easy to register any hooks, shortcodes, post types, taxonomies, admin pages, and rest endpoints. Any class which needs to be processed, implements the `Hookable` interface and creates the ```function register(Hook_Hook_Loader $loader): void {...}
 
 ```php
 class Some_Controller implements Hookable {
@@ -204,91 +204,7 @@ class Some_Controller implements Hookable {
 
 Now when the init hook is called (priority 1), the some_action hook will be added. So long as the request comes from wp-admin. 
 
-> For more details on Hookable and the Hook_Loader please see the full docs
-
-### Registration Middleware ###
-
-Custom registration processes can be added using Registration_Middleware. You can easily create your own middleware that implements the `` `PinkCrab\Perique\Interfaces\Registration_Middleware `` interface. This interface consists of a single method `` process(object $class): void ` `` which is available to each class.
-
-```php
-<?php
-
-class Does_Something implements PinkCrab\Perique\Interfaces\Registration_Middleware {
-
-	/** @var Some_Service */
-	protected $some_service;
-	
-	public function __construct(Some_Service $some_service){
-		$this->some_service = $some_service;
-	}
-
-	public function process(object $class): void {
-		// Use interfaces or abstract classes to ensure you only process classes you expected
-		if ( in_array( Some_Interface::class, class_implements( $class ) ?: array(), true ) ) {
-			$this->some_service->so_something($class);
-		}
-	}
-}
-```
-
-As of version 1.0.3 all middleware classes have access to the App's `Hook_Loader` and internal `DI_Container`. These can be accessed using the following methods. This removes the need to create a custom `Hook_Loader` for each middleware and have access to the `DI_Container`  without the need of Static Helpers
-
-```php
-class Does_Something implements PinkCrab\Perique\Interfaces\Registration_Middleware {
-	
-	/** @var Hook_Loader */
-	protected $loader;
-
-	/**	
-	 * The hook loader is passed in, if this method is implemented.
-	 */
-	public function set_hook_loader(Hook_Loader $loader): void{
-		$this->loader = $loader;
-	}
-
-	/** @var DI_Container */
-	protected $container;
-
-	/**	
-	 * The container is passed in, if this method is implemented.
-	 */
-	public function set_di_container(DI_Container $container): void{
-		$this->container = $container;
-	}
-}
-
-```
-
-> Due to when all of this is loaded, all Dependency rules might not be defined!
-
-***
-
-> The objects are passed fully constructed using the DI_Container
-
-You can then pass these custom Registration_Middlewares to the app at boot.
-
-```php
-<?php 
-// As an instance.
-$app = ( new PinkCrab\Perique\Application\App_Factory )->default_setup( true )
-	// Rest of bootstrapping
-	->registration_middleware(new Does_Something(new Some_Service()))
-	->boot();
-```
-
-> Based on the complexity of your Middleware, you can either pass instances of the class's name.
-
-```php
-<?php 
-// As a class name.
-$app = ( new PinkCrab\Perique\Application\App_Factory )->default_setup( true )
-	// Rest of bootstrapping
-	->construct_registration_middleware( Does_Something::class )
-	->boot();
-```
-
-> These can either be passed before the app is booted, or afterwards.
->  
+Please see the [Perique Docs::Hookable](https://perique.info/core/Registration/Hookable) for more details.
 
 ## Static Helpers ##
 
