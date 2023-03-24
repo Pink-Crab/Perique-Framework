@@ -1,5 +1,7 @@
 # PinkCrab **Perique** Plugin Framework #
 
+![logo](assets/Perique_Card.jpg "Pink Crab")
+
 Welcome to the core package of the PinkCrab **Perique** plugin framework, formally known as just the PinkCrab Plugin Framework. 
 
 [![Latest Stable Version](http://poser.pugx.org/pinkcrab/perique-framework-core/v)](https://packagist.org/packages/pinkcrab/perique-framework-core)
@@ -20,15 +22,15 @@ Welcome to the core package of the PinkCrab **Perique** plugin framework, formal
 
 
 For more details please visit our docs.
-https://perique.info
+[**https://perique.info**](https://perique.info)
 
 ## Why? ##
 
 WordPress is a powerful tool for building a wide range of websites, but due to its age and commitment to backwards compatibility it's often frustration to work with using more modern tools.
 
-Perique allows the creation of plugins, themes and MU libraries for use on more complex websites.
+Perique allows the creation of plugins, MU libraries for use on more complex websites.
 
-The Core only provides access to the Hook_Loader, Registration, DI (DICE Dependency Injection Container), App_Config and basic (native) PHP render engine for view.
+The Core only provides access to the `Hook_Loader`, `Registration`, DI (DICE IOC Container), `App_Config` and basic (native) `PHP_Engine` rendering views.
 
 ## What is Perique? ##
 
@@ -43,7 +45,7 @@ $ composer require pinkcrab/perique-framework-core
 
 First you will need to create your composer.json and plugin.php file. 
 
-### plugin.php ###
+### plugin.php
 
 ```php
 // @file plugin.php 
@@ -51,37 +53,39 @@ First you will need to create your composer.json and plugin.php file.
      
 /**
  * @wordpress-plugin
- * Plugin Name:     ##PLUGIN NAME##
- * Plugin URI:      ##YOUR URL##
- * Description:     ##YOUR PLUGIN DESC##
- * Version:         ##VERSION##
- * Author:          ##AUTHOR##
- * Author URI:      ##YOUR URL##
+ * Plugin Name:     My Custom Plugin
+ * Plugin URI:      https://my-custom-plugin.com
+ * Description:     This is an example plugin for the PinkCrab Perique Framework
+ * Version:         1.2.0
+ * Author:          Me<me@me.com>
+ * Author URI:      https://my-custom-plugin.com
  * License:         GPL-2.0+
  * License URI:     http://www.gnu.org/licenses/gpl-2.0.txt
- * Text Domain:     ##TEXT DOMAIN##
+ * Text Domain:     custom-plugin
  */
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-// Creates an App loaded with the WP_Dice DI container and basic DI rules
-// Allows for the passing of wpdb and the App's own instance.
-$app = ( new PinkCrab\Perique\Application\App_Factory() )->default_setup( true );
+// Creates an instance of the App_Factory with the current directory as the base path.
+$factory = new PinkCrab\Perique\Application\App_Factory(__DIR__);
+
+// Define the default rules. 
+$factory->default_setup();
 
 // Set rules and configure DI Container
-$app->di_rules(include __DIR__ . '/config/dependencies.php');
+$factory->di_rules(include __DIR__ . '/config/dependencies.php');
 
 // Pass settings for App_Config
-$app->app_config( include __DIR__ . '/config/settings.php' )
+$factory->app_config( include __DIR__ . '/config/settings.php' )
 
 // Pass all class names which should be used during registration
-$app->registration_classes(include __DIR__ . '/config/registration.php' );
+$factory->registration_classes(include __DIR__ . '/config/registration.php' );
 
-// Add custom Registration Middleware (Not usually used!!! OPTIONAL!)
-$app->registration_middleware(new Example_Rest_Route_Registration_Middleware('my_base/route'));
+// Add optional modules.
+$factory->module(Some_Module::class);
 
 // Then just boot the application.
-$app->boot();
+$factory->boot();
 
 ```
 > Previously (pre 1.4.0) `with_wp_dice()` was used to create the App, this is now deprecated, but will remain for a while to account for any legacy code. The main different between `with_wp_dice()` and `default_setup()` is originally a bug existed where view paths by default where the same as the base path, now this is fixed and the default view path is set to the base path + `/views`. (Applies to all versions 1.4 and above)
@@ -89,18 +93,17 @@ $app->boot();
 ### Custom View Path
 If you wish to use a custom view path, you can can call `$app_factory->set_base_view_path('path/to/views')` before calling `default_setup()`.
 
-You can still set this afterwards by redefining the Renderable instance in the DI container.
+You can also define a DI rule which will allow you to set the base path directly to the `PHP_Engine` class.
+
+> Please note by doing this, it will the use `APP_Config::path('views')` or `APP_Config::url('views')` will not match the path you have set.
 
 ```php
-return [
-  '*' => [
-    'substitutions' => [
-      Renderable::class => new PHP_Engine( 'some/custom/path' )
-    ]
-  ],
-];
+return array(
+   PHP_Engine::class => array(
+      'constructParams' => array( 'custom/view/path' ),
+   ),
+);
 ```
-
 
 ## Config files ##
 
@@ -108,29 +111,26 @@ While you can pass arrays to the container_config(), app_config() and registrati
 
 > These files can be placed anywhere, but in the above example and our boilerplate's, these 3 files are placed in the /config directory.
 
-### dependencies.php ###
+### dependencies.php
 
-Used to define all of your custom rules for Dice, for more details on how to work with Interfaces and other classes which cant be autowired, see the [full docs ](https://app.gitbook.com/@glynn-quelch/s/pinkcrab/application/dependency-injection)
+Used to define all of your custom rules for Dice, for more details on how to work with Interfaces and other classes which cant be autowired, see the [Perique Docs::Setup](https://perique.info/core/App/setup)
 
 > Using the full class name is essential, so ensure you include all needed use statements.
 
 
 ```php
 // @file config/dependencies.php
-
-<?php
-
 use Some\Namespace\Some_Controller;
 
 return array(
-    // Your custom rules
-    Some_Interface::class => array(
-        'instanceOf' => Some_Implementation::class
-    )
+   // Your custom rules
+   Some_Interface::class => array(
+      'instanceOf' => Some_Implementation::class
+   )
 );
 ```
 
-### registration.php ###
+### registration.php
 
 When the app is booted, all classes which have either hook calls or needed to be called, are passed in this array. 
 
@@ -138,21 +138,17 @@ By default the Hookable middleware is passed, so all classes which implement the
 
 > Using the full class name is essential, so ensure you include all needed use statements.
 
-`
-
 ```php
 // @file config/registration.php
-
-<?php
-
 use Some\Namespace\{Some_Interface, Some_Implementation};
 
 return array(
-    Some_Controller::class
+   Some_Controller::class
 );
 ```
+See the [Perique Docs::Registration](https://perique.info/core/Registration/) for more details.
 
-### settings.php ###
+### settings.php
 
 The App holds an internal config class, this can be used as an injectable collection of helper methods in place of defining lots of constants.
 
@@ -161,159 +157,129 @@ Alongside the usual path and url values that are needed frequently. You can also
 
 ```php
 // @file config/settings.php
-<?php
     
 // Assumes the base directory of the plugin, is 1 level up.
 $base_path  = \dirname( __DIR__, 1 );
 $plugin_dir = \basename( $base_path );
 
-// Useful WP helpers
-$wp_uploads = \wp_upload_dir();
-global $wpdb;
-
 return array(
-	'plugin'     => array(
-		'version' => '1.2.5',
-	),
-	'path'       => array(
-		'plugin'         => $base_path,
-		'view'           => $base_path . '/views',
-		'assets'         => $base_path . '/assets',
-		'upload_root'    => $wp_uploads['basedir'],
-		'upload_current' => $wp_uploads['path'],
-	),
-	'url'        => array(
-		'plugin'         => plugins_url( $plugin_dir ),
-		'view'           => plugins_url( $plugin_dir ) . '/views',
-		'assets'         => plugins_url( $plugin_dir ) . '/assets',
-		'upload_root'    => $wp_uploads['baseurl'],
-		'upload_current' => $wp_uploads['url'],
-	),
-	'db_table' => array(
-		'subscriptions' => $wpdb->table_prefix . 'some_plugin_subscribers'
-	),
-	'additional' => array(
-		// Custom values go here 
-		'key' => 'value'   // Config::additional('key'); = value
-		'other' => 'value' // $app_config->other = value
-	),
+   'plugin'     => array(
+      'version' => '1.2.5',
+   ),
+   'path'       => array(
+      'assets'         => $base_path . '/custom/assets',
+   ),
+   'url'        => array(
+      'assets'         => plugins_url( $plugin_dir ) . '/custom/assets',
+   ),
+   'db_table' => array(
+      'subscriptions' => 'some_plugin_subscribers'
+   ),
+   'additional' => array(
+      // Custom values go here 
+      'key' => 'value'   // Config::additional('key'); = value
+      'other' => 'value' // $app_config->other = value
+   ),
 );
 ```
 
-> The full set of options can be found in the [docs](https://app.gitbook.com/@glynn-quelch/s/pinkcrab/application/app_config).
+> The full set of options can be found in the [Perique Docs::App_Config](https://perique.info/core/App/app_config).
 
-## Registration Service ##
+## Modules and the Registration Service ##
 
 At the heart of the application is the registration process. Classes can be stacked up and executed at initialisation. This allows for registering into core WP APIs, triggering remote API calls and anything else which needs to be set up when all of WP core is loaded.
 
-### Hookable ###
+### Modules
+
+It is possible to extend Perique with the use of `Modules`. Modules are a way to add additional functionality to Perique and often come bundled with their own Registration Middleware.
+
+Modules are easily added to the App_Factory by calling `$factory->module(Some_Module::class)` and often come with there own config and abstract classes to help with the registration process.
+
+> Please see the [Perique Docs::Modules](https://perique.info/core/Registration/Modules) for more details about how to create your own modules and also a [curated list of existing modules](https://perique.info/module/).
+
+### Hookable
 
 > The `Loader::class` loader has been deprecated and replaced with the new `Hook_Loader::class`
 
-Included with Perique is a single piece of Registration_Middleware. The Renderable interface and Renderable_Middleware pair make it easy to register any hooks, shortcodes, post types, taxonomies, admin pages, and rest endpoints. Any class which needs to be processed, implements the Renderable interface and creates the ```function register(Hook_Hook_Loader $loader): void {...}
+Included with Perique is a single piece of Registration_Middleware. The `Hookable` interface and `Hookable_Middleware` pair make it easy to register any hooks, shortcodes, post types, taxonomies, admin pages, and rest endpoints. Any class which needs to be processed, implements the `Hookable` interface and creates the ```function register(Hook_Hook_Loader $loader): void {...}
 
 ```php
 class Some_Controller implements Hookable {
-	public function register(Hook_Loader $loader): void{
-		$loader->admin_action('some_action', [$this, 'some_action']);
-	}
-	public function some_action($some_arg): void {...}
+   public function register(Hook_Loader $loader): void{
+      $loader->admin_action('some_action', [$this, 'some_callback']);
+   }
+   public function some_callback($some_arg): void {...}
 }
 ```
 
 Now when the init hook is called (priority 1), the some_action hook will be added. So long as the request comes from wp-admin. 
 
-> For more details on Hookable and the Hook_Loader please see the full docs
+Please see the [Perique Docs::Hookable](https://perique.info/core/Registration/Hookable) for more details.
 
-### Registration Middleware ###
+## DI Container
 
-Custom registration processes can be added using Registration_Middleware. You can easily create your own middleware that implements the `` `PinkCrab\Perique\Interfaces\Registration_Middleware `` interface. This interface consists of a single method `` process(object $class): void ` `` which is available to each class.
+At its heart, most of Perique makes use a custom version of the [Dice](https://r.je/dice.html) DI container. This allows for the easy creation of classes and the injection of dependencies.
 
+```php 
+class With_Dependencies{
+   private Some_Repository $repo;
+   private Some_Service $service;
+   private View $view;
+
+   public function __construct(Some_Repository $repo, Some_Service $service, View $view){
+      $this->repo = $repo;
+      $this->service = $service;
+      $this->view = $view;
+   }
+}
+```
+`Some_Repository` and `Some_Service` can be either concrete classes, interfaces or abstract classes. The container will resolve the correct implementation and inject it into the class. For interfaces and abstract classes, you will need to define a rule in the `dependencies.php` config file.
+
+Please see the [Perique Docs::Dependency Injection](https://perique.info/core/DI) for more details.
+
+## View
+
+Out of the box Perique comes with a basic PHP view engine. This allows for the rendering of templates, partials, Components and other view related tasks.
+
+The `View` class can be injected into classes as a dependency, or accessed statically from the `App` object.
 ```php
-<?php
+// As a dependency
+class Something{
+   protected View $view;
 
-class Does_Something implements PinkCrab\Perique\Interfaces\Registration_Middleware {
+   public function __construct(View $view){
+      $this->view = $view;
+   }
 
-	/** @var Some_Service */
-	protected $some_service;
-	
-	public function __construct(Some_Service $some_service){
-		$this->some_service = $some_service;
-	}
+   public function render(): void{
+      $this->view->render('some/template', ['some' => 'data']);
+   }
+}
 
-	public function process(object $class): void {
-		// Use interfaces or abstract classes to ensure you only process classes you expected
-		if ( in_array( Some_Interface::class, class_implements( $class ) ?: array(), true ) ) {
-			$this->some_service->so_something($class);
-		}
-	}
+// As a static call
+class Something{
+   public function render(): void{
+      App::view()->render('some/template', ['some' => 'data']);
+   }
 }
 ```
 
-As of version 1.0.3 all middleware classes have access to the App's `Hook_Loader` and internal `DI_Container`. These can be accessed using the following methods. This removes the need to create a custom `Hook_Loader` for each middleware and have access to the `DI_Container`  without the need of Static Helpers
+All template paths are relative to the `view_path` defined when creating the app. Also the `.php` extension is not required and optionally you can use the `.` or `/` to separate the path.
 
-```php
-class Does_Something implements PinkCrab\Perique\Interfaces\Registration_Middleware {
-	
-	/** @var Hook_Loader */
-	protected $loader;
+| Template Path | View Path | Full Path |
+| --- | --- | --- |
+| `some/template` | `/path/to/views` | `/path/to/views/some/template.php` |
+| `some/template.php` | `/path/to/views/` | `/path/to/views/some/template.php` |
+| `some.template` | `/path/to/views` | `/path/to/views/some/template.php` |
+| `some.template.php` | `/path/to/views/` | `/path/to/views/some/template.php` |
 
-	/**	
-	 * The hook loader is passed in, if this method is implemented.
-	 */
-	public function set_hook_loader(Hook_Loader $loader): void{
-		$this->loader = $loader;
-	}
-
-	/** @var DI_Container */
-	protected $container;
-
-	/**	
-	 * The container is passed in, if this method is implemented.
-	 */
-	public function set_di_container(DI_Container $container): void{
-		$this->container = $container;
-	}
-}
-
-```
-
-> Due to when all of this is loaded, all Dependency rules might not be defined!
-
-***
-
-> The objects are passed fully constructed using the DI_Container
-
-You can then pass these custom Registration_Middlewares to the app at boot.
-
-```php
-<?php 
-// As an instance.
-$app = ( new PinkCrab\Perique\Application\App_Factory )->default_setup( true )
-	// Rest of bootstrapping
-	->registration_middleware(new Does_Something(new Some_Service()))
-	->boot();
-```
-
-> Based on the complexity of your Middleware, you can either pass instances of the class's name.
-
-```php
-<?php 
-// As a class name.
-$app = ( new PinkCrab\Perique\Application\App_Factory )->default_setup( true )
-	// Rest of bootstrapping
-	->construct_registration_middleware( Does_Something::class )
-	->boot();
-```
-
-> These can either be passed before the app is booted, or afterwards.
->  
+Please visit the [Perique Docs::View](https://perique.info/core/App/view) for more details.
 
 ## Static Helpers ##
 
 The App object has a few helper methods which can be called statically (either from an instance or from its name). 
 
-### App::make(string $class, array $args = array()): object ###
+### App::make(string $class, array $args = array()): object
 
 * @param string $class Fully namespaced class name
 * @param array<string, mixed> $args Constructor params if needed
@@ -329,7 +295,7 @@ $emailer->send();
 
 ```
 
-### App::config(string $key, ...$child): mixed ###
+### App::config(string $key, ...$child): mixed
 
 * @param string $key The config key to call
 * @param ...string $child Additional params passed.
@@ -349,7 +315,7 @@ $version = App::config('version');
 
 > For more details on App_Config and its various use cases, [please checkout the full docs](https://app.gitbook.com/@glynn-quelch/s/pinkcrab/application/app_config).
 
-### App::view(): View ###
+### App::view(): View
 
 * @return View
 * @throws App_Initialization_Exception Code 4
@@ -371,166 +337,38 @@ Would equate to
 $view->render('path/to/file',['var' => 'foo']);
 ```
 
-> As with regular paths, the .php can be omitted. However having a file called `php.php` could cause problems if the final .php is not included.
-
-Components and View Models where added in 1.2.* and can be used to render templates in a more modular way. 
-
-```php
-class Input extends Component{
-   public $name;
-   public function __construct( string $name ) {
-      $this->name = $name;
-   }
-
-   /** Template method for the component.*/
-   public function template(): string {
-      return 'custom-components/input-text';
-   }
-}
-```
-
-
-> The path should be relative to the base component path.
-
-```php
-App::view()->component( new Input('name') );
-
-//this is similar to, but you can so more logic with a component internally.
-App::view()->render('path/to/views/custom-components/input-text', ['name' => 'name']);
-```
-
-> While the View and Config helpers are useful at times, its always better to inject them (App_Config::class or View::class).
-
-### Setup Component Compiler Path ###
-Out of the box, Perique expects components to found in a `components` directory, inside your defined view path. 
-
-You can change this by setting the path in the dependency rules.
-```php
-// @file config/dependencies.php
-return array(
-   ....,
-   Component_Compiler::class => array(
-      'constructParams' => array(
-         'some/new/path', // Path to components
-         array( Input::class => 'custom/path/for/component' ),
-      ),
-   )
-)
-```
-
 ## Hooks ##
 
-We have a number of hooks you can use to extend or modify how the app works. All of our internal hooks have pinkcrab/pf/app/ prefix, but we have a class of constants you can use ```PinkCrab\Perique\Application\Hooks:: APP_INIT_*```
+We have a number of hooks you can use to extend or modify how the app works. All of our internal hooks have pinkcrab/pf/app/ prefix, but we have a class of constants you can use `PinkCrab\Perique\Application\Hooks:: APP_INIT_*`
 
-### Hooks:: APP_INIT_PRE_BOOT ###
+* `Hooks:: APP_INIT_PRE_BOOT`
+* `Hooks:: APP_INIT_PRE_REGISTRATION`
+* `Hooks:: APP_INIT_POST_REGISTRATION`
+* `Hooks:: APP_INIT_CONFIG_VALUES`
+* `Hooks:: APP_INIT_REGISTRATION_CLASS_LIST`
+* `Hooks:: APP_INIT_SET_DI_RULES`
+* `Hooks::COMPONENT_ALIASES`
+* `Hooks::MODULE_MANAGER`
 
-This is primarily used internally to make last minute changes to how the boot process works. Due to the way this hook is used (called when plugin.php is loaded) it should not be used from outside of your own code, as you can be 100% external code will load first.
+Please see the [Perique Docs::Hooks](https://perique.info/core/App/hooks) for more details.
 
-```php
-<?php
-add_action( 
-   Hooks::APP_INIT_PRE_BOOT, 
-   function( App_Config $app_config, Hook_Loader $loader, DI_Container $container ): void {
-      // do something cool
-   }
-);
-```
-
-### Hooks:: APP_INIT_PRE_REGISTRATION ###
-
-During the boot processes, all classes passed for registration are processed on init hook, priority 1. The APP_INIT_PRE_REGISTRATION hook fires right before these are added. This allow you to hook in extra functionality to the application. This allows for extending your plugin with other plugins.
-
-```php
-<?php
-add_action( 
-	Hooks::APP_INIT_PRE_REGISTRATION, 
-	function( App_Config $app_config, Hook_Loader $loader, DI_Container $container ): void {
-		$some_controller = $container->create(Some_Other\Namespace\Some_Controller::class);
-		$some_controller->load_hooks($loader);
-	}
-);
-```
-
-### Hooks:: APP_INIT_POST_REGISTRATION ###
-
-After all the registration process has completed, this hook is fired. This allows you to check all has loaded correctly or if anything is missing. You can then fire notifications or disable functionality based on its results. *The internal loader is fired after this, so you can still use later hooks before initialisation.*
-
-```php
-<?php
-add_action( 
-	Hooks::APP_INIT_POST_REGISTRATION, 
-	function( App_Config $app_config, Hook_Loader $loader, DI_Container $container ): void {
-		if( ! has_action('some_action') ){
-			// Do something due to action not being added.
-		}
-	}
-);
-```
-
-### Hooks:: APP_INIT_CONFIG_VALUES ###
-
-When the App_Config class is constructed with all values passed from ``config/settings.php ` `` this filter is fired during the initial boot process and should only really be used for internal purposes. Sadly due to the timing in which we use this filter, its not really suited for extending the plugin.
-
-```php
-<?php
-add_filter(Hooks::APP_INIT_CONFIG_VALUES, 
-	function( array $config ): array {
-		$config['additional']['some_key'] = 'some value';
-		return $config;
-	}
-);
-```
-
-### Hooks:: APP_INIT_REGISTRATION_CLASS_LIST ###
-
-Filters all classes passed to the Registration Service before they are processed. This allows for hooking in from other plugins.
-
-```php
-<?php
-add_filter(Hooks::APP_INIT_REGISTRATION_CLASS_LIST, 
-	function( array $class_list ): array {
-		$class_list[] = 'My\Other\Plugin\Service';
-		$class_list[] = Another_Service::class;
-		return $class_list;
-	}
-);
-```
-
-### Hooks:: APP_INIT_SET_DI_RULES ###
-
-When the DI rules are set to the container, this filter is applied to all definitions. This allows for hooking in from external plugins and code to make use of the DI_Container. This combined with the other hooks allows for full expansion of your plugin.
-
-```php
-<?php
-add_filter(Hooks::APP_INIT_SET_DI_RULES, 
-	function( array $di_rules ): array {
-		$di_rules['*'][Some_Interface::class] = Some_Class_Implementation::class;
-		return $di_rules;
-	}
-);
-```
-
-### Hooks::COMPONENT_ALIASES ###
-
-This can be used to add custom Component Path Aliases after the app has been booted. These aliases are recompiled (via this filter) every time a components path is determined. This should be used by modules or plugins to add their own component paths.
-
-```php
-add_filter(
-	Hooks::COMPONENT_ALIASES,
-	function( array $aliases ): array {
-		$aliases[ MyComponent::class ] = 'some/custom/other/path';
-		return $aliases;
-	}
-);
-```
 ## License ##
 
-### MIT License ###
+### MIT License
 
 http://www.opensource.org/licenses/mit-license.html  
 
 ## Change Log ##
 
+* 2.0.0 -
+   * Dropping of support for PHP 7.2 & 7.3 
+   * Creation of Modules and the removal of adding `Registration_Middleware` to the App at setup.
+   * Custom DICE instance to allow the use of `call` rules with multiple Interfaces
+   * Restriction of setting base and view paths in App_Config
+   * Addition of `wbdb_prefix` to App_Config 
+   * Lots of internal bug fixes and improvements.
+   * More strict typing and return types.
+   * More strict testing thanks to infection (Mutation Testing)
 * 1.4.0 - 
    * Added `set_base_view_path()` and `get_base_view_path()` to App_Factory
    * Changed how the base view path is used during App_Factory, it will now default to base path (passed when creating the factory) + '/views'
