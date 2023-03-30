@@ -356,7 +356,7 @@ final class App_Config {
 		$wp_uploads = \wp_upload_dir();
 
 		$base_path = App_Config_Path_Helper::normalise_path( $base_path );
-		$view_path = $this->base_view_path ?? App_Config_Path_Helper::assume_view_path( $base_path );
+		$view_path = App_Config_Path_Helper::assume_view_path( $base_path );
 
 		global $wpdb;
 
