@@ -1,4 +1,4 @@
-name: WordPress 5.9 Test Suite [PHP7.4-8.1]
+name: WP5.9 [PHP7.4-8.1] Tests
 
 on:
   push:

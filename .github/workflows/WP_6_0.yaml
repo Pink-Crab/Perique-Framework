@@ -1,4 +1,4 @@
-name: WordPress 6.0 Test Suite [PHP7.4-8.1]
+name: WP6.0 [PHP7.4-8.1] Tests
 
 on:
   push:
