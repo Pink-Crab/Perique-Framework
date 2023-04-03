@@ -1,17 +1,17 @@
-name: WordPress 5.9 Test Suite [PHP7.2-8.1]
+name: WP5.9 [PHP7.4-8.1] Tests
 
 on:
   push:
     branches: [ master ]
   pull_request:
-    branches: [ master, develop ]
+    branches: [ master, develop, feature/v2-sandbox ]
 
 jobs:
   build:
     strategy:
       matrix:
         operating-system: [ubuntu-latest]
-        php-versions: [ '7.2', '7.3', '7.4', '8.0', '8.1']
+        php-versions: ['7.4', '8.0', '8.1']
         mysql-versions: ['mysql:5.7']
     runs-on: ${{ matrix.operating-system }}
     services:
@@ -54,9 +54,9 @@ jobs:
         run: >
           rm -rf composer.lock 
           && composer clearcache
-          && composer require php-stubs/wordpress-stubs:5.9.0 --dev --no-update
-          && composer require roots/wordpress:5.9.4 --dev --no-update
-          && composer require wp-phpunit/wp-phpunit:5.9.4 --dev --no-update
+          && composer require php-stubs/wordpress-stubs:5.9.* --dev --no-update
+          && composer require roots/wordpress:5.9.* --dev --no-update
+          && composer require wp-phpunit/wp-phpunit:5.9.* --dev --no-update
           && composer update --no-cache
       
       - name: Run Tests on WP5.9

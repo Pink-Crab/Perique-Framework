@@ -30,18 +30,18 @@ final class App_Validation {
 	 *
 	 * @var array<string,bool>
 	 */
-	private $required_properties = array(
-		'container'    => true,
-		'app_config'   => true,
-		'registration' => false,
-		'loader'       => false,
+	private array $required_properties = array(
+		'container'      => true,
+		'app_config'     => true,
+		'module_manager' => false,
+		'loader'         => false,
 	);
 
 	/** @var array<string> */
-	public $errors = array();
+	public array $errors = array();
 
 	/** @var App */
-	private $app;
+	private App $app;
 
 	public function __construct( App $app ) {
 		$this->app = $app;

@@ -10,13 +10,12 @@ declare(strict_types=1);
  * @package PinkCrab\Perique
  */
 
-namespace PinkCrab\Perique\Tests\Application;
+namespace PinkCrab\Perique\Tests\Integration\Application;
 
 use Dice\Dice;
 use Exception;
 use WP_UnitTestCase;
 use PinkCrab\Loader\Hook_Loader;
-use Gin0115\WPUnit_Helpers\Objects;
 use PinkCrab\Perique\Application\App;
 use PinkCrab\Perique\Application\Hooks;
 use PinkCrab\Perique\Interfaces\Renderable;
@@ -24,16 +23,22 @@ use PinkCrab\Perique\Application\App_Config;
 use PinkCrab\Perique\Application\App_Factory;
 use PinkCrab\Perique\Interfaces\DI_Container;
 use PinkCrab\Perique\Services\View\PHP_Engine;
-use PinkCrab\Perique\Services\Dice\PinkCrab_Dice;
-use PinkCrab\Perique\Interfaces\Registration_Middleware;
 use PinkCrab\Perique\Tests\Application\App_Helper_Trait;
+use PinkCrab\Perique\Exceptions\Module_Manager_Exception;
+use PinkCrab\Perique\Services\Registration\Module_Manager;
 use PinkCrab\Perique\Exceptions\App_Initialization_Exception;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Sample_Class;
-use PinkCrab\Perique\Services\Registration\Registration_Service;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Parent_Dependency;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Hookable\Hookable_Mock;
-use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\Mock_Registration_Middleware;
+use PinkCrab\Perique\Tests\Fixtures\Modules\With_Middleware\Module_With_Middleware__Module;
+use PinkCrab\Perique\Tests\Fixtures\Modules\With_Middleware\Module_With_Middleware__Middleware;
 
+/**
+ * @group integration
+ * @group app
+ * @group app_factory
+ *
+ */
 class Test_App_Functional extends WP_UnitTestCase {
 
 
@@ -42,10 +47,15 @@ class Test_App_Functional extends WP_UnitTestCase {
 	 */
 	use App_Helper_Trait;
 
-	public function tearDown(): void {
+	public function tear_down(): void {
+		parent::tear_down();
 		self::unset_app_instance();
 	}
 
+	public function set_up() {
+		parent::set_up();
+		self::unset_app_instance();
+	}
 	/** @testdox When running the applications setup, hooks should be triggered to allow external codeabases to interact and piggyback into the app initialisation process. */
 	public function test_all_hooks_fire_on_finalise_during_boot(): void {
 
@@ -163,29 +173,30 @@ class Test_App_Functional extends WP_UnitTestCase {
 
 		$this->assertArrayHasKey( 'booted', $debug );
 		$this->assertTrue( $debug['booted'] );
-	}
 
-	/** @testdox Additional functionality should be added at boot up through the means of middleware */
-	public function test_registration_middleware_as_string(): void {
-		$app = $this->pre_populated_app_provider()->boot();
-		$app->construct_registration_middleware( Mock_Registration_Middleware::class );
-		$registration = Objects::get_property( $app, 'registration' );
-		$this->assertArrayHasKey( Mock_Registration_Middleware::class, Objects::get_property( $registration, 'middleware' ) );
+		$this->assertArrayHasKey( 'module_manager', $debug );
+		$this->assertInstanceOf( Module_Manager::class, $debug['module_manager'] );
+
+		$this->assertArrayHasKey( 'base_path', $debug );
+		$this->assertEquals( FIXTURES_PATH, $debug['base_path'] );
+
+		$this->assertArrayHasKey( 'view_path', $debug );
+		$this->assertEquals( FIXTURES_PATH . '/views', $debug['view_path'] );
 	}
 
 	/** @testdox When attempting to pass a non registration middleware class name to be constructed an exception should be thrown if invalid type. */
 	public function test_registration_middleware_as_string_throws_invalid_middleware_exception(): void {
 
-		$this->expectException( App_Initialization_Exception::class );
-		$this->expectExceptionCode( 9 );
+		$this->expectException( Module_Manager_Exception::class );
+		$this->expectExceptionCode( 20 );
 		$app = $this->pre_populated_app_provider()
-			->boot()
-			->construct_registration_middleware( Sample_Class::class );
+			->module( Sample_Class::class )->boot();
+		do_action('init');
 	}
 
 	/** @testdox When creating a new App instance using the App Factory, the base path should be reflected in App Configs default values. */
 	public function test_app_config_paths_based_on_app_factory_base_path() {
-		$path = \dirname( \dirname( __DIR__, 1 ) . '/Fixtures/' );
+		$path = \FIXTURES_PATH;
 		$app  = ( new App_Factory( $path ) )
 			->set_base_view_path( $path )
 			->default_setup( true )->boot();
@@ -308,6 +319,34 @@ class Test_App_Functional extends WP_UnitTestCase {
 
 		// Restore the backup.
 		$GLOBALS['wp_filter']['init'][1] = $backup;
+	}
+
+		/** @testdox It should be possible to hook in and add both classes and modules using hooks. */
+	public function test_can_hook_in_and_add_classes_and_modules(): void {
+		
+		add_action(Hooks::MODULE_MANAGER, function( Module_Manager $manager ) {
+			$manager->push_module( Module_With_Middleware__Module::class );
+		});
+
+		\add_action(Hooks::APP_INIT_REGISTRATION_CLASS_LIST, function( array $classes ) {
+			$classes[] = Sample_Class::class;
+			return $classes;
+		});
+		
+		$app = $this->pre_populated_app_provider();
+		$app->registration_classes( array( Parent_Dependency::class ) );
+		$app->boot();
+
+		\do_action( 'init' );
+		\do_action( 'plugins_loaded' );
+
+		$this->assertNotEmpty(Module_With_Middleware__Middleware::$processed);
+		$this->assertContains(Sample_Class::class, Module_With_Middleware__Middleware::$processed);
+		$this->assertContains(Parent_Dependency::class, Module_With_Middleware__Middleware::$processed);
+
+		// Clear the hooks.
+		\remove_all_actions( Hooks::APP_INIT_REGISTRATION_CLASS_LIST );
+		\remove_all_actions( Hooks::MODULE_MANAGER );
 	}
 
 }

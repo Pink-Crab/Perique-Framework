@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace PinkCrab\Perique\Application;
 
 use OutOfBoundsException;
+use PinkCrab\Perique\Utils\App_Config_Path_Helper;
 
 final class App_Config {
 
@@ -29,42 +30,42 @@ final class App_Config {
 	 *
 	 * @var array<string, mixed>
 	 */
-	private $paths = array();
+	private array $paths = array();
 
 	/**
 	 * Holds all the namespaces (rest, cache etc).
 	 *
 	 * @var array<string, mixed>
 	 */
-	private $namespaces = array();
+	private array $namespaces = array();
 
 	/**
 	 * Holds all plugin details.
 	 *
 	 * @var array<string, mixed>
 	 */
-	private $plugin = array();
+	private array $plugin = array();
 
 	/**
 	 * Holds all taxonomy terms.
 	 *
 	 * @var array<string, mixed>
 	 */
-	private $taxonomies = array();
+	private array $taxonomies = array();
 
 	/**
 	 * Holds the CPT slugs and meta keys.
 	 *
 	 * @var array<string, mixed>
 	 */
-	private $post_types = array();
+	private array $post_types = array();
 
 	/**
 	 * Holds an array of table names.
 	 *
 	 * @var array<string, mixed>
 	 */
-	private $db_tables = array();
+	private array $db_tables = array();
 
 	/**
 	 * Holds all custom settings keys.
@@ -72,14 +73,14 @@ final class App_Config {
 	 *
 	 * @var array<string, mixed>
 	 */
-	private $additional = array();
+	private array $additional = array();
 
 	/**
 	 * Holds all the meta keys
 	 *
 	 * @var array{post:array<string,string>,user:array<string,string>,term:array<string,string>}
 	 */
-	private $meta = array(
+	private array $meta = array(
 		self::POST_META => array(),
 		self::USER_META => array(),
 		self::TERM_META => array(),
@@ -207,6 +208,15 @@ final class App_Config {
 	 */
 	public function version(): string {
 		return $this->plugin['version'];
+	}
+
+	/**
+	 * Returns the wpdb prefix
+	 *
+	 * @return string
+	 */
+	public function wpdb_prefix(): string {
+		return $this->plugin['wpdb_prefix'];
 	}
 
 	/**
@@ -343,24 +353,29 @@ final class App_Config {
 	 */
 	private function settings_defaults(): array {
 		$base_path  = \dirname( __DIR__, 2 );
-		$plugin_dir = \basename( $base_path );
 		$wp_uploads = \wp_upload_dir();
+
+		$base_path = App_Config_Path_Helper::normalise_path( $base_path );
+		$view_path = App_Config_Path_Helper::assume_view_path( $base_path );
+
+		global $wpdb;
 
 		return array(
 			'plugin'     => array(
-				'version' => '0.1.0',
+				'version'     => '0.1.0',
+				'wpdb_prefix' => $wpdb->prefix,
 			),
 			'path'       => array(
 				'plugin'         => $base_path,
-				'view'           => $base_path . '/views',
-				'assets'         => $base_path . '/assets',
+				'view'           => $view_path,
+				'assets'         => $base_path . \DIRECTORY_SEPARATOR . 'assets',
 				'upload_root'    => $wp_uploads['basedir'],
 				'upload_current' => $wp_uploads['path'],
 			),
 			'url'        => array(
-				'plugin'         => plugins_url( $plugin_dir ),
-				'view'           => plugins_url( $plugin_dir ) . '/views',
-				'assets'         => plugins_url( $plugin_dir ) . '/assets',
+				'plugin'         => App_Config_Path_Helper::assume_base_url( $base_path ),
+				'view'           => App_Config_Path_Helper::assume_view_url( $base_path, $view_path ),
+				'assets'         => App_Config_Path_Helper::assume_base_url( $base_path ) . '/assets',
 				'upload_root'    => $wp_uploads['baseurl'],
 				'upload_current' => $wp_uploads['url'],
 			),

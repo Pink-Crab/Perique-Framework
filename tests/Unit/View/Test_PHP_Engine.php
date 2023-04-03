@@ -11,7 +11,7 @@ declare(strict_types=1);
  * @package PinkCrab\Perique
  */
 
-namespace PinkCrab\Perique\Tests\View;
+namespace PinkCrab\Perique\Tests\Unit\View;
 
 use Exception;
 use WP_UnitTestCase;
@@ -20,6 +20,10 @@ use PinkCrab\Perique\Services\View\PHP_Engine;
 use PinkCrab\Perique\Services\View\View_Model;
 use PinkCrab\Perique\Tests\Fixtures\Mock_Objects\View_Components\Span;
 
+/**
+ * @group view
+ * @group unit
+ */
 class Test_PHP_Engine extends WP_UnitTestCase {
 
 	/**
@@ -36,7 +40,7 @@ class Test_PHP_Engine extends WP_UnitTestCase {
 	 */
 	public function setUp() : void {
 		parent::setUp();
-		$this->view = new PHP_Engine( \dirname( __DIR__, 1 ) . '/Fixtures/views/' );
+		$this->view = new PHP_Engine( FIXTURES_PATH . '/views/' );
 	}
 
 	/**
@@ -156,7 +160,7 @@ class Test_PHP_Engine extends WP_UnitTestCase {
 	 */
 	public function test_adds_trailing_slash_to_view_path(): void {
 		$this->expectOutputString( 'Hello World' );
-		$view = new PHP_Engine( \dirname( __DIR__, 1 ) . '/Fixtures/views' );
+		$view = new PHP_Engine( FIXTURES_PATH . '/views' );
 		$view->render( '/hello.php', array( 'hello' => 'Hello World' ) );
 	}
 
@@ -190,7 +194,7 @@ class Test_PHP_Engine extends WP_UnitTestCase {
 	/** @testdox It should be possible to define the base path for view using dot notation. */
 	public function test_can_set_base_path_using_dot_notation(): void {
 		$this->expectOutputString( 'foo' );
-		$view = new PHP_Engine( \dirname( __DIR__, 1 ) . '.Fixtures.views.' );
+		$view = new PHP_Engine( \dirname( __DIR__, 2 ) . '.Fixtures.views.' );
 		$view->render(
 			'sub_path.template',
 			array( 'variable' => 'foo' ),
@@ -219,7 +223,7 @@ class Test_PHP_Engine extends WP_UnitTestCase {
 
 	/** @testdox It should be possible to access the base_path from the engine. */
 	public function test_can_get_base_path(): void {
-		$path = \dirname( __DIR__, 1 ) . '/Fixtures/views/';
+		$path = FIXTURES_PATH . '/views/';
 		$this->assertEquals(
 			$path,
 			( new PHP_Engine( $path ) )->base_view_path()

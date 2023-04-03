@@ -46,14 +46,14 @@ class View {
 	 *
 	 * @var Renderable
 	 */
-	protected $engine;
+	protected Renderable $engine;
 
 	/**
 	 * The component compiler
 	 *
 	 * @var Component_Compiler
 	 */
-	protected $component_compiler;
+	protected Component_Compiler $component_compiler;
 
 
 	/**
