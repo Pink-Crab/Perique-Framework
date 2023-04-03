@@ -28,6 +28,7 @@ use PinkCrab\Loader\Hook_Loader;
 use PinkCrab\Perique\Application\Hooks;
 use PinkCrab\Perique\Interfaces\DI_Container;
 use PinkCrab\Perique\Interfaces\Registration_Middleware;
+use PinkCrab\Perique\Exceptions\Module_Manager_Exception;
 
 class Registration_Service {
 
@@ -36,49 +37,24 @@ class Registration_Service {
 	 *
 	 * @var array<Registration_Middleware>
 	 */
-	protected $middleware = array();
+	protected array $middleware = array();
 
 	/**
 	 * Holds all classes that are to be registered.
 	 *
 	 * @var array<string>
 	 */
-	protected $class_list = array();
+	protected array $class_list = array();
 
 	/**
 	 * Access to the DI Container
 	 *
 	 * @var DI_Container
 	 */
-	protected $di_container;
+	protected DI_Container $di_container;
 
-	/**
-	 * Access to the Hook Loader
-	 *
-	 * @var Hook_Loader|null
-	 */
-	protected $loader;
-
-	/**
-	 * Sets the DI Container.
-	 *
-	 * @param DI_Container $di_container
-	 * @return self
-	 */
-	public function set_container( DI_Container $di_container ): self {
+	public function __construct( DI_Container $di_container ) {
 		$this->di_container = $di_container;
-		return $this;
-	}
-
-	/**
-	 * Sets the DI Container.
-	 *
-	 * @param Hook_Loader $loader
-	 * @return self
-	 */
-	public function set_loader( Hook_Loader $loader ): self {
-		$this->loader = $loader;
-		return $this;
 	}
 
 	/**
@@ -93,23 +69,21 @@ class Registration_Service {
 	}
 
 	/**
-	 * Used to set the list of classes used.
-	 *
-	 * @param array<string> $class_list
-	 * @return self
-	 */
-	public function set_classes( array $class_list ): self {
-		$this->class_list = $class_list;
-		return $this;
-	}
-
-	/**
-	 * Pushes a single class to the class list.
-	 *
-	 * @param string $class
-	 * @return self
+	 * Adds a class to the list of classes to be registered.
+	 * @template Class_Name of object
+	 * @param class-string<Class_Name> $class
 	 */
 	public function push_class( string $class ): self {
+		// If the class is already in the list, skip.
+		if ( \in_array( $class, $this->class_list, true ) ) {
+			return $this;
+		}
+
+		// If $class is not a class, throw exception.
+		if ( ! \class_exists( $class ) ) {
+			throw Module_Manager_Exception::none_class_string_passed_to_registration( $class );
+		}
+
 		$this->class_list[] = $class;
 		return $this;
 	}
@@ -122,18 +96,13 @@ class Registration_Service {
 	public function process(): void {
 		// Filter all classes, before processing.
 		$class_list = apply_filters( Hooks::APP_INIT_REGISTRATION_CLASS_LIST, $this->class_list );
+
+		// If class list is empty, skip.
+		if ( empty( $class_list ) ) {
+			return;
+		}
+
 		foreach ( $this->middleware as $middleware ) {
-
-			// Set the container if requested.
-			if ( \method_exists( $middleware, 'set_di_container' ) && ! is_null( $this->di_container ) ) {
-				$middleware->set_di_container( $this->di_container );
-			}
-
-			// Set the hook loader if requested.
-			if ( \method_exists( $middleware, 'set_hook_loader' ) && ! is_null( $this->loader ) ) {
-				$middleware->set_hook_loader( $this->loader );
-			}
-
 			// Run middleware setup
 			$middleware->setup();
 

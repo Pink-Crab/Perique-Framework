@@ -25,15 +25,19 @@ declare(strict_types=1);
 
 namespace PinkCrab\Perique\Interfaces;
 
+use PinkCrab\Loader\Hook_Loader;
+use PinkCrab\Perique\Interfaces\DI_Container;
+
 interface Registration_Middleware {
 
 	/**
 	 * Process the current class
 	 *
-	 * @param object $class
-	 * @return object
+	 * @template T of object
+	 * @param T $class
+	 * @return T
 	 */
-	public function process( $class );
+	public function process( object $class ): object;
 
 	/**
 	 * Used to for any middleware setup before process is called

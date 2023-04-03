@@ -33,7 +33,7 @@ trait Inject_DI_Container_Aware {
 	 *
 	 * @var DI_Container
 	 */
-	protected $di_container;
+	protected DI_Container $di_container;
 
 	/**
 	 * Accepts the DI Container as a method injectable dependency.

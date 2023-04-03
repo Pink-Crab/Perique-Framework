@@ -15,14 +15,17 @@ namespace PinkCrab\Perique\Application;
 use Dice\Dice;
 use PinkCrab\Loader\Hook_Loader;
 use PinkCrab\Perique\Application\App;
+use PinkCrab\Perique\Interfaces\Module;
 use PinkCrab\Perique\Interfaces\Renderable;
 use PinkCrab\Perique\Interfaces\DI_Container;
 use PinkCrab\Perique\Services\View\PHP_Engine;
 use PinkCrab\Perique\Services\Dice\PinkCrab_Dice;
+use PinkCrab\Perique\Utils\App_Config_Path_Helper;
 use PinkCrab\Perique\Interfaces\Registration_Middleware;
-use PinkCrab\Perique\Exceptions\App_Initialization_Exception;
+use PinkCrab\Perique\Services\Registration\Module_Manager;
 use PinkCrab\Perique\Services\Registration\Registration_Service;
-use PinkCrab\Perique\Services\Registration\Middleware\Hookable_Middleware;
+use PinkCrab\Perique\Services\View\Component\Component_Compiler;
+use PinkCrab\Perique\Services\Registration\Modules\Hookable_Module;
 
 class App_Factory {
 
@@ -31,14 +34,14 @@ class App_Factory {
 	 *
 	 * @var App
 	 */
-	protected $app;
+	protected App $app;
 
 	/**
 	 * The base path of the app.
 	 *
 	 * @var string
 	 */
-	protected $base_path;
+	protected string $base_path;
 
 	/**
 	 * The base view path
@@ -46,10 +49,20 @@ class App_Factory {
 	 * @var string|null
 	 * @since 1.4.0
 	 */
-	protected $base_view_path;
+	protected ?string $base_view_path = null;
+
+	/**
+	 * Modules
+	 *
+	 * @since 2.0.0
+	 * @var array{
+	 *  0:class-string<Module>,
+	 *  1:?callable(Module, ?Registration_Middleware):Module
+	 * }[]
+	 */
+	protected array $modules = array();
 
 	public function __construct( ?string $base_path = null ) {
-		$this->app = new App();
 
 		if ( null === $base_path ) {
 			$file_index      = 0;
@@ -58,6 +71,9 @@ class App_Factory {
 		} else {
 			$this->base_path = \trailingslashit( $base_path );
 		}
+
+		$this->app = new App( $this->base_path );
+
 	}
 
 		/**
@@ -79,6 +95,10 @@ class App_Factory {
 	 */
 	public function set_base_view_path( string $base_view_path ): self {
 		$this->base_view_path = \trailingslashit( $base_view_path );
+
+		// Set the view base path on the app.
+		$this->app->set_view_path( $this->base_view_path );
+
 		return $this;
 	}
 
@@ -100,7 +120,7 @@ class App_Factory {
 	 * THIS WAS REPLACED IN 1.4.0
 	 * ASSUMES THE VIEW BASE PATH IS THE SAME AS THE BASE PATH
 	 * THIS IS KEPT FOR BACKWARDS COMPATIBILITY
-	 *
+	 * @infection-ignore-all
 	 * @return self
 	 */
 	public function with_wp_dice( bool $include_default_rules = false ): self {
@@ -134,15 +154,39 @@ class App_Factory {
 		}
 
 		$this->app->set_container( $container );
-
-		// Set registration middleware
-		$this->app->set_registration_services( new Registration_Service() );
-
 		$this->app->set_loader( $loader );
 
-		// Include Hookable.
-		$this->app->registration_middleware( new Hookable_Middleware() );
+		// Set registration middleware
+		$module_manager = new Module_Manager( $container, new Registration_Service( $container ) );
+		$module_manager->push_module( Hookable_Module::class );
 
+		// Push any modules that have been added before the module manager was set.
+		foreach ( $this->modules as $module ) {
+			$module_manager->push_module( $module[0], $module[1] );
+		}
+
+		$this->app->set_module_manager( $module_manager );
+
+		return $this;
+	}
+
+	/**
+	 * Add a module to the application.
+	 *
+	 * @template Module_Instance of Module
+	 * @param class-string<Module_Instance> $module
+	 * @param ?callable(Module, ?Registration_Middleware):Module $callback
+	 * @return self
+	 */
+	public function module( string $module, ?callable $callback = null ): self {
+
+		// If the Module_Manager has been set in app, add the module to app.
+		if ( $this->app->has_module_manager() ) {
+			$this->app->module( $module, $callback );
+			return $this;
+		}
+
+		$this->modules[] = array( $module, $callback );
 		return $this;
 	}
 
@@ -154,10 +198,17 @@ class App_Factory {
 	 */
 	protected function default_di_rules(): array {
 		return array(
-			'*' => array(
-				'substitutions' => array(
-					Renderable::class => new PHP_Engine( $this->get_base_view_path() ),
+			PHP_Engine::class         => array(
+				'constructParams' => array(
+					$this->get_base_view_path(),
 				),
+			),
+			Renderable::class         => array(
+				'instanceOf' => PHP_Engine::class,
+				'shared'     => true,
+			),
+			Component_Compiler::class => array(
+				'constructParams' => array( 'components' ),
 			),
 		);
 	}
@@ -180,7 +231,7 @@ class App_Factory {
 	/**
 	 * Sets the registration class list.
 	 *
-	 * @param array<int, string> $class_list Array of fully namespaced class names.
+	 * @param array<class-string> $class_list Array of fully namespaced class names.
 	 * @return self
 	 */
 	public function registration_classes( array $class_list ): self {
@@ -244,47 +295,26 @@ class App_Factory {
 	 */
 	private function default_config_paths(): array {
 		$wp_uploads = \wp_upload_dir();
+
+		$base_path = App_Config_Path_Helper::normalise_path( $this->base_path );
+		$view_path = $this->base_view_path ?? App_Config_Path_Helper::assume_view_path( $base_path );
+
 		return array(
 			'path' => array(
-				'plugin'         => rtrim( $this->base_path, \DIRECTORY_SEPARATOR ),
-				'view'           => rtrim( $this->base_path, \DIRECTORY_SEPARATOR ) . '/views',
-				'assets'         => rtrim( $this->base_path, \DIRECTORY_SEPARATOR ) . '/assets',
+				'plugin'         => $base_path,
+				'view'           => $view_path,
+				'assets'         => $base_path . \DIRECTORY_SEPARATOR . 'assets',
 				'upload_root'    => $wp_uploads['basedir'],
 				'upload_current' => $wp_uploads['path'],
 			),
 			'url'  => array(
-				'plugin'         => plugins_url( basename( $this->base_path ) ),
-				'view'           => plugins_url( basename( $this->base_path ) ) . '/views',
-				'assets'         => plugins_url( basename( $this->base_path ) ) . '/assets',
+				'plugin'         => App_Config_Path_Helper::assume_base_url( $base_path ),
+				'view'           => App_Config_Path_Helper::assume_view_url( $base_path, $view_path ),
+				'assets'         => App_Config_Path_Helper::assume_base_url( $base_path ) . '/assets',
 				'upload_root'    => $wp_uploads['baseurl'],
 				'upload_current' => $wp_uploads['url'],
 			),
 		);
 	}
 
-	/**
-	 * Add registration middleware
-	 *
-	 * @param Registration_Middleware $middleware
-	 * @return self
-	 * @throws App_Initialization_Exception Code 3
-	 */
-	public function registration_middleware( Registration_Middleware $middleware ): self {
-		$this->app->registration_middleware( $middleware );
-		return $this;
-	}
-
-	/**
-	 * Add registration middleware as a class string.
-	 * This is constructed via the DI Container before being added.
-	 *
-	 * @param class-string<Registration_Middleware> $class_name
-	 * @return self
-	 * @throws App_Initialization_Exception Code 1 If DI container not registered
-	 * @throws App_Initialization_Exception Code 9 If class doesn't create as middleware.
-	 */
-	public function construct_registration_middleware( string $class_name ): self {
-		$this->app->construct_registration_middleware( $class_name );
-		return $this;
-	}
 }

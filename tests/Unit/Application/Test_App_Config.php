@@ -10,28 +10,19 @@ declare(strict_types=1);
  * @package PinkCrab\Perique
  */
 
-namespace PinkCrab\Perique\Tests\Application;
+namespace PinkCrab\Perique\Tests\Unit\Application;
 
 use WP_UnitTestCase;
 use OutOfBoundsException;
-use PinkCrab\Perique\Application\App;
-use PinkCrab\Perique\Application\Config;
 use PinkCrab\Perique\Application\App_Config;
-
+/**
+ * @group unit
+ * @group app
+ * @group app_config
+ */
 class Test_App_Config extends WP_UnitTestCase {
 
-	/**
-	 * @method self::unset_app_instance();
-	 */
-	use App_Helper_Trait;
 
-	public function tearDown(): void {
-		self::unset_app_instance();
-	}
-
-	public function setUp() : void {
-		$this->pre_populated_app_provider()->boot();
-	}
 
 	/**
 	 * Sample set of settings paths, would be passed on start up.
@@ -64,19 +55,6 @@ class Test_App_Config extends WP_UnitTestCase {
 		$this->assertInstanceOf( App_Config::class, new App_Config() );
 	}
 
-	/**
-	 * Test that the config can be accessed
-	 *
-	 * This doesnt check the value, only that values are returned.
-	 * The values are set in App setup, so cant be checked from here.
-	 *
-	 * @return void
-	 */
-	public function test_can_call_with_config_proxy(): void {
-		$this->assertTrue( is_string( Config::namespace( 'rest' ) ) );
-		$this->assertTrue( is_array( Config::path() ) );
-		$this->assertTrue( is_array( Config::url() ) );
-	}
 
 	/**
 	 * Tests that the additional keys can be called out.
@@ -101,7 +79,7 @@ class Test_App_Config extends WP_UnitTestCase {
 	 * @return void
 	 */
 	public function test_default_values_can_be_overwritten_via_settings() {
-		$no_override   = App::make( App_Config::class );
+		$no_override   = new App_Config();
 		$with_override = new App_Config( self::SAMPLE_SETTINGS );
 
 		$this->assertNotEquals(
@@ -266,6 +244,9 @@ class Test_App_Config extends WP_UnitTestCase {
 		$this->assertEquals( 'One Post', $app_config->meta( 'post_meta_1', 'post' ) );
 		$this->assertEquals( 'One User', $app_config->meta( 'user_meta_1', 'user' ) );
 		$this->assertEquals( 'One Term', $app_config->meta( 'term_meta_1', 'term' ) );
+
+		// Assumes not passing a type will default to post.
+		$this->assertEquals( 'One Post', $app_config->meta( 'post_meta_1' ) );
 	}
 
 	/** @testdox It should be possible to get a post meta key, from its own key value. */
@@ -434,4 +415,14 @@ class Test_App_Config extends WP_UnitTestCase {
 		);
 	}
 
+	/** @testdox It should be possible to access the wpdb prefix */
+	public function test_app_config_wpdb_prefix(): void {
+		global $wpdb;
+		$app_config = new App_Config();
+		$this->assertEquals( $wpdb->prefix, $app_config->wpdb_prefix() );
+
+		// With defined prefix.
+		$app_config = new App_Config( array( 'plugin' => array( 'wpdb_prefix' => 'test_' ) ) );
+		$this->assertEquals( 'test_', $app_config->wpdb_prefix() );
+	}
 }

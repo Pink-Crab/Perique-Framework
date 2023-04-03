@@ -27,5 +27,7 @@ class Hooks {
 	public const APP_INIT_SET_DI_RULES = 'PinkCrab/App/Boot/set_di_rules';
 	/** @var string */
 	public const COMPONENT_ALIASES = 'PinkCrab/App/Component/aliases';
+	/** @var string */
+	public const MODULE_MANAGER = 'PinkCrab/App/Module/manager';
 }
 

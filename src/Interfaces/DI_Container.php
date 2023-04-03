@@ -33,7 +33,7 @@ interface DI_Container extends ContainerInterface {
 	 * Add a single rule.
 	 *
 	 * @param string $name
-	 * @param array<string, array<mixed>> $rule
+	 * @param array<string, mixed> $rule
 	 * @return DI_Container
 	 */
 	public function addRule( string $name, array $rule ): DI_Container;
@@ -53,5 +53,5 @@ interface DI_Container extends ContainerInterface {
 	 * @param array<mixed> $args
 	 * @return object|null
 	 */
-	public function create( string $name, array $args = array() );
+	public function create( string $name, array $args = array() ): ?object;
 }

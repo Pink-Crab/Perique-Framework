@@ -15,12 +15,13 @@ declare(strict_types=1);
 
 namespace PinkCrab\Perique\Tests\Fixtures\Mock_Objects;
 
-use PinkCrab\Loader\Hook_Loader;
 use PinkCrab\Perique\Interfaces\Registration_Middleware;
-use PinkCrab\Perique\Interfaces\DI_Container;
+use PinkCrab\Perique\Services\Container_Aware_Traits\Inject_Hook_Loader_Aware;
+use PinkCrab\Perique\Services\Container_Aware_Traits\Inject_DI_Container_Aware;
 
 
 class Mock_Registration_Middleware implements Registration_Middleware {
+	use Inject_Hook_Loader_Aware, Inject_DI_Container_Aware;
 
 	public $message;
 
@@ -31,10 +32,13 @@ class Mock_Registration_Middleware implements Registration_Middleware {
 		$this->message = $message;
 	}
 
-	public function process( $class ) {
+	public function process( object $class ): object {
 		$this->message_log[] = $this->message ?? \get_class( $class );
 		echo $this->message ?? \get_class( $class );
+		return $class;
+
 	}
+
 
 	/**
 	 * Used to for any middleware setup before process is called
@@ -54,27 +58,4 @@ class Mock_Registration_Middleware implements Registration_Middleware {
 		$this->message_log[] = 'tear_down';
 	}
 
-	/**
-	 * Optional
-	 *
-	 * Sets the DI container
-	 *
-	 * @param DI_Container $container
-	 * @return void
-	 */
-	public function set_di_container( DI_Container $container ) {
-		$this->message_log[] = \get_class( $container );
-	}
-
-	/**
-	 * Optional
-	 *
-	 * Sets the Hook Loader
-	 *
-	 * @param Hook_Loader $loader
-	 * @return void
-	 */
-	public function set_hook_loader( Hook_Loader $loader ) {
-		$this->message_log[] = \get_class( $loader );
-	}
 }

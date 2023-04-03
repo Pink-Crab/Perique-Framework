@@ -32,14 +32,14 @@ class View_Model {
 	 *
 	 * @var string
 	 */
-	private $template;
+	private string $template;
 
 	/**
 	 * The data to be used with the template.
 	 *
 	 * @var array<string, mixed>
 	 */
-	private $data = array();
+	private array $data = array();
 
 	/** @param array<string, mixed> $data */
 	public function __construct( string $template, array $data = array() ) {
