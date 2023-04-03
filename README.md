@@ -1,6 +1,6 @@
 # PinkCrab **Perique** Plugin Framework #
 
-![logo](assets/Perique_Card.jpg "Pink Crab")
+![logo](assets/Perique_Card.jpg "PinkCrab Perique")
 
 Welcome to the core package of the PinkCrab **Perique** plugin framework, formally known as just the PinkCrab Plugin Framework. 
 
@@ -121,7 +121,7 @@ Used to define all of your custom rules for Dice, for more details on how to wor
 
 ```php
 // @file config/dependencies.php
-use Some\Namespace\Some_Controller;
+use Some\Namespace\{Some_Interface, Some_Implementation};
 
 return array(
    // Your custom rules
@@ -141,7 +141,7 @@ By default the Hookable middleware is passed, so all classes which implement the
 
 ```php
 // @file config/registration.php
-use Some\Namespace\{Some_Interface, Some_Implementation};
+use Some\Namespace\Some_Controller;
 
 return array(
    Some_Controller::class
