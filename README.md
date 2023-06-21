@@ -361,6 +361,7 @@ http://www.opensource.org/licenses/mit-license.html
 
 ## Change Log ##
 
+* 2.0.1 - Update dev dependencies and remove plugin.php from root of repo.
 * 2.0.0 -
    * Dropping of support for PHP 7.2 & 7.3 
    * Creation of Modules and the removal of adding `Registration_Middleware` to the App at setup.
