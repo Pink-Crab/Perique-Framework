@@ -95,7 +95,7 @@ final class App {
 	/**
 	 * Checks if the app has already been booted.
 	 *
-	 * @return bool
+	 * @return boolean
 	 */
 	public static function is_booted(): bool {
 		return self::$booted;
@@ -143,7 +143,7 @@ final class App {
 	/**
 	 * Checks if the Module_Manager has been set.
 	 *
-	 * @return bool
+	 * @return boolean
 	 */
 	public function has_module_manager(): bool {
 		return $this->module_manager instanceof Module_Manager;
@@ -250,8 +250,8 @@ final class App {
 	 * Adds a module to the app.
 	 *
 	 * @template Module_Instance of Module
-	 * @param class-string<Module_Instance> $module
-	 * @param ?callable(Module, ?Registration_Middleware):Module $callback
+	 * @param class-string<Module_Instance>                     $module
+	 * @param callable(Module, ?Registration_Middleware):Module $callback
 	 * @return self
 	 * @throws App_Initialization_Exception Code 1 If DI container not registered
 	 * @throws App_Initialization_Exception Code 3 If module manager not defined.
@@ -361,7 +361,9 @@ final class App {
 		// Build all modules and middleware.
 		$this->module_manager->register_modules(); // @phpstan-ignore-line, already verified if not null
 
-		/** @hook{string, App_Config, Loader, DI_Container} */
+		/**
+ * @hook{string, App_Config, Loader, DI_Container}
+*/
 		do_action( Hooks::APP_INIT_PRE_BOOT, self::$app_config, $this->loader, self::$container ); // phpcs:disable WordPress.NamingConventions.ValidHookName.*
 
 		// Initialise on init
@@ -384,7 +386,7 @@ final class App {
 	/**
 	 * Creates an instance of class using the DI Container.
 	 *
-	 * @param string $class
+	 * @param string               $class
 	 * @param array<string, mixed> $args
 	 * @return object|null
 	 * @throws App_Initialization_Exception Code 4
@@ -399,7 +401,7 @@ final class App {
 	/**
 	 * Gets a value from the internal App_Config
 	 *
-	 * @param string $key The config key to call
+	 * @param string $key      The config key to call
 	 * @param string ...$child Additional params passed.
 	 * @return mixed
 	 * @throws App_Initialization_Exception Code 4
@@ -421,19 +423,25 @@ final class App {
 		if ( self::$booted === false ) {
 			throw App_Initialization_Exception::app_not_initialized( View::class );
 		}
-		/** @var ?View */
+		/**
+ * @var ?View
+*/
 		return self::$container->create( View::class ); // @phpstan-ignore-line, already verified if not null
 	}
 
-	/** @return array{
+	/**
+	 * Returns the App_Config
+	 *
+	 * @return array{
 	 *  container:?DI_Container,
 	 *  app_config:?App_Config,
 	 *  booted:bool,
 	 *  module_manager:?Module_Manager,
 	 *  base_path:string,
 	 *  view_path:?string
-	 * } */
-	public function __debugInfo() {
+	 * }
+	*/
+	public function __debugInfo(): array {
 		return array(
 			'container'      => self::$container,
 			'app_config'     => self::$app_config,
@@ -447,7 +455,7 @@ final class App {
 	/**
 	 * Checks if app config set.
 	 *
-	 * @return bool
+	 * @return boolean
 	 */
 	public function has_app_config(): bool {
 		return Object_Helper::is_a( self::$app_config, App_Config::class );

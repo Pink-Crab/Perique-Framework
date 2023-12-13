@@ -70,15 +70,16 @@ final class PHP_Engine implements Renderable {
 	/**
 	 * Renders a template with data.
 	 *
-	 * @param string $view
+	 * @param string                  $view
 	 * @param iterable<string, mixed> $data
-	 * @param bool $print
-	 * @return string|void
+	 * @param boolean                 $print
+	 * @return string|null
 	 */
-	public function render( string $view, iterable $data, bool $print = true ) {
+	public function render( string $view, iterable $data, bool $print = true ): ?string {
 		$view = $this->resolve_file_path( $view );
 		if ( $print ) {
 			print( $this->render_buffer( $view, $data ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			return null;
 		} else {
 			return $this->render_buffer( $view, $data );
 		}
@@ -88,9 +89,9 @@ final class PHP_Engine implements Renderable {
 	 * Renders a component.
 	 *
 	 * @param Component $component
-	 * @return string|void
+	 * @return string
 	 */
-	public function component( Component $component, bool $print = true ) {
+	public function component( Component $component, bool $print = true ): ?string {
 
 		// Throw exception of no compiler passed.
 		if ( ! Object_Helper::is_a( $this->component_compiler, Component_Compiler::class ) ) {
@@ -103,6 +104,7 @@ final class PHP_Engine implements Renderable {
 		$view     = sprintf( '%s%s%s.php', $this->base_view_path, \DIRECTORY_SEPARATOR, trim( $template ) );
 		if ( $print ) {
 			print( $this->render_buffer( $view, $compiled->data() ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			return null;
 		} else {
 			return $this->render_buffer( $view, $compiled->data() );
 		}
@@ -113,23 +115,24 @@ final class PHP_Engine implements Renderable {
 	 * Renders a view Model
 	 *
 	 * @param View_Model $view_model
-	 * @return string|void
+	 * @return string|null
 	 */
-	public function view_model( View_Model $view_model, bool $print = true ) {
+	public function view_model( View_Model $view_model, bool $print = true ): ?string {
 		return $this->render( $view_model->template(), $view_model->data(), $print );
 	}
 
 	/**
 	 * Include a partial sub template
 	 *
-	 * @param string $view
+	 * @param string                  $view
 	 * @param iterable<string, mixed> $data
-	 * @param bool $print
-	 * @return string|void
+	 * @param boolean                 $print
+	 * @return string|null
 	 */
-	public function partial( string $view, iterable $data = array(), bool $print = true ) {
+	public function partial( string $view, iterable $data = array(), bool $print = true ): ?string {
 		if ( $print ) {
 			$this->render( $view, $data, $print );
+			return null;
 		} else {
 			return $this->render( $view, $data, $print );
 		}
@@ -138,7 +141,7 @@ final class PHP_Engine implements Renderable {
 	/**
 	 * Builds the view.
 	 *
-	 * @param string $view
+	 * @param string                  $view
 	 * @param iterable<string, mixed> $__data
 	 * @return string
 	 * @throws Exception
