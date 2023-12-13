@@ -62,7 +62,4 @@ jobs:
         env:
           environment_github: true
         run: composer all
-
-      - name: Codecov
-        run: bash <(curl -s https://codecov.io/bash) -t ${{ secrets.CORE_CODEV }}
  
