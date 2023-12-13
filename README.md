@@ -361,6 +361,7 @@ http://www.opensource.org/licenses/mit-license.html
 
 ## Change Log ##
 
+* 2.0.2 - Test suites updated to include WP6.3 & 6.4
 * 2.0.1 - Update dev dependencies and remove plugin.php from root of repo.
 * 2.0.0 -
    * Dropping of support for PHP 7.2 & 7.3 
