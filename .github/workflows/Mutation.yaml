@@ -53,12 +53,12 @@ jobs:
           rm -rf composer.lock 
           && composer clearcache
           && composer require infection/infection
-          && composer require php-stubs/wordpress-stubs:6.2.* --dev --no-update
-          && composer require roots/wordpress:6.2.* --dev --no-update
-          && composer require wp-phpunit/wp-phpunit:6.2.* --dev --no-update
+          && composer require php-stubs/wordpress-stubs:6.4.* --dev --no-update
+          && composer require roots/wordpress:6.4.* --dev --no-update
+          && composer require wp-phpunit/wp-phpunit:6.4.* --dev --no-update
           && composer update --no-cache
 
-      - name: Run Infection on WP6.2
+      - name: Run Infection on WP6.4
         env: 
           environment_github: true
           STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
