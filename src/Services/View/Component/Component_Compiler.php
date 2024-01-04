@@ -49,7 +49,9 @@ class Component_Compiler {
 	 */
 	private array $component_aliases = array();
 
-	/** @param array<string, string> $component_aliases */
+	/**
+	 * @param array<string, string> $component_aliases
+	 */
 	public function __construct( string $component_base_path = '', array $component_aliases = array() ) {
 		$this->component_base_path = $component_base_path;
 		$this->component_aliases   = \apply_filters( Hooks::COMPONENT_ALIASES, $component_aliases );
@@ -76,7 +78,7 @@ class Component_Compiler {
 		// Check aliases.
 		$aliases = \apply_filters( Hooks::COMPONENT_ALIASES, $this->component_aliases );
 
-		if ( isset( $aliases[ get_class( $component ) ] ) ) {
+		if ( \array_key_exists( get_class( $component ), $this->component_aliases ) ) {
 			return esc_attr( $aliases[ get_class( $component ) ] );
 		}
 
@@ -104,7 +106,7 @@ class Component_Compiler {
 	/**
 	 * Attempts to extract a defined Annotation from component class doc block.
 	 *
-	 * @param string $annotation
+	 * @param string    $annotation
 	 * @param Component $component
 	 * @return string|null
 	 */
