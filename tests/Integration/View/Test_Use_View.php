@@ -14,6 +14,7 @@ namespace PinkCrab\Perique\Tests\Registration;
 
 use WP_UnitTestCase;
 use PinkCrab\Loader\Hook_Loader;
+use PinkCrab\Perique\Application\Hooks;
 use PinkCrab\Perique\Application\App_Factory;
 use PinkCrab\Perique\Interfaces\DI_Container;
 use PinkCrab\Perique\Services\Dice\PinkCrab_Dice;
@@ -33,7 +34,6 @@ use PinkCrab\Perique\Tests\Fixtures\Modules\Without_Middleware\Module_Without_Mi
  * @group integration
  * @group view
  * @group components
- *
  */
 class Test_Use_View extends WP_UnitTestCase {
 
@@ -46,7 +46,6 @@ class Test_Use_View extends WP_UnitTestCase {
 	public function tear_down(): void {
 		parent::tear_down();
 		self::unset_app_instance();
-
 	}
 
 	public function set_up() {
@@ -54,7 +53,9 @@ class Test_Use_View extends WP_UnitTestCase {
 		self::unset_app_instance();
 	}
 
-	/** @testdox By default the default component path should be {view_path}/component */
+	/**
+ * @testdox By default the default component path should be {view_path}/component
+*/
 	public function test_render_component_with_base_path() {
 		$app = ( new App_Factory( \FIXTURES_PATH ) )
 			->default_setup()
@@ -65,6 +66,35 @@ class Test_Use_View extends WP_UnitTestCase {
 			array( 'component' => new P_Tag_Component( 'test', new Span( 'span-class', 'span-content' ) ) ),
 			false
 		);
-		$this->assertEquals('<p class="test"><span class="span-class">span-content</span></p>', $output);
+		$this->assertEquals( '<p class="test"><span class="span-class">span-content</span></p>', $output );
+	}
+
+	/**
+	 * @testdox It should be possible to use a component alias and have it use the full path.
+	 * @see  https://github.com/Pink-Crab/Perique-Framework/issues/182
+	 */
+	public function test_render_component_with_alias() {
+		add_filter(
+			Hooks::COMPONENT_ALIASES,
+			function ( array $aliases ): array {
+				$aliases[ P_Tag_Component::class ] = \FIXTURES_PATH . '/views/components/alias-dir/some-view.php';
+				return $aliases;
+			}
+		);
+
+		$app = ( new App_Factory( \FIXTURES_PATH ) )
+			->default_setup()
+			->boot();
+
+		$output = $app::view()->render(
+			'render-component',
+			array( 'component' => new P_Tag_Component( 'test', new Span( 'span-class', 'span-content' ) ) ),
+			false
+		);
+
+		// Remove the filter.
+		add_filter( Hooks::COMPONENT_ALIASES, fn ( array $aliases ): array  => array() );
+
+		$this->assertStringContainsString( '<p class="test">ALIAS <span class="span-class">span-content</span></p>', $output );
 	}
 }
