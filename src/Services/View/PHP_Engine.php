@@ -103,8 +103,8 @@ final class PHP_Engine implements Renderable {
 		$template = $compiled->template();
 
 		$view = file_exists( $template )
-		? $template
-		: sprintf( '%s%s%s.php', $this->base_view_path, \DIRECTORY_SEPARATOR, trim( $this->maybe_resolve_dot_notation( $template ) ) );
+			? $template
+			: sprintf( '%s%s%s.php', $this->base_view_path, \DIRECTORY_SEPARATOR, trim( $this->maybe_resolve_dot_notation( $template ) ) );
 
 		if ( $print ) {
 			print( $this->render_buffer( $view, $compiled->data() ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
