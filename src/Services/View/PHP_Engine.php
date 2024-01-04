@@ -100,8 +100,12 @@ final class PHP_Engine implements Renderable {
 
 		// Compile the component.
 		$compiled = $this->component_compiler->compile( $component ); // @phpstan-ignore-line, checked above.
-		$template = $this->maybe_resolve_dot_notation( $compiled->template() );
-		$view     = sprintf( '%s%s%s.php', $this->base_view_path, \DIRECTORY_SEPARATOR, trim( $template ) );
+		$template = $compiled->template();
+
+		$view = file_exists( $template )
+			? $template
+			: sprintf( '%s%s%s.php', $this->base_view_path, \DIRECTORY_SEPARATOR, trim( $this->maybe_resolve_dot_notation( $template ) ) );
+
 		if ( $print ) {
 			print( $this->render_buffer( $view, $compiled->data() ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			return null;
@@ -109,7 +113,6 @@ final class PHP_Engine implements Renderable {
 			return $this->render_buffer( $view, $compiled->data() );
 		}
 	}
-
 
 	/**
 	 * Renders a view Model

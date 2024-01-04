@@ -344,12 +344,12 @@ $view->render('path/to/file',['var' => 'foo']);
 
 We have a number of hooks you can use to extend or modify how the app works. All of our internal hooks have pinkcrab/pf/app/ prefix, but we have a class of constants you can use `PinkCrab\Perique\Application\Hooks:: APP_INIT_*`
 
-* `Hooks:: APP_INIT_PRE_BOOT`
-* `Hooks:: APP_INIT_PRE_REGISTRATION`
-* `Hooks:: APP_INIT_POST_REGISTRATION`
-* `Hooks:: APP_INIT_CONFIG_VALUES`
-* `Hooks:: APP_INIT_REGISTRATION_CLASS_LIST`
-* `Hooks:: APP_INIT_SET_DI_RULES`
+* `Hooks::APP_INIT_PRE_BOOT`
+* `Hooks::APP_INIT_PRE_REGISTRATION`
+* `Hooks::APP_INIT_POST_REGISTRATION`
+* `Hooks::APP_INIT_CONFIG_VALUES`
+* `Hooks::APP_INIT_REGISTRATION_CLASS_LIST`
+* `Hooks::APP_INIT_SET_DI_RULES`
 * `Hooks::COMPONENT_ALIASES`
 * `Hooks::MODULE_MANAGER`
 
@@ -363,6 +363,7 @@ http://www.opensource.org/licenses/mit-license.html
 
 ## Change Log ##
 
+* 2.0.4 - Fix bugs where component paths were not being resolved correctly when added using the alias filter.
 * 2.0.3 - Add PHP8.3 to test suites
 * 2.0.2 - Test suites updated to include WP6.3 & 6.4
 * 2.0.1 - Update dev dependencies and remove plugin.php from root of repo.
