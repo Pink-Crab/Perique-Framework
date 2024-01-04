@@ -50,8 +50,8 @@ class Component_Compiler {
 	private array $component_aliases = array();
 
 	/**
- * @param array<string, string> $component_aliases
-*/
+	 * @param array<string, string> $component_aliases
+	 */
 	public function __construct( string $component_base_path = '', array $component_aliases = array() ) {
 		$this->component_base_path = $component_base_path;
 		$this->component_aliases   = \apply_filters( Hooks::COMPONENT_ALIASES, $component_aliases );
