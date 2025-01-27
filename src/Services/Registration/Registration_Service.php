@@ -70,21 +70,22 @@ class Registration_Service {
 
 	/**
 	 * Adds a class to the list of classes to be registered.
+	 *
 	 * @template Class_Name of object
-	 * @param class-string<Class_Name> $class
+	 * @param class-string<Class_Name> $class_string
 	 */
-	public function push_class( string $class ): self {
+	public function push_class( string $class_string ): self {
 		// If the class is already in the list, skip.
-		if ( \in_array( $class, $this->class_list, true ) ) {
+		if ( \in_array( $class_string, $this->class_list, true ) ) {
 			return $this;
 		}
 
-		// If $class is not a class, throw exception.
-		if ( ! \class_exists( $class ) ) {
-			throw Module_Manager_Exception::none_class_string_passed_to_registration( $class );
+		// If $class_string is not a class, throw exception.
+		if ( ! \class_exists( $class_string ) ) {
+			throw Module_Manager_Exception::none_class_string_passed_to_registration( esc_html( $class_string ) );
 		}
 
-		$this->class_list[] = $class;
+		$this->class_list[] = $class_string;
 		return $this;
 	}
 
@@ -121,5 +122,4 @@ class Registration_Service {
 			$middleware->tear_down();
 		}
 	}
-
 }

@@ -73,7 +73,6 @@ class App_Factory {
 		}
 
 		$this->app = new App( $this->base_path );
-
 	}
 
 		/**
@@ -221,7 +220,7 @@ class App_Factory {
 	 */
 	public function di_rules( array $rules ): self {
 		$this->app->container_config(
-			function( DI_Container $container ) use ( $rules ): void {
+			function ( DI_Container $container ) use ( $rules ): void {
 				$container->addRules( $rules );
 			}
 		);
@@ -316,5 +315,4 @@ class App_Factory {
 			),
 		);
 	}
-
 }

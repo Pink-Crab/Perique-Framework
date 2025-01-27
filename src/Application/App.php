@@ -88,9 +88,9 @@ final class App {
 	/**
 	 * Apps view path.
 	 *
-	 * @var ?string
+	 * @var string
 	 */
-	private ?string $view_path;
+	private string $view_path;
 
 	/**
 	 * Checks if the app has already been booted.
@@ -282,9 +282,7 @@ final class App {
 		// Validate.
 		$validate = new App_Validation( $this );
 		if ( $validate->validate() === false ) {
-			throw App_Initialization_Exception::failed_boot_validation(
-				$validate->errors
-			);
+			throw App_Initialization_Exception::failed_boot_validation( array_map( 'esc_attr', $validate->errors ) );
 		}
 
 		// Run the final process, where all are loaded in via
@@ -386,16 +384,17 @@ final class App {
 	/**
 	 * Creates an instance of class using the DI Container.
 	 *
-	 * @param string               $class
+	 * @param string               $class_string
 	 * @param array<string, mixed> $args
+	 *
 	 * @return object|null
 	 * @throws App_Initialization_Exception Code 4
 	 */
-	public static function make( string $class, array $args = array() ): ?object {
+	public static function make( string $class_string, array $args = array() ): ?object {
 		if ( self::$booted === false ) {
 			throw App_Initialization_Exception::app_not_initialized( DI_Container::class );
 		}
-		return self::$container->create( $class, $args ); // @phpstan-ignore-line, already verified if not null
+		return self::$container->create( $class_string, $args ); // @phpstan-ignore-line, already verified if not null
 	}
 
 	/**

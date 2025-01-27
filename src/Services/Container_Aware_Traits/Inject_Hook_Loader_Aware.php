@@ -45,4 +45,3 @@ trait Inject_Hook_Loader_Aware {
 		$this->loader = $hook_loader;
 	}
 }
-

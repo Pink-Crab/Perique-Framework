@@ -232,7 +232,7 @@ class Test_App_Config extends WP_UnitTestCase {
 	/** @testdox When attempting to get a meta key which hasn't been defined, an error should be generated. */
 	public function test_exception_throw_for_unset_meta_key(): void {
 		$this->expectException( OutOfBoundsException::class );
-		$this->expectExceptionMessage( 'App Config :: "invalid_key" is not a defined post meta key' );
+		$this->expectExceptionMessage( 'App Config :: "invalid_key" is not a defined postmeta key' );
 
 		$app_config = new App_Config( self::SAMPLE_SETTINGS );
 		$app_config->meta( 'invalid_key', 'post' );
