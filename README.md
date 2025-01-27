@@ -363,6 +363,13 @@ http://www.opensource.org/licenses/mit-license.html
 
 ## Change Log ##
 
+* 2.1.0 - Updated to WP6.6, changed PHPCS rules and added a number of new helpers to App_Config.
+   * App_Config::asset_url() - Returns the full URL to an asset.
+   * App_Config::asset_path() - Returns the full path to an asset.
+   * App_Config::view_url() - Returns the full URL to a view.
+   * App_Config::view_path() - Returns the full path to a view.
+   * App_Config::plugin_url() - Returns the full URL to the plugin.
+   * App_Config::plugin_path() - Returns the full path to the plugin. 
 * 2.0.4 - Fix bugs where component paths were not being resolved correctly when added using the alias filter.
 * 2.0.3 - Add PHP8.3 to test suites
 * 2.0.2 - Test suites updated to include WP6.3 & 6.4
