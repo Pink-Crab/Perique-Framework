@@ -29,8 +29,8 @@ use PinkCrab\Perique\Utils\Object_Helper;
 use PinkCrab\Perique\Interfaces\Renderable;
 use PinkCrab\Perique\Services\View\View_Model;
 use PinkCrab\Perique\Services\View\Component\Component;
-use function PinkCrab\FunctionConstructors\Strings\endsWith;
 use PinkCrab\Perique\Services\View\Component\Component_Compiler;
+use function PinkCrab\FunctionConstructors\Strings\endsWith;
 
 final class PHP_Engine implements Renderable {
 
@@ -152,7 +152,7 @@ final class PHP_Engine implements Renderable {
 	private function render_buffer( string $view, iterable $__data ): string {
 
 		if ( ! file_exists( $view ) ) {
-			throw new Exception( "{$view} doesn't exist" );
+			throw new Exception( esc_html( "{$view} doesn't exist" ) );
 		}
 
 		$output = '';
@@ -174,7 +174,7 @@ final class PHP_Engine implements Renderable {
 		include $view;
 		$output = ob_get_contents();
 		ob_end_clean();
-		return $output ?: '';
+		return $output ?: ''; // phpcs:ignore Universal.Operators.DisallowShortTernary.Found
 	}
 
 	/**
@@ -221,7 +221,7 @@ final class PHP_Engine implements Renderable {
 		$path = rtrim( $path, '/' ) . '/';
 
 		if ( ! \is_dir( $path ) ) {
-			throw new Exception( "{$path} doesn't exist and cant be used as the base view path." );
+			throw new Exception( esc_html( "{$path} doesn't exist and cant be used as the base view path." ) );
 		}
 
 		return $path;

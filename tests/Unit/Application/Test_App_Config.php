@@ -232,7 +232,7 @@ class Test_App_Config extends WP_UnitTestCase {
 	/** @testdox When attempting to get a meta key which hasn't been defined, an error should be generated. */
 	public function test_exception_throw_for_unset_meta_key(): void {
 		$this->expectException( OutOfBoundsException::class );
-		$this->expectExceptionMessage( 'App Config :: "invalid_key" is not a defined post meta key' );
+		$this->expectExceptionMessage( 'App Config :: "invalid_key" is not a defined postmeta key' );
 
 		$app_config = new App_Config( self::SAMPLE_SETTINGS );
 		$app_config->meta( 'invalid_key', 'post' );
@@ -424,5 +424,53 @@ class Test_App_Config extends WP_UnitTestCase {
 		// With defined prefix.
 		$app_config = new App_Config( array( 'plugin' => array( 'wpdb_prefix' => 'test_' ) ) );
 		$this->assertEquals( 'test_', $app_config->wpdb_prefix() );
+	}
+
+	/**
+	 * @testdox It should be possible to get the asset URL from the config
+	 */
+	public function test_can_get_asset_url(): void {
+		$app_config = new App_Config();
+		$this->assertEquals( $app_config->url( 'assets' ), $app_config->asset_url() );
+	}
+
+	/**
+	 * @testdox It should be possible to get the asset path from the config
+	 */
+	public function test_can_get_asset_path(): void {
+		$app_config = new App_Config();
+		$this->assertEquals( $app_config->path( 'assets' ), $app_config->asset_path() );
+	}
+
+	/**
+	 * @testdox It should be possible to get the view URL from the config
+	 */
+	public function test_can_get_view_url(): void {
+		$app_config = new App_Config();
+		$this->assertEquals( $app_config->url( 'view' ), $app_config->view_url() );
+	}
+
+	/**
+	 * @testdox It should be possible to get the view path from the config
+	 */
+	public function test_can_get_view_path(): void {
+		$app_config = new App_Config();
+		$this->assertEquals( $app_config->path( 'view' ), $app_config->view_path() );
+	}
+
+	/**
+	 * @testdox It should be possible to get the plugin URL from the config
+	 */
+	public function test_can_get_plugin_url(): void {
+		$app_config = new App_Config();
+		$this->assertEquals( $app_config->url( 'plugin' ), $app_config->plugin_url() );
+	}
+
+	/**
+	 * @testdox It should be possible to get the plugin path from the config
+	 */
+	public function test_can_get_plugin_path(): void {
+		$app_config = new App_Config();
+		$this->assertEquals( $app_config->path( 'plugin' ), $app_config->plugin_path() );
 	}
 }

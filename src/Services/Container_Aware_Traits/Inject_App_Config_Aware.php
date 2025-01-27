@@ -45,4 +45,3 @@ trait Inject_App_Config_Aware {
 		$this->app_config = $app_config;
 	}
 }
-

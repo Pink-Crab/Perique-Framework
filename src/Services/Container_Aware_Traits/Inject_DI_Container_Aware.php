@@ -45,4 +45,3 @@ trait Inject_DI_Container_Aware {
 		$this->di_container = $container;
 	}
 }
-

@@ -4,19 +4,19 @@
 
 Welcome to the core package of the PinkCrab **Perique** plugin framework, formally known as just the PinkCrab Plugin Framework. 
 
-[![Latest Stable Version](http://poser.pugx.org/pinkcrab/perique-framework-core/v)](https://packagist.org/packages/pinkcrab/perique-framework-core)
-[![Total Downloads](http://poser.pugx.org/pinkcrab/perique-framework-core/downloads)](https://packagist.org/packages/pinkcrab/perique-framework-core)
-[![License](http://poser.pugx.org/pinkcrab/perique-framework-core/license)](https://packagist.org/packages/pinkcrab/perique-framework-core)
-[![PHP Version Require](http://poser.pugx.org/pinkcrab/perique-framework-core/require/php)](https://packagist.org/packages/pinkcrab/perique-framework-core)
+[![Latest Stable Version](https://poser.pugx.org/pinkcrab/perique-framework-core/v)](https://packagist.org/packages/pinkcrab/perique-framework-core)
+[![Total Downloads](https://poser.pugx.org/pinkcrab/perique-framework-core/downloads)](https://packagist.org/packages/pinkcrab/perique-framework-core)
+[![License](https://poser.pugx.org/pinkcrab/perique-framework-core/license)](https://packagist.org/packages/pinkcrab/perique-framework-core)
+[![PHP Version Require](https://poser.pugx.org/pinkcrab/perique-framework-core/require/php)](https://packagist.org/packages/pinkcrab/perique-framework-core)
 ![GitHub contributors](https://img.shields.io/github/contributors/Pink-Crab/Perique-Framework?label=Contributors)
 ![GitHub issues](https://img.shields.io/github/issues-raw/Pink-Crab/Perique-Framework)
 
-[![WP5.9 [PHP7.4-8.1] Tests](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_5_9.yaml/badge.svg)](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_5_9.yaml)
-[![WP6.0 [PHP7.4-8.1] Tests](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_0.yaml/badge.svg)](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_0.yaml)
 [![WP6.1 [PHP7.4-8.3] Tests](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_1.yaml/badge.svg)](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_1.yaml)
 [![WP6.2 [PHP7.4-8.3] Tests](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_2.yaml/badge.svg)](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_2.yaml)
 [![WP6.3 [PHP7.4-8.3] Tests](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_3.yaml/badge.svg)](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_3.yaml)
 [![WP6.4 [PHP7.4-8.3] Tests](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_4.yaml/badge.svg)](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_4.yaml)
+[![WP6.5 [PHP7.4-8.3] Tests](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_5.yaml/badge.svg)](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_5.yaml)
+[![WP6.6 [PHP7.4-8.3] Tests](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_6.yaml/badge.svg)](https://github.com/Pink-Crab/Perique-Framework/actions/workflows/WP_6_6.yaml)
 
 [![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2FPink-Crab%2FPerique-Framework%2Fmaster)](https://dashboard.stryker-mutator.io/reports/github.com/Pink-Crab/Perique-Framework/master)
 [![codecov](https://codecov.io/gh/Pink-Crab/Perique-Framework/branch/master/graph/badge.svg)](https://codecov.io/gh/Pink-Crab/Perique-Framework)
@@ -363,6 +363,13 @@ http://www.opensource.org/licenses/mit-license.html
 
 ## Change Log ##
 
+* 2.1.0 - Updated to WP6.6, changed PHPCS rules and added a number of new helpers to App_Config.
+   * App_Config::asset_url() - Returns the full URL to an asset.
+   * App_Config::asset_path() - Returns the full path to an asset.
+   * App_Config::view_url() - Returns the full URL to a view.
+   * App_Config::view_path() - Returns the full path to a view.
+   * App_Config::plugin_url() - Returns the full URL to the plugin.
+   * App_Config::plugin_path() - Returns the full path to the plugin. 
 * 2.0.4 - Fix bugs where component paths were not being resolved correctly when added using the alias filter.
 * 2.0.3 - Add PHP8.3 to test suites
 * 2.0.2 - Test suites updated to include WP6.3 & 6.4

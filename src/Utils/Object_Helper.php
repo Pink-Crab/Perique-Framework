@@ -29,11 +29,11 @@ class Object_Helper {
 	/**
 	 * Checks if a value is an object and is_a of the given class.
 	 *
-	 * @param mixed $value
-	 * @param string $class
-	 * @return bool
+	 * @param mixed  $value
+	 * @param string $class_instance
+	 * @return boolean
 	 */
-	public static function is_a( $value, string $class ): bool {
-		return is_object( $value ) && is_a( $value, $class );
+	public static function is_a( $value, string $class_instance ): bool {
+		return is_object( $value ) && is_a( $value, $class_instance );
 	}
 }

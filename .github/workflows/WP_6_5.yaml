@@ -1,4 +1,4 @@
-name: WP6.0 [PHP7.4-8.1] Tests
+name: WP6.5 [PHP7.4-8.3] Tests
 
 on:
   push:
@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         operating-system: [ubuntu-latest]
-        php-versions: ['7.4', '8.0', '8.1']
+        php-versions: [ '7.4', '8.0', '8.1', '8.2', '8.3']
     runs-on: ${{ matrix.operating-system }}
     services:
       # Setup MYSQL
@@ -53,16 +53,13 @@ jobs:
         run: >
           rm -rf composer.lock 
           && composer clearcache
-          && composer require php-stubs/wordpress-stubs:6.0.* --dev --no-update
-          && composer require roots/wordpress:6.0.* --dev --no-update
-          && composer require wp-phpunit/wp-phpunit:6.0.* --dev --no-update
+          && composer require php-stubs/wordpress-stubs:6.5.* --dev --no-update
+          && composer require roots/wordpress:6.5.* --dev --no-update
+          && composer require wp-phpunit/wp-phpunit:6.5.* --dev --no-update
           && composer update --no-cache
 
-      - name: Run Tests on Latest Version - WP6.0
+      - name: Run Tests on Latest Version - WP6.5
         env:
           environment_github: true
         run: composer all
-
-      - name: Codecov
-        run: bash <(curl -s https://codecov.io/bash) -t ${{ secrets.CORE_CODEV }}
  
