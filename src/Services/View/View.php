@@ -114,7 +114,7 @@ class View {
 		$to_buffer();
 		$output = ob_get_contents();
 		ob_end_clean();
-		return $output ?: '';
+		return $output ?: ''; // phpcs:ignore Universal.Operators.DisallowShortTernary.Found
 	}
 
 	/**
@@ -135,5 +135,4 @@ class View {
 	public function base_path(): string {
 		return $this->engine->base_view_path();
 	}
-
 }

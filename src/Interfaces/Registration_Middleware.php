@@ -25,9 +25,6 @@ declare(strict_types=1);
 
 namespace PinkCrab\Perique\Interfaces;
 
-use PinkCrab\Loader\Hook_Loader;
-use PinkCrab\Perique\Interfaces\DI_Container;
-
 interface Registration_Middleware {
 
 	/**
@@ -37,7 +34,7 @@ interface Registration_Middleware {
 	 * @param T $class
 	 * @return T
 	 */
-	public function process( object $class ): object;
+	public function process( object $class ): object; // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.classFound
 
 	/**
 	 * Used to for any middleware setup before process is called

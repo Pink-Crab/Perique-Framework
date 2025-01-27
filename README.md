@@ -4,10 +4,10 @@
 
 Welcome to the core package of the PinkCrab **Perique** plugin framework, formally known as just the PinkCrab Plugin Framework. 
 
-[![Latest Stable Version](http://poser.pugx.org/pinkcrab/perique-framework-core/v)](https://packagist.org/packages/pinkcrab/perique-framework-core)
-[![Total Downloads](http://poser.pugx.org/pinkcrab/perique-framework-core/downloads)](https://packagist.org/packages/pinkcrab/perique-framework-core)
-[![License](http://poser.pugx.org/pinkcrab/perique-framework-core/license)](https://packagist.org/packages/pinkcrab/perique-framework-core)
-[![PHP Version Require](http://poser.pugx.org/pinkcrab/perique-framework-core/require/php)](https://packagist.org/packages/pinkcrab/perique-framework-core)
+[![Latest Stable Version](https://poser.pugx.org/pinkcrab/perique-framework-core/v)](https://packagist.org/packages/pinkcrab/perique-framework-core)
+[![Total Downloads](https://poser.pugx.org/pinkcrab/perique-framework-core/downloads)](https://packagist.org/packages/pinkcrab/perique-framework-core)
+[![License](https://poser.pugx.org/pinkcrab/perique-framework-core/license)](https://packagist.org/packages/pinkcrab/perique-framework-core)
+[![PHP Version Require](https://poser.pugx.org/pinkcrab/perique-framework-core/require/php)](https://packagist.org/packages/pinkcrab/perique-framework-core)
 ![GitHub contributors](https://img.shields.io/github/contributors/Pink-Crab/Perique-Framework?label=Contributors)
 ![GitHub issues](https://img.shields.io/github/issues-raw/Pink-Crab/Perique-Framework)
 

@@ -64,5 +64,4 @@ class View_Model {
 	public function data(): array {
 		return $this->data;
 	}
-
 }

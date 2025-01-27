@@ -78,8 +78,8 @@ final class Module_Manager {
 	 * Adds a module to the manager.
 	 *
 	 * @template Module_Instance of Module
-	 * @param class-string<Module_Instance> $module_name
-	 * @param ?callable(Module, ?Registration_Middleware):Module $config
+	 * @param class-string<Module_Instance>                     $module_name
+	 * @param callable(Module, ?Registration_Middleware):Module $config
 	 * @return void
 	 */
 	public function push_module( string $module_name, ?callable $config = null ): void {
@@ -89,10 +89,10 @@ final class Module_Manager {
 	/**
 	 * Adds a class to the Registration Service.
 	 *
-	 * @param class-string $class
+	 * @param class-string $class_string The class to register.
 	 */
-	public function register_class( string $class ): void {
-		$this->registration_service->push_class( $class );
+	public function register_class( string $class_string ): void {
+		$this->registration_service->push_class( $class_string );
 	}
 
 	/**
@@ -141,7 +141,7 @@ final class Module_Manager {
 		if ( ! is_object( $instance )
 		|| ! is_a( $instance, Module::class, true )
 		) {
-			throw Module_Manager_Exception::invalid_module_class_name( $module );
+			throw Module_Manager_Exception::invalid_module_class_name( esc_html( $module ) );
 		}
 
 		return $instance;
@@ -163,7 +163,7 @@ final class Module_Manager {
 
 		// If not an object or not an instance of the module interface, throw.
 		if ( ! is_a( $middleware, Registration_Middleware::class, true ) ) {
-			throw Module_Manager_Exception::invalid_registration_middleware( $middleware );
+			throw Module_Manager_Exception::invalid_registration_middleware( $middleware ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped, escaped in exception.
 		}
 
 		// Create the middleware.
@@ -173,7 +173,7 @@ final class Module_Manager {
 		if ( ! is_object( $middleware )
 		|| ! is_a( $middleware, Registration_Middleware::class, true )
 		) {
-			throw Module_Manager_Exception::failed_to_create_registration_middleware( $middleware );
+			throw Module_Manager_Exception::failed_to_create_registration_middleware( $middleware ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped, escaped in exception.
 		}
 
 		return $middleware;
@@ -198,11 +198,7 @@ final class Module_Manager {
 	 */
 	public function process_middleware(): void {
 
-		// Register all modules.
-		// $this->register_modules();
-
 		// Process all middleware.
 		$this->registration_service->process();
 	}
-
 }
