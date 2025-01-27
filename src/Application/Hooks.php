@@ -30,4 +30,3 @@ class Hooks {
 	/** @var string */
 	public const MODULE_MANAGER = 'PinkCrab/App/Module/manager';
 }
-

@@ -66,7 +66,7 @@ class PinkCrab_Dice implements DI_Container {
 	 */
 	public function get( string $id ): ?object {
 		if ( ! $this->has( $id ) ) {
-			throw new DI_Container_Exception( "{$id} not defined in container", 1 );
+			throw new DI_Container_Exception( esc_html( "{$id} not defined in container" ), 1 );
 		}
 		return $this->create( $id );
 	}
@@ -76,7 +76,7 @@ class PinkCrab_Dice implements DI_Container {
 	 * Doesn't take into account the ability to autowire.
 	 *
 	 * @param string $id Class name (fully namespaced.)
-	 * @return bool
+	 * @return boolean
 	 */
 	public function has( string $id ): bool {
 		$from_dice = $this->dice->getRule( $id );
@@ -98,7 +98,7 @@ class PinkCrab_Dice implements DI_Container {
 	/**
 	 * Proxy for addRule.
 	 *
-	 * @param string $name
+	 * @param string                               $name
 	 * @param array<string, string|object|mixed[]> $rule
 	 * @return PinkCrab_Dice
 	 */
@@ -121,7 +121,7 @@ class PinkCrab_Dice implements DI_Container {
 	/**
 	 * Proxy for create, but with third param removed (see dice code comments)
 	 *
-	 * @param string $name
+	 * @param string       $name
 	 * @param array<mixed> $args
 	 * @return object|null
 	 */

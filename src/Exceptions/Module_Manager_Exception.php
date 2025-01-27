@@ -41,7 +41,7 @@ class Module_Manager_Exception extends Exception {
 		}
 
 		if ( is_array( $value ) ) {
-			return \wp_json_encode( $value ) ?: 'FAILED_TO_CAST ARRAY';
+			return \wp_json_encode( $value ) ?: 'FAILED_TO_CAST ARRAY'; // phpcs:ignore Universal.Operators.DisallowShortTernary.Found
 		}
 
 		if ( is_null( $value ) ) {
@@ -108,5 +108,4 @@ class Module_Manager_Exception extends Exception {
 		$message = "None class-string \"{$passed}\" passed to the registration class list";
 		return new Module_Manager_Exception( $message, 23 );
 	}
-
 }

@@ -16,13 +16,19 @@ use PinkCrab\Perique\Utils\App_Config_Path_Helper;
 
 final class App_Config {
 
-	/**@ var string */
+	/**
+* @ var string
+*/
 	public const POST_META = 'post';
 
-	/**@ var string */
+	/**
+* @ var string
+*/
 	public const TERM_META = 'term';
 
-	/**@ var string */
+	/**
+* @ var string
+*/
 	public const USER_META = 'user';
 
 	/**
@@ -107,7 +113,8 @@ final class App_Config {
 	/**
 	 * Maps the supplied settings array to inner states.
 	 *
-	 * @param array<string, mixed> $settings
+	 * @param array<string, mixed> $settings The settings to map.
+	 *
 	 * @return void
 	 */
 	private function set_props( array $settings ): void {
@@ -126,11 +133,12 @@ final class App_Config {
 	/**
 	 * Gets a path with trailing slash.
 	 *
-	 * @param string|null $path
-	 * @param string|null $default The default value to return if not set.
+	 * @param string|null $path          The path to return.
+	 * @param string|null $default_value The default value to return if not set.
+	 *
 	 * @return array<string, mixed>|string|null
 	 */
-	public function path( ?string $path = null, ?string $default = null ) {
+	public function path( ?string $path = null, ?string $default_value = null ) {
 
 		if ( is_null( $path ) ) {
 			return $this->paths['path'];
@@ -138,17 +146,18 @@ final class App_Config {
 
 		return \array_key_exists( $path, $this->paths['path'] )
 			? trailingslashit( $this->paths['path'][ $path ] )
-			: $default;
+			: $default_value;
 	}
 
 	/**
 	 * Gets a path with trailing slash.
 	 *
-	 * @param string|null $url
-	 * @param string|null $default The default value to return if not set.
+	 * @param string|null $url           The key for the url.
+	 * @param string|null $default_value The default value to return if not set.
+	 *
 	 * @return array<string, mixed>|string|null
 	 */
-	public function url( ?string $url = null, ?string $default = null ) {
+	public function url( ?string $url = null, ?string $default_value = null ) {
 
 		if ( is_null( $url ) ) {
 			return $this->paths['url'];
@@ -156,7 +165,7 @@ final class App_Config {
 
 		return \array_key_exists( $url, $this->paths['url'] )
 			? trailingslashit( $this->paths['url'][ $url ] )
-			: $default;
+			: $default_value;
 	}
 
 	/**
@@ -180,25 +189,27 @@ final class App_Config {
 	/**
 	 * Return a namespace by its key.
 	 *
-	 * @param string $key
-	 * @param string|null $default The default value to return if not set.
+	 * @param string      $key           The key for the namespace.
+	 * @param string|null $default_value The default value to return if not set.
+	 *
 	 * @return string|null
 	 */
-	public function namespace( string $key, ?string $default = null ): ?string {
+	public function namespace( string $key, ?string $default_value = null ): ?string {
 		return array_key_exists( $key, $this->namespaces )
-			? $this->namespaces[ $key ] : $default;
+			? $this->namespaces[ $key ] : $default_value;
 	}
 
 	/**
 	 * Return a additional by its key.
 	 *
-	 * @param string $key
-	 * @param string|null $default The default value to return if not set.
+	 * @param string      $key           The key for the additional.
+	 * @param string|null $default_value The default value to return if not set.
+	 *
 	 * @return mixed
 	 */
-	public function additional( string $key, ?string $default = null ) {
+	public function additional( string $key, ?string $default_value = null ) {
 		return array_key_exists( $key, $this->additional )
-			? $this->additional[ $key ] : $default;
+			? $this->additional[ $key ] : $default_value;
 	}
 
 	/**
@@ -228,7 +239,7 @@ final class App_Config {
 	 */
 	public function post_types( string $key ) {
 		if ( ! array_key_exists( $key, $this->post_types ) ) {
-			throw new OutOfBoundsException( "App Config :: \"{$key}\" is not a defined post type" );
+			throw new OutOfBoundsException( 'App Config :: "' . esc_html( $key ) . '" is not a defined post type' );
 		}
 
 		return $this->post_types[ $key ];
@@ -245,11 +256,11 @@ final class App_Config {
 	public function meta( string $key, string $type = self::POST_META ): string {
 		// Check meta type.
 		if ( ! array_key_exists( $type, $this->meta ) ) {
-			throw new OutOfBoundsException( "App Config :: \"{$type}\" is not a valid meta type and cant be fetched" );
+			throw new OutOfBoundsException( 'App Config :: "' . esc_html( $type ) . '" is not a valid meta type and cant be fetched' );
 		}
 		// Check key.
 		if ( ! array_key_exists( $key, $this->meta[ $type ] ) ) {
-			throw new OutOfBoundsException( "App Config :: \"{$key}\" is not a defined {$type} meta key" );
+			throw new OutOfBoundsException( 'App Config :: "' . esc_html( $key ) . '" is not a defined ' . esc_html( $type ) . 'meta key' );
 		}
 
 		return $this->meta[ $type ][ $key ];
@@ -298,7 +309,7 @@ final class App_Config {
 		$valid_meta_types = array( self::POST_META, self::USER_META, self::TERM_META );
 		foreach ( $meta as $meta_type => $pairs ) {
 			if ( ! in_array( $meta_type, $valid_meta_types, true ) ) {
-				throw new OutOfBoundsException( "App Config :: \"{$meta_type}\" is not a valid meta type and cant be defined" );
+				throw new OutOfBoundsException( 'App Config :: "' . esc_html( $meta_type ) . '" is not a valid meta type and cant be defined' );
 			}
 
 			// Set all pairs which have both valid key and values.
@@ -315,7 +326,7 @@ final class App_Config {
 	 */
 	public function taxonomies( string $key ): string {
 		if ( ! array_key_exists( $key, $this->taxonomies ) ) {
-			throw new OutOfBoundsException( "App Config :: \"{$key}\" is not a defined taxonomy" );
+			throw new OutOfBoundsException( 'App Config :: "' . esc_html( $key ) . '" is not a defined taxonomy' );
 		}
 
 		return $this->taxonomies[ $key ];
@@ -331,7 +342,7 @@ final class App_Config {
 	 */
 	public function db_tables( string $name ): string {
 		if ( ! array_key_exists( $name, $this->db_tables ) ) {
-			throw new OutOfBoundsException( "App Config :: \"{$name}\" is not a defined DB table" );
+			throw new OutOfBoundsException( 'App Config :: "' . esc_html( $name ) . '" is not a defined DB table' );
 		}
 		return $this->db_tables[ $name ];
 	}
@@ -398,7 +409,9 @@ final class App_Config {
 	 * @return array<string, string>
 	 */
 	private function filter_key_value_pair( array $pairs ): array {
-		/** @var array<string, string> (as per filter function)*/
+		/**
+	@var array<string, string> (as per filter function)
+*/
 		return array_filter(
 			$pairs,
 			function ( $value, $key ): bool {

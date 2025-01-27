@@ -123,5 +123,4 @@ class App_Initialization_Exception extends Exception {
 		$message = 'Can not redeclare Module_Manager as its already set to the application';
 		return new App_Initialization_Exception( $message, 10 );
 	}
-
 }

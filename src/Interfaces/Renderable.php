@@ -30,9 +30,9 @@ interface Renderable {
 	/**
 	 * Display a view and its context.
 	 *
-	 * @param string $view
+	 * @param string                  $view
 	 * @param iterable<string, mixed> $data
-	 * @param bool $print
+	 * @param boolean                 $print
 	 * @return void|string
 	 */
 	public function render( string $view, iterable $data, bool $print = true );
@@ -47,7 +47,8 @@ interface Renderable {
 
 	/**
 	 * Renders a view Model
-	 *
+	 *It is recommended not to use reserved keyword "print" as function parameter name. Found: $print
+
 	 * @param View_Model $view_model
 	 * @return string|void
 	 */
@@ -68,5 +69,4 @@ interface Renderable {
 	 * @since 1.4.0
 	 */
 	public function base_view_path(): string;
-
 }
