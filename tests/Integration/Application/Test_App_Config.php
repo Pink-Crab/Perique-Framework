@@ -94,6 +94,16 @@ class Test_App_Config extends WP_UnitTestCase {
 
 		// wpdb_prefix
 		$this->assertEquals( $app_config->wpdb_prefix(), Config::wpdb_prefix() );
+
+		// Check the url helpers
+		$this->assertEquals( $app_config->asset_url(), Config::asset_url() );
+		$this->assertEquals( $app_config->plugin_url(), Config::plugin_url() );
+		$this->assertEquals( $app_config->view_url(), Config::view_url() );
+
+		// Check the path helpers
+		$this->assertEquals( $app_config->asset_path(), Config::asset_path() );
+		$this->assertEquals( $app_config->plugin_path(), Config::plugin_path() );
+		$this->assertEquals( $app_config->view_path(), Config::view_path() );
 	}
 
 }
