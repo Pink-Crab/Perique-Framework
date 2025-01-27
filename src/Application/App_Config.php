@@ -410,8 +410,8 @@ final class App_Config {
 	 */
 	private function filter_key_value_pair( array $pairs ): array {
 		/**
-	@var array<string, string> (as per filter function)
-*/
+		 * @var array<string, string> (as per filter function)
+		 */
 		return array_filter(
 			$pairs,
 			function ( $value, $key ): bool {
@@ -441,5 +441,65 @@ final class App_Config {
 			'taxonomies' => $this->taxonomies,
 			'meta'       => $this->meta,
 		);
+	}
+
+	/**
+	 * Get Asset Path.
+	 *
+	 * @return string
+	 */
+	public function asset_path(): string {
+		$paths = $this->path( 'assets' );
+		return is_string( $paths ) ? $paths : '';
+	}
+
+	/**
+	 * Get the View Path.
+	 *
+	 * @return string
+	 */
+	public function view_path(): string {
+		$paths = $this->path( 'view' );
+		return is_string( $paths ) ? $paths : '';
+	}
+
+	/**
+	 * Get the plugin path.
+	 *
+	 * @return string
+	 */
+	public function plugin_path(): string {
+		$paths = $this->path( 'plugin' );
+		return is_string( $paths ) ? $paths : '';
+	}
+
+	/**
+	 * Get the asset URL.
+	 *
+	 * @return string
+	 */
+	public function asset_url(): string {
+		$url = $this->url( 'assets' );
+		return is_string( $url ) ? $url : '';
+	}
+
+	/**
+	 * Get the view URL.
+	 *
+	 * @return string
+	 */
+	public function view_url(): string {
+		$url = $this->url( 'view' );
+		return is_string( $url ) ? $url : '';
+	}
+
+	/**
+	 * Get the plugin URL.
+	 *
+	 * @return string
+	 */
+	public function plugin_url(): string {
+		$url = $this->url( 'plugin' );
+		return is_string( $url ) ? $url : '';
 	}
 }
