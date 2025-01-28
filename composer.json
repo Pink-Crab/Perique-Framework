@@ -37,7 +37,7 @@
         "yoast/phpunit-polyfills": "^1.0.0 || ^2.0.0",
         "symfony/var-dumper": "<=6.2.7",
         "gin0115/wpunit-helpers": "1.1.*",
-        "vlucas/phpdotenv": "<=5.5.0",
+        "vlucas/phpdotenv": "<=5.7.0",
         "doctrine/instantiator": "^1.5",
         "phpcompatibility/php-compatibility": "*"
     },
