@@ -363,6 +363,7 @@ http://www.opensource.org/licenses/mit-license.html
 
 ## Change Log ##
 
+* 2.1.1 - Remove the attempt to resolve dot notation in the base view path of the PHP_Engine, as this was causing issues when servers have . in folder names.
 * 2.1.0 - Updated to WP6.6, changed PHPCS rules and added a number of new helpers to App_Config.
    * App_Config::asset_url() - Returns the full URL to an asset.
    * App_Config::asset_path() - Returns the full path to an asset.
