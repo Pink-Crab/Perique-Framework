@@ -38,7 +38,7 @@ class Test_PHP_Engine extends WP_UnitTestCase {
 	 *
 	 * @return void
 	 */
-	public function setUp() : void {
+	public function setUp(): void {
 		parent::setUp();
 		$this->view = new PHP_Engine( FIXTURES_PATH . '/views/' );
 	}
@@ -164,7 +164,9 @@ class Test_PHP_Engine extends WP_UnitTestCase {
 		$view->render( '/hello.php', array( 'hello' => 'Hello World' ) );
 	}
 
-	/** @testdox An exception should be thrown if the engine attempts to render a component with setting the compiler. */
+	/**
+ * @testdox An exception should be thrown if the engine attempts to render a component with setting the compiler.
+*/
 	public function test_throws_exception_if_component_not_set(): void {
 		$this->expectException( Exception::class );
 		$this->expectExceptionMessage( 'No component compiler passed to PHP_Engine' );
@@ -191,20 +193,12 @@ class Test_PHP_Engine extends WP_UnitTestCase {
 		);
 	}
 
-	/** @testdox It should be possible to define the base path for view using dot notation. */
-	public function test_can_set_base_path_using_dot_notation(): void {
-		$this->expectOutputString( 'foo' );
-		$view = new PHP_Engine( \dirname( __DIR__, 2 ) . '.Fixtures.views.' );
-		$view->render(
-			'sub_path.template',
-			array( 'variable' => 'foo' ),
-			View::PRINT_VIEW // Optional as print view is default.
-		);
-	}
 
-	/** @testdox It should be possible to use filepaths with or without the .php extensions */
+	/**
+ * @testdox It should be possible to use filepaths with or without the .php extensions
+*/
 	public function test_can_render_path_with_or_without_php_extension(): void {
-		function() {
+		function () {
 			$this->expectOutputString( 'foo' );
 			$this->view->render(
 				'sub_path.template',
@@ -221,7 +215,9 @@ class Test_PHP_Engine extends WP_UnitTestCase {
 		);
 	}
 
-	/** @testdox It should be possible to access the base_path from the engine. */
+	/**
+ * @testdox It should be possible to access the base_path from the engine.
+*/
 	public function test_can_get_base_path(): void {
 		$path = FIXTURES_PATH . '/views/';
 		$this->assertEquals(
@@ -230,7 +226,9 @@ class Test_PHP_Engine extends WP_UnitTestCase {
 		);
 	}
 
-	/** @testdox By default view_models should be printed, unless false is passed as the param for $print */
+	/**
+ * @testdox By default view_models should be printed, unless false is passed as the param for $print
+*/
 	public function test_view_models_print_by_default(): void {
 		$this->expectOutputString( 'partial_value' );
 		$this->view->view_model(
@@ -241,7 +239,9 @@ class Test_PHP_Engine extends WP_UnitTestCase {
 		);
 	}
 
-	/** @testdox By default the partial() method should print the view, unless false is passed as the param for $prinr */
+	/**
+ * @testdox By default the partial() method should print the view, unless false is passed as the param for $prinr
+*/
 	public function test_returns_partial_from_template(): void {
 		$this->expectOutputString( 'rendered partial using PHPEngine->partial()' );
 		$this->view->partial(
@@ -250,11 +250,11 @@ class Test_PHP_Engine extends WP_UnitTestCase {
 		);
 	}
 
-	/** @testdox Any path passed as a view, should be trimmed for all whitespace. */
+	/**
+ * @testdox Any path passed as a view, should be trimmed for all whitespace.
+*/
 	public function test_view_path_is_trimmed(): void {
 		$this->expectOutputString( 'Hello World' );
 		$this->view->render( ' hello ', array( 'hello' => 'Hello World' ) );
 	}
-
-
 }

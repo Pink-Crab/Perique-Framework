@@ -217,7 +217,6 @@ final class PHP_Engine implements Renderable {
 	 * @throws Exception
 	 */
 	private function verify_view_path( string $path ): string {
-		$path = $this->maybe_resolve_dot_notation( $path );
 		$path = rtrim( $path, '/' ) . '/';
 
 		if ( ! \is_dir( $path ) ) {
