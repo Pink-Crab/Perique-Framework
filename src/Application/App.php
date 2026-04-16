@@ -168,14 +168,14 @@ final class App {
 		// Ensure the base path and url are defined from app.
 		$settings['path']           = $settings['path'] ?? array();
 		$settings['path']['plugin'] = $this->base_path;
-		$settings['path']['view']   = $this->view_path ?? App_Config_Path_Helper::assume_view_path( $this->base_path );
+		$settings['path']['view']   = $this->view_path;
 
 		// Get the url from the base path.
 		$settings['url']           = $settings['url'] ?? array();
 		$settings['url']['plugin'] = App_Config_Path_Helper::assume_base_url( $this->base_path );
 		$settings['url']['view']   = App_Config_Path_Helper::assume_view_url(
 			$this->base_path,
-			$this->view_path ?? App_Config_Path_Helper::assume_view_path( $this->base_path )
+			$this->view_path
 		);
 
 		self::$app_config = new App_Config( $settings );
