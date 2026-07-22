@@ -30,7 +30,7 @@
         "roots/wordpress": "6.9.*",
         "wp-phpunit/wp-phpunit": "6.9.*",
         "wp-cli/i18n-command": "*",
-        "squizlabs/php_codesniffer": "3.*",
+        "squizlabs/php_codesniffer": "3.* || 4.*",
         "dealerdirect/phpcodesniffer-composer-installer": "*",
         "roave/security-advisories": "dev-latest",
         "wp-coding-standards/wpcs": "*",
